@@ -1,0 +1,7 @@
+[package]
+name = "xflow-rust"
+version = "0.1.0"
+authors = ["Michiel Kalkman <michiel@nosuchtype.com>"]
+
+[dependencies]
+rand="0.3.0"
