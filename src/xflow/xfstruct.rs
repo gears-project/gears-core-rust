@@ -2,41 +2,41 @@
 pub type XFlowEdge = (i32, i32);
 
 pub struct XFlowStruct {
-    id:       i32,
-    version:  i32,
-    name:     String,
+    pub id:       i32,
+    pub version:  i32,
+    pub name:     String,
     pub nodes:    Vec<XFlowNode>,
     pub edges:    Vec<XFlowEdge>,
     pub branches: Vec<XFlowBranch>,
 }
 
 pub struct XFlowRequirement {
-    xtype: String,
-    version: i32
+    pub xtype: String,
+    pub version: i32
 }
 
 pub struct XFlowVariable {
-    name:  String,
-    vtype: String,
-    value: String
+    pub name:  String,
+    pub vtype: String,
+    pub value: String
 }
 
 pub struct XFlowVariables {
-    input:  Vec<XFlowVariable>,
-    output: Vec<XFlowVariable>,
-    local:  Vec<XFlowVariable>,
+    pub input:  Vec<XFlowVariable>,
+    pub output: Vec<XFlowVariable>,
+    pub local:  Vec<XFlowVariable>,
 }
 
 pub struct XFlowNode {
-    id:       i32,
-    nodetype: String,
-    label:    String,
-    action:   String,
+    pub id:       i32,
+    pub nodetype: String,
+    pub label:    String,
+    pub action:   String,
 }
 
 pub struct XFlowBranch {
-    name: String,
-    edge: XFlowEdge
+    pub name: String,
+    pub edge: XFlowEdge
 }
 
 impl XFlowStruct {
@@ -48,7 +48,7 @@ impl XFlowStruct {
         format!("xflow {}", self.id)
     }
 
-//    fn get_entry_node(&self) -> XFlowNode {
+//    pub fn get_entry_node(&self) -> XFlowNode {
 //        let res = self.nodes.filter({|&node|
 //            node.label == "label"
 //        });
@@ -77,8 +77,6 @@ fn create_node(id:i32) -> XFlowNode {
 fn create_nodes(amount:i32) -> Vec<XFlowNode> {
     let mut nodes = Vec::<XFlowNode>::new();
 
-    let i:i32 = 0;
-
     for i in 0..amount {
         nodes.push(create_node(i))
     }
@@ -90,30 +88,26 @@ fn create_edges(amount:i32) -> Vec<(i32, i32)> {
     let left   = x_get_rand();
     let right  = x_get_rand();
 
-    let mut edges = Vec::<(i32, i32)>::new();
-
-    let i:i32 = 0;
+    let mut edges = Vec::<XFlowEdge>::new();
 
     for i in 0..amount {
-        edges.push((left, right));
+        edges.push((left, right + i));
     }
 
     edges
 }
 
 fn create_branches(amount:i32) -> Vec<XFlowBranch> {
-    let left   = x_get_rand();
-    let right  = x_get_rand();
 
     let mut branches = Vec::<XFlowBranch>::new();
 
-    let i:i32 = 0;
-
     for i in 0..amount {
+        let left   = x_get_rand();
+        let right  = x_get_rand();
         branches.push(
             XFlowBranch {
                 name: "Some branch".to_string(),
-                edge : (left, right)
+                edge : (left, right + i)
             })
     }
 

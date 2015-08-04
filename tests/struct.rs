@@ -10,3 +10,12 @@ fn test_xfs() {
     assert_eq!(xfs.branches.len(), 5);
 }
 
+
+#[test]
+fn test_xfs_fields() {
+    let xfs = XFlowStruct::new();
+    println!("Hello, xflow {:?}", xfs.to_string());
+    assert_eq!(xfs.version, 1);
+    assert_eq!(xfs.id, 1);
+    assert_eq!(xfs.name, "Some name");
+}
