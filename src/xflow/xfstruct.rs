@@ -1,8 +1,13 @@
+use rustc_serialize::json;
 
 pub type XFlowEdge = (i32, i32);
 
+// Automatically generate `RustcDecodable` and `RustcEncodable` trait
+// implementations
+
+#[derive(RustcDecodable, RustcEncodable)]
 pub struct XFlowStruct {
-    pub id:       i32,
+    pub id:       String,
     pub version:  i32,
     pub name:     String,
     pub nodes:    Vec<XFlowNode>,
@@ -10,23 +15,27 @@ pub struct XFlowStruct {
     pub branches: Vec<XFlowBranch>,
 }
 
+#[derive(RustcDecodable, RustcEncodable)]
 pub struct XFlowRequirement {
-    pub xtype: String,
-    pub version: i32
+    pub xtype:   String,
+    pub version: i32,
 }
 
+#[derive(RustcDecodable, RustcEncodable)]
 pub struct XFlowVariable {
     pub name:  String,
     pub vtype: String,
-    pub value: String
+    pub value: String,
 }
 
+#[derive(RustcDecodable, RustcEncodable)]
 pub struct XFlowVariables {
     pub input:  Vec<XFlowVariable>,
     pub output: Vec<XFlowVariable>,
     pub local:  Vec<XFlowVariable>,
 }
 
+#[derive(RustcDecodable, RustcEncodable)]
 pub struct XFlowNode {
     pub id:       i32,
     pub nodetype: String,
@@ -34,9 +43,10 @@ pub struct XFlowNode {
     pub action:   String,
 }
 
+#[derive(RustcDecodable, RustcEncodable)]
 pub struct XFlowBranch {
     pub name: String,
-    pub edge: XFlowEdge
+    pub edge: XFlowEdge,
 }
 
 impl XFlowStruct {
@@ -48,12 +58,34 @@ impl XFlowStruct {
         format!("xflow {}", self.id)
     }
 
-//    pub fn get_entry_node(&self) -> XFlowNode {
-//        let res = self.nodes.filter({|&node|
-//            node.label == "label"
-//        });
-//        res.0
-//    }
+    pub fn get_entry_nodes(&self) -> usize {
+
+        let iterator = &self.nodes.iter();
+        let filtered = iterator.clone().filter({|&node|
+            node.nodetype == "flow" &&
+                node.action == "start"
+        });
+
+        let num = filtered.count();
+
+        if num > 1 {
+            panic!("More than one entry node found!");
+        } else if num < 1 {
+            panic!("No entry nodes found!");
+        }
+
+        num
+
+    }
+
+    pub fn to_json(&self) -> String {
+        json::encode(&self).unwrap()
+    }
+
+    pub fn from_json(json_string:String) -> XFlowStruct {
+        let xfs:XFlowStruct = json::decode(&json_string).unwrap();
+        xfs
+    }
 
 }
 
@@ -116,7 +148,7 @@ fn create_branches(amount:i32) -> Vec<XFlowBranch> {
 
 fn create_xflow_struct() -> XFlowStruct {
     XFlowStruct {
-        id:       1,
+        id:       "id1".to_string(),
         version:  1,
         name:     "Some name".to_string(),
         nodes:    create_nodes(5),
