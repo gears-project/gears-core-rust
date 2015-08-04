@@ -36,7 +36,7 @@ fn read_file_mf() -> String {
 #[test]
 fn test_xfs() {
     let xfs = XFlowStruct::new();
-    println!("Hello, xflow {:?}", xfs.to_string());
+
     assert_eq!(xfs.nodes.len(), 5);
     assert_eq!(xfs.edges.len(), 5);
     assert_eq!(xfs.branches.len(), 5);
@@ -45,29 +45,29 @@ fn test_xfs() {
 #[test]
 fn test_xfs_fields() {
     let xfs = XFlowStruct::new();
-    println!("Hello, xflow {:?}", xfs.to_string());
+
     assert_eq!(xfs.version, 1);
     assert_eq!(xfs.id, "id1".to_string());
     assert_eq!(xfs.name, "Some name");
 }
 
 #[test]
+#[should_panic]
 fn test_xfs_entry() {
     let xfs = XFlowStruct::new();
-    assert_eq!(xfs.get_entry_nodes(), 4);
-}
 
-#[test]
-fn test_xfs_to_json() {
-    let xfs = XFlowStruct::new();
-    assert_eq!(xfs.to_json(), "asd");
+    assert_eq!(xfs.get_entry_nodes(), 5);
 }
 
 #[test]
 fn test_xfs_from_json() {
     let json_string = read_file_mf();
     let xfs = XFlowStruct::from_json(json_string);
-    assert_eq!(xfs.to_json(), "asd");
+
+    assert_eq!(xfs.name, "steps".to_string());
+    assert_eq!(xfs.nodes.len(), 10);
+    assert_eq!(xfs.edges.len(), 9);
+    assert_eq!(xfs.branches.len(), 0);
 }
 
 
