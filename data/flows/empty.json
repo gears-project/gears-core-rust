@@ -1,0 +1,29 @@
+{
+  "id": "empty",
+  "name": "empty",
+  "version": 1,
+  "requirements": [
+    {
+      "xtype": "flow",
+      "version": 1
+    },
+    {
+      "xtype": "flox",
+      "version": 1
+    }
+  ],
+  "variables" : {
+    "input" : [
+    ],
+    "output" : [
+    ],
+    "local" : [
+    ]
+  },
+  "nodes": [
+  ],
+  "edges": [
+  ],
+  "branches" : [
+  ]
+}

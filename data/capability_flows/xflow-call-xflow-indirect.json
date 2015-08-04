@@ -1,0 +1,105 @@
+{
+  "id": "xflow_call_xflow_indirect",
+  "name": "xflow_call_xflow_indirect",
+  "version": 1,
+  "requirements": [
+    {
+      "xtype": "flow",
+      "version": 1
+    },
+    {
+      "xtype": "flox",
+      "version": 1
+    },
+    {
+      "xtype": "callxflow",
+      "version": 1
+    }
+  ],
+  "variables" : {
+    "input" : [
+      {
+        "name"  : "CounterValue",
+        "vtype"  : "number",
+        "value" : 0
+      }
+    ],
+    "output" : [
+      {
+        "name" : "CounterValue",
+        "vtype" : "number"
+      }
+    ],
+    "local" : [
+    ]
+  },
+  "nodes": [
+    {
+      "id": 1,
+      "nodetype": "flow",
+      "action": "start",
+      "label" : "Start",
+      "parameters": {}
+    },
+    {
+      "id": 2,
+      "nodetype": "callxflow",
+      "action": "call",
+      "label" : "Call XFlow",
+      "parameters": {
+        "xflowid": "xflow_call_xflow_3x",
+        "inputmatch" : [
+          ["CounterValue", "CounterValue"]
+        ],
+        "outputmatch" : [
+          ["CounterValue", "CounterValue"]
+        ]
+      }
+    },
+    {
+      "id": 3,
+      "nodetype": "callxflow",
+      "action": "call",
+      "label" : "Call XFlow",
+      "parameters": {
+        "xflowid": "xflow_call_xflow_3x",
+        "inputmatch" : [
+          ["CounterValue", "CounterValue"]
+        ],
+        "outputmatch" : [
+          ["CounterValue", "CounterValue"]
+        ]
+      }
+    },
+    {
+      "id": 4,
+      "nodetype": "callxflow",
+      "action": "call",
+      "label" : "Call XFlow",
+      "parameters": {
+        "xflowid": "xflow_call_xflow_3x",
+        "inputmatch" : [
+          ["CounterValue", "CounterValue"]
+        ],
+        "outputmatch" : [
+          ["CounterValue", "CounterValue"]
+        ]
+      }
+    },
+    {
+      "id": 5,
+      "nodetype": "flow",
+      "action": "end",
+      "label" : "End",
+      "parameters": {}
+    }
+  ],
+  "edges": [
+    [ 1, 2 ],
+    [ 2, 3 ],
+    [ 3, 4 ],
+    [ 4, 5 ]
+  ],
+  "branches" : [
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "id": "add_1",
+  "name": "add_1",
+  "version": 1,
+  "requirements": [
+    {
+      "xtype": "flow",
+      "version": 1
+    },
+    {
+      "xtype": "flox",
+      "version": 1
+    }
+  ],
+  "variables" : {
+    "input" : [
+      {
+        "name"  : "CounterValue",
+        "vtype"  : "number",
+        "value" : 0
+      }
+    ],
+    "output" : [
+      {
+        "name" : "CounterValue",
+        "vtype" : "number"
+      }
+    ],
+    "local" : [
+    ]
+  },
+  "nodes": [
+    {
+      "id": 1,
+      "nodetype": "flow",
+      "action": "start",
+      "label" : "Start",
+      "parameters": {}
+    },
+    {
+      "id": 2,
+      "nodetype": "flox",
+      "action": "evalexpr",
+      "label" : "Flox",
+      "parameters": {
+        "expression" : "$CounterValue+1",
+        "returns"    : {
+          "name"   : "CounterValue",
+          "vtype"   : "number"
+        }
+      }
+    },
+    {
+      "id": 3,
+      "nodetype": "flow",
+      "action": "end",
+      "label" : "End",
+      "parameters": {}
+    }
+  ],
+  "edges": [
+    [ 1, 2 ],
+    [ 2, 3 ]
+  ],
+  "branches" : [
+  ]
+}
+

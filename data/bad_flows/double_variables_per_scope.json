@@ -1,0 +1,66 @@
+{
+  "id": "double_variables_per_scope",
+  "name": "double_variables_per_scope",
+  "version" : 1,
+  "requirements": [
+    {
+      "xtype": "flow",
+      "version": 1
+    }
+  ],
+  "variables" : {
+    "input" : [
+      {
+        "name" : "ReturnValue",
+        "vtype" : "boolean"
+      },
+      {
+        "name" : "ReturnValue",
+        "vtype" : "boolean"
+      }
+    ],
+    "output" : [
+      {
+        "name" : "ReturnValue",
+        "vtype" : "boolean"
+      },
+      {
+        "name" : "ReturnValue",
+        "vtype" : "boolean"
+      }
+    ],
+    "local" : [
+      {
+        "name" : "ReturnValue",
+        "vtype" : "boolean",
+        "value" : false
+      },
+      {
+        "name" : "ReturnValue",
+        "vtype" : "boolean",
+        "value" : false
+      }
+    ]
+  },
+  "nodes": [
+    {
+      "id": 1,
+      "nodetype": "flow",
+      "action": "start",
+      "label" : "Start",
+      "parameters": {}
+    },
+    {
+      "id": 3,
+      "nodetype": "flow",
+      "action": "end",
+      "label" : "End",
+      "parameters": {}
+    }
+  ],
+  "edges": [
+    [ 1, 3 ]
+  ],
+  "branches" : [
+  ]
+}

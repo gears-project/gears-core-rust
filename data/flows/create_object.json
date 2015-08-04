@@ -1,0 +1,94 @@
+{
+  "id": "asd",
+  "name": "asd",
+  "version": 1,
+  "requirements": [
+    {
+      "xtype": "flow",
+      "version": 1
+    },
+    {
+      "xtype": "object",
+      "version": 1
+    },
+    {
+      "xtype": "flox",
+      "version": 1
+    }
+  ],
+  "variables" : {
+    "input" : [
+      {
+        "name"  : "UserName",
+        "vtype"  : "string"
+      }
+    ],
+    "output" : [
+      {
+        "vtype" : "boolean",
+        "name" : "ReturnValue"
+      }
+    ],
+    "local" : [
+      {
+        "value" : false,
+        "vtype" : "boolean",
+        "name" : "ReturnValue"
+      }
+    ]
+  },
+  "nodes": [
+    {
+      "id": 1,
+      "nodetype": "flow",
+      "action": "start",
+      "label" : "Start",
+      "parameters": {}
+    },
+    {
+      "id": 2,
+      "nodetype": "object",
+      "action": "create",
+      "label" : "Create User",
+      "parameters": {
+        "object": "User"
+      }
+    },
+    {
+      "id": 3,
+      "nodetype": "object",
+      "action": "setattributes",
+      "label" : "Set name",
+      "parameters": {
+        "object": "User",
+        "attributes": {
+          "name": "Joe Blow"
+        }
+      }
+    },
+    {
+      "id": 4,
+      "nodetype": "object",
+      "action": "save",
+      "label" : "Save User",
+      "parameters": {
+        "object": "User"
+      }
+    },
+    {
+      "id": 5,
+      "nodetype": "flow",
+      "action": "end",
+      "label" : "End",
+      "parameters": {}
+    }
+  ],
+  "edges": [
+    [ 1, 2 ],
+    [ 2, 3 ],
+    [ 3, 4 ],
+    [ 4, 5 ]
+  ],
+  "branches" : [
+  ]
+}
