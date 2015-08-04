@@ -1,5 +1,5 @@
 [package]
-name = "xflow-rust"
+name = "xfdocs"
 version = "0.1.0"
 authors = ["Michiel Kalkman <michiel@nosuchtype.com>"]
 

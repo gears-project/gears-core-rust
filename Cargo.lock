@@ -1,5 +1,5 @@
 [root]
-name = "xflow-rust"
+name = "xfdocs"
 version = "0.1.0"
 dependencies = [
  "rand 0.3.9 (registry+https://github.com/rust-lang/crates.io-index)",
