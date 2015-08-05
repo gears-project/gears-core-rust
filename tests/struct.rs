@@ -123,7 +123,15 @@ fn test_xfs_entry() {
     let json_string = read_file_mf();
     let xfs = XFlowStruct::from_json(json_string);
 
-    assert_eq!(xfs.get_entry_nodes(), 1);
+    assert_eq!(xfs.get_nodes_by("flow".to_string(), "start".to_string()).len(), 1);
+}
+
+#[test]
+fn test_xfs_get_nodes_of_type() {
+    let json_string = read_file_mf();
+    let xfs = XFlowStruct::from_json(json_string);
+
+    assert_eq!(xfs.get_nodes_of_type("flow".to_string()).len(), 2);
 }
 
 #[test]

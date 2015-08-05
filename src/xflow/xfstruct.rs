@@ -5,7 +5,7 @@ pub type XFlowEdge = [i32; 2];
 // Automatically generate `RustcDecodable` and `RustcEncodable` trait
 // implementations
 
-#[derive(RustcDecodable, RustcEncodable)]
+#[derive(RustcDecodable, RustcEncodable, Debug, Clone)]
 pub struct XFlowStruct {
     pub id:       String,
     pub version:  i32,
@@ -15,27 +15,27 @@ pub struct XFlowStruct {
     pub branches: Vec<XFlowBranch>,
 }
 
-#[derive(RustcDecodable, RustcEncodable)]
+#[derive(RustcDecodable, RustcEncodable, Debug, Clone)]
 pub struct XFlowRequirement {
     pub xtype:   String,
     pub version: i32,
 }
 
-#[derive(RustcDecodable, RustcEncodable)]
+#[derive(RustcDecodable, RustcEncodable, Debug, Clone)]
 pub struct XFlowVariable {
     pub name:  String,
     pub vtype: String,
     pub value: String,
 }
 
-#[derive(RustcDecodable, RustcEncodable)]
+#[derive(RustcDecodable, RustcEncodable, Debug, Clone)]
 pub struct XFlowVariables {
     pub input:  Vec<XFlowVariable>,
     pub output: Vec<XFlowVariable>,
     pub local:  Vec<XFlowVariable>,
 }
 
-#[derive(RustcDecodable, RustcEncodable)]
+#[derive(RustcDecodable, RustcEncodable, Debug, Clone)]
 pub struct XFlowNode {
     pub id:       i32,
     pub nodetype: String,
@@ -43,7 +43,7 @@ pub struct XFlowNode {
     pub action:   String,
 }
 
-#[derive(RustcDecodable, RustcEncodable)]
+#[derive(RustcDecodable, RustcEncodable, Debug, Clone)]
 pub struct XFlowBranch {
     pub name: String,
     pub edge: XFlowEdge,
@@ -80,20 +80,47 @@ impl XFlowStruct {
         format!("xflow {}", self.id)
     }
 
-    pub fn get_entry_nodes(&self) -> usize {
+    pub fn get_entry_nodes(&self) -> Vec<XFlowNode> {
 
-        let mut counter:usize = 0;
+        self.get_nodes_by(
+            "flow".to_string(),
+            "start".to_string()
+            )
+    }
 
-        for node in self.nodes.iter() {
+    /// Get `XFlowNode`s of `nodetype` and `action`
+    ///
+    /// # Example
+    /// ```
+    /// use xfdocs::xflow::xfstruct::{XFlowStruct};
+    /// let xfs = XFlowStruct::new();
+    /// xfs.get_nodes_by("flow".to_string(), "start".to_string());
+    /// ```
+    pub fn get_nodes_by(&self, nodetype:String, action:String) -> Vec<XFlowNode> {
 
-            if node.nodetype == "flow" &&
-                node.action == "start" {
-                    counter = counter + 1;
-                }
-        }
+        let res:Vec<XFlowNode> = self.nodes.iter().cloned().filter({|node|
+            node.nodetype == nodetype &&
+                node.action == action
+        }).collect();
 
-        counter
+        res
+    }
 
+    /// Get `XFlowNode`s of `nodetype`
+    ///
+    /// # Example
+    /// ```
+    /// use xfdocs::xflow::xfstruct::{XFlowStruct};
+    /// let xfs = XFlowStruct::new();
+    /// xfs.get_nodes_of_type("flow".to_string());
+    /// ```
+    pub fn get_nodes_of_type(&self, nodetype:String) -> Vec<XFlowNode> {
+
+        let res:Vec<XFlowNode> = self.nodes.iter().cloned().filter({|node|
+            node.nodetype == nodetype
+        }).collect();
+
+        res
     }
 
     /// Return a JSON representation of the XFlowStruct
