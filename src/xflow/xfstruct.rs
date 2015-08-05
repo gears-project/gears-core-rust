@@ -68,6 +68,14 @@ impl XFlowStruct {
         }
     }
 
+    /// Return a string representation of the XFlowStruct
+    ///
+    /// # Example
+    /// ```
+    /// use xfdocs::xflow::xfstruct::{XFlowStruct};
+    /// let xfs = XFlowStruct::new();
+    /// xfs.to_string();
+    /// ```
     pub fn to_string(&self) -> String {
         format!("xflow {}", self.id)
     }
@@ -88,10 +96,28 @@ impl XFlowStruct {
 
     }
 
+    /// Return a JSON representation of the XFlowStruct
+    ///
+    /// # Example
+    /// ```
+    /// use xfdocs::xflow::xfstruct::{XFlowStruct};
+    /// let xfs = XFlowStruct::new();
+    /// xfs.to_json();
+    /// ```
     pub fn to_json(&self) -> String {
         json::encode(&self).unwrap()
     }
 
+    /// Initialize a XFlowStruct from a JSON string
+    ///
+    /// # Example
+    /// ```
+    /// use xfdocs::xflow::xfstruct::{XFlowStruct};
+    ///
+    /// let empty_flow = "{\"id\":\"empty\",\"name\":\"empty\",\"version\":1,\"requirements\":[{\"xtype\":\"flow\",\"version\":1},{\"xtype\":\"flox\",\"version\":1}],\"variables\":{\"input\":[],\"output\":[],\"local\":[]},\"nodes\":[],\"edges\":[],\"branches\":[]}".to_string();
+    ///
+    /// let xfs = XFlowStruct::from_json(empty_flow);
+    /// ```
     pub fn from_json(json_string:String) -> XFlowStruct {
         let xfs:XFlowStruct = json::decode(&json_string).unwrap();
         xfs
