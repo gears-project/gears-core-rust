@@ -1,6 +1,6 @@
 use rustc_serialize::json;
 
-pub type XFlowEdge = (i32, i32);
+pub type XFlowEdge = [i32; 2];
 
 // Automatically generate `RustcDecodable` and `RustcEncodable` trait
 // implementations
@@ -50,8 +50,22 @@ pub struct XFlowBranch {
 }
 
 impl XFlowStruct {
+    /// Constructs a new `XFlowStruct`
+    ///
+    /// # Example
+    /// ```
+    /// use xfdocs::xflow::xfstruct::{XFlowStruct};
+    /// let xfs = XFlowStruct::new();
+    /// ```
     pub fn new() -> XFlowStruct {
-        create_xflow_struct()
+        XFlowStruct {
+            id:       "".to_string(),
+            name:     "".to_string(),
+            version:  1,
+            nodes:    Vec::<XFlowNode>::new(),
+            edges:    Vec::<XFlowEdge>::new(),
+            branches: Vec::<XFlowBranch>::new(),
+        }
     }
 
     pub fn to_string(&self) -> String {
@@ -60,21 +74,17 @@ impl XFlowStruct {
 
     pub fn get_entry_nodes(&self) -> usize {
 
-        let iterator = &self.nodes.iter();
-        let filtered = iterator.clone().filter({|&node|
-            node.nodetype == "flow" &&
-                node.action == "start"
-        });
+        let mut counter:usize = 0;
 
-        let num = filtered.count();
+        for node in self.nodes.iter() {
 
-        if num > 1 {
-            panic!("More than one entry node found!");
-        } else if num < 1 {
-            panic!("No entry nodes found!");
+            if node.nodetype == "flow" &&
+                node.action == "start" {
+                    counter = counter + 1;
+                }
         }
 
-        num
+        counter
 
     }
 
@@ -87,73 +97,5 @@ impl XFlowStruct {
         xfs
     }
 
-}
-
-//
-// Test code
-//
-
-fn x_get_rand() -> i32 {
-    5 // rand::thread_rng().gen_range(1, 11)
-}
-
-fn create_node(id:i32) -> XFlowNode {
-    XFlowNode {
-        id: id,
-        nodetype: "flow".to_string(),
-        action: "some action".to_string(),
-        label: "some name".to_string()
-    }
-}
-
-fn create_nodes(amount:i32) -> Vec<XFlowNode> {
-    let mut nodes = Vec::<XFlowNode>::new();
-
-    for i in 0..amount {
-        nodes.push(create_node(i))
-    }
-
-    return nodes
-}
-
-fn create_edges(amount:i32) -> Vec<(i32, i32)> {
-    let left   = x_get_rand();
-    let right  = x_get_rand();
-
-    let mut edges = Vec::<XFlowEdge>::new();
-
-    for i in 0..amount {
-        edges.push((left, right + i));
-    }
-
-    edges
-}
-
-fn create_branches(amount:i32) -> Vec<XFlowBranch> {
-
-    let mut branches = Vec::<XFlowBranch>::new();
-
-    for i in 0..amount {
-        let left   = x_get_rand();
-        let right  = x_get_rand();
-        branches.push(
-            XFlowBranch {
-                name: "Some branch".to_string(),
-                edge : (left, right + i)
-            })
-    }
-
-    branches
-}
-
-fn create_xflow_struct() -> XFlowStruct {
-    XFlowStruct {
-        id:       "id1".to_string(),
-        version:  1,
-        name:     "Some name".to_string(),
-        nodes:    create_nodes(5),
-        edges:    create_edges(5),
-        branches: create_branches(5)
-    }
 }
 
