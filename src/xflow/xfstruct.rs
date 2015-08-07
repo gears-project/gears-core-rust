@@ -6,7 +6,7 @@ pub type XFlowEdge = [i32; 2];
 // Automatically generate `RustcDecodable` and `RustcEncodable` trait
 // implementations
 
-#[derive(RustcDecodable, RustcEncodable, Debug, Clone)]
+#[derive(RustcDecodable, RustcEncodable, Debug)]
 pub struct XFlowStruct {
     pub id:           String,
     pub version:      i32,
@@ -18,33 +18,33 @@ pub struct XFlowStruct {
     pub branches:     Vec<XFlowBranch>,
 }
 
-#[derive(RustcDecodable, RustcEncodable, Debug, Clone)]
+#[derive(RustcDecodable, RustcEncodable, Debug)]
 pub struct XFlowRequirement {
     pub xtype:   String,
     pub version: i32,
 }
 
-#[derive(RustcDecodable, RustcEncodable, Debug, Clone)]
+#[derive(RustcDecodable, RustcEncodable, Debug)]
 pub struct XFlowVariableDefinition {
     pub name:  String,
     pub vtype: String,
 }
 
-#[derive(RustcDecodable, RustcEncodable, Debug, Clone)]
+#[derive(RustcDecodable, RustcEncodable, Debug)]
 pub struct XFlowVariable {
     pub name:  String,
     pub vtype: String,
     pub value: String,
 }
 
-#[derive(RustcDecodable, RustcEncodable, Debug, Clone)]
+#[derive(RustcDecodable, RustcEncodable, Debug)]
 pub struct XFlowVariables {
     pub input:  Vec<XFlowVariable>,
     pub local:  Vec<XFlowVariable>,
     pub output: Vec<XFlowVariableDefinition>,
 }
 
-#[derive(RustcDecodable, RustcEncodable, Debug, Clone)]
+#[derive(RustcDecodable, RustcEncodable, Debug)]
 pub struct XFlowNode {
     pub id:       i32,
     pub nodetype: String,
@@ -52,7 +52,7 @@ pub struct XFlowNode {
     pub action:   String,
 }
 
-#[derive(RustcDecodable, RustcEncodable, Debug, Clone)]
+#[derive(RustcDecodable, RustcEncodable, Debug)]
 pub struct XFlowBranch {
     pub name: String,
     pub edge: XFlowEdge,
