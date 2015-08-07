@@ -93,9 +93,15 @@ fn create_xflow_struct() -> XFlowStruct {
         id:       "id1".to_string(),
         version:  1,
         name:     "Some name".to_string(),
-        nodes:    create_nodes(5),
-        edges:    create_edges(5),
-        branches: create_branches(5)
+        requirements: Vec::<XFlowRequirement>::new(),
+        variables:    XFlowVariables {
+            input:  Vec::<XFlowVariable>::new(),
+            local:  Vec::<XFlowVariable>::new(),
+            output: Vec::<XFlowVariableDefinition>::new(),
+        },
+        nodes:        create_nodes(5),
+        edges:        create_edges(5),
+        branches:     create_branches(5)
     }
 }
 

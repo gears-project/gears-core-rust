@@ -7,18 +7,26 @@ pub type XFlowEdge = [i32; 2];
 
 #[derive(RustcDecodable, RustcEncodable, Debug, Clone)]
 pub struct XFlowStruct {
-    pub id:       String,
-    pub version:  i32,
-    pub name:     String,
-    pub nodes:    Vec<XFlowNode>,
-    pub edges:    Vec<XFlowEdge>,
-    pub branches: Vec<XFlowBranch>,
+    pub id:           String,
+    pub version:      i32,
+    pub name:         String,
+    pub requirements: Vec<XFlowRequirement>,
+    pub variables:    XFlowVariables,
+    pub nodes:        Vec<XFlowNode>,
+    pub edges:        Vec<XFlowEdge>,
+    pub branches:     Vec<XFlowBranch>,
 }
 
 #[derive(RustcDecodable, RustcEncodable, Debug, Clone)]
 pub struct XFlowRequirement {
     pub xtype:   String,
     pub version: i32,
+}
+
+#[derive(RustcDecodable, RustcEncodable, Debug, Clone)]
+pub struct XFlowVariableDefinition {
+    pub name:  String,
+    pub vtype: String,
 }
 
 #[derive(RustcDecodable, RustcEncodable, Debug, Clone)]
@@ -31,8 +39,8 @@ pub struct XFlowVariable {
 #[derive(RustcDecodable, RustcEncodable, Debug, Clone)]
 pub struct XFlowVariables {
     pub input:  Vec<XFlowVariable>,
-    pub output: Vec<XFlowVariable>,
     pub local:  Vec<XFlowVariable>,
+    pub output: Vec<XFlowVariableDefinition>,
 }
 
 #[derive(RustcDecodable, RustcEncodable, Debug, Clone)]
@@ -59,12 +67,18 @@ impl XFlowStruct {
     /// ```
     pub fn new() -> XFlowStruct {
         XFlowStruct {
-            id:       "".to_string(),
-            name:     "".to_string(),
-            version:  1,
-            nodes:    Vec::<XFlowNode>::new(),
-            edges:    Vec::<XFlowEdge>::new(),
-            branches: Vec::<XFlowBranch>::new(),
+            id:          "".to_string(),
+            name:        "".to_string(),
+            version:      1,
+            requirements: Vec::<XFlowRequirement>::new(),
+            variables:    XFlowVariables {
+                input:  Vec::<XFlowVariable>::new(),
+                local:  Vec::<XFlowVariable>::new(),
+                output: Vec::<XFlowVariableDefinition>::new(),
+            },
+            nodes:        Vec::<XFlowNode>::new(),
+            edges:        Vec::<XFlowEdge>::new(),
+            branches:     Vec::<XFlowBranch>::new(),
         }
     }
 
@@ -148,6 +162,35 @@ impl XFlowStruct {
     pub fn from_json(json_string:String) -> XFlowStruct {
         let xfs:XFlowStruct = json::decode(&json_string).unwrap();
         xfs
+    }
+
+    pub fn get_in_edges(&self, node:XFlowNode) -> Vec<XFlowEdge> {
+
+        let res:Vec<XFlowEdge> = self.edges.iter().cloned().filter({|edge|
+            edge[1] == node.id
+        }).collect();
+
+        res
+    }
+
+    pub fn get_out_edges(&self, node:XFlowNode) -> Vec<XFlowEdge> {
+
+        let res:Vec<XFlowEdge> = self.edges.iter().cloned().filter({|edge|
+            edge[0] == node.id
+        }).collect();
+
+        res
+    }
+
+    pub fn get_branches_for(&self, edge:XFlowEdge) -> Vec<XFlowBranch> {
+
+        let res:Vec<XFlowBranch> = self.branches.iter().cloned().filter({|branch|
+            edge[0] == branch.edge[0] &&
+                edge[1] == branch.edge[1]
+        }).collect();
+
+        res
+
     }
 
 }
