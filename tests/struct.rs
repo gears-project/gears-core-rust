@@ -169,6 +169,20 @@ fn test_xfs_from_json() {
         Err(err) => println!("Error: {:?}", err),
     }
 
+    match xfs.get_entry_node() {
+        Ok(res)  => {
+
+            let in_edges  = xfs.get_in_edges(res);
+            let out_edges = xfs.get_out_edges(res);
+
+            assert_eq!(in_edges.len(), 0);
+            assert_eq!(out_edges.len(), 1);
+
+            assert_eq!(xfs.get_branches_for(out_edges[0]).len(), 0);
+
+        },
+        Err(err) => println!("Error: {:?}", err),
+    }
 }
 
 #[test]
