@@ -6,9 +6,9 @@ use std::fs::File;
 use std::io::prelude::*;
 use std::path::Path;
 
-fn read_file_mf() -> String {
+fn read_json_file(filename:&str) -> String {
     // Create a path to the desired file
-    let path = Path::new("data/flows/10_steps.json");
+    let path = Path::new(filename);
     let display = path.display();
 
     let mut file = match File::open(&path) {
@@ -126,24 +126,24 @@ fn test_xfs_fields() {
 #[test]
 // #[should_panic]
 fn test_xfs_entry() {
-    let json_string = read_file_mf();
-    let xfs = XFlowStruct::from_json(json_string);
+    let json_string = read_json_file("data/flows/10_steps.json");
+    let xfs = XFlowStruct::from_json(&json_string);
 
     assert_eq!(xfs.get_nodes_by("flow", "start").len(), 1);
 }
 
 #[test]
 fn test_xfs_get_nodes_of_type() {
-    let json_string = read_file_mf();
-    let xfs = XFlowStruct::from_json(json_string);
+    let json_string = read_json_file("data/flows/10_steps.json");
+    let xfs = XFlowStruct::from_json(&json_string);
 
     assert_eq!(xfs.get_nodes_of_type("flow").len(), 2);
 }
 
 #[test]
 fn test_xfs_from_json() {
-    let json_string = read_file_mf();
-    let xfs = XFlowStruct::from_json(json_string);
+    let json_string = read_json_file("data/flows/10_steps.json");
+    let xfs = XFlowStruct::from_json(&json_string);
 
     assert_eq!(xfs.name, "steps".to_string());
     assert_eq!(xfs.nodes.len(), 10);
@@ -153,9 +153,8 @@ fn test_xfs_from_json() {
 
 #[test]
 fn test_xfs_from_json_string() {
-    let empty_flow = "{\"id\":\"empty\",\"name\":\"empty\",\"version\":1,\"requirements\":[{\"xtype\":\"flow\",\"version\":1},{\"xtype\":\"flox\",\"version\":1}],\"variables\":{\"input\":[],\"output\":[],\"local\":[]},\"nodes\":[],\"edges\":[],\"branches\":[]}".to_string();
-
-    let xfs = XFlowStruct::from_json(empty_flow);
+    let empty_flow = read_json_file("data/flows/empty.json");
+    let xfs = XFlowStruct::from_json(&empty_flow);
 
     assert_eq!(xfs.name, "empty".to_string());
     assert_eq!(xfs.nodes.len(), 0);

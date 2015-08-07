@@ -155,16 +155,16 @@ impl XFlowStruct {
     /// ```
     /// use xfdocs::xflow::xfstruct::{XFlowStruct};
     ///
-    /// let empty_flow = "{\"id\":\"empty\",\"name\":\"empty\",\"version\":1,\"requirements\":[{\"xtype\":\"flow\",\"version\":1},{\"xtype\":\"flox\",\"version\":1}],\"variables\":{\"input\":[],\"output\":[],\"local\":[]},\"nodes\":[],\"edges\":[],\"branches\":[]}".to_string();
+    /// let empty_flow = "{\"id\":\"empty\",\"name\":\"empty\",\"version\":1,\"requirements\":[{\"xtype\":\"flow\",\"version\":1},{\"xtype\":\"flox\",\"version\":1}],\"variables\":{\"input\":[],\"output\":[],\"local\":[]},\"nodes\":[],\"edges\":[],\"branches\":[]}";
     ///
     /// let xfs = XFlowStruct::from_json(empty_flow);
     /// ```
-    pub fn from_json(json_string:String) -> XFlowStruct {
-        let xfs:XFlowStruct = json::decode(&json_string).unwrap();
+    pub fn from_json(json_string:&str) -> XFlowStruct {
+        let xfs:XFlowStruct = json::decode(json_string).unwrap();
         xfs
     }
 
-    pub fn get_in_edges(&self, node:XFlowNode) -> Vec<&XFlowEdge> {
+    pub fn get_in_edges(&self, node:&XFlowNode) -> Vec<&XFlowEdge> {
 
         let res:Vec<&XFlowEdge> = self.edges.iter().filter({|edge|
             edge[1] == node.id
@@ -173,7 +173,7 @@ impl XFlowStruct {
         res
     }
 
-    pub fn get_out_edges(&self, node:XFlowNode) -> Vec<&XFlowEdge> {
+    pub fn get_out_edges(&self, node:&XFlowNode) -> Vec<&XFlowEdge> {
 
         let res:Vec<&XFlowEdge> = self.edges.iter().filter({|edge|
             edge[0] == node.id
@@ -182,7 +182,7 @@ impl XFlowStruct {
         res
     }
 
-    pub fn get_branches_for(&self, edge:XFlowEdge) -> Vec<&XFlowBranch> {
+    pub fn get_branches_for(&self, edge:&XFlowEdge) -> Vec<&XFlowBranch> {
 
         let res:Vec<&XFlowBranch> = self.branches.iter().filter({|branch|
             edge[0] == branch.edge[0] &&
