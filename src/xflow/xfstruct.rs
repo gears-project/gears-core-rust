@@ -97,8 +97,8 @@ impl XFlowStruct {
     pub fn get_entry_nodes(&self) -> Vec<&XFlowNode> {
 
         self.get_nodes_by(
-            "flow".to_string(),
-            "start".to_string()
+            "flow",
+            "start"
             )
     }
 
@@ -108,9 +108,9 @@ impl XFlowStruct {
     /// ```
     /// use xfdocs::xflow::xfstruct::{XFlowStruct};
     /// let xfs = XFlowStruct::new();
-    /// xfs.get_nodes_by("flow".to_string(), "start".to_string());
+    /// xfs.get_nodes_by("flow", "start");
     /// ```
-    pub fn get_nodes_by(&self, nodetype:String, action:String) -> Vec<&XFlowNode> {
+    pub fn get_nodes_by(&self, nodetype:&str, action:&str) -> Vec<&XFlowNode> {
 
         let res:Vec<&XFlowNode> = self.nodes.iter().filter({|node|
             node.nodetype == nodetype &&
@@ -126,9 +126,9 @@ impl XFlowStruct {
     /// ```
     /// use xfdocs::xflow::xfstruct::{XFlowStruct};
     /// let xfs = XFlowStruct::new();
-    /// xfs.get_nodes_of_type("flow".to_string());
+    /// xfs.get_nodes_of_type("flow");
     /// ```
-    pub fn get_nodes_of_type(&self, nodetype:String) -> Vec<&XFlowNode> {
+    pub fn get_nodes_of_type(&self, nodetype:&str) -> Vec<&XFlowNode> {
 
         let res:Vec<&XFlowNode> = self.nodes.iter().filter({|node|
             node.nodetype == nodetype
