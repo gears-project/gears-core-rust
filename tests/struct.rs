@@ -149,6 +149,13 @@ fn test_xfs_from_json() {
     assert_eq!(xfs.nodes.len(), 10);
     assert_eq!(xfs.edges.len(), 9);
     assert_eq!(xfs.branches.len(), 0);
+
+    assert_eq!(xfs.requirements.len(), 2);
+
+    assert_eq!(xfs.variables.input.len(), 1);
+    assert_eq!(xfs.variables.local.len(), 0);
+    assert_eq!(xfs.variables.output.len(), 1);
+
 }
 
 #[test]
