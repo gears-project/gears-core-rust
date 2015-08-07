@@ -156,9 +156,18 @@ fn test_xfs_from_json() {
     assert_eq!(xfs.variables.local.len(), 0);
     assert_eq!(xfs.variables.output.len(), 1);
 
-    // assert_eq!(xfs.get_entry_nodes().len(), 1);
-    // assert_eq!(xfs.get_terminal_nodes().len(), 1);
+    assert!(xfs.get_entry_node().is_ok());
+    assert!(xfs.get_terminal_nodes().is_ok());
 
+    match xfs.get_entry_node() {
+        Ok(res)  => assert_eq!(res.id, 1),
+        Err(err) => println!("Error: {:?}", err),
+    }
+
+    match xfs.get_terminal_nodes() {
+        Ok(res)  => assert_eq!(res.len(), 1),
+        Err(err) => println!("Error: {:?}", err),
+    }
 
 }
 

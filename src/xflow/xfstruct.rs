@@ -186,11 +186,11 @@ impl XFlowStruct {
 
     }
 
-    pub fn get_entry_nodes(&self) -> Result<Vec<&XFlowNode>, XFlowError> {
+    pub fn get_entry_node(&self) -> Result<&XFlowNode, XFlowError> {
         let res = self.get_nodes_by("flow", "start");
         match res.len() {
             0 => Err(XFlowError::NoEntryNode),
-            1 => Ok(res),
+            1 => Ok(res[0]),
             _ => Err(XFlowError::MultipleEntryNodes),
         }
     }
