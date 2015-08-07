@@ -1,4 +1,5 @@
 use rustc_serialize::json;
+use ::xflow::errors::*;
 
 pub type XFlowEdge = [i32; 2];
 
@@ -94,14 +95,6 @@ impl XFlowStruct {
         format!("xflow {}", self.id)
     }
 
-    pub fn get_entry_nodes(&self) -> Vec<&XFlowNode> {
-
-        self.get_nodes_by(
-            "flow",
-            "start"
-            )
-    }
-
     /// Get `XFlowNode`s of `nodetype` and `action`
     ///
     /// # Example
@@ -191,6 +184,23 @@ impl XFlowStruct {
 
         res
 
+    }
+
+    pub fn get_entry_nodes(&self) -> Result<Vec<&XFlowNode>, XFlowError> {
+        let res = self.get_nodes_by("flow", "start");
+        match res.len() {
+            0 => Err(XFlowError::NoEntryNode),
+            1 => Ok(res),
+            _ => Err(XFlowError::MultipleEntryNodes),
+        }
+    }
+
+    pub fn get_terminal_nodes(&self) -> Result<Vec<&XFlowNode>, XFlowError> {
+        let res = self.get_nodes_by("flow", "end");
+        match res.len() {
+            0 => Err(XFlowError::NoTerminalNode),
+            _ => Ok(res),
+        }
     }
 
 }
