@@ -31,9 +31,6 @@ fn read_json_file(filename:&str) -> String {
 
     s
 }
-fn create_xfstruct() -> XFlowStruct {
-    XFlowStruct::new()
-}
 
 #[test]
 fn test_init_validation() {

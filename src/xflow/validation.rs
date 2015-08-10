@@ -39,6 +39,8 @@ impl Validation {
 
    pub fn validate(&self, xflow:&XFlowStruct) {
        Validation::all_edges_have_nodes(xflow);
+       Validation::has_one_entry_node(xflow);
+       Validation::has_terminal_nodes(xflow);
    }
 
     pub fn all_edges_have_nodes(xflow:&XFlowStruct) -> Vec<ValidationError> {
@@ -73,7 +75,7 @@ impl Validation {
        errors
    }
 
-    pub fn has_one_entry_node(&self, xflow:&XFlowStruct) -> Vec<ValidationError> {
+    pub fn has_one_entry_node(xflow:&XFlowStruct) -> Vec<ValidationError> {
         let mut errors = Vec::<ValidationError>::new();
 
         let res = xflow.get_nodes_by("flow", "start");
@@ -100,25 +102,26 @@ impl Validation {
 
         errors
     }
-//
-//    fn has_terminal_nodes(&self, xflow:&XFlowStruct) -> Vec<ValidationError> {
-//        let mut errors = Vec::<ValidationError>::new();
-//
-//        let res = xflow.get_nodes_by("flow", "end");
-//        match res.len() {
-//            0 => {
-//                errors.push(ValidationError {
-//                    code:    1,
-//                    message: "XFlow has no terminal nodes".to_string(),
-//                    paths:   vec!["/nodes".to_string()],
-//                });
-//            }
-//            _ => {}
-//        }
-//
-//        errors
-//
-//    }
+
+    pub fn has_terminal_nodes(xflow:&XFlowStruct) -> Vec<ValidationError> {
+        let mut errors = Vec::<ValidationError>::new();
+
+        let res = xflow.get_nodes_by("flow", "end");
+        match res.len() {
+            0 => {
+                errors.push(ValidationError {
+                    code:    1,
+                    message: format!("XFlow has no terminal nodes"),
+                    paths:   vec![format!("/nodes")],
+                });
+            }
+            _ => {}
+        }
+
+        errors
+
+    }
+
 //
 //
 //        all_edges_have_nodes(flow),
