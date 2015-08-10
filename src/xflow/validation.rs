@@ -1,5 +1,5 @@
 use ::xflow::xfstruct::*;
-use ::xflow::errors::*;
+// use ::xflow::errors::*;
 
 pub struct ValidationError {
     pub code:    i32,
@@ -14,6 +14,7 @@ impl ValidationError {
     /// ```
     /// use xfdocs::xflow::validation::{ValidationError};
     /// let err = ValidationError::new(1, "sample error".to_string(), Vec::<String>::new());
+    /// println!("Validation error {}", err.message);
     /// ```
     pub fn new(code:i32, message:String, paths:Vec<String>) -> ValidationError {
         ValidationError {
@@ -30,13 +31,6 @@ pub struct Validation {
 
 impl Validation {
 
-    /// Constructs a new `Validation`
-    ///
-    /// # Example
-    /// ```
-    /// use xfdocs::xflow::validation::{Validation};
-    /// let validation = Validation::new();
-    /// ```
     pub fn new() -> Validation {
         Validation {
             errors: Vec::<ValidationError>::new()
@@ -44,8 +38,7 @@ impl Validation {
     }
 
    pub fn validate(&self, xflow:&XFlowStruct) {
-       // let mut x = self.all_edges_have_nodes(xflow);
-       // self.errors.append(x);
+       Validation::all_edges_have_nodes(xflow);
    }
 
     pub fn all_edges_have_nodes(xflow:&XFlowStruct) -> Vec<ValidationError> {
@@ -79,34 +72,34 @@ impl Validation {
 
        errors
    }
-//
-//    fn has_one_entry_node(&self, xflow:&XFlowStruct) -> Vec<ValidationError> {
-//        let mut errors = Vec::<ValidationError>::new();
-//
-//        let res = xflow.get_nodes_by("flow", "start");
-//        match res.len() {
-//            0 => {
-//                errors.push(ValidationError {
-//                    code:    1,
-//                    message: "XFlow has no entry nodes".to_string(),
-//                    paths:   vec!["/nodes".to_string()],
-//                });
-//            },
-//            1 => {},
-//            _ => {
-//                //
-//                // XXX: Add multiple paths
-//                //
-//                errors.push(ValidationError {
-//                    code:    1,
-//                    message: "XFlow has multiple entry nodes".to_string(),
-//                    paths:   vec!["/nodes".to_string()],
-//                });
-//            }
-//        }
-//
-//        errors
-//    }
+
+    pub fn has_one_entry_node(&self, xflow:&XFlowStruct) -> Vec<ValidationError> {
+        let mut errors = Vec::<ValidationError>::new();
+
+        let res = xflow.get_nodes_by("flow", "start");
+        match res.len() {
+            0 => {
+                errors.push(ValidationError {
+                    code:    1,
+                    message: format!("XFlow has no entry nodes"),
+                    paths:   vec![format!("/nodes")],
+                });
+            },
+            1 => {},
+            _ => {
+                //
+                // XXX: Add multiple paths
+                //
+                errors.push(ValidationError {
+                    code:    1,
+                    message: format!("XFlow has multiple entry nodes"),
+                    paths:   vec!["/nodes".to_string()],
+                });
+            }
+        }
+
+        errors
+    }
 //
 //    fn has_terminal_nodes(&self, xflow:&XFlowStruct) -> Vec<ValidationError> {
 //        let mut errors = Vec::<ValidationError>::new();

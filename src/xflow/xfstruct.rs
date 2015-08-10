@@ -65,6 +65,7 @@ impl XFlowStruct {
     /// ```
     /// use xfdocs::xflow::xfstruct::{XFlowStruct};
     /// let xfs = XFlowStruct::new();
+    /// println!("XFlow version {}", xfs.id);
     /// ```
     pub fn new() -> XFlowStruct {
         XFlowStruct {
@@ -151,6 +152,7 @@ impl XFlowStruct {
     /// let empty_flow = "{\"id\":\"empty\",\"name\":\"empty\",\"version\":1,\"requirements\":[{\"xtype\":\"flow\",\"version\":1},{\"xtype\":\"flox\",\"version\":1}],\"variables\":{\"input\":[],\"output\":[],\"local\":[]},\"nodes\":[],\"edges\":[],\"branches\":[]}";
     ///
     /// let xfs = XFlowStruct::from_json(empty_flow);
+    /// println!("XFlow has version {}", xfs.version);
     /// ```
     pub fn from_json(json_string:&str) -> XFlowStruct {
         let xfs:XFlowStruct = json::decode(json_string).unwrap();
