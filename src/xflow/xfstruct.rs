@@ -1,7 +1,7 @@
 use rustc_serialize::json;
 use ::xflow::errors::*;
 
-pub type XFlowEdge = [i32; 2];
+pub type XFlowEdge = (i32, i32);
 
 // Automatically generate `RustcDecodable` and `RustcEncodable` trait
 // implementations
@@ -52,7 +52,7 @@ pub struct XFlowNode {
     pub action:   String,
 }
 
-#[derive(RustcDecodable, RustcEncodable, Debug)]
+#[derive(RustcDecodable, RustcEncodable, Debug, Eq, PartialEq)]
 pub struct XFlowBranch {
     pub name: String,
     pub edge: XFlowEdge,
@@ -160,7 +160,7 @@ impl XFlowStruct {
     pub fn get_in_edges(&self, node:&XFlowNode) -> Vec<&XFlowEdge> {
 
         let res:Vec<&XFlowEdge> = self.edges.iter().filter({|edge|
-            edge[1] == node.id
+            edge.1 == node.id
         }).collect();
 
         res
@@ -169,7 +169,7 @@ impl XFlowStruct {
     pub fn get_out_edges(&self, node:&XFlowNode) -> Vec<&XFlowEdge> {
 
         let res:Vec<&XFlowEdge> = self.edges.iter().filter({|edge|
-            edge[0] == node.id
+            edge.0 == node.id
         }).collect();
 
         res
@@ -178,8 +178,8 @@ impl XFlowStruct {
     pub fn get_branches_for(&self, edge:&XFlowEdge) -> Vec<&XFlowBranch> {
 
         let res:Vec<&XFlowBranch> = self.branches.iter().filter({|branch|
-            edge[0] == branch.edge[0] &&
-                edge[1] == branch.edge[1]
+            edge.0 == branch.edge.0 &&
+                edge.1 == branch.edge.1
         }).collect();
 
         res

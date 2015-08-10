@@ -25,7 +25,7 @@ fn read_json_file(filename:&str) -> String {
     match file.read_to_string(&mut s) {
         Err(why) => panic!("couldn't read {}: {}", display,
                                                    Error::description(&why)),
-        Ok(_)    => print!("{} contains:\n{}", display, s),
+        Ok(_)    => {}, // print!("{} contains:\n{}", display, s),
     };
 
     s
@@ -65,7 +65,7 @@ fn create_edges(amount:i32) -> Vec<XFlowEdge> {
     let mut edges = Vec::<XFlowEdge>::new();
 
     for i in 0..amount {
-        edges.push([left, right + i]);
+        edges.push((left, right + i));
     }
 
     edges
@@ -81,7 +81,7 @@ fn create_branches(amount:i32) -> Vec<XFlowBranch> {
         branches.push(
             XFlowBranch {
                 name: "Some branch".to_string(),
-                edge : [left, right + i]
+                edge : (left, right + i)
             })
     }
 
