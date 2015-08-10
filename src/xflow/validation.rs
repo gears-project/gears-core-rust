@@ -48,40 +48,34 @@ impl Validation {
        // self.errors.append(x);
    }
 
-    pub fn all_edges_have_nodes(xflow:&XFlowStruct) -> Vec<&ValidationError> {
-        let mut errors = Vec::<&ValidationError>::new();
+    pub fn all_edges_have_nodes(xflow:&XFlowStruct) -> Vec<ValidationError> {
+        let mut errors = Vec::<ValidationError>::new();
 
         let mut node_ids = xflow.nodes.iter().map({|node|
-            node.id
+            node.id.clone()
         }).collect::<Vec<i32>>();
 
         node_ids.sort();
         node_ids.dedup();
 
-        // println!("Got x3 {:?}", node_ids);
+        for edge in xflow.edges.iter() {
 
+            if !node_ids.contains(&edge.0) {
+                errors.push(ValidationError {
+                    code:    1,
+                    message: format!("Edge {:?} has no connecting node {:?}", edge, edge.0),
+                    paths:   vec![format!("/edges/{:?}", edge)],
+                });
+            };
 
-//       xflow.edges.iter().map({|edge|
-//
-//           println!("Got edge {:?}", &edge);
-//
-//           if !node_ids.contains(edge[0]) {
-//               errors.push(ValidationError {
-//                   code:    1,
-//                   message: format!("Edge {} has no connecting node {:?}", *edge, *edge[0]),
-//                   paths:   vec![format!("/edges/{}", *edge)],
-//               });
-//           };
-//
-//           if !node_ids.contains(edge[1]) {
-//               errors.push(ValidationError {
-//                   code:    1,
-//                   message: format!("Edge {} has no connecting node {:?}", *edge, *edge[1]),
-//                   paths:   vec![format!("/edges/{}", *edge)],
-//               });
-//           };
-//
-//       });
+            if !node_ids.contains(&edge.1) {
+                errors.push(ValidationError {
+                    code:    1,
+                    message: format!("Edge {:?} has no connecting node {:?}", edge, edge.1),
+                    paths:   vec![format!("/edges/{:?}", edge)],
+                });
+            };
+        }
 
        errors
    }
