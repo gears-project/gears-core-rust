@@ -122,11 +122,15 @@ impl Validation {
 
     }
 
-//
-//
-//        all_edges_have_nodes(flow),
-//        has_one_entry_node(flow),
-//        has_terminal_nodes(flow),
+    pub fn all_nodes_have_at_least_one_edge(xflow:&XFlowStruct) -> Vec<ValidationError> {
+        let mut errors = Vec::<ValidationError>::new();
+
+        errors
+    }
+
+//     X  all_edges_have_nodes(flow),
+//     X  has_one_entry_node(flow),
+//     X  has_terminal_nodes(flow),
 //        all_node_actions_have_matching_requirements(flow),
 //        expressions_reference_known_variables(flow),
 //        all_return_values_exist(flow),
