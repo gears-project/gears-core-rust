@@ -1,14 +1,14 @@
 use ::xflow::xfstruct::*;
 use ::actiondispatch::dispatchable::*;
 
-pub struct Flow {
+pub struct Flox {
     ready: bool
 }
 
-impl Flow {
+impl Flox {
 
-    pub fn new() -> Flow {
-        Flow {
+    pub fn new() -> Flox {
+        Flox {
             ready: false
         }
     }
@@ -18,7 +18,7 @@ impl Flow {
 
 }
 
-impl Dispatchable for Flow {
+impl Dispatchable for Flox {
     fn init(&self) -> Result<String, String> {
         Ok("ok".to_string())
 
@@ -30,4 +30,5 @@ impl Dispatchable for Flow {
     }
 
 }
+
 
