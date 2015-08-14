@@ -13,19 +13,21 @@ impl Flow {
         }
     }
 
-    fn process_node(&self, node:&XFlowNode) -> () {
+    fn process_node(&self, node:&XFlowNode, state:&str) -> () {
+        println!("Flow: {} - {}", node.id, state);
     }
 
 }
 
 impl Dispatchable for Flow {
-    fn init(&self) -> Result<String, String> {
+    fn init(&mut self) -> Result<String, String> {
+        self.ready = true;
         Ok("ok".to_string())
 
     }
 
-    fn dispatch(&self, node:&XFlowNode, state:String) -> Result<String, String> {
-        self.process_node(node);
+    fn dispatch(&self, node:&XFlowNode, state:&str) -> Result<String, String> {
+        self.process_node(node, state);
         Ok("ok".to_string())
     }
 
