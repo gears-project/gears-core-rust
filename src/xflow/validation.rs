@@ -43,6 +43,8 @@ impl Validation {
        Validation::all_edges_have_nodes(xflow);
        Validation::has_one_entry_node(xflow);
        Validation::has_terminal_nodes(xflow);
+       Validation::all_nodes_have_at_least_one_edge(xflow);
+       Validation::all_node_actions_have_matching_requirements(xflow);
    }
 
     pub fn all_edges_have_nodes(xflow:&XFlowStruct) -> Vec<ValidationError> {
@@ -170,7 +172,7 @@ impl Validation {
 //     X  all_edges_have_nodes(flow),
 //     X  has_one_entry_node(flow),
 //     X  has_terminal_nodes(flow),
-//        all_node_actions_have_matching_requirements(flow),
+//     X  all_node_actions_have_matching_requirements(flow),
 //        expressions_reference_known_variables(flow),
 //        all_return_values_exist(flow),
 //        variables_are_defined_only_once(flow),

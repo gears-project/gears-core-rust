@@ -58,6 +58,9 @@ mod test {
 
         let res_a = Validation::all_nodes_have_at_least_one_edge(&xfs);
         assert_eq!(res_a.len(), 0);
+
+        let res_a = Validation::all_node_actions_have_matching_requirements(&xfs);
+        assert_eq!(res_a.len(), 0);
     }
 
 #[test]
