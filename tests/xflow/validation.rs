@@ -39,7 +39,25 @@ mod test {
     fn test_init_validation() {
         let json_string = read_json_file("data/flows/10_steps.json");
         let xfs = XFlowStruct::from_json(&json_string);
-        Validation::all_edges_have_nodes(&xfs);
+        assert_eq!(xfs.nodes.len(), 10);
+    }
+
+#[test]
+    fn test_validations_ok() {
+        let json_string = read_json_file("data/flows/10_steps.json");
+        let xfs = XFlowStruct::from_json(&json_string);
+
+        let res_a = Validation::all_edges_have_nodes(&xfs);
+        assert_eq!(res_a.len(), 0);
+
+        let res_a = Validation::has_one_entry_node(&xfs);
+        assert_eq!(res_a.len(), 0);
+
+        let res_a = Validation::has_terminal_nodes(&xfs);
+        assert_eq!(res_a.len(), 0);
+
+        let res_a = Validation::all_nodes_have_at_least_one_edge(&xfs);
+        assert_eq!(res_a.len(), 0);
     }
 
 }
