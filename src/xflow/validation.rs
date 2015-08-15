@@ -145,6 +145,27 @@ impl Validation {
         errors
     }
 
+    pub fn all_node_actions_have_matching_requirements(xflow:&XFlowStruct) -> Vec<ValidationError> {
+        let mut errors = Vec::<ValidationError>::new();
+
+        let reqs = xflow.requirements.iter().map({|req|
+            req.xtype.clone()
+        }).collect::<Vec<String>>();
+
+        for node in xflow.nodes.iter() {
+
+            if !reqs.contains(&node.nodetype) {
+                errors.push(ValidationError {
+                    code:    1,
+                    message: format!("XFlow node '{}' has an unmatched capability requirement '{}'", node.id, node.nodetype),
+                    paths:   vec![format!("/nodes/{}", node.id)],
+                });
+            }
+        }
+
+        errors
+    }
+
 
 //     X  all_edges_have_nodes(flow),
 //     X  has_one_entry_node(flow),

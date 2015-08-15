@@ -108,5 +108,18 @@ mod test {
 
     }
 
+#[test]
+    fn test_all_node_actions_have_matching_requirements() {
+        let json_string = read_json_file("data/bad_flows/bad_capabilities.json");
+        let xfs = XFlowStruct::from_json(&json_string);
+
+        let res_a = Validation::all_node_actions_have_matching_requirements(&xfs);
+
+        assert_eq!(res_a.len(), 2);
+        assert_eq!(res_a[0].paths[0], "/nodes/1");
+        assert_eq!(res_a[1].paths[0], "/nodes/3");
+
+    }
+
 }
 
