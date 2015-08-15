@@ -44,7 +44,7 @@ pub struct XFlowVariables {
     pub output: Vec<XFlowVariableDefinition>,
 }
 
-#[derive(RustcDecodable, RustcEncodable, Debug)]
+#[derive(RustcDecodable, RustcEncodable, Debug, Eq, PartialEq)]
 pub struct XFlowNode {
     pub id:       i32,
     pub nodetype: String,

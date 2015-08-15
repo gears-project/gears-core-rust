@@ -125,6 +125,24 @@ impl Validation {
     pub fn all_nodes_have_at_least_one_edge(xflow:&XFlowStruct) -> Vec<ValidationError> {
         let mut errors = Vec::<ValidationError>::new();
 
+        for node in xflow.nodes.iter() {
+            let res = xflow.edges.iter().filter({|edge|
+                node.id == edge.0 ||
+                    node.id == edge.1
+            }).collect::<Vec<&XFlowEdge>>();
+
+            if res.len() > 0 {
+                //
+                // XXX: Handle multiple
+                //
+                errors.push(ValidationError {
+                    code:    1,
+                    message: format!("XFlow node is not connected to an edge"),
+                    paths:   vec![format!("/nodes")],
+                });
+            }
+        }
+
         errors
     }
 
