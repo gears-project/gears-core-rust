@@ -38,10 +38,6 @@ mod test {
     // Test code
     //
 
-    fn x_get_rand() -> i32 {
-        5 // rand::thread_rng().gen_range(1, 11)
-    }
-
     fn create_node(id:i32) -> XFlowNode {
         XFlowNode {
             id: id,
@@ -62,8 +58,8 @@ mod test {
     }
 
     fn create_edges(amount:i32) -> Vec<XFlowEdge> {
-        let left   = x_get_rand();
-        let right  = x_get_rand();
+        let left   = 5;
+        let right  = 5;
 
         let mut edges = Vec::<XFlowEdge>::new();
 
@@ -79,8 +75,8 @@ mod test {
         let mut branches = Vec::<XFlowBranch>::new();
 
         for i in 0..amount {
-            let left   = x_get_rand();
-            let right  = x_get_rand();
+            let left   = 5;
+            let right  = 5;
             branches.push(
                 XFlowBranch {
                     name: "Some branch".to_string(),

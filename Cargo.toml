@@ -8,5 +8,4 @@ name = "xfdocs"
 # crate-type = ["dylib"] # staticlib, dylib, rlib
 
 [dependencies]
-rand="0.3.0"
 rustc-serialize = "0.3.15"
