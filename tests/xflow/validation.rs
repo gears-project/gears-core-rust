@@ -60,5 +60,53 @@ mod test {
         assert_eq!(res_a.len(), 0);
     }
 
+#[test]
+    fn test_validations_edges_have_nodes() {
+        let json_string = read_json_file("data/bad_flows/edges_without_nodes.json");
+        let xfs = XFlowStruct::from_json(&json_string);
+
+        let res_a = Validation::all_edges_have_nodes(&xfs);
+
+        assert_eq!(res_a.len(), 3);
+        assert_eq!(res_a[0].paths[0], "/edges/(1, 4)");
+
+    }
+
+#[test]
+    fn test_validations_has_one_entry_node() {
+        let json_string = read_json_file("data/bad_flows/multiple_entry_nodes.json");
+        let xfs = XFlowStruct::from_json(&json_string);
+
+        let res_a = Validation::has_one_entry_node(&xfs);
+
+        assert_eq!(res_a.len(), 1);
+        assert_eq!(res_a[0].paths[0], "/nodes");
+
+    }
+
+#[test]
+    fn test_validations_has_one_entry_node_ii() {
+        let json_string = read_json_file("data/bad_flows/no_entry_nodes.json");
+        let xfs = XFlowStruct::from_json(&json_string);
+
+        let res_a = Validation::has_one_entry_node(&xfs);
+
+        assert_eq!(res_a.len(), 1);
+        assert_eq!(res_a[0].paths[0], "/nodes");
+
+    }
+
+#[test]
+    fn test_validations_has_terminal_nodes() {
+        let json_string = read_json_file("data/bad_flows/no_terminal_nodes.json");
+        let xfs = XFlowStruct::from_json(&json_string);
+
+        let res_a = Validation::has_terminal_nodes(&xfs);
+
+        assert_eq!(res_a.len(), 1);
+        assert_eq!(res_a[0].paths[0], "/nodes");
+
+    }
+
 }
 

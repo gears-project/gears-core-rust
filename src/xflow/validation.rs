@@ -1,6 +1,7 @@
 use ::xflow::xfstruct::*;
 // use ::xflow::errors::*;
 
+#[derive(Debug)]
 pub struct ValidationError {
     pub code:    i32,
     pub message: String,
@@ -25,6 +26,7 @@ impl ValidationError {
     }
 }
 
+#[derive(Debug)]
 pub struct Validation {
     pub errors: Vec<ValidationError>,
 }
@@ -143,6 +145,7 @@ impl Validation {
         errors
     }
 
+
 //     X  all_edges_have_nodes(flow),
 //     X  has_one_entry_node(flow),
 //     X  has_terminal_nodes(flow),
@@ -150,5 +153,5 @@ impl Validation {
 //        expressions_reference_known_variables(flow),
 //        all_return_values_exist(flow),
 //        variables_are_defined_only_once(flow),
-//        all_nodes_have_at_least_one_edge(flow)
+//     X  all_nodes_have_at_least_one_edge(flow)
 }
