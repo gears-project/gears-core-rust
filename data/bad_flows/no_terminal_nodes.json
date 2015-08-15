@@ -21,7 +21,7 @@
       {
         "name" : "ReturnValue",
         "vtype" : "boolean",
-        "value" : false
+        "value" : "false"
       }
     ]
   },

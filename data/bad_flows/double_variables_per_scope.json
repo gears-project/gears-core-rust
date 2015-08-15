@@ -33,12 +33,12 @@
       {
         "name" : "ReturnValue",
         "vtype" : "boolean",
-        "value" : false
+        "value" : "false"
       },
       {
         "name" : "ReturnValue",
         "vtype" : "boolean",
-        "value" : false
+        "value" : "false"
       }
     ]
   },
