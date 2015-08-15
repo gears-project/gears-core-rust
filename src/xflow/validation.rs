@@ -131,14 +131,11 @@ impl Validation {
                     node.id == edge.1
             }).collect::<Vec<&XFlowEdge>>();
 
-            if res.len() > 0 {
-                //
-                // XXX: Handle multiple
-                //
+            if res.len() == 0 {
                 errors.push(ValidationError {
                     code:    1,
-                    message: format!("XFlow node is not connected to an edge"),
-                    paths:   vec![format!("/nodes")],
+                    message: format!("XFlow node '{}' is not connected to an edge", node.id),
+                    paths:   vec![format!("/nodes/{}", node.id)],
                 });
             }
         }
