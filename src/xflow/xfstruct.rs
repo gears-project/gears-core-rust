@@ -102,7 +102,8 @@ impl XFlowStruct {
     /// ```
     /// use xfdocs::xflow::xfstruct::{XFlowStruct};
     /// let xfs = XFlowStruct::new();
-    /// xfs.get_nodes_by("flow", "start");
+    /// let nodes = xfs.get_nodes_by("flow", "start");
+    /// assert_eq!(nodes.len(), 0);
     /// ```
     pub fn get_nodes_by(&self, nodetype:&str, action:&str) -> Vec<&XFlowNode> {
 
@@ -120,7 +121,8 @@ impl XFlowStruct {
     /// ```
     /// use xfdocs::xflow::xfstruct::{XFlowStruct};
     /// let xfs = XFlowStruct::new();
-    /// xfs.get_nodes_of_type("flow");
+    /// let nodes = xfs.get_nodes_of_type("flow");
+    /// assert_eq!(nodes.len(), 0);
     /// ```
     pub fn get_nodes_of_type(&self, nodetype:&str) -> Vec<&XFlowNode> {
 
