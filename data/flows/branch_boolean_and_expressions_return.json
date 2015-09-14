@@ -16,7 +16,8 @@
     "input" : [
       {
         "name"  : "MatchValue",
-        "vtype"  : "boolean"
+        "vtype"  : "boolean",
+        "value" : "false"
       }
     ],
     "output" : [
@@ -29,7 +30,7 @@
       {
         "name"  : "ReturnValue",
         "vtype"  : "number",
-        "value" : 0
+        "value" : "0"
       }
     ]
   },

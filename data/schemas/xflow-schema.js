@@ -66,7 +66,7 @@ export default {
           'items': {
             'type': 'object',
             'oneOf' : [
-              { '$ref': '#/definitions/scopeVariable' }
+              { '$ref': '#/definitions/scopeVariableReference' }
             ]
           }
         },
@@ -132,6 +132,29 @@ export default {
     }
   },
   'definitions' : {
+    'scopeVariableReference' : {
+      'properties' : {
+        'name' : {
+          'type': 'string',
+          'minLength': 1
+        },
+        'vtype' : {
+          'type': 'string',
+          'minLength': 1,
+          'default': 'string',
+          'enum': [
+            'boolean',
+            'number',
+            'string'
+          ]
+        }
+      },
+      'additionalProperties' : false,
+      'required': [
+        'name',
+        'vtype'
+      ]
+    },
     'scopeVariable' : {
       'properties' : {
         'name' : {
@@ -149,18 +172,16 @@ export default {
           ]
         },
         'value' : {
-          'type': 'object',
-          'anyOf': [
-            { 'type': 'boolean' },
-            { 'type': 'string' },
-            { 'type': 'number' }
-          ]
+          'type': 'string',
+          'minLength': 0,
+          'default': ''
         }
       },
       'additionalProperties' : false,
       'required': [
         'name',
-        'vtype'
+        'vtype',
+        'value'
       ]
     },
     'flowNode' : {

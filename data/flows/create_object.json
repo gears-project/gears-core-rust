@@ -20,7 +20,8 @@
     "input" : [
       {
         "name"  : "UserName",
-        "vtype"  : "string"
+        "vtype"  : "string",
+        "value" : ""
       }
     ],
     "output" : [
@@ -31,7 +32,7 @@
     ],
     "local" : [
       {
-        "value" : false,
+        "value" : "false",
         "vtype" : "boolean",
         "name" : "ReturnValue"
       }
