@@ -1,5 +1,5 @@
-use ::xflow::xfstruct::*;
-use ::actiondispatch::dispatchable::*;
+use actiondispatch::dispatchable::*;
+use xfstruct::*;
 
 pub struct Flow {
     ready: bool

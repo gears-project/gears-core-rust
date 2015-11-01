@@ -1,5 +1,6 @@
 use rustc_serialize::json;
-use ::xflow::errors::*;
+
+use errors::XFlowError;
 
 pub type XFlowEdge = (i32, i32);
 

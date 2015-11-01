@@ -1,5 +1,4 @@
-use ::xflow::xfstruct::*;
-// use ::xflow::errors::*;
+use xfstruct::*;
 
 #[derive(Debug)]
 pub struct ValidationError {

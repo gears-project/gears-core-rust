@@ -1,4 +1,4 @@
-use ::xflow::xfstruct::*;
+use xfstruct::*;
 
 pub trait Dispatchable {
     fn init(&mut self) -> Result<String, String>;
