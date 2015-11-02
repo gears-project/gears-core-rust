@@ -12,7 +12,7 @@ impl ValidationError {
     ///
     /// # Example
     /// ```
-    /// use xfdocs::xflow::validation::{ValidationError};
+    /// use xflow::validation::{ValidationError};
     /// let err = ValidationError::new(1, "sample error".to_string(), Vec::<String>::new());
     /// println!("Validation error {}", err.message);
     /// ```
