@@ -1,4 +1,5 @@
 #[cfg(test)]
+#[allow(dead_code)]
 
     use std::error::Error;
     use std::fs::File;
@@ -29,5 +30,4 @@
 
         s
     }
-
 

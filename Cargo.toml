@@ -1,11 +1,11 @@
 [package]
-name = "xfdocs"
+name = "xflow"
 version = "0.1.0"
 authors = ["Michiel Kalkman <michiel@nosuchtype.com>"]
 
 [lib]
-name = "xfdocs"
+name = "xflow"
 # crate-type = ["dylib"] # staticlib, dylib, rlib
 
 [dependencies]
-rustc-serialize = "0.3.15"
+rustc-serialize = "0.3.16"

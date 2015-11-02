@@ -1,6 +1,10 @@
 extern crate rustc_serialize;
 
-pub mod actiondispatch;
+mod actiondispatch;
 pub mod xfstruct;
 pub mod validation;
 pub mod errors;
+
+pub use self::xfstruct::*;
+pub use self::validation::*;
+
