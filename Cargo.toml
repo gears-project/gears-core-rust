@@ -9,3 +9,7 @@ name = "xflow"
 
 [dependencies]
 rustc-serialize = "0.3.16"
+libc = "0.1.12"
+
+[features]
+embedded = []
