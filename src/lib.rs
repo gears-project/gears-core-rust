@@ -1,8 +1,5 @@
 extern crate rustc_serialize;
 
-#[cfg(feature = "embedded")]
-extern crate libc;
-
 mod actiondispatch;
 pub mod xfstruct;
 pub mod validation;
@@ -14,8 +11,16 @@ pub use self::xfstruct::*;
 #[cfg(not(feature = "embedded"))]
 pub use self::validation::*;
 
+//
+// Embedded config
+//
+
+#[cfg(feature = "embedded")]
+extern crate libc;
+
+#[cfg(feature = "embedded")]
 mod embed;
 
 #[cfg(feature = "embedded")]
-pub use self::embed::embed::{char_count};
+pub use self::embed::embed::*;
 
