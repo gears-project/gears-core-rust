@@ -9,3 +9,4 @@
 ## Build
 
     cargo build --release
+    cargo build --features embedded

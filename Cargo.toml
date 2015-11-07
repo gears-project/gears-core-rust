@@ -5,7 +5,11 @@ authors = ["Michiel Kalkman <michiel@nosuchtype.com>"]
 
 [lib]
 name = "xflow"
-# crate-type = ["dylib"] # staticlib, dylib, rlib
+crate-type = ["rlib", "dylib"] # staticlib, dylib, rlib
 
 [dependencies]
 rustc-serialize = "0.3.16"
+libc = "0.1.12"
+
+[features]
+embedded = []
