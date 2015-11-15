@@ -4,3 +4,11 @@ pub enum XFlowError {
     NoTerminalNode,
     MultipleEntryNodes
 }
+
+#[derive(Debug)]
+pub enum XFlowStatus {
+    Completed,
+    Aborted,
+    TimedOut,
+    InvalidState
+}
