@@ -10,53 +10,48 @@ use std::fs::File;
 use std::io::prelude::*;
 use std::path::Path;
 
-fn read_json_file(filename:&str) -> String {
+fn read_json_file(filename: &str) -> String {
     // Create a path to the desired file
     let path = Path::new(filename);
     let display = path.display();
 
     let mut file = match File::open(&path) {
-        Err(why) => panic!(
-            "couldn't open {}: {}",
-            display,
-            Error::description(&why)
-            ),
+        Err(why) => panic!("couldn't open {}: {}", display, Error::description(&why)),
         Ok(file) => file,
     };
 
     // Read the file contents into a string, returns `io::Result<usize>`
     let mut s = String::new();
     match file.read_to_string(&mut s) {
-        Err(why) => panic!("couldn't read {}: {}", display,
-                                                   Error::description(&why)),
-        Ok(_)    => {}, // print!("{} contains:\n{}", display, s),
+        Err(why) => panic!("couldn't read {}: {}", display, Error::description(&why)),
+        Ok(_) => {} // print!("{} contains:\n{}", display, s),
     };
 
     s
 }
 
-fn create_node(id:i32) -> XFlowNode {
+fn create_node(id: i32) -> XFlowNode {
     XFlowNode {
         id: id,
         nodetype: "flow".to_string(),
         action: "some action".to_string(),
-        label: "some name".to_string()
+        label: "some name".to_string(),
     }
 }
 
-fn create_nodes(amount:i32) -> Vec<XFlowNode> {
+fn create_nodes(amount: i32) -> Vec<XFlowNode> {
     let mut nodes = Vec::<XFlowNode>::new();
 
     for i in 0..amount {
         nodes.push(create_node(i))
     }
 
-    return nodes
+    return nodes;
 }
 
-fn create_edges(amount:i32) -> Vec<XFlowEdge> {
-    let left   = 5;
-    let right  = 5;
+fn create_edges(amount: i32) -> Vec<XFlowEdge> {
+    let left = 5;
+    let right = 5;
 
     let mut edges = Vec::<XFlowEdge>::new();
 
@@ -67,18 +62,17 @@ fn create_edges(amount:i32) -> Vec<XFlowEdge> {
     edges
 }
 
-fn create_branches(amount:i32) -> Vec<XFlowBranch> {
+fn create_branches(amount: i32) -> Vec<XFlowBranch> {
 
     let mut branches = Vec::<XFlowBranch>::new();
 
     for i in 0..amount {
-        let left   = 5;
-        let right  = 5;
-        branches.push(
-            XFlowBranch {
-                name: "Some branch".to_string(),
-                edge : (left, right + i)
-            })
+        let left = 5;
+        let right = 5;
+        branches.push(XFlowBranch {
+            name: "Some branch".to_string(),
+            edge: (left, right + i),
+        })
     }
 
     branches
@@ -86,18 +80,18 @@ fn create_branches(amount:i32) -> Vec<XFlowBranch> {
 
 fn create_xflow_struct() -> XFlowStruct {
     XFlowStruct {
-        id:       "id1".to_string(),
-        version:  1,
-        name:     "Some name".to_string(),
+        id: "id1".to_string(),
+        version: 1,
+        name: "Some name".to_string(),
         requirements: Vec::<XFlowRequirement>::new(),
-        variables:    XFlowVariables {
-            input:  Vec::<XFlowVariable>::new(),
-            local:  Vec::<XFlowVariable>::new(),
+        variables: XFlowVariables {
+            input: Vec::<XFlowVariable>::new(),
+            local: Vec::<XFlowVariable>::new(),
             output: Vec::<XFlowVariableDefinition>::new(),
         },
-        nodes:        create_nodes(5),
-        edges:        create_edges(5),
-        branches:     create_branches(5)
+        nodes: create_nodes(5),
+        edges: create_edges(5),
+        branches: create_branches(5),
     }
 }
 
@@ -156,19 +150,19 @@ fn test_xfs_from_json() {
     assert!(xfs.get_terminal_nodes().is_ok());
 
     match xfs.get_entry_node() {
-        Ok(res)  => assert_eq!(res.id, 1),
+        Ok(res) => assert_eq!(res.id, 1),
         Err(err) => println!("Error: {:?}", err),
     }
 
     match xfs.get_terminal_nodes() {
-        Ok(res)  => assert_eq!(res.len(), 1),
+        Ok(res) => assert_eq!(res.len(), 1),
         Err(err) => println!("Error: {:?}", err),
     }
 
     match xfs.get_entry_node() {
-        Ok(res)  => {
+        Ok(res) => {
 
-            let in_edges  = xfs.get_in_edges(res);
+            let in_edges = xfs.get_in_edges(res);
             let out_edges = xfs.get_out_edges(res);
 
             assert_eq!(in_edges.len(), 0);
@@ -176,7 +170,7 @@ fn test_xfs_from_json() {
 
             assert_eq!(xfs.get_branches_for(out_edges[0]).len(), 0);
 
-        },
+        }
         Err(err) => println!("Error: {:?}", err),
     }
 }
