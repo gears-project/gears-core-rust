@@ -2,21 +2,17 @@ use actiondispatch::dispatchable::*;
 use xfstruct::*;
 
 pub struct Flox {
-    ready: bool
+    ready: bool,
 }
 
 impl Flox {
-
     pub fn new() -> Flox {
-        Flox {
-            ready: false
-        }
+        Flox { ready: false }
     }
 
-    fn process_node(&self, node:&XFlowNode, state:&str) -> () {
+    fn process_node(&self, node: &XFlowNode, state: &str) -> () {
         println!("Flox: {} - {}", node.id, state);
     }
-
 }
 
 impl Dispatchable for Flox {
@@ -26,11 +22,8 @@ impl Dispatchable for Flox {
 
     }
 
-    fn dispatch(&self, node:&XFlowNode, state:&str) -> Result<String, String> {
+    fn dispatch(&self, node: &XFlowNode, state: &str) -> Result<String, String> {
         self.process_node(node, state);
         Ok("ok".to_string())
     }
-
 }
-
-

@@ -11,7 +11,6 @@ pub use self::xfstruct::*;
 #[cfg(not(feature = "embedded"))]
 pub use self::validation::*;
 
-//
 // Embedded config
 //
 
@@ -23,4 +22,3 @@ mod embed;
 
 #[cfg(feature = "embedded")]
 pub use self::embed::embed::*;
-
