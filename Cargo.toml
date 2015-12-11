@@ -10,6 +10,7 @@ crate-type = ["rlib", "dylib"] # staticlib, bin
 [dependencies]
 rustc-serialize = "0.3.16"
 libc = "0.1.12"
+clippy = "*"
 
 [features]
 embedded = []
