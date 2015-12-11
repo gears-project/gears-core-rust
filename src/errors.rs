@@ -10,5 +10,5 @@ pub enum XFlowStatus {
     Completed,
     Aborted,
     TimedOut,
-    InvalidState
+    InvalidState,
 }

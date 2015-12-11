@@ -56,7 +56,7 @@ impl Validation {
         node_ids.sort();
         node_ids.dedup();
 
-        for edge in xflow.edges.iter() {
+        for edge in &xflow.edges {
 
             if !node_ids.contains(&edge.0) {
                 errors.push(ValidationError {
@@ -97,7 +97,7 @@ impl Validation {
                 errors.push(ValidationError {
                     code: 1,
                     message: format!("XFlow has multiple entry nodes"),
-                    paths: vec!["/nodes".to_string()],
+                    paths: vec!["/nodes".to_owned()],
                 });
             }
         }
@@ -109,15 +109,13 @@ impl Validation {
         let mut errors = Vec::<ValidationError>::new();
 
         let res = xflow.get_nodes_by("flow", "end");
-        match res.len() {
-            0 => {
-                errors.push(ValidationError {
-                    code: 1,
-                    message: format!("XFlow has no terminal nodes"),
-                    paths: vec![format!("/nodes")],
-                });
-            }
-            _ => {}
+
+        if let 0 = res.len() {
+            errors.push(ValidationError {
+                code: 1,
+                message: format!("XFlow has no terminal nodes"),
+                paths: vec![format!("/nodes")],
+            });
         }
 
         errors
@@ -127,7 +125,7 @@ impl Validation {
     pub fn all_nodes_have_at_least_one_edge(xflow: &XFlowStruct) -> Vec<ValidationError> {
         let mut errors = Vec::<ValidationError>::new();
 
-        for node in xflow.nodes.iter() {
+        for node in &xflow.nodes {
             let res = xflow.edges
                            .iter()
                            .filter({
@@ -135,7 +133,7 @@ impl Validation {
                            })
                            .collect::<Vec<&XFlowEdge>>();
 
-            if res.len() == 0 {
+            if res.is_empty() {
                 errors.push(ValidationError {
                     code: 1,
                     message: format!("XFlow node '{}' is not connected to an edge", node.id),
@@ -157,7 +155,7 @@ impl Validation {
                         })
                         .collect::<Vec<String>>();
 
-        for node in xflow.nodes.iter() {
+        for node in &xflow.nodes {
 
             if !reqs.contains(&node.nodetype) {
                 errors.push(ValidationError {

@@ -70,8 +70,8 @@ impl XFlowStruct {
     /// ```
     pub fn new() -> XFlowStruct {
         XFlowStruct {
-            id: "".to_string(),
-            name: "".to_string(),
+            id: "".to_owned(),
+            name: "".to_owned(),
             version: 1,
             requirements: Vec::<XFlowRequirement>::new(),
             variables: XFlowVariables {
@@ -108,14 +108,13 @@ impl XFlowStruct {
     /// ```
     pub fn get_nodes_by(&self, nodetype: &str, action: &str) -> Vec<&XFlowNode> {
 
-        let res: Vec<&XFlowNode> = self.nodes
-                                       .iter()
-                                       .filter({
-                                           |node| node.nodetype == nodetype && node.action == action
-                                       })
-                                       .collect();
+        self.nodes
+            .iter()
+            .filter({
+                |node| node.nodetype == nodetype && node.action == action
+            })
+            .collect()
 
-        res
     }
 
     /// Get `XFlowNode`s of `nodetype`
@@ -129,14 +128,12 @@ impl XFlowStruct {
     /// ```
     pub fn get_nodes_of_type(&self, nodetype: &str) -> Vec<&XFlowNode> {
 
-        let res: Vec<&XFlowNode> = self.nodes
-                                       .iter()
-                                       .filter({
-                                           |node| node.nodetype == nodetype
-                                       })
-                                       .collect();
-
-        res
+        self.nodes
+            .iter()
+            .filter({
+                |node| node.nodetype == nodetype
+            })
+            .collect()
     }
 
     /// Return a JSON representation of the XFlowStruct
@@ -163,47 +160,37 @@ impl XFlowStruct {
     /// println!("XFlow has version {}", xfs.version);
     /// ```
     pub fn from_json(json_string: &str) -> XFlowStruct {
-        let xfs: XFlowStruct = json::decode(json_string).unwrap();
-        xfs
+        json::decode(json_string).unwrap()
     }
 
     pub fn get_in_edges(&self, node: &XFlowNode) -> Vec<&XFlowEdge> {
 
-        let res: Vec<&XFlowEdge> = self.edges
-                                       .iter()
-                                       .filter({
-                                           |edge| edge.1 == node.id
-                                       })
-                                       .collect();
-
-        res
+        self.edges
+            .iter()
+            .filter({
+                |edge| edge.1 == node.id
+            })
+            .collect()
     }
 
     pub fn get_out_edges(&self, node: &XFlowNode) -> Vec<&XFlowEdge> {
 
-        let res: Vec<&XFlowEdge> = self.edges
-                                       .iter()
-                                       .filter({
-                                           |edge| edge.0 == node.id
-                                       })
-                                       .collect();
-
-        res
+        self.edges
+            .iter()
+            .filter({
+                |edge| edge.0 == node.id
+            })
+            .collect()
     }
 
     pub fn get_branches_for(&self, edge: &XFlowEdge) -> Vec<&XFlowBranch> {
 
-        let res: Vec<&XFlowBranch> = self.branches
-                                         .iter()
-                                         .filter({
-                                             |branch| {
-                                                 edge.0 == branch.edge.0 && edge.1 == branch.edge.1
-                                             }
-                                         })
-                                         .collect();
-
-        res
-
+        self.branches
+            .iter()
+            .filter({
+                |branch| edge.0 == branch.edge.0 && edge.1 == branch.edge.1
+            })
+            .collect()
     }
 
     pub fn get_entry_node(&self) -> Result<&XFlowNode, XFlowError> {
