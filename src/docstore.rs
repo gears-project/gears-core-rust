@@ -1,7 +1,7 @@
 #[derive(Debug)]
 
 enum DocType {
-    XFlowStruct
+    XFlowStruct,
 }
 
 pub struct DocStore {
@@ -10,11 +10,8 @@ pub struct DocStore {
 
 impl DocStore {
     pub fn new() -> DocStore {
-        DocStore {
-            docs: Vec::<(String, DocType)>::new()
-        }
+        DocStore { docs: Vec::<(String, DocType)>::new() }
     }
 
-    pub fn add(&self, doc:DocType) {
-    }
+    pub fn add(&self, doc: DocType) {}
 }
