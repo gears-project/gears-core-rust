@@ -49,4 +49,8 @@ impl XFState {
     pub fn add(&mut self, xvar: &XFlowVariable) {
         self.store.insert(xvar.name.clone(), copy_xvar(xvar));
     }
+
+    pub fn remove(&mut self, name: &str) {
+        self.store.remove(name);
+    }
 }

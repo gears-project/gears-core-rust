@@ -27,3 +27,21 @@ fn test_store_has() {
     }
 
 }
+
+#[test]
+fn test_store_add_and_remove() {
+    let mut xfstate = XFState::new();
+    let xvar = XFlowVariable {
+        name: "number1".to_string(),
+        vtype: "number1".to_string(),
+        value: "number1".to_string(),
+    };
+
+    xfstate.add(&xvar);
+    assert_eq!(xfstate.has("number1"), true);
+
+    xfstate.remove("number1");
+
+    assert_eq!(xfstate.has("number1"), false);
+    assert_eq!(xfstate.is_empty(), true);
+}
