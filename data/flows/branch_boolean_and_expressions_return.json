@@ -96,13 +96,19 @@
   "branches" : [
     {
       "edge" : [2,3],
-      "name"   : "MatchValue",
-      "value"  : true
+      "xvar"  : {
+        "name"  : "MatchValue",
+        "vtype"  : "boolean",
+        "value" : "true"
+      }
     },
     {
       "edge" : [2,4],
-      "name"   : "MatchValue",
-      "value"  : false
+      "xvar"  : {
+        "name"  : "MatchValue",
+        "vtype"  : "boolean",
+        "value" : "false"
+      }
     }
   ]
 }

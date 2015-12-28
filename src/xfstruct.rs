@@ -19,19 +19,19 @@ pub struct XFlowStruct {
     pub branches: Vec<XFlowBranch>,
 }
 
-#[derive(RustcDecodable, RustcEncodable, Debug)]
+#[derive(RustcDecodable, RustcEncodable, Debug, Eq, PartialEq)]
 pub struct XFlowRequirement {
     pub xtype: String,
     pub version: i32,
 }
 
-#[derive(RustcDecodable, RustcEncodable, Debug)]
+#[derive(RustcDecodable, RustcEncodable, Debug, Eq, PartialEq)]
 pub struct XFlowVariableDefinition {
     pub name: String,
     pub vtype: String,
 }
 
-#[derive(RustcDecodable, RustcEncodable, Debug)]
+#[derive(RustcDecodable, RustcEncodable, Debug, Eq, PartialEq)]
 pub struct XFlowVariable {
     pub name: String,
     pub vtype: String,
@@ -55,8 +55,8 @@ pub struct XFlowNode {
 
 #[derive(RustcDecodable, RustcEncodable, Debug, Eq, PartialEq)]
 pub struct XFlowBranch {
-    pub name: String,
     pub edge: XFlowEdge,
+    pub xvar: XFlowVariable,
 }
 
 impl XFlowStruct {
@@ -193,6 +193,16 @@ impl XFlowStruct {
             .collect()
     }
 
+    pub fn get_out_branches(&self, id: i32) -> Vec<&XFlowBranch> {
+
+        self.branches
+            .iter()
+            .filter({
+                |branch| branch.edge.0 == id
+            })
+            .collect()
+    }
+
     pub fn get_entry_node(&self) -> Result<&XFlowNode, XFlowError> {
         let res = self.get_nodes_by("flow", "start");
         match res.len() {
@@ -209,4 +219,32 @@ impl XFlowStruct {
             _ => Ok(res),
         }
     }
+
+    pub fn get_node_id(&self, id: i32) -> Option<&XFlowNode> {
+        let nodes: Vec<&XFlowNode> = self.nodes
+                                         .iter()
+                                         .filter({
+                                             |node| node.id == id
+                                         })
+                                         .collect();
+
+        match nodes.len() {
+            1 => {
+                match nodes.first() {
+                    Some(node) => Some(node),
+                    None => None,
+                }
+            }
+            _ => None,
+        }
+    }
+
+    //     pub fn get_nodes<F>(&self, func: &F) -> Vec<&XFlowNode>
+    //         where F: Fn(&XFlowNode) -> bool
+    //     {
+    //         self.nodes
+    //             .iter()
+    //             .filter(func)
+    //             .collect::<Vec<&XFlowNode>>()
+    //     }
 }

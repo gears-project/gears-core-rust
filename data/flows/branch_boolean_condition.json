@@ -94,13 +94,19 @@
   "branches" : [
     {
       "edge"   : [3,4],
-      "name"   : "ReturnValue",
-      "value"  : true
+      "xvar" : {
+          "name"  : "ReturnValue",
+          "vtype"  : "boolean",
+          "value" : "true"
+      }
     },
     {
       "edge"   : [3,5],
-      "name"   : "ReturnValue",
-      "value"  : false
+      "xvar" : {
+          "name"  : "ReturnValue",
+          "vtype"  : "boolean",
+          "value" : "false"
+      }
     }
   ]
 }

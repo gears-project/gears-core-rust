@@ -70,7 +70,11 @@ fn create_branches(amount: i32) -> Vec<XFlowBranch> {
         let left = 5;
         let right = 5;
         branches.push(XFlowBranch {
-            name: "Some branch".to_string(),
+            xvar: XFlowVariable {
+                name: "MatchValue".to_string(),
+                vtype: "string".to_string(),
+                value: "Some branch".to_string(),
+            },
             edge: (left, right + i),
         })
     }

@@ -96,13 +96,19 @@
   "branches" : [
     {
       "edge"   : [4,5],
-      "name"   : "LoopValue",
-      "value"  : true
+      "xvar"  : {
+        "name"  : "LoopValue",
+        "vtype"  : "boolean",
+        "value" : "true"
+      }
     },
     {
       "edge"   : [4,2],
-      "name"   : "LoopValue",
-      "value"  : false
+      "xvar"  : {
+        "name"  : "LoopValue",
+        "vtype"  : "boolean",
+        "value" : "false"
+      }
     }
   ]
 }
