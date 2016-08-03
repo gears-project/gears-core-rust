@@ -123,22 +123,22 @@ impl<'a> XFlowRunner<'a> {
                     //
 
                     let branches: Vec<&XFlowBranch> = self.xflow
-                                                          .get_out_branches(current_node.id)
-                                                          .iter()
-                                                          .filter({
-                                                              |branch| {
-                                                                  let xv = self.state
-                                                                               .get(&branch.xvar
-                                                                                           .name);
-                                                                  if let Some(xvar) = xv {
-                                                                      *xvar == branch.xvar
-                                                                  } else {
-                                                                      false
-                                                                  }
-                                                              }
-                                                          })
-                                                          .cloned()
-                                                          .collect();
+                        .get_out_branches(current_node.id)
+                        .iter()
+                        .filter({
+                            |branch| {
+                                let xv = self.state
+                                    .get(&branch.xvar
+                                        .name);
+                                if let Some(xvar) = xv {
+                                    *xvar == branch.xvar
+                                } else {
+                                    false
+                                }
+                            }
+                        })
+                        .cloned()
+                        .collect();
                     match branches.len() {
                         0 => {
                             self.status = XFlowStatus::InvalidState;
