@@ -70,6 +70,7 @@ fn test_validations_edges_have_nodes() {
     let res_a = Validation::all_edges_have_nodes(&xfs);
 
     assert_eq!(res_a.len(), 3);
+    assert_eq!(res_a[0].code, 1);
     assert_eq!(res_a[0].paths[0], "/edges/(1, 4)");
 
 }
@@ -82,6 +83,7 @@ fn test_validations_has_one_entry_node() {
     let res_a = Validation::has_one_entry_node(&xfs);
 
     assert_eq!(res_a.len(), 1);
+    assert_eq!(res_a[0].code, 1);
     assert_eq!(res_a[0].paths[0], "/nodes");
 
 }
@@ -94,6 +96,7 @@ fn test_validations_has_one_entry_node_ii() {
     let res_a = Validation::has_one_entry_node(&xfs);
 
     assert_eq!(res_a.len(), 1);
+    assert_eq!(res_a[0].code, 1);
     assert_eq!(res_a[0].paths[0], "/nodes");
 
 }
@@ -106,6 +109,7 @@ fn test_validations_has_terminal_nodes() {
     let res_a = Validation::has_terminal_nodes(&xfs);
 
     assert_eq!(res_a.len(), 1);
+    assert_eq!(res_a[0].code, 1);
     assert_eq!(res_a[0].paths[0], "/nodes");
 
 }
@@ -118,7 +122,11 @@ fn test_all_node_actions_have_matching_requirements() {
     let res_a = Validation::all_node_actions_have_matching_requirements(&xfs);
 
     assert_eq!(res_a.len(), 2);
+
+    assert_eq!(res_a[0].code, 1);
     assert_eq!(res_a[0].paths[0], "/nodes/1");
+
+    assert_eq!(res_a[1].code, 1);
     assert_eq!(res_a[1].paths[0], "/nodes/3");
 
 }
