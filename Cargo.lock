@@ -2,17 +2,8 @@
 name = "xflow"
 version = "0.1.0"
 dependencies = [
- "clippy 0.0.33 (registry+https://github.com/rust-lang/crates.io-index)",
  "libc 0.1.12 (registry+https://github.com/rust-lang/crates.io-index)",
  "rustc-serialize 0.3.16 (registry+https://github.com/rust-lang/crates.io-index)",
-]
-
-[[package]]
-name = "clippy"
-version = "0.0.33"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-dependencies = [
- "unicode-normalization 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -23,10 +14,5 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 [[package]]
 name = "rustc-serialize"
 version = "0.3.16"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-
-[[package]]
-name = "unicode-normalization"
-version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 

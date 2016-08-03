@@ -1,7 +1,3 @@
-#![feature(plugin)]
-
-#![plugin(clippy)]
-
 extern crate rustc_serialize;
 
 pub mod actiondispatch;
