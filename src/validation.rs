@@ -47,11 +47,11 @@ impl Validation {
         let mut errors = Vec::<ValidationError>::new();
 
         let mut node_ids = xflow.nodes
-                                .iter()
-                                .map({
-                                    |node| node.id.clone()
-                                })
-                                .collect::<Vec<i32>>();
+            .iter()
+            .map({
+                |node| node.id.clone()
+            })
+            .collect::<Vec<i32>>();
 
         node_ids.sort();
         node_ids.dedup();
@@ -127,11 +127,11 @@ impl Validation {
 
         for node in &xflow.nodes {
             let res = xflow.edges
-                           .iter()
-                           .filter({
-                               |edge| node.id == edge.0 || node.id == edge.1
-                           })
-                           .collect::<Vec<&XFlowEdge>>();
+                .iter()
+                .filter({
+                    |edge| node.id == edge.0 || node.id == edge.1
+                })
+                .collect::<Vec<&XFlowEdge>>();
 
             if res.is_empty() {
                 errors.push(ValidationError {
@@ -149,18 +149,19 @@ impl Validation {
         let mut errors = Vec::<ValidationError>::new();
 
         let reqs = xflow.requirements
-                        .iter()
-                        .map({
-                            |req| req.xtype.clone()
-                        })
-                        .collect::<Vec<String>>();
+            .iter()
+            .map({
+                |req| req.xtype.clone()
+            })
+            .collect::<Vec<String>>();
 
         for node in &xflow.nodes {
 
             if !reqs.contains(&node.nodetype) {
                 errors.push(ValidationError {
                     code: 1,
-                    message: format!("XFlow node '{}' has an unmatched capability requirement '{}'",
+                    message: format!("XFlow node '{}' has an unmatched capability requirement \
+                                      '{}'",
                                      node.id,
                                      node.nodetype),
                     paths: vec![format!("/nodes/{}", node.id)],

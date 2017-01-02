@@ -222,11 +222,11 @@ impl XFlowStruct {
 
     pub fn get_node_id(&self, id: i32) -> Option<&XFlowNode> {
         let nodes: Vec<&XFlowNode> = self.nodes
-                                         .iter()
-                                         .filter({
-                                             |node| node.id == id
-                                         })
-                                         .collect();
+            .iter()
+            .filter({
+                |node| node.id == id
+            })
+            .collect();
 
         match nodes.len() {
             1 => {
