@@ -145,7 +145,8 @@ impl Validation {
         errors
     }
 
-    pub fn all_node_actions_have_matching_requirements(xflow: &XFlowStruct) -> Vec<ValidationError> {
+    pub fn all_node_actions_have_matching_requirements(xflow: &XFlowStruct)
+                                                       -> Vec<ValidationError> {
         let mut errors = Vec::<ValidationError>::new();
 
         let reqs = xflow.requirements

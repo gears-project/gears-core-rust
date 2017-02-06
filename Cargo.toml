@@ -8,7 +8,9 @@ name = "xflow"
 crate-type = ["rlib", "dylib"] # staticlib, bin
 
 [dependencies]
-rustc-serialize = "0.3.16"
+serde = "0.9"
+serde_json = "0.9"
+serde_derive = "0.9"
 libc = "0.1.12"
 # clippy = "*"
 

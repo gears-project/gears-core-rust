@@ -1,4 +1,4 @@
-use rustc_serialize::json;
+use serde_json;
 
 use errors::XFlowError;
 
@@ -7,7 +7,7 @@ pub type XFlowEdge = (i32, i32);
 // Automatically generate `RustcDecodable` and `RustcEncodable` trait
 // implementations
 
-#[derive(RustcDecodable, RustcEncodable, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct XFlowStruct {
     pub id: String,
     pub version: i32,
@@ -19,33 +19,33 @@ pub struct XFlowStruct {
     pub branches: Vec<XFlowBranch>,
 }
 
-#[derive(RustcDecodable, RustcEncodable, Debug, Eq, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Eq, PartialEq)]
 pub struct XFlowRequirement {
     pub xtype: String,
     pub version: i32,
 }
 
-#[derive(RustcDecodable, RustcEncodable, Debug, Eq, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Eq, PartialEq)]
 pub struct XFlowVariableDefinition {
     pub name: String,
     pub vtype: String,
 }
 
-#[derive(RustcDecodable, RustcEncodable, Debug, Eq, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Eq, PartialEq)]
 pub struct XFlowVariable {
     pub name: String,
     pub vtype: String,
     pub value: String,
 }
 
-#[derive(RustcDecodable, RustcEncodable, Debug)]
+#[derive(Serialize, Deserialize, Debug, Eq, PartialEq)]
 pub struct XFlowVariables {
     pub input: Vec<XFlowVariable>,
     pub local: Vec<XFlowVariable>,
     pub output: Vec<XFlowVariableDefinition>,
 }
 
-#[derive(RustcDecodable, RustcEncodable, Debug, Eq, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Eq, PartialEq)]
 pub struct XFlowNode {
     pub id: i32,
     pub nodetype: String,
@@ -53,7 +53,7 @@ pub struct XFlowNode {
     pub action: String,
 }
 
-#[derive(RustcDecodable, RustcEncodable, Debug, Eq, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Eq, PartialEq)]
 pub struct XFlowBranch {
     pub edge: XFlowEdge,
     pub xvar: XFlowVariable,
@@ -145,7 +145,7 @@ impl XFlowStruct {
     /// xfs.to_json();
     /// ```
     pub fn to_json(&self) -> String {
-        json::encode(&self).unwrap()
+        serde_json::to_string(&self).unwrap()
     }
 
     /// Initialize a XFlowStruct from a JSON string
@@ -160,7 +160,7 @@ impl XFlowStruct {
     /// println!("XFlow has version {}", xfs.version);
     /// ```
     pub fn from_json(json_string: &str) -> XFlowStruct {
-        json::decode(json_string).unwrap()
+        serde_json::from_str(json_string).unwrap()
     }
 
     pub fn get_in_edges(&self, node: &XFlowNode) -> Vec<&XFlowEdge> {
