@@ -4,7 +4,7 @@ use xflow::*;
 #[cfg(test)]
 #[test]
 fn test_store_has() {
-    let mut xfstate = XFState::new();
+    let mut xfstate = XFState::default();
     let xvar = XFlowVariable {
         name: "number1".to_string(),
         vtype: "number1".to_string(),
@@ -30,7 +30,7 @@ fn test_store_has() {
 
 #[test]
 fn test_store_add_and_remove() {
-    let mut xfstate = XFState::new();
+    let mut xfstate = XFState::default();
     let xvar = XFlowVariable {
         name: "number1".to_string(),
         vtype: "number1".to_string(),

@@ -1,3 +1,4 @@
 target
 **/*.bk
 **/*.rs.racertmp
+**/*.rs.rustfmt

@@ -24,7 +24,7 @@ pub struct XFlowRunner<'a> {
 impl<'a> XFlowRunner<'a> {
     pub fn new(xflow: &'a XFlowStruct, dispatcher: &'a Dispatcher<'a>) -> XFlowRunner<'a> {
 
-        let mut state = XFState::new();
+        let mut state = XFState::default();
 
         for xvar in &xflow.variables.input {
             state.add(&xvar);
@@ -140,10 +140,6 @@ impl<'a> XFlowRunner<'a> {
                         .cloned()
                         .collect();
                     match branches.len() {
-                        0 => {
-                            self.status = XFlowStatus::InvalidState;
-                            self.current_node = None;
-                        }
                         1 => {
                             if let Some(branch) = branches.first() {
                                 self.current_node = self.xflow.get_node_id(branch.edge.1);
