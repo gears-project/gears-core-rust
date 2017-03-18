@@ -31,7 +31,7 @@ impl<'a> XFlowRunner<'a> {
         }
 
         for xvar in &xflow.variables.local {
-            state.add(&xvar);
+            state.add(xvar);
         }
 
         match xflow.get_entry_node() {

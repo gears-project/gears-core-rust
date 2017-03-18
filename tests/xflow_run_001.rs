@@ -33,7 +33,7 @@ fn test_run_10_steps() {
         if !xfrunner.step() {
             break;
         }
-        i = i + 1;
+        i += 1;
     }
 
     assert_eq!(i, xfs.nodes.len());
