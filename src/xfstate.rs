@@ -17,20 +17,6 @@ fn copy_xvar(xvar: &XFlowVariable) -> XFlowVariable {
 }
 
 impl XFState {
-    /// Constructs a new `XFState`
-    ///
-    /// # Example
-    /// ```
-    /// use xflow::xfstate::{XFState};
-    /// let xfstate = XFState::new();
-    /// println!("State has {} keys", xfstate.len());
-    /// ```
-    pub fn new() -> XFState {
-        let store: XFStore = HashMap::new();
-
-        XFState { store: store }
-    }
-
     pub fn len(&self) -> usize {
         self.store.len()
     }
@@ -56,6 +42,21 @@ impl XFState {
     }
 }
 
+impl Default for XFState {
+    /// Constructs a new `XFState`
+    ///
+    /// # Example
+    /// ```
+    /// use xflow::xfstate::{XFState};
+    /// let xfstate = XFState::default();
+    /// println!("State has {} keys", xfstate.len());
+    /// ```
+    fn default() -> Self {
+        let store: XFStore = HashMap::new();
+
+        XFState { store: store }
+    }
+}
 
 impl fmt::Display for XFState {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {

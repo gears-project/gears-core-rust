@@ -10,8 +10,8 @@ fn read_json_file(filename: &str) -> String {
 }
 
 fn build_dispatcher<'a>() -> Dispatcher<'a> {
-    let mut dispatcher = Dispatcher::new();
-    let flow_dispatcher = flow::Flow::new();
+    let mut dispatcher = Dispatcher::default();
+    let flow_dispatcher = flow::Flow::default();
     dispatcher.register_dispatcher("flow", flow_dispatcher);
     dispatcher
 }
@@ -33,7 +33,7 @@ fn test_run_10_steps() {
         if !xfrunner.step() {
             break;
         }
-        i = i + 1;
+        i += 1;
     }
 
     assert_eq!(i, xfs.nodes.len());

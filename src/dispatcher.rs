@@ -10,12 +10,6 @@ pub struct Dispatcher<'a> {
 }
 
 impl<'a> Dispatcher<'a> {
-    pub fn new() -> Dispatcher<'a> {
-        let dispatchers: Dispatchers = HashMap::new();
-
-        Dispatcher { dispatchers: dispatchers }
-    }
-
     pub fn register_dispatcher<T: Dispatchable + 'a>(&mut self, name: &str, dispatcher: T) -> () {
         let disp_box = Box::new(dispatcher);
         self.dispatchers.insert(name.to_owned(), disp_box);
@@ -31,5 +25,13 @@ impl<'a> Dispatcher<'a> {
             false
         }
 
+    }
+}
+
+impl<'a> Default for Dispatcher<'a> {
+    fn default() -> Dispatcher<'a> {
+        let dispatchers: Dispatchers = HashMap::new();
+
+        Dispatcher { dispatchers: dispatchers }
     }
 }

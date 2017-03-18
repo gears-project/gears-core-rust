@@ -60,37 +60,12 @@ pub struct XFlowBranch {
 }
 
 impl XFlowStruct {
-    /// Constructs a new `XFlowStruct`
-    ///
-    /// # Example
-    /// ```
-    /// use xflow::xfstruct::{XFlowStruct};
-    /// let xfs = XFlowStruct::new();
-    /// println!("XFlow version {}", xfs.id);
-    /// ```
-    pub fn new() -> XFlowStruct {
-        XFlowStruct {
-            id: "".to_owned(),
-            name: "".to_owned(),
-            version: 1,
-            requirements: Vec::<XFlowRequirement>::new(),
-            variables: XFlowVariables {
-                input: Vec::<XFlowVariable>::new(),
-                local: Vec::<XFlowVariable>::new(),
-                output: Vec::<XFlowVariableDefinition>::new(),
-            },
-            nodes: Vec::<XFlowNode>::new(),
-            edges: Vec::<XFlowEdge>::new(),
-            branches: Vec::<XFlowBranch>::new(),
-        }
-    }
-
     /// Return a string representation of the XFlowStruct
     ///
     /// # Example
     /// ```
     /// use xflow::xfstruct::{XFlowStruct};
-    /// let xfs = XFlowStruct::new();
+    /// let xfs = XFlowStruct::default();
     /// xfs.to_string();
     /// ```
     pub fn to_string(&self) -> String {
@@ -102,7 +77,7 @@ impl XFlowStruct {
     /// # Example
     /// ```
     /// use xflow::xfstruct::{XFlowStruct};
-    /// let xfs = XFlowStruct::new();
+    /// let xfs = XFlowStruct::default();
     /// let nodes = xfs.get_nodes_by("flow", "start");
     /// assert_eq!(nodes.len(), 0);
     /// ```
@@ -122,7 +97,7 @@ impl XFlowStruct {
     /// # Example
     /// ```
     /// use xflow::xfstruct::{XFlowStruct};
-    /// let xfs = XFlowStruct::new();
+    /// let xfs = XFlowStruct::default();
     /// let nodes = xfs.get_nodes_of_type("flow");
     /// assert_eq!(nodes.len(), 0);
     /// ```
@@ -141,7 +116,7 @@ impl XFlowStruct {
     /// # Example
     /// ```
     /// use xflow::xfstruct::{XFlowStruct};
-    /// let xfs = XFlowStruct::new();
+    /// let xfs = XFlowStruct::default();
     /// xfs.to_json();
     /// ```
     pub fn to_json(&self) -> String {
@@ -247,4 +222,31 @@ impl XFlowStruct {
     //             .filter(func)
     //             .collect::<Vec<&XFlowNode>>()
     //     }
+}
+
+impl Default for XFlowStruct {
+    /// Constructs a new `XFlowStruct`
+    ///
+    /// # Example
+    /// ```
+    /// use xflow::xfstruct::{XFlowStruct};
+    /// let xfs = XFlowStruct::default();
+    /// println!("XFlow version {}", xfs.id);
+    /// ```
+    fn default() -> Self {
+        XFlowStruct {
+            id: "".to_owned(),
+            name: "".to_owned(),
+            version: 1,
+            requirements: Vec::<XFlowRequirement>::new(),
+            variables: XFlowVariables {
+                input: Vec::<XFlowVariable>::new(),
+                local: Vec::<XFlowVariable>::new(),
+                output: Vec::<XFlowVariableDefinition>::new(),
+            },
+            nodes: Vec::<XFlowNode>::new(),
+            edges: Vec::<XFlowEdge>::new(),
+            branches: Vec::<XFlowBranch>::new(),
+        }
+    }
 }

@@ -7,10 +7,6 @@ pub struct Flow {
 }
 
 impl Flow {
-    pub fn new() -> Flow {
-        Flow { ready: false }
-    }
-
     fn process_node(&self, node: &XFlowNode, state: &mut XFState) -> () {
         println!("Flow: {} - {}", node.id, state);
         match node.action.as_ref() {
@@ -28,6 +24,12 @@ impl Flow {
             }
 
         }
+    }
+}
+
+impl Default for Flow {
+    fn default() -> Self {
+        Flow { ready: false }
     }
 }
 

@@ -7,10 +7,6 @@ pub struct Flox {
 }
 
 impl Flox {
-    pub fn new() -> Flox {
-        Flox { ready: false }
-    }
-
     fn process_node(&self, node: &XFlowNode, state: &mut XFState) -> () {
         println!("Flox: {} - {}", node.id, state);
         match node.action.as_ref() {
@@ -22,6 +18,12 @@ impl Flox {
             }
 
         }
+    }
+}
+
+impl Default for Flox {
+    fn default() -> Self {
+        Flox { ready: false }
     }
 }
 

@@ -61,7 +61,7 @@ pub mod embed {
     #[no_mangle]
     pub extern "C" fn xflowstruct_new() -> *mut XFlowStruct {
 
-        let xfs = XFlowStruct::new();
+        let xfs = XFlowStruct::default();
 
         unsafe { mem::transmute(Box::new(xfs)) }
     }
