@@ -27,7 +27,7 @@ impl<'a> XFlowRunner<'a> {
         let mut state = XFState::default();
 
         for xvar in &xflow.variables.input {
-            state.add(&xvar);
+            state.add(xvar);
         }
 
         for xvar in &xflow.variables.local {

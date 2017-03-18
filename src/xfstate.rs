@@ -48,7 +48,7 @@ impl Default for XFState {
     /// # Example
     /// ```
     /// use xflow::xfstate::{XFState};
-    /// let xfstate = XFState::new();
+    /// let xfstate = XFState::default();
     /// println!("State has {} keys", xfstate.len());
     /// ```
     fn default() -> Self {

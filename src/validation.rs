@@ -31,10 +31,6 @@ pub struct Validation {
 }
 
 impl Validation {
-    pub fn new() -> Validation {
-        Validation { errors: Vec::<ValidationError>::new() }
-    }
-
     pub fn validate(&self, xflow: &XFlowStruct) {
         Validation::all_edges_have_nodes(xflow);
         Validation::has_one_entry_node(xflow);
@@ -49,7 +45,7 @@ impl Validation {
         let mut node_ids = xflow.nodes
             .iter()
             .map({
-                |node| node.id.clone()
+                |node| node.id
             })
             .collect::<Vec<i32>>();
 
@@ -86,8 +82,8 @@ impl Validation {
             0 => {
                 errors.push(ValidationError {
                     code: 1,
-                    message: format!("XFlow has no entry nodes"),
-                    paths: vec![format!("/nodes")],
+                    message: "XFlow has no entry nodes".into(),
+                    paths: vec!["/nodes".into()],
                 });
             }
             1 => {}
@@ -96,7 +92,7 @@ impl Validation {
                 //
                 errors.push(ValidationError {
                     code: 1,
-                    message: format!("XFlow has multiple entry nodes"),
+                    message: "XFlow has multiple entry nodes".into(),
                     paths: vec!["/nodes".to_owned()],
                 });
             }
@@ -113,8 +109,8 @@ impl Validation {
         if let 0 = res.len() {
             errors.push(ValidationError {
                 code: 1,
-                message: format!("XFlow has no terminal nodes"),
-                paths: vec![format!("/nodes")],
+                message: "XFlow has no terminal nodes".into(),
+                paths: vec!["/nodes".into()],
             });
         }
 
@@ -182,4 +178,10 @@ impl Validation {
     //        all_return_values_exist(flow),
     //        variables_are_defined_only_once(flow),
     //     X  all_nodes_have_at_least_one_edge(flow)
+}
+
+impl Default for Validation {
+    fn default() -> Self {
+        Validation { errors: Vec::<ValidationError>::new() }
+    }
 }
