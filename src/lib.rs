@@ -12,6 +12,7 @@ pub mod validation;
 pub mod errors;
 pub mod xfrunner;
 pub mod dispatcher;
+pub mod flox;
 
 #[cfg(not(feature = "embedded"))]
 pub use self::xfstate::*;

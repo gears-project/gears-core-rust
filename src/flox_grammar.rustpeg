@@ -1,0 +1,20 @@
+use flox::{FloxOutput, FloxError};
+
+pub equation -> i64
+  = add / sub / mul / div
+
+pub add -> i64
+  = i:int "+" j:int { i + j }
+
+pub sub -> i64
+  = i:int "-" j:int { i - j }
+
+pub mul -> i64
+  = i:int "*" j:int { i * j }
+
+pub div -> i64
+  = i:int "/" j:int { i / j }
+
+pub int -> i64
+  = n:$([0-9]+) { n.parse().unwrap() }
+

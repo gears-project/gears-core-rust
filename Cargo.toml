@@ -10,6 +10,7 @@ readme = "README.md"
 keywords = ["xflow"]
 categories = []
 license = "MIT"
+build = "build.rs"
 
 [lib]
 name = "xflow"
@@ -20,6 +21,9 @@ serde = "0.9"
 serde_json = "0.9"
 serde_derive = "0.9"
 libc = "0.1.12"
+
+[build-dependencies]
+peg = { version = "0.5" }
 
 [features]
 embedded = []

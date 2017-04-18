@@ -3,6 +3,7 @@ name = "xflow"
 version = "0.1.1"
 dependencies = [
  "libc 0.1.12 (registry+https://github.com/rust-lang/crates.io-index)",
+ "peg 0.5.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "serde 0.9.6 (registry+https://github.com/rust-lang/crates.io-index)",
  "serde_derive 0.9.6 (registry+https://github.com/rust-lang/crates.io-index)",
  "serde_json 0.9.5 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -27,6 +28,14 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 name = "num-traits"
 version = "0.1.36"
 source = "registry+https://github.com/rust-lang/crates.io-index"
+
+[[package]]
+name = "peg"
+version = "0.5.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+dependencies = [
+ "quote 0.3.12 (registry+https://github.com/rust-lang/crates.io-index)",
+]
 
 [[package]]
 name = "quote"
@@ -86,6 +95,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 "checksum itoa 0.3.1 (registry+https://github.com/rust-lang/crates.io-index)" = "eb2f404fbc66fd9aac13e998248505e7ecb2ad8e44ab6388684c5fb11c6c251c"
 "checksum libc 0.1.12 (registry+https://github.com/rust-lang/crates.io-index)" = "e32a70cf75e5846d53a673923498228bbec6a8624708a9ea5645f075d6276122"
 "checksum num-traits 0.1.36 (registry+https://github.com/rust-lang/crates.io-index)" = "a16a42856a256b39c6d3484f097f6713e14feacd9bfb02290917904fae46c81c"
+"checksum peg 0.5.1 (registry+https://github.com/rust-lang/crates.io-index)" = "5fd5b23b4705900a7dd1e40a5d689bd854840e9ed9d1259ee936fb1752b771d6"
 "checksum quote 0.3.12 (registry+https://github.com/rust-lang/crates.io-index)" = "e7b44fd83db28b83c1c58187159934906e5e955c812e211df413b76b03c909a5"
 "checksum serde 0.9.6 (registry+https://github.com/rust-lang/crates.io-index)" = "0ae9a3c8b07c09dbe43022486d55a18c629a0618d2241e49829aaef9b6d862f9"
 "checksum serde_codegen_internals 0.13.0 (registry+https://github.com/rust-lang/crates.io-index)" = "c3172bf2940b975c0e4f6ab42a511c0a4407d4f46ccef87a9d3615db5c26fa96"
