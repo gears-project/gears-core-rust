@@ -4,17 +4,21 @@ mod flox_grammar {
 }
 
 #[derive(Debug)]
-pub enum FloxOutput {
+pub enum FloxResult {
     String(String),
     Integer(i64),
     Boolean(bool),
 }
 
 #[derive(Debug)]
-pub enum FloxError {
+pub enum Error {
     ParseError(String),
 }
 
-pub fn parse(input: &str) -> Result<FloxOutput, FloxError> {
-    Err(FloxError::ParseError("Unimplemented!".into()))
+pub fn parse(input: &str) -> Result<FloxResult, Error> {
+    match flox_grammar::expression(input) {
+        Ok(res) => Ok(res),
+        Err(_) => Err(Error::ParseError(format!("Bad expression {:?}", input))),
+
+    }
 }

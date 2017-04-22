@@ -1,17 +1,25 @@
 extern crate xflow;
 use xflow::*;
 
-#[test]
-fn test_flox_arithmetic() {
-
-    match flox::parse("1+2") {
-        Err(_) => assert!(true),
+fn expect_ok_integer(input: &str, expected: i64) -> () {
+    match flox::parse(input) {
+        Err(_) => assert!(false),
         Ok(res) => {
             match res {
-                flox::FloxOutput::Integer(res) => assert_eq!(res, 3),
+                flox::FloxResult::Integer(res) => assert_eq!(res, expected),
                 _ => assert!(false),
             }
         }
     }
+}
 
+#[test]
+fn test_flox_arithmetic() {
+    expect_ok_integer("1+2", 3);
+    expect_ok_integer("1 + 2", 3);
+    // expect_ok_integer("1+2+3", 6);
+    expect_ok_integer("1*2", 2);
+    expect_ok_integer("1 * 2", 2);
+    expect_ok_integer("11+255", 266);
+    expect_ok_integer("11 + 255", 266);
 }
