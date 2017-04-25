@@ -18,7 +18,19 @@ pub enum Error {
 pub fn parse(input: &str) -> Result<FloxResult, Error> {
     match flox_grammar::expression(input) {
         Ok(res) => Ok(res),
-        Err(_) => Err(Error::ParseError(format!("Bad expression {:?}", input))),
+        Err(err) => {
+            Err(Error::ParseError(format!("Bad expression {:?} - Error : {:?}", input, err)))
+        }
+
+    }
+}
+
+pub fn parse_boolean(input: &str) -> Result<FloxResult, Error> {
+    match flox_grammar::boolean_expression(input) {
+        Ok(res) => Ok(res),
+        Err(err) => {
+            Err(Error::ParseError(format!("Bad expression {:?} - Error : {:?}", input, err)))
+        }
 
     }
 }
