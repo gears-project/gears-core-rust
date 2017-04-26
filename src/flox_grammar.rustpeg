@@ -1,21 +1,27 @@
 use flox::{FloxResult};
 
 pub expression -> FloxResult
+  = arithmetic_expression
+  / boolean_expression
+
+/// Arithmetic
+
+pub arithmetic_expression -> FloxResult
   = e:equation { FloxResult::Integer(e) }
 
-pub equation -> i64
+equation -> i64
   = add / sub / mul / div
 
-pub add -> i64
+add -> i64
   = i:int space* "+" space* j:int { i + j }
 
-pub sub -> i64
+sub -> i64
   = i:int space* "-" space* j:int { i - j }
 
-pub mul -> i64
+mul -> i64
   = i:int space* "*" space* j:int { i * j }
 
-pub div -> i64
+div -> i64
   = i:int space* "/" space* j:int { i / j }
 
 // Boolean
@@ -23,7 +29,7 @@ pub div -> i64
 pub boolean_expression -> FloxResult
   = e:boolean_test { FloxResult::Boolean(e) }
 
-pub boolean_test -> bool
+boolean_test -> bool
   = equals
   / not_equals
   / greater_than
@@ -31,37 +37,37 @@ pub boolean_test -> bool
   / greater_or_equal
   / less_or_equal
 
-pub equals -> bool
+equals -> bool
   = l:int space* "==" space* r:int { l == r }
   / l:boolean space* "==" space* r:boolean { l == r }
 
-pub not_equals -> bool
+not_equals -> bool
   = l:int space* "!=" space* r:int { l != r }
   / l:boolean space* "!=" space* r:boolean { l != r }
 
-pub greater_than -> bool
+greater_than -> bool
   = l:int space* ">" space* r:int { l > r }
 
-pub less_than -> bool
+less_than -> bool
   = l:int space* "<" space* r:int { l < r }
 
-pub greater_or_equal -> bool
+greater_or_equal -> bool
   = l:int space* ">=" space* r:int { l >= r }
 
-pub less_or_equal -> bool
+less_or_equal -> bool
   = l:int space* "<=" space* r:int { l <= r }
 
 
 // Primitives
 
-pub boolean -> bool
+boolean -> bool
  = b:"true" { true }
  / b:"false" { false }
 
-pub int -> i64
+int -> i64
   = n:$([0-9]+) { n.parse().unwrap() }
 
-pub space -> ()
+space -> ()
   = " "
   / "\n"
   / "\r"
