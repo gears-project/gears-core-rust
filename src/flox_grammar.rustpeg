@@ -3,6 +3,7 @@ use flox::{FloxResult};
 pub expression -> FloxResult
   = arithmetic_expression
   / boolean_expression
+  / atom
 
 /// Arithmetic
 
@@ -36,6 +37,10 @@ boolean_test -> bool
   / less_than
   / greater_or_equal
   / less_or_equal
+  / and
+  / or
+  / not
+  / xor
 
 equals -> bool
   = l:int space* "==" space* r:int { l == r }
@@ -57,8 +62,23 @@ greater_or_equal -> bool
 less_or_equal -> bool
   = l:int space* "<=" space* r:int { l <= r }
 
+and -> bool
+  = l:boolean space* "&&" space* r:boolean { l && r }
+
+or -> bool
+  = l:boolean space* "||" space* r:boolean { l || r }
+
+xor -> bool
+  = l:boolean space* "^" space* r:boolean { l && r }
+
+not -> bool
+  = "!" l:boolean { !l }
 
 // Primitives
+
+atom -> FloxResult
+ = b:boolean { FloxResult::Boolean(b) }
+ / i:int { FloxResult::Integer(i) }
 
 boolean -> bool
  = b:"true" { true }
