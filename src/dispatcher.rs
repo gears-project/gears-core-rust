@@ -22,6 +22,9 @@ impl<'a> Dispatcher<'a> {
             dispatch.dispatch(xfnode, xfstate);
             true
         } else {
+            println!("Dispatch error : no dispatcher found for {}/{}!",
+                     xfnode.nodetype,
+                     xfnode.action);
             false
         }
 

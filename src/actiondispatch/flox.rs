@@ -2,9 +2,7 @@ use actiondispatch::dispatchable::*;
 use xfstruct::*;
 use xfstate::XFState;
 
-pub struct Flox {
-    ready: bool,
-}
+pub struct Flox;
 
 impl Flox {
     fn process_node(&self, node: &XFlowNode, state: &mut XFState) -> () {
@@ -23,19 +21,17 @@ impl Flox {
 
 impl Default for Flox {
     fn default() -> Self {
-        Flox { ready: false }
+        Flox {}
     }
 }
 
 impl Dispatchable for Flox {
-    fn init(&mut self) -> Result<String, String> {
-        self.ready = true;
-        Ok("ok".to_owned())
-
+    fn init(&mut self) -> Result<(), ()> {
+        Ok(())
     }
 
-    fn dispatch(&self, node: &XFlowNode, state: &mut XFState) -> Result<String, String> {
+    fn dispatch(&self, node: &XFlowNode, state: &mut XFState) -> Result<(), ()> {
         self.process_node(node, state);
-        Ok("ok".to_owned())
+        Ok(())
     }
 }
