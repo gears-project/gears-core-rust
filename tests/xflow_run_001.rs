@@ -1,7 +1,7 @@
+extern crate env_logger;
+
 extern crate xflow;
 use xflow::*;
-
-#[cfg(test)]
 
 mod helper;
 
@@ -11,15 +11,17 @@ fn read_json_file(filename: &str) -> String {
 
 fn build_dispatcher<'a>() -> Dispatcher<'a> {
     let mut dispatcher = Dispatcher::default();
-    let flow_dispatcher = actiondispatch::flow::Flow::default();
-    let flox_dispatcher = actiondispatch::flox::Flox::default();
-    dispatcher.register_dispatcher("flow", flow_dispatcher);
-    dispatcher.register_dispatcher("flox", flox_dispatcher);
+    let flow_receiver = actiondispatch::flow::Flow::default();
+    let flox_receiver = actiondispatch::flox::Flox::default();
+    dispatcher.register_receiver("flow", flow_receiver);
+    dispatcher.register_receiver("flox", flox_receiver);
     dispatcher
 }
 
 #[test]
 fn test_run_10_steps() {
+    let _ = env_logger::init();
+
     let json_string = read_json_file("data/flows/10_steps.json");
     let xfs = XFlowStruct::from_json(&json_string);
     assert_eq!(xfs.nodes.len(), 10);
@@ -43,6 +45,8 @@ fn test_run_10_steps() {
 
 #[test]
 fn test_run_simple_branch() {
+    let _ = env_logger::init();
+
     let json_string = read_json_file("data/flows/branch_boolean.json");
     let xfs = XFlowStruct::from_json(&json_string);
     assert_eq!(xfs.nodes.len(), 4);

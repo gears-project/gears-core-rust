@@ -7,24 +7,29 @@ pub struct Flox;
 
 impl Flox {
     fn process_node(&self, node: &XFlowNode, state: &mut XFState) -> () {
-        println!("Flox: {} - {}", node.id, state);
+        debug!("Flox: {} - {}", node.id, state);
         match node.action.as_ref() {
             "evalexpr" => {
-                println!("Flox: evalexpr {} - {}", node.id, state);
+                info!("Flox: evalexpr {} - {}", node.id, state);
                 match node.parameters {
                     Some(ref params) => {
                         match params.get("expression") {
                             Some(val) => {
-                                error!("FLOX EXPRESSION {}", val);
+                                debug!("Expression : {}", val);
+                                flox::parse(val.as_str().unwrap());
                             }
-                            None => {}
+                            None => {
+                                error!("No expression found in parameters");
+                            }
                         }
                     }
-                    None => {}
+                    None => {
+                        error!("No parameters found in node");
+                    }
                 }
             }
             _ => {
-                println!("Flox: unimplemented/unhandled {} - {}", node.id, state);
+                error!("Unimplemented/unhandled action : {} - {}", node.id, state);
             }
 
         }

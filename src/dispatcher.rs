@@ -10,21 +10,21 @@ pub struct Dispatcher<'a> {
 }
 
 impl<'a> Dispatcher<'a> {
-    pub fn register_dispatcher<T: Dispatchable + 'a>(&mut self, name: &str, dispatcher: T) -> () {
+    pub fn register_receiver<T: Dispatchable + 'a>(&mut self, name: &str, dispatcher: T) -> () {
         let disp_box = Box::new(dispatcher);
         self.dispatchers.insert(name.to_owned(), disp_box);
     }
 
     pub fn dispatch(&self, xfnode: &XFlowNode, xfstate: &mut XFState) -> bool {
-        println!("Dispatch {}/{}!", xfnode.nodetype, xfnode.action);
+        info!("Dispatch {}/{}!", xfnode.nodetype, xfnode.action);
 
         if let Some(dispatch) = self.dispatchers.get(&xfnode.nodetype) {
             dispatch.dispatch(xfnode, xfstate);
             true
         } else {
-            println!("Dispatch error : no dispatcher found for {}/{}!",
-                     xfnode.nodetype,
-                     xfnode.action);
+            error!("Dispatch error : no dispatcher found for {}/{}!",
+                   xfnode.nodetype,
+                   xfnode.action);
             false
         }
 
