@@ -45,12 +45,13 @@ pub struct XFlowVariables {
     pub output: Vec<XFlowVariableDefinition>,
 }
 
-#[derive(Serialize, Deserialize, Debug, Eq, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct XFlowNode {
     pub id: i32,
     pub nodetype: String,
     pub label: String,
     pub action: String,
+    pub parameters: Option<serde_json::Map<String, serde_json::Value>>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq)]

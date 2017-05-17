@@ -4,7 +4,7 @@ mod flox_grammar {
 }
 
 #[derive(Debug)]
-pub enum FloxResult {
+pub enum FloxValue {
     String(String),
     Integer(i64),
     Boolean(bool),
@@ -15,7 +15,7 @@ pub enum Error {
     ParseError(String),
 }
 
-pub fn parse(input: &str) -> Result<FloxResult, Error> {
+pub fn parse(input: &str) -> Result<FloxValue, Error> {
     match flox_grammar::arithmetic_expression(input) {
         Ok(res) => Ok(res),
         Err(err) => {
@@ -24,7 +24,7 @@ pub fn parse(input: &str) -> Result<FloxResult, Error> {
     }
 }
 
-pub fn parse_arithmetic(input: &str) -> Result<FloxResult, Error> {
+pub fn parse_arithmetic(input: &str) -> Result<FloxValue, Error> {
     match flox_grammar::arithmetic_expression(input) {
         Ok(res) => Ok(res),
         Err(err) => {
@@ -33,7 +33,7 @@ pub fn parse_arithmetic(input: &str) -> Result<FloxResult, Error> {
     }
 }
 
-pub fn parse_boolean(input: &str) -> Result<FloxResult, Error> {
+pub fn parse_boolean(input: &str) -> Result<FloxValue, Error> {
     match flox_grammar::boolean_expression(input) {
         Ok(res) => Ok(res),
         Err(err) => {

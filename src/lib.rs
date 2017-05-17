@@ -14,6 +14,9 @@ pub mod xfrunner;
 pub mod dispatcher;
 pub mod flox;
 
+#[macro_use]
+extern crate log;
+
 #[cfg(not(feature = "embedded"))]
 pub use self::xfstate::*;
 

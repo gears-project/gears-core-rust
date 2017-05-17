@@ -11,8 +11,10 @@ fn read_json_file(filename: &str) -> String {
 
 fn build_dispatcher<'a>() -> Dispatcher<'a> {
     let mut dispatcher = Dispatcher::default();
-    let flow_dispatcher = flow::Flow::default();
+    let flow_dispatcher = actiondispatch::flow::Flow::default();
+    let flox_dispatcher = actiondispatch::flox::Flox::default();
     dispatcher.register_dispatcher("flow", flow_dispatcher);
+    dispatcher.register_dispatcher("flox", flox_dispatcher);
     dispatcher
 }
 

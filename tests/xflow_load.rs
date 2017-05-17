@@ -31,6 +31,7 @@ fn create_node(id: i32) -> XFlowNode {
         nodetype: "flow".to_string(),
         action: "some action".to_string(),
         label: "some name".to_string(),
+        parameters: None,
     }
 }
 

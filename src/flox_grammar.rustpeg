@@ -1,17 +1,20 @@
-use flox::{FloxResult};
+use flox::{FloxValue};
 
-pub expression -> FloxResult
-  = arithmetic_expression
-  / boolean_expression
+pub expression -> FloxValue
+  = boolean_expression
+  / arithmetic_expression
   / atom
 
 /// Arithmetic
 
-pub arithmetic_expression -> FloxResult
-  = e:equation { FloxResult::Integer(e) }
+pub arithmetic_expression -> FloxValue
+  = e:equation { FloxValue::Integer(e) }
 
 equation -> i64
-  = add / sub / mul / div
+  = mul
+  / div
+  / add
+  / sub
 
 add -> i64
   = i:int space* "+" space* j:int { i + j }
@@ -27,8 +30,8 @@ div -> i64
 
 // Boolean
 
-pub boolean_expression -> FloxResult
-  = e:boolean_test { FloxResult::Boolean(e) }
+pub boolean_expression -> FloxValue
+  = e:boolean_test { FloxValue::Boolean(e) }
 
 boolean_test -> bool
   = equals
@@ -76,9 +79,9 @@ not -> bool
 
 // Primitives
 
-atom -> FloxResult
- = b:boolean { FloxResult::Boolean(b) }
- / i:int { FloxResult::Integer(i) }
+atom -> FloxValue
+ = i:int { FloxValue::Integer(i) }
+ / b:boolean { FloxValue::Boolean(b) }
 
 boolean -> bool
  = b:"true" { true }
