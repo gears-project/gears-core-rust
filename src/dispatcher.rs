@@ -3,29 +3,29 @@ use std::collections::HashMap;
 use xfstruct::XFlowNode;
 use xfstate::XFState;
 
-type Dispatchers<'a> = HashMap<String, Box<Dispatchable + 'a>>;
+type Receivers<'a> = HashMap<String, Box<Dispatchable + 'a>>;
 
 pub struct Dispatcher<'a> {
-    dispatchers: Dispatchers<'a>,
+    receivers: Receivers<'a>,
 }
 
 impl<'a> Dispatcher<'a> {
-    pub fn register_receiver<T: Dispatchable + 'a>(&mut self, name: &str, dispatcher: T) -> () {
-        let disp_box = Box::new(dispatcher);
-        self.dispatchers.insert(name.to_owned(), disp_box);
+    pub fn register_receiver<T: Dispatchable + 'a>(&mut self, name: &str, receiver: T) -> () {
+        let receiver_box = Box::new(receiver);
+        self.receivers.insert(name.to_owned(), receiver_box);
     }
 
-    pub fn dispatch(&self, xfnode: &XFlowNode, xfstate: &mut XFState) -> bool {
-        info!("Dispatch {}/{}!", xfnode.nodetype, xfnode.action);
+    pub fn dispatch(&self, xfnode: &XFlowNode, xfstate: &mut XFState) -> Result<(), ()> {
+        info!("Nodetype {}, action {}", xfnode.nodetype, xfnode.action);
 
-        if let Some(dispatch) = self.dispatchers.get(&xfnode.nodetype) {
-            dispatch.dispatch(xfnode, xfstate);
-            true
+        if let Some(receiver) = self.receivers.get(&xfnode.nodetype) {
+            receiver.dispatch(xfnode, xfstate);
+            Ok(())
         } else {
             error!("Dispatch error : no dispatcher found for {}/{}!",
                    xfnode.nodetype,
                    xfnode.action);
-            false
+            Err(())
         }
 
     }
@@ -33,8 +33,8 @@ impl<'a> Dispatcher<'a> {
 
 impl<'a> Default for Dispatcher<'a> {
     fn default() -> Dispatcher<'a> {
-        let dispatchers: Dispatchers = HashMap::new();
+        let receivers: Receivers = HashMap::new();
 
-        Dispatcher { dispatchers: dispatchers }
+        Dispatcher { receivers: receivers }
     }
 }

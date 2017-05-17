@@ -16,7 +16,14 @@ impl Flox {
                         match params.get("expression") {
                             Some(val) => {
                                 debug!("Expression : {}", val);
-                                flox::parse(val.as_str().unwrap());
+                                match flox::parse(val.as_str().unwrap()) {
+                                    Ok(res) => {
+                                        debug!("Expression {} - Result - {:?}", val, res);
+                                    }
+                                    Err(err) => {
+                                        error!("Expression {} - Result - {:?}", val, err);
+                                    }
+                                };
                             }
                             None => {
                                 error!("No expression found in parameters");
