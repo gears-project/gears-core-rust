@@ -62,3 +62,18 @@ fn test_run_simple_branch() {
 
     assert_eq!(xfrunner.is_completed_ok(), true);
 }
+
+#[test]
+fn test_run_arithmetic() {
+    let _ = env_logger::init();
+
+    let json_string = read_json_file("data/flows/arithmetic_addition.json");
+    let xfs = XFlowStruct::from_json(&json_string);
+
+    let dispatcher = build_dispatcher();
+    let mut xfrunner = XFlowRunner::new(&xfs, &dispatcher);
+
+    xfrunner.run();
+
+    assert_eq!(xfrunner.is_completed_ok(), true);
+}

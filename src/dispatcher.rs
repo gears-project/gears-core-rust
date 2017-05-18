@@ -22,7 +22,7 @@ impl<'a> Dispatcher<'a> {
             receiver.dispatch(xfnode, xfstate);
             Ok(())
         } else {
-            error!("Dispatch error : no dispatcher found for {}/{}!",
+            error!("No dispatcher found for {}/{}!",
                    xfnode.nodetype,
                    xfnode.action);
             Err(())
