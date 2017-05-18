@@ -51,7 +51,7 @@ pub struct XFlowNode {
     pub nodetype: String,
     pub label: String,
     pub action: String,
-    pub parameters: Option<serde_json::Map<String, serde_json::Value>>,
+    pub parameters: Option<serde_json::Value>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq)]

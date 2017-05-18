@@ -3,14 +3,14 @@ mod flox_grammar {
     include!(concat!(env!("OUT_DIR"), "/flox_grammar.rs"));
 }
 
-#[derive(Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub enum FloxValue {
     String(String),
     Integer(i64),
     Boolean(bool),
 }
 
-#[derive(Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub enum Error {
     ParseError(String),
 }
