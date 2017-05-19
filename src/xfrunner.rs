@@ -2,7 +2,7 @@ use xfstruct::*;
 use xfstate::*;
 use dispatcher::*;
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum XFlowStatus {
     Uninitialized,
     Initialized,
@@ -14,11 +14,12 @@ pub enum XFlowStatus {
 }
 
 pub struct XFlowRunner<'a> {
-    status: XFlowStatus,
+    pub status: XFlowStatus,
     xflow: &'a XFlowStruct,
     dispatcher: &'a Dispatcher<'a>,
     state: XFState,
     current_node: Option<&'a XFlowNode>,
+    output: Option<Vec<XFlowValue>>,
 }
 
 impl<'a> XFlowRunner<'a> {
@@ -42,6 +43,7 @@ impl<'a> XFlowRunner<'a> {
                     dispatcher: dispatcher,
                     state: state,
                     current_node: Some(node),
+                    output: None,
                 }
             }
             _ => {
@@ -51,6 +53,7 @@ impl<'a> XFlowRunner<'a> {
                     dispatcher: dispatcher,
                     state: state,
                     current_node: None,
+                    output: None,
                 }
             }
         }
@@ -64,17 +67,11 @@ impl<'a> XFlowRunner<'a> {
     }
 
     pub fn is_initialized(&self) -> bool {
-        match self.status {
-            XFlowStatus::Initialized => true,
-            _ => false,
-        }
+        self.status == XFlowStatus::Initialized
     }
 
     pub fn is_completed_ok(&self) -> bool {
-        match self.status {
-            XFlowStatus::Finished => true,
-            _ => false,
-        }
+        self.status == XFlowStatus::Finished
     }
 
     pub fn run(&mut self) -> () {
@@ -96,6 +93,7 @@ impl<'a> XFlowRunner<'a> {
             true
         } else {
             self.status = XFlowStatus::Finished;
+            // self.finalize();
             false
         }
     }
@@ -158,6 +156,14 @@ impl<'a> XFlowRunner<'a> {
         } else {
             self.status = XFlowStatus::InvalidState;
             self.current_node = None;
+        }
+    }
+
+    fn finalize(&mut self) -> () {
+        if (self.status == XFlowStatus::Finished) {
+
+        } else {
+            error!("Called before xflow has finished!");
         }
     }
 }

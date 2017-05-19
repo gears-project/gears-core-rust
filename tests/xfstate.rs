@@ -7,8 +7,8 @@ fn test_store_has() {
     let mut xfstate = XFState::default();
     let xvar = XFlowVariable {
         name: "number1".to_string(),
-        vtype: "number1".to_string(),
-        value: "number1".to_string(),
+        vtype: XFlowValueType::String,
+        value: XFlowValue::String("number1".to_owned()),
     };
 
     assert_eq!(xfstate.len(), 0);
@@ -33,8 +33,8 @@ fn test_store_add_and_remove() {
     let mut xfstate = XFState::default();
     let xvar = XFlowVariable {
         name: "number1".to_string(),
-        vtype: "number1".to_string(),
-        value: "number1".to_string(),
+        vtype: XFlowValueType::String,
+        value: XFlowValue::String("number1".to_owned()),
     };
 
     xfstate.add(&xvar);

@@ -4,9 +4,6 @@ use errors::XFlowError;
 
 pub type XFlowEdge = (i32, i32);
 
-// Automatically generate `RustcDecodable` and `RustcEncodable` trait
-// implementations
-
 #[derive(Serialize, Deserialize, Debug)]
 pub struct XFlowStruct {
     pub id: String,
@@ -19,6 +16,24 @@ pub struct XFlowStruct {
     pub branches: Vec<XFlowBranch>,
 }
 
+#[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
+pub enum XFlowValueType {
+    #[serde(rename="string")]
+    String,
+    #[serde(rename="number")]
+    Integer,
+    #[serde(rename="boolean")]
+    Boolean,
+}
+
+#[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
+#[serde(untagged)]
+pub enum XFlowValue {
+    String(String),
+    Integer(i64),
+    Boolean(bool),
+}
+
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq)]
 pub struct XFlowRequirement {
     pub xtype: String,
@@ -28,14 +43,14 @@ pub struct XFlowRequirement {
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq)]
 pub struct XFlowVariableDefinition {
     pub name: String,
-    pub vtype: String,
+    pub vtype: XFlowValueType,
 }
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq)]
 pub struct XFlowVariable {
     pub name: String,
-    pub vtype: String,
-    pub value: String,
+    pub vtype: XFlowValueType,
+    pub value: XFlowValue,
 }
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq)]

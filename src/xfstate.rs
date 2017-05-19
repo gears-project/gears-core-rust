@@ -4,6 +4,7 @@ use xfstruct::XFlowVariable;
 
 type XFStore = HashMap<String, XFlowVariable>;
 
+#[derive(Serialize, Deserialize, Debug)]
 pub struct XFState {
     store: XFStore,
 }

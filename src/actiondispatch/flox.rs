@@ -1,5 +1,5 @@
 use serde_json;
-use serde_json::{Value, Error};
+use serde_json::Value;
 use actiondispatch::dispatchable::*;
 use xfstruct::*;
 use xfstate::XFState;
@@ -12,8 +12,8 @@ struct FloxParameters {
 }
 
 impl FloxParameters {
-    pub fn from_optional_value(value: &Option<Value>) -> Result<FloxParameters, Error> {
-        let flox_params: FloxParameters = serde_json::from_value(value.clone().unwrap()).unwrap();
+    pub fn from_optional_value(v: &Option<Value>) -> Result<FloxParameters, String> {
+        let flox_params: FloxParameters = serde_json::from_value(v.clone().unwrap()).unwrap();
         Ok(flox_params)
     }
 }
@@ -38,7 +38,7 @@ impl Flox {
                                         state.add(&XFlowVariable {
                                             name: node_params.returns.name,
                                             vtype: node_params.returns.vtype,
-                                            value: format!("{:?}", res),
+                                            value: res.clone(),
                                         });
                                     }
                                     Err(err) => {

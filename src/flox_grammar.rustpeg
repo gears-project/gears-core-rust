@@ -1,14 +1,14 @@
-use flox::{FloxValue};
+use xfstruct::{XFlowValue};
 
-pub expression -> FloxValue
+pub expression -> XFlowValue
   = boolean_expression
   / arithmetic_expression
   / atom
 
 /// Arithmetic
 
-pub arithmetic_expression -> FloxValue
-  = e:equation { FloxValue::Integer(e) }
+pub arithmetic_expression -> XFlowValue
+  = e:equation { XFlowValue::Integer(e) }
 
 equation -> i64
   = mul
@@ -30,8 +30,8 @@ div -> i64
 
 // Boolean
 
-pub boolean_expression -> FloxValue
-  = e:boolean_test { FloxValue::Boolean(e) }
+pub boolean_expression -> XFlowValue
+  = e:boolean_test { XFlowValue::Boolean(e) }
 
 boolean_test -> bool
   = equals
@@ -79,9 +79,9 @@ not -> bool
 
 // Primitives
 
-atom -> FloxValue
- = i:int { FloxValue::Integer(i) }
- / b:boolean { FloxValue::Boolean(b) }
+atom -> XFlowValue
+ = i:int { XFlowValue::Integer(i) }
+ / b:boolean { XFlowValue::Boolean(b) }
 
 boolean -> bool
  = b:"true" { true }

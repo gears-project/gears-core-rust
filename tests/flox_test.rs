@@ -13,7 +13,7 @@ fn expect_integer(input: &str, expected: i64) -> () {
         Ok(res) => {
             println!("RES for ('{:?}') is {:?}", input, res);
             match res {
-                flox::FloxValue::Integer(res) => assert_eq!(res, expected),
+                xfstruct::XFlowValue::Integer(res) => assert_eq!(res, expected),
                 _ => assert!(false),
             }
         }
@@ -30,7 +30,7 @@ fn expect_boolean(input: &str, expected: bool) -> () {
         Ok(res) => {
             println!("RES for ('{:?}') is {:?}", input, res);
             match res {
-                flox::FloxValue::Boolean(res) => assert_eq!(res, expected),
+                xfstruct::XFlowValue::Boolean(res) => assert_eq!(res, expected),
                 _ => assert!(false),
             }
         }
@@ -105,7 +105,7 @@ fn test_flox_atom() {
         }
         Ok(res) => {
             match res {
-                flox::FloxValue::Integer(res) => assert_eq!(res, 1),
+                xfstruct::XFlowValue::Integer(res) => assert_eq!(res, 1),
                 _ => assert!(false),
             }
         }
@@ -120,7 +120,7 @@ fn test_combined_expressions() {
         Err(_) => assert!(false),
         Ok(res) => {
             match res {
-                flox::FloxValue::Integer(res) => assert_eq!(res, 3),
+                xfstruct::XFlowValue::Integer(res) => assert_eq!(res, 3),
                 _ => assert!(false),
             }
         }
