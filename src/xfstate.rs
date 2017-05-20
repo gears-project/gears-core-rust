@@ -2,7 +2,7 @@ use std::collections::HashMap;
 use std::fmt;
 use xfstruct::XFlowVariable;
 
-type XFStore = HashMap<String, XFlowVariable>;
+pub type XFStore = HashMap<String, XFlowVariable>;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct XFState {

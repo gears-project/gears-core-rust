@@ -76,4 +76,9 @@ fn test_run_arithmetic() {
     xfrunner.run();
 
     assert_eq!(xfrunner.is_completed_ok(), true);
+
+    match xfrunner.get_output().unwrap().get("ReturnValue").unwrap().value {
+        XFlowValue::Integer(i) => assert_eq!(i, 3),
+        _ => assert!(false),
+    }
 }

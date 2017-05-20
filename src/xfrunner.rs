@@ -19,7 +19,7 @@ pub struct XFlowRunner<'a> {
     dispatcher: &'a Dispatcher<'a>,
     state: XFState,
     current_node: Option<&'a XFlowNode>,
-    output: Option<Vec<XFlowValue>>,
+    pub output: Option<Vec<XFlowValue>>,
 }
 
 impl<'a> XFlowRunner<'a> {
@@ -27,9 +27,9 @@ impl<'a> XFlowRunner<'a> {
 
         let mut state = XFState::default();
 
-        for xvar in &xflow.variables.input {
-            state.add(xvar);
-        }
+        // for xvar in &xflow.variables.input {
+        //     state.add(xvar);
+        // }
 
         for xvar in &xflow.variables.local {
             state.add(xvar);
@@ -93,7 +93,6 @@ impl<'a> XFlowRunner<'a> {
             true
         } else {
             self.status = XFlowStatus::Finished;
-            // self.finalize();
             false
         }
     }
@@ -159,11 +158,21 @@ impl<'a> XFlowRunner<'a> {
         }
     }
 
-    fn finalize(&mut self) -> () {
-        if (self.status == XFlowStatus::Finished) {
-
+    pub fn get_output(self) -> Result<XFState, String> {
+        if self.status == XFlowStatus::Finished {
+            let mut state = XFState::default();
+            for xvar in &self.xflow.variables.output {
+                if let Some(xvar) = self.state.get(&xvar.name) {
+                    state.add(xvar);
+                } else {
+                    error!("Required var '{:?}' not found in state!", &xvar.name);
+                    return Err(format!("Required var '{}' not found in state!", &xvar.name));
+                }
+            }
+            Ok(state)
         } else {
             error!("Called before xflow has finished!");
+            Err("Called before xflow has finished!".to_owned())
         }
     }
 }

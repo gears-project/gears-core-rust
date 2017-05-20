@@ -55,7 +55,7 @@ pub struct XFlowVariable {
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq)]
 pub struct XFlowVariables {
-    pub input: Vec<XFlowVariable>,
+    pub input: Vec<XFlowVariableDefinition>,
     pub local: Vec<XFlowVariable>,
     pub output: Vec<XFlowVariableDefinition>,
 }
@@ -256,7 +256,7 @@ impl Default for XFlowStruct {
             version: 1,
             requirements: Vec::<XFlowRequirement>::new(),
             variables: XFlowVariables {
-                input: Vec::<XFlowVariable>::new(),
+                input: Vec::<XFlowVariableDefinition>::new(),
                 local: Vec::<XFlowVariable>::new(),
                 output: Vec::<XFlowVariableDefinition>::new(),
             },

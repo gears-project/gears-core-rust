@@ -87,7 +87,7 @@ fn create_xflow_struct() -> XFlowStruct {
         name: "Some name".to_string(),
         requirements: Vec::<XFlowRequirement>::new(),
         variables: XFlowVariables {
-            input: Vec::<XFlowVariable>::new(),
+            input: Vec::<XFlowVariableDefinition>::new(),
             local: Vec::<XFlowVariable>::new(),
             output: Vec::<XFlowVariableDefinition>::new(),
         },
