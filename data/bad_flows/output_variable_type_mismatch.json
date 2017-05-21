@@ -23,9 +23,9 @@
     ],
     "local" : [
       {
-        "vtype" : "number",
+        "vtype" : "boolean",
         "name" : "ReturnValue",
-        "value" : "0"
+        "value" : "false"
       }
     ]
   },

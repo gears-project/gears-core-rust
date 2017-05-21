@@ -164,12 +164,20 @@ impl<'a> XFlowRunner<'a> {
     pub fn get_output(self) -> Result<XFState, String> {
         if self.status == XFlowStatus::Finished {
             let mut state = XFState::default();
-            for xvar in &self.xflow.variables.output {
-                if let Some(xvar) = self.state.get(&xvar.name) {
-                    state.add(xvar);
+            for xvar_out in &self.xflow.variables.output {
+                if let Some(xvar_local) = self.state.get(&xvar_out.name) {
+                    if xvar_local.vtype == xvar_out.vtype {
+                        state.add(xvar_local);
+                    } else {
+                        error!("Output var '{}' has a different type than its local one",
+                               &xvar_out.name);
+                        return Err(format!("Output var '{}' has a different type than its local \
+                                            one",
+                                           &xvar_out.name));
+                    }
                 } else {
-                    error!("Required var '{:?}' not found in state!", &xvar.name);
-                    return Err(format!("Required var '{}' not found in state!", &xvar.name));
+                    error!("Required var '{:?}' not found in state!", &xvar_out.name);
+                    return Err(format!("Required var '{}' not found in state!", &xvar_out.name));
                 }
             }
             Ok(state)
