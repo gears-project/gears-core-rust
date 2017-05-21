@@ -70,6 +70,11 @@ impl<'a> XFlowRunner<'a> {
         self.status == XFlowStatus::Initialized
     }
 
+    pub fn is_completed(&self) -> bool {
+        self.status == XFlowStatus::Finished || self.status == XFlowStatus::Aborted ||
+        self.status == XFlowStatus::TimedOut || self.status == XFlowStatus::InvalidState
+    }
+
     pub fn is_completed_ok(&self) -> bool {
         self.status == XFlowStatus::Finished
     }
@@ -80,20 +85,18 @@ impl<'a> XFlowRunner<'a> {
         }
     }
 
-    pub fn step(&mut self) -> bool {
+    pub fn step(&mut self) -> () {
         self.next_node();
-        self.run_node()
+        self.run_node();
     }
 
-    fn run_node(&mut self) -> bool {
+    fn run_node(&mut self) -> () {
         let st = &mut self.state;
         if let Some(node) = self.current_node {
             self.status = XFlowStatus::Running;
             self.dispatcher.dispatch(node, st);
-            true
         } else {
             self.status = XFlowStatus::Finished;
-            false
         }
     }
 

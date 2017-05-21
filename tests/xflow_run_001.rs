@@ -34,7 +34,8 @@ fn test_run_10_steps() {
     let mut i = 1;
 
     loop {
-        if !xfrunner.step() {
+        xfrunner.step();
+        if xfrunner.is_completed() {
             break;
         }
         i += 1;
