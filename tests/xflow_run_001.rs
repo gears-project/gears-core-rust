@@ -83,3 +83,36 @@ fn test_run_arithmetic() {
         _ => assert!(false),
     }
 }
+
+#[test]
+fn test_run_arithmetic_multiple_return_values() {
+    let _ = env_logger::init();
+
+    let json_string = read_json_file("data/flows/arithmetic_addition_multiple_return_values.json");
+    let xfs = XFlowStruct::from_json(&json_string);
+
+    let dispatcher = build_dispatcher();
+    let mut xfrunner = XFlowRunner::new(&xfs, &dispatcher);
+
+    xfrunner.run();
+
+    assert_eq!(xfrunner.is_completed_ok(), true);
+
+    match xfrunner.get_output() {
+        Ok(xfstate) => {
+            match xfstate.get("ReturnValueA").unwrap().value {
+                XFlowValue::Integer(i) => assert_eq!(i, 3),
+                _ => assert!(false),
+            }
+            match xfstate.get("ReturnValueB").unwrap().value {
+                XFlowValue::Integer(i) => assert_eq!(i, 16),
+                _ => assert!(false),
+            }
+        }
+        Err(err) => {
+            println!("{:?}", err);
+            assert!(false);
+        }
+    }
+
+}
