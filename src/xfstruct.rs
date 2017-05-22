@@ -40,7 +40,7 @@ pub struct XFlowRequirement {
     pub version: i32,
 }
 
-#[derive(Serialize, Deserialize, Debug, Eq, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 pub struct XFlowVariableDefinition {
     pub name: String,
     pub vtype: XFlowValueType,

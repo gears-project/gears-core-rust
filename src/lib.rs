@@ -1,9 +1,9 @@
 extern crate serde;
-
 #[macro_use]
 extern crate serde_derive;
-
 extern crate serde_json;
+#[macro_use]
+extern crate log;
 
 pub mod actiondispatch;
 pub mod xfstruct;
@@ -13,6 +13,3 @@ pub mod errors;
 pub mod xfrunner;
 pub mod dispatcher;
 pub mod flox;
-
-#[macro_use]
-extern crate log;
