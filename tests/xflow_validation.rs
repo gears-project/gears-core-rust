@@ -76,6 +76,19 @@ fn test_validations_edges_have_nodes() {
 }
 
 #[test]
+fn test_validations_all_nodes_have_edges() {
+    let json_string = read_json_file("data/bad_flows/orphan_node.json");
+    let xfs = XFlowStruct::from_json(&json_string);
+
+    let res_a = Validation::all_nodes_have_at_least_one_edge(&xfs);
+
+    assert_eq!(res_a.len(), 1);
+    assert_eq!(res_a[0].code, 1);
+    assert_eq!(res_a[0].paths[0], "/nodes/2");
+
+}
+
+#[test]
 fn test_validations_has_one_entry_node() {
     let json_string = read_json_file("data/bad_flows/multiple_entry_nodes.json");
     let xfs = XFlowStruct::from_json(&json_string);
