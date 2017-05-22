@@ -3,29 +3,8 @@ extern crate env_logger;
 extern crate xflow;
 use xflow::xfstruct::*;
 
-use std::error::Error;
-use std::fs::File;
-use std::io::prelude::*;
-use std::path::Path;
-
-fn read_json_file(filename: &str) -> String {
-    // Create a path to the desired file
-    let path = Path::new(filename);
-    let display = path.display();
-
-    let mut file = match File::open(&path) {
-        Err(why) => panic!("couldn't open {}: {}", display, Error::description(&why)),
-        Ok(file) => file,
-    };
-
-    // Read the file contents into a string, returns `io::Result<usize>`
-    let mut s = String::new();
-    if let Err(why) = file.read_to_string(&mut s) {
-        panic!("couldn't read {}: {}", display, Error::description(&why));
-    };
-
-    s
-}
+mod helper;
+use helper::read_json_file;
 
 fn create_node(id: i32) -> XFlowNode {
     XFlowNode {

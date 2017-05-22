@@ -8,10 +8,7 @@ use xflow::dispatcher::*;
 use xflow::actiondispatch;
 
 mod helper;
-
-fn read_json_file(filename: &str) -> String {
-    helper::read_json_file(filename)
-}
+use helper::read_json_file;
 
 fn build_dispatcher<'a>() -> Dispatcher<'a> {
     let mut dispatcher = Dispatcher::default();
