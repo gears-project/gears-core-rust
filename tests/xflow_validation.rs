@@ -1,5 +1,6 @@
 extern crate xflow;
-use xflow::*;
+use xflow::xfstruct::*;
+use xflow::validation::*;
 
 #[cfg(test)]
 

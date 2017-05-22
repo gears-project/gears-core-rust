@@ -1,7 +1,7 @@
 extern crate env_logger;
 
 extern crate xflow;
-use xflow::*;
+use xflow::xfstruct::*;
 
 use std::error::Error;
 use std::fs::File;

@@ -1,7 +1,11 @@
 extern crate env_logger;
 
 extern crate xflow;
-use xflow::*;
+
+use xflow::xfstruct::*;
+use xflow::xfrunner::*;
+use xflow::dispatcher::*;
+use xflow::actiondispatch;
 
 mod helper;
 
