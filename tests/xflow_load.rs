@@ -1,5 +1,7 @@
+extern crate env_logger;
+
 extern crate xflow;
-use xflow::*;
+use xflow::xfstruct::*;
 
 use std::error::Error;
 use std::fs::File;
@@ -31,6 +33,7 @@ fn create_node(id: i32) -> XFlowNode {
         nodetype: "flow".to_string(),
         action: "some action".to_string(),
         label: "some name".to_string(),
+        parameters: None,
     }
 }
 
@@ -67,8 +70,8 @@ fn create_branches(amount: i32) -> Vec<XFlowBranch> {
         branches.push(XFlowBranch {
             xvar: XFlowVariable {
                 name: "MatchValue".to_string(),
-                vtype: "string".to_string(),
-                value: "Some branch".to_string(),
+                vtype: XFlowValueType::String,
+                value: XFlowValue::String("Some branch".to_owned()),
             },
             edge: (left, right + i),
         })
@@ -84,7 +87,7 @@ fn create_xflow_struct() -> XFlowStruct {
         name: "Some name".to_string(),
         requirements: Vec::<XFlowRequirement>::new(),
         variables: XFlowVariables {
-            input: Vec::<XFlowVariable>::new(),
+            input: Vec::<XFlowVariableDefinition>::new(),
             local: Vec::<XFlowVariable>::new(),
             output: Vec::<XFlowVariableDefinition>::new(),
         },
@@ -96,6 +99,8 @@ fn create_xflow_struct() -> XFlowStruct {
 
 #[test]
 fn test_xfs() {
+    let _ = env_logger::init();
+
     let xfs = create_xflow_struct();
 
     assert_eq!(xfs.nodes.len(), 5);
@@ -105,6 +110,8 @@ fn test_xfs() {
 
 #[test]
 fn test_xfs_fields() {
+    let _ = env_logger::init();
+
     let xfs = create_xflow_struct();
 
     assert_eq!(xfs.version, 1);
@@ -115,6 +122,8 @@ fn test_xfs_fields() {
 #[test]
 // #[should_panic]
 fn test_xfs_entry() {
+    let _ = env_logger::init();
+
     let json_string = read_json_file("data/flows/10_steps.json");
     let xfs = XFlowStruct::from_json(&json_string);
 
@@ -123,6 +132,8 @@ fn test_xfs_entry() {
 
 #[test]
 fn test_xfs_get_nodes_of_type() {
+    let _ = env_logger::init();
+
     let json_string = read_json_file("data/flows/10_steps.json");
     let xfs = XFlowStruct::from_json(&json_string);
 
@@ -131,6 +142,8 @@ fn test_xfs_get_nodes_of_type() {
 
 #[test]
 fn test_xfs_from_json() {
+    let _ = env_logger::init();
+
     let json_string = read_json_file("data/flows/10_steps.json");
     let xfs = XFlowStruct::from_json(&json_string);
 
@@ -176,6 +189,8 @@ fn test_xfs_from_json() {
 
 #[test]
 fn test_xfs_from_json_string() {
+    let _ = env_logger::init();
+
     let empty_flow = read_json_file("data/flows/empty.json");
     let xfs = XFlowStruct::from_json(&empty_flow);
 
@@ -187,6 +202,8 @@ fn test_xfs_from_json_string() {
 
 #[test]
 fn test_mem_profile() {
+    let _ = env_logger::init();
+
     use std;
     let json_string = read_json_file("data/flows/10_steps.json");
     let xfs = XFlowStruct::from_json(&json_string);

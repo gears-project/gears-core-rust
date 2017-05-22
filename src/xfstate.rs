@@ -2,8 +2,9 @@ use std::collections::HashMap;
 use std::fmt;
 use xfstruct::XFlowVariable;
 
-type XFStore = HashMap<String, XFlowVariable>;
+pub type XFStore = HashMap<String, XFlowVariable>;
 
+#[derive(Serialize, Deserialize, Debug)]
 pub struct XFState {
     store: XFStore,
 }
@@ -34,7 +35,7 @@ impl XFState {
     }
 
     pub fn add(&mut self, xvar: &XFlowVariable) {
-        self.store.insert(xvar.name.clone(), copy_xvar(xvar));
+        self.store.insert(xvar.name.clone(), copy_xvar(xvar)); // (*xvar).clone());
     }
 
     pub fn remove(&mut self, name: &str) {
@@ -60,11 +61,6 @@ impl Default for XFState {
 
 impl fmt::Display for XFState {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        // Write strictly the first element into the supplied output
-        // stream: `f`. Returns `fmt::Result` which indicates whether the
-        // operation succeeded or failed. Note that `write!` uses syntax which
-        // is very similar to `println!`.
-        // write!(f, "{}", self.store.keys())
-        write!(f, "KEY")
+        write!(f, "{:?}", self.store.keys())
     }
 }

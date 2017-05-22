@@ -1,34 +1,37 @@
-use flox::{FloxResult};
+use xfstruct::{XFlowValue};
 
-pub expression -> FloxResult
-  = arithmetic_expression
-  / boolean_expression
+pub expression -> XFlowValue
+  = boolean_expression
+  / arithmetic_expression
   / atom
 
 /// Arithmetic
 
-pub arithmetic_expression -> FloxResult
-  = e:equation { FloxResult::Integer(e) }
+pub arithmetic_expression -> XFlowValue
+  = e:equation { XFlowValue::Integer(e) }
 
 equation -> i64
-  = add / sub / mul / div
+  = mul
+  / div
+  / add
+  / sub
 
 add -> i64
-  = i:int space* "+" space* j:int { i + j }
+  = i:int _ "+" _ j:int { i + j }
 
 sub -> i64
-  = i:int space* "-" space* j:int { i - j }
+  = i:int _ "-" _ j:int { i - j }
 
 mul -> i64
-  = i:int space* "*" space* j:int { i * j }
+  = i:int _ "*" _ j:int { i * j }
 
 div -> i64
-  = i:int space* "/" space* j:int { i / j }
+  = i:int _ "/" _ j:int { i / j }
 
 // Boolean
 
-pub boolean_expression -> FloxResult
-  = e:boolean_test { FloxResult::Boolean(e) }
+pub boolean_expression -> XFlowValue
+  = e:boolean_test { XFlowValue::Boolean(e) }
 
 boolean_test -> bool
   = equals
@@ -43,42 +46,42 @@ boolean_test -> bool
   / xor
 
 equals -> bool
-  = l:int space* "==" space* r:int { l == r }
-  / l:boolean space* "==" space* r:boolean { l == r }
+  = l:int _ "==" _ r:int { l == r }
+  / l:boolean _ "==" _ r:boolean { l == r }
 
 not_equals -> bool
-  = l:int space* "!=" space* r:int { l != r }
-  / l:boolean space* "!=" space* r:boolean { l != r }
+  = l:int _ "!=" _ r:int { l != r }
+  / l:boolean _ "!=" _ r:boolean { l != r }
 
 greater_than -> bool
-  = l:int space* ">" space* r:int { l > r }
+  = l:int _ ">" _ r:int { l > r }
 
 less_than -> bool
-  = l:int space* "<" space* r:int { l < r }
+  = l:int _ "<" _ r:int { l < r }
 
 greater_or_equal -> bool
-  = l:int space* ">=" space* r:int { l >= r }
+  = l:int _ ">=" _ r:int { l >= r }
 
 less_or_equal -> bool
-  = l:int space* "<=" space* r:int { l <= r }
+  = l:int _ "<=" _ r:int { l <= r }
 
 and -> bool
-  = l:boolean space* "&&" space* r:boolean { l && r }
+  = l:boolean _ "&&" _ r:boolean { l && r }
 
 or -> bool
-  = l:boolean space* "||" space* r:boolean { l || r }
+  = l:boolean _ "||" _ r:boolean { l || r }
 
 xor -> bool
-  = l:boolean space* "^" space* r:boolean { l && r }
+  = l:boolean _ "^" _ r:boolean { l && r }
 
 not -> bool
   = "!" l:boolean { !l }
 
 // Primitives
 
-atom -> FloxResult
- = b:boolean { FloxResult::Boolean(b) }
- / i:int { FloxResult::Integer(i) }
+atom -> XFlowValue
+ = i:int { XFlowValue::Integer(i) }
+ / b:boolean { XFlowValue::Boolean(b) }
 
 boolean -> bool
  = b:"true" { true }
@@ -91,4 +94,6 @@ space -> ()
   = " "
   / "\n"
   / "\r"
+
+_ = space*
 

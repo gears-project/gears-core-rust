@@ -18,13 +18,22 @@
     "output" : [
       {
         "vtype" : "number",
-        "name" : "ReturnValue"
+        "name" : "ReturnValueA"
+      },
+      {
+        "vtype" : "number",
+        "name" : "ReturnValueB"
       }
     ],
     "local" : [
       {
         "vtype" : "number",
-        "name" : "ReturnValue",
+        "name" : "ReturnValueA",
+        "value" : "0"
+      },
+      {
+        "vtype" : "number",
+        "name" : "ReturnValueB",
         "value" : "0"
       }
     ]
@@ -45,13 +54,26 @@
       "parameters": {
         "expression" : "1+2",
         "returns"    : {
-          "name"   : "ReturnValue",
+          "name"   : "ReturnValueA",
           "vtype"   : "number"
         }
       }
     },
     {
       "id": 3,
+      "nodetype": "flox",
+      "action": "evalexpr",
+      "label" : "Flox",
+      "parameters": {
+        "expression" : "4*4",
+        "returns"    : {
+          "name"   : "ReturnValueB",
+          "vtype"   : "number"
+        }
+      }
+    },
+    {
+      "id": 4,
       "nodetype": "flow",
       "action": "end",
       "label" : "End",
@@ -60,7 +82,8 @@
   ],
   "edges": [
     [ 1, 2 ],
-    [ 2, 3 ]
+    [ 2, 3 ],
+    [ 3, 4 ]
   ],
   "branches" :[
   ]

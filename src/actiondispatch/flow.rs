@@ -2,25 +2,23 @@ use actiondispatch::dispatchable::*;
 use xfstruct::*;
 use xfstate::XFState;
 
-pub struct Flow {
-    ready: bool,
-}
+pub struct Flow;
 
 impl Flow {
     fn process_node(&self, node: &XFlowNode, state: &mut XFState) -> () {
-        println!("Flow: {} - {}", node.id, state);
+        debug!("Flow: {} - {}", node.id, state);
         match node.action.as_ref() {
             "start" => {
-                println!("Flow: start {} - {}", node.id, state);
+                info!("Start {} - {}", node.id, state);
             }
             "end" => {
-                println!("Flow: end {} - {}", node.id, state);
+                info!("End {} - {}", node.id, state);
             }
             "branch" => {
-                println!("Flow: branch {} - {}", node.id, state);
+                info!("Branch {} - {}", node.id, state);
             }
             _ => {
-                println!("Flow: unimplemented/unhandled {} - {}", node.id, state);
+                error!("Unimplemented/unhandled {} - {}", node.id, state);
             }
 
         }
@@ -29,18 +27,17 @@ impl Flow {
 
 impl Default for Flow {
     fn default() -> Self {
-        Flow { ready: false }
+        Flow {}
     }
 }
 
 impl Dispatchable for Flow {
-    fn init(&mut self) -> Result<String, String> {
-        self.ready = true;
-        Ok("ok".to_owned())
+    fn init(&mut self) -> Result<(), ()> {
+        Ok(())
     }
 
-    fn dispatch(&self, node: &XFlowNode, state: &mut XFState) -> Result<String, String> {
+    fn dispatch(&self, node: &XFlowNode, state: &mut XFState) -> Result<(), ()> {
         self.process_node(node, state);
-        Ok("ok".to_owned())
+        Ok(())
     }
 }

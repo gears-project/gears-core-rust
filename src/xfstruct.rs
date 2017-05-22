@@ -4,9 +4,6 @@ use errors::XFlowError;
 
 pub type XFlowEdge = (i32, i32);
 
-// Automatically generate `RustcDecodable` and `RustcEncodable` trait
-// implementations
-
 #[derive(Serialize, Deserialize, Debug)]
 pub struct XFlowStruct {
     pub id: String,
@@ -19,38 +16,57 @@ pub struct XFlowStruct {
     pub branches: Vec<XFlowBranch>,
 }
 
+#[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
+pub enum XFlowValueType {
+    #[serde(rename="string")]
+    String,
+    #[serde(rename="number")]
+    Integer,
+    #[serde(rename="boolean")]
+    Boolean,
+}
+
+#[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
+#[serde(untagged)]
+pub enum XFlowValue {
+    String(String),
+    Integer(i64),
+    Boolean(bool),
+}
+
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq)]
 pub struct XFlowRequirement {
     pub xtype: String,
     pub version: i32,
 }
 
-#[derive(Serialize, Deserialize, Debug, Eq, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 pub struct XFlowVariableDefinition {
     pub name: String,
-    pub vtype: String,
+    pub vtype: XFlowValueType,
 }
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq)]
 pub struct XFlowVariable {
     pub name: String,
-    pub vtype: String,
-    pub value: String,
+    pub vtype: XFlowValueType,
+    pub value: XFlowValue,
 }
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq)]
 pub struct XFlowVariables {
-    pub input: Vec<XFlowVariable>,
+    pub input: Vec<XFlowVariableDefinition>,
     pub local: Vec<XFlowVariable>,
     pub output: Vec<XFlowVariableDefinition>,
 }
 
-#[derive(Serialize, Deserialize, Debug, Eq, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct XFlowNode {
     pub id: i32,
     pub nodetype: String,
     pub label: String,
     pub action: String,
+    pub parameters: Option<serde_json::Value>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq)]
@@ -240,7 +256,7 @@ impl Default for XFlowStruct {
             version: 1,
             requirements: Vec::<XFlowRequirement>::new(),
             variables: XFlowVariables {
-                input: Vec::<XFlowVariable>::new(),
+                input: Vec::<XFlowVariableDefinition>::new(),
                 local: Vec::<XFlowVariable>::new(),
                 output: Vec::<XFlowVariableDefinition>::new(),
             },

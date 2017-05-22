@@ -2,7 +2,7 @@ use xfstruct::*;
 use xfstate::*;
 use dispatcher::*;
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum XFlowStatus {
     Uninitialized,
     Initialized,
@@ -14,11 +14,12 @@ pub enum XFlowStatus {
 }
 
 pub struct XFlowRunner<'a> {
-    status: XFlowStatus,
+    pub status: XFlowStatus,
     xflow: &'a XFlowStruct,
     dispatcher: &'a Dispatcher<'a>,
     state: XFState,
     current_node: Option<&'a XFlowNode>,
+    pub output: Option<Vec<XFlowValue>>,
 }
 
 impl<'a> XFlowRunner<'a> {
@@ -26,9 +27,9 @@ impl<'a> XFlowRunner<'a> {
 
         let mut state = XFState::default();
 
-        for xvar in &xflow.variables.input {
-            state.add(xvar);
-        }
+        // for xvar in &xflow.variables.input {
+        //     state.add(xvar);
+        // }
 
         for xvar in &xflow.variables.local {
             state.add(xvar);
@@ -42,6 +43,7 @@ impl<'a> XFlowRunner<'a> {
                     dispatcher: dispatcher,
                     state: state,
                     current_node: Some(node),
+                    output: None,
                 }
             }
             _ => {
@@ -51,6 +53,7 @@ impl<'a> XFlowRunner<'a> {
                     dispatcher: dispatcher,
                     state: state,
                     current_node: None,
+                    output: None,
                 }
             }
         }
@@ -64,17 +67,16 @@ impl<'a> XFlowRunner<'a> {
     }
 
     pub fn is_initialized(&self) -> bool {
-        match self.status {
-            XFlowStatus::Initialized => true,
-            _ => false,
-        }
+        self.status == XFlowStatus::Initialized
+    }
+
+    pub fn is_completed(&self) -> bool {
+        self.status == XFlowStatus::Finished || self.status == XFlowStatus::Aborted ||
+        self.status == XFlowStatus::TimedOut || self.status == XFlowStatus::InvalidState
     }
 
     pub fn is_completed_ok(&self) -> bool {
-        match self.status {
-            XFlowStatus::Finished => true,
-            _ => false,
-        }
+        self.status == XFlowStatus::Finished
     }
 
     pub fn run(&mut self) -> () {
@@ -83,20 +85,18 @@ impl<'a> XFlowRunner<'a> {
         }
     }
 
-    pub fn step(&mut self) -> bool {
+    pub fn step(&mut self) -> () {
         self.next_node();
-        self.run_node()
+        self.run_node();
     }
 
-    fn run_node(&mut self) -> bool {
+    fn run_node(&mut self) -> () {
         let st = &mut self.state;
         if let Some(node) = self.current_node {
             self.status = XFlowStatus::Running;
             self.dispatcher.dispatch(node, st);
-            true
         } else {
             self.status = XFlowStatus::Finished;
-            false
         }
     }
 
@@ -158,6 +158,32 @@ impl<'a> XFlowRunner<'a> {
         } else {
             self.status = XFlowStatus::InvalidState;
             self.current_node = None;
+        }
+    }
+
+    pub fn get_output(self) -> Result<XFState, String> {
+        if self.status == XFlowStatus::Finished {
+            let mut state = XFState::default();
+            for xvar_out in &self.xflow.variables.output {
+                if let Some(xvar_local) = self.state.get(&xvar_out.name) {
+                    if xvar_local.vtype == xvar_out.vtype {
+                        state.add(xvar_local);
+                    } else {
+                        error!("Output var '{}' has a different type than its local one",
+                               &xvar_out.name);
+                        return Err(format!("Output var '{}' has a different type than its local \
+                                            one",
+                                           &xvar_out.name));
+                    }
+                } else {
+                    error!("Required var '{:?}' not found in state!", &xvar_out.name);
+                    return Err(format!("Required var '{}' not found in state!", &xvar_out.name));
+                }
+            }
+            Ok(state)
+        } else {
+            error!("Called before xflow has finished!");
+            Err("Called before xflow has finished!".to_owned())
         }
     }
 }
