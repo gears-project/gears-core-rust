@@ -303,7 +303,6 @@ impl Validation {
     //     X  has_one_entry_node(flow),
     //     X  has_terminal_nodes(flow),
     //     X  all_node_actions_have_matching_requirements(flow),
-    //        expressions_reference_known_variables(flow),
     //     X  all_return_values_exist(flow),
     //     X  variables_are_defined_only_once(flow),
     //     X  all_nodes_have_at_least_one_edge(flow)
