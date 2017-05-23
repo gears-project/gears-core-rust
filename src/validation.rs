@@ -1,4 +1,5 @@
 use xfstruct::*;
+use std::collections::{HashSet, HashMap};
 
 #[derive(Debug)]
 pub struct ValidationError {
@@ -31,12 +32,19 @@ pub struct Validation {
 }
 
 impl Validation {
-    pub fn validate(&self, xflow: &XFlowStruct) {
-        Validation::all_edges_have_nodes(xflow);
-        Validation::has_one_entry_node(xflow);
-        Validation::has_terminal_nodes(xflow);
-        Validation::all_nodes_have_at_least_one_edge(xflow);
-        Validation::all_node_actions_have_matching_requirements(xflow);
+    pub fn validate(xflow: &XFlowStruct) -> Vec<ValidationError> {
+        let mut errors = Vec::<ValidationError>::new();
+
+        errors.extend(Validation::all_edges_have_nodes(xflow));
+        errors.extend(Validation::has_one_entry_node(xflow));
+        errors.extend(Validation::has_terminal_nodes(xflow));
+        errors.extend(Validation::all_nodes_have_at_least_one_edge(xflow));
+        errors.extend(Validation::all_node_actions_have_matching_requirements(xflow));
+        errors.extend(Validation::variables_are_defined_only_once(xflow));
+        errors.extend(Validation::all_return_values_exist(xflow));
+        errors.extend(Validation::no_variable_redefinition(xflow));
+
+        errors
     }
 
     pub fn all_edges_have_nodes(xflow: &XFlowStruct) -> Vec<ValidationError> {
@@ -169,15 +177,137 @@ impl Validation {
         errors
     }
 
+    pub fn variables_are_defined_only_once(xflow: &XFlowStruct) -> Vec<ValidationError> {
+        let mut errors = Vec::<ValidationError>::new();
+
+        let mut input_vars = HashSet::<String>::new();
+        for xvar in &xflow.variables.input {
+            if input_vars.contains(&xvar.name) {
+                errors.push(ValidationError {
+                    code: 1,
+                    message: format!("XFlow input variable '{}' defined more than once",
+                                     xvar.name),
+                    paths: vec![format!("/variables/input/{}", xvar.name)],
+                });
+            } else {
+                input_vars.insert(xvar.name.clone());
+            }
+        }
+
+        let mut local_vars = HashSet::<String>::new();
+        for xvar in &xflow.variables.local {
+            if local_vars.contains(&xvar.name) {
+                errors.push(ValidationError {
+                    code: 1,
+                    message: format!("XFlow local variable '{}' defined more than once",
+                                     xvar.name),
+                    paths: vec![format!("/variables/local/{}", xvar.name)],
+                });
+            } else {
+                local_vars.insert(xvar.name.clone());
+            }
+        }
+
+        let mut output_vars = HashSet::<String>::new();
+        for xvar in &xflow.variables.output {
+            if output_vars.contains(&xvar.name) {
+                errors.push(ValidationError {
+                    code: 1,
+                    message: format!("XFlow output variable '{}' defined more than once",
+                                     xvar.name),
+                    paths: vec![format!("/variables/output/{}", xvar.name)],
+                });
+            } else {
+                output_vars.insert(xvar.name.clone());
+            }
+        }
+
+        errors
+    }
+
+    pub fn all_return_values_exist(xflow: &XFlowStruct) -> Vec<ValidationError> {
+        let mut errors = Vec::<ValidationError>::new();
+
+        let mut inputs = HashMap::<&String, &XFlowVariableDefinition>::new();
+        let mut locals = HashMap::<&String, &XFlowVariable>::new();
+
+        for xvar in &xflow.variables.input {
+            inputs.insert(&xvar.name, &xvar);
+        }
+
+        for xvar in &xflow.variables.local {
+            locals.insert(&xvar.name, &xvar);
+        }
+
+        for xvar in &xflow.variables.output {
+            if !locals.contains_key(&xvar.name) && !inputs.contains_key(&xvar.name) {
+                errors.push(ValidationError {
+                    code: 1,
+                    message: format!("XFlow output variable '{}' has no local or input definition",
+                                     xvar.name),
+                    paths: vec![format!("/variables/output/{}", xvar.name)],
+                });
+            }
+            if let Some(local_xvar) = locals.get(&xvar.name) {
+                if local_xvar.vtype != xvar.vtype {
+                    errors.push(ValidationError {
+                        code: 1,
+                        message: format!("XFlow output variable '{}' vtype is incompatible with \
+                                          its local definition",
+                                         xvar.name),
+                        paths: vec![format!("/variables/output/{}", xvar.name)],
+                    });
+                }
+            }
+            if let Some(input_xvar) = inputs.get(&xvar.name) {
+                if input_xvar.vtype != xvar.vtype {
+                    errors.push(ValidationError {
+                        code: 1,
+                        message: format!("XFlow output variable '{}' vtype is incompatible with \
+                                          its input definition",
+                                         xvar.name),
+                        paths: vec![format!("/variables/output/{}", xvar.name)],
+                    });
+                }
+            }
+        }
+
+
+        errors
+    }
+
+    pub fn no_variable_redefinition(xflow: &XFlowStruct) -> Vec<ValidationError> {
+        let mut errors = Vec::<ValidationError>::new();
+
+        let mut locals = HashMap::<&String, &XFlowVariable>::new();
+
+        for xvar in &xflow.variables.local {
+            locals.insert(&xvar.name, &xvar);
+        }
+
+        for xvar in &xflow.variables.input {
+            if locals.contains_key(&xvar.name) {
+                errors.push(ValidationError {
+                    code: 1,
+                    message: format!("XFlow input variable '{}' is redefined in local scope",
+                                     xvar.name),
+                    paths: vec![format!("/variables/input/{}", xvar.name)],
+                });
+            }
+        }
+
+        errors
+    }
 
     //     X  all_edges_have_nodes(flow),
     //     X  has_one_entry_node(flow),
     //     X  has_terminal_nodes(flow),
     //     X  all_node_actions_have_matching_requirements(flow),
     //        expressions_reference_known_variables(flow),
-    //        all_return_values_exist(flow),
-    //        variables_are_defined_only_once(flow),
+    //     X  all_return_values_exist(flow),
+    //     X  variables_are_defined_only_once(flow),
     //     X  all_nodes_have_at_least_one_edge(flow)
+    //     X  no_variable_redefinition(flow)
 }
 
 impl Default for Validation {

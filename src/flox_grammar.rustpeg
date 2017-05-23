@@ -5,7 +5,7 @@ pub expression -> XFlowValue
   / arithmetic_expression
   / atom
 
-/// Arithmetic
+// Arithmetic
 
 pub arithmetic_expression -> XFlowValue
   = e:equation { XFlowValue::Integer(e) }
@@ -89,6 +89,13 @@ boolean -> bool
 
 int -> i64
   = n:$([0-9]+) { n.parse().unwrap() }
+
+
+pub variables -> Vec<String>
+  = variable*
+
+variable -> String
+  = "+" s:$([A-Za-z]+) { s.to_string() }
 
 space -> ()
   = " "

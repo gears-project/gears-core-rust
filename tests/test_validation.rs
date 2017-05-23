@@ -9,11 +9,9 @@ fn test_validation_default() {
     let _ = env_logger::init();
 
     let xfs = XFlowStruct::default();
-    let validation = Validation::default();
+    let errors = Validation::validate(&xfs);
 
-    validation.validate(&xfs);
-
-    assert_eq!(validation.errors.len(), 0)
+    assert_eq!(errors.len(), 2)
 }
 
 #[test]
