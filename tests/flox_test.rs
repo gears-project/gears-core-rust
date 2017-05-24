@@ -41,12 +41,12 @@ fn expect_boolean(input: &str, expected: bool) -> () {
 fn test_flox_arithmetic() {
     let _ = env_logger::init();
     expect_integer("1+2", 3);
-    expect_integer("1 + 2", 3);
+    expect_integer("1+2", 3);
     // expect_integer("1+2+3", 6);
     expect_integer("1*2", 2);
-    expect_integer("1 * 2", 2);
+    expect_integer("1*2", 2);
     expect_integer("11+255", 266);
-    expect_integer("11 + 255", 266);
+    expect_integer("11+255", 266);
 }
 
 #[test]
