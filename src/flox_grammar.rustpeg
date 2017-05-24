@@ -10,13 +10,14 @@ pub expression -> XFlowValue
 pub arithmetic_expression -> XFlowValue
   = e:arithmetic { XFlowValue::Integer(e) }
 
-pub arithmetic -> i64 = #infix<integer> {
-	#L x "+" y { x + y }
-	   x "-" y { x - y }
-	#L x "*" y { x * y }
-	   x "/" y { x / y }
-	#R x "^" y { x.pow(y as u32) }
-}
+pub arithmetic -> i64
+    = #infix<integer> {
+        #L x "+" y { x + y }
+           x "-" y { x - y }
+        #L x "*" y { x * y }
+           x "/" y { x / y }
+        #R x "^" y { x.pow(y as u32) }
+    }
 
 // Boolean
 
@@ -24,45 +25,25 @@ pub boolean_expression -> XFlowValue
   = e:boolean_test { XFlowValue::Boolean(e) }
 
 boolean_test -> bool
-  = equals
-  / not_equals
-  / greater_than
-  / less_than
-  / greater_or_equal
-  / less_or_equal
-  / and
-  / or
-  / not
-  / xor
+  = not
+  / numeric_boolean_result
+  / boolean_boolean_result
 
-equals -> bool
+numeric_boolean_result -> bool
   = l:integer _ "==" _ r:integer { l == r }
-  / l:boolean _ "==" _ r:boolean { l == r }
+  / l:integer _ "!=" _ r:integer { l != r }
+  / l:integer _ ">" _ r:integer { l > r }
+  / l:integer _ "<" _ r:integer { l < r }
+  / l:integer _ ">=" _ r:integer { l >= r }
+  / l:integer _ "<=" _ r:integer { l <= r }
 
-not_equals -> bool
-  = l:integer _ "!=" _ r:integer { l != r }
-  / l:boolean _ "!=" _ r:boolean { l != r }
-
-greater_than -> bool
-  = l:integer _ ">" _ r:integer { l > r }
-
-less_than -> bool
-  = l:integer _ "<" _ r:integer { l < r }
-
-greater_or_equal -> bool
-  = l:integer _ ">=" _ r:integer { l >= r }
-
-less_or_equal -> bool
-  = l:integer _ "<=" _ r:integer { l <= r }
-
-and -> bool
-  = l:boolean _ "&&" _ r:boolean { l && r }
-
-or -> bool
-  = l:boolean _ "||" _ r:boolean { l || r }
-
-xor -> bool
-  = l:boolean _ "^" _ r:boolean { l && r }
+boolean_boolean_result -> bool
+    = #infix<boolean> {
+        #L l "==" r { l == r }
+           l "!=" r { l != r }
+        #R l "&&" r { l && r }
+           l "||" r { l || r }
+    }
 
 not -> bool
   = "!" l:boolean { !l }

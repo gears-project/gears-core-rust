@@ -7,11 +7,11 @@ fn expect_integer(input: &str, expected: i64) -> () {
     let _ = env_logger::init();
     match flox::parse_arithmetic(input) {
         Err(err) => {
-            println!("RES for ('{:?}') is {:?}", input, err);
+            println!("Parsing result for ('{:?}') is {:?}", input, err);
             assert!(false);
         }
         Ok(res) => {
-            println!("RES for ('{:?}') is {:?}", input, res);
+            println!("Parsing result for ('{:?}') is {:?}", input, res);
             match res {
                 xfstruct::XFlowValue::Integer(res) => assert_eq!(res, expected),
                 _ => assert!(false),
@@ -24,11 +24,11 @@ fn expect_boolean(input: &str, expected: bool) -> () {
     let _ = env_logger::init();
     match flox::parse_boolean(input) {
         Err(err) => {
-            println!("RES for ('{:?}') is {:?}", input, err);
+            println!("Parsing result for ('{:?}') is {:?}", input, err);
             assert!(false);
         }
         Ok(res) => {
-            println!("RES for ('{:?}') is {:?}", input, res);
+            println!("Parsing result for ('{:?}') is {:?}", input, res);
             match res {
                 xfstruct::XFlowValue::Boolean(res) => assert_eq!(res, expected),
                 _ => assert!(false),
@@ -55,28 +55,30 @@ fn test_flox_boolean() {
     expect_boolean("1==1", true);
     expect_boolean("1 == 1", true);
     expect_boolean("1==2", false);
-    expect_boolean("false == false", true);
-    expect_boolean("true == true", true);
-    expect_boolean("true == false", false);
-    expect_boolean("false == true", false);
+    expect_boolean("false==false", true);
+    expect_boolean("true==true", true);
+    expect_boolean("true==false", false);
+    expect_boolean("false==true", false);
+    expect_boolean("false&&false&&false", false);
+    expect_boolean("false&&false||true", false);
 
     expect_boolean("1!=1", false);
     expect_boolean("1!=2", true);
-    expect_boolean("1 != 2", true);
+    expect_boolean("1!=2", true);
 
-    expect_boolean("1 < 2", true);
-    expect_boolean("1 > 2", false);
+    expect_boolean("1<2", true);
+    expect_boolean("1>2", false);
 
-    expect_boolean("1 > 2", false);
-    expect_boolean("1 < 2", true);
+    expect_boolean("1>2", false);
+    expect_boolean("1<2", true);
 
-    expect_boolean("1 >= 2", false);
-    expect_boolean("2 >= 1", true);
-    expect_boolean("2 >= 2", true);
+    expect_boolean("1>=2", false);
+    expect_boolean("2>=1", true);
+    expect_boolean("2>=2", true);
 
-    expect_boolean("1 <= 2", true);
-    expect_boolean("2 <= 1", false);
-    expect_boolean("2 <= 2", true);
+    expect_boolean("1<=2", true);
+    expect_boolean("2<=1", false);
+    expect_boolean("2<=2", true);
 
     // expect_boolean("false", false);
     // expect_boolean("true", true);
@@ -84,15 +86,15 @@ fn test_flox_boolean() {
     expect_boolean("!false", true);
     expect_boolean("!true", false);
 
-    expect_boolean("true && true", true);
-    expect_boolean("true && false", false);
-    expect_boolean("false && false", false);
-    expect_boolean("false && true", false);
+    expect_boolean("true&&true", true);
+    expect_boolean("true&&false", false);
+    expect_boolean("false&&false", false);
+    expect_boolean("false&&true", false);
 
-    expect_boolean("true || true", true);
-    expect_boolean("true || false", true);
-    expect_boolean("false || false", false);
-    expect_boolean("false || true", true);
+    expect_boolean("true||true", true);
+    expect_boolean("true||false", true);
+    expect_boolean("false||false", false);
+    expect_boolean("false||true", true);
 }
 
 #[test]
@@ -100,7 +102,7 @@ fn test_flox_atom() {
     let _ = env_logger::init();
     match flox::parse("1+0") {
         Err(err) => {
-            println!("RES for ('{:?}') is {:?}", "1", err);
+            println!("Parsing result for ('{:?}') is {:?}", "1", err);
             assert!(false);
         }
         Ok(res) => {
