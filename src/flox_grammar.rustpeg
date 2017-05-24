@@ -1,9 +1,13 @@
 use xfstruct::{XFlowValue};
 
 pub expression -> XFlowValue
-  = boolean_expression
+  = parenthesized<expression>
   / arithmetic_expression
+  / boolean_expression
   / atom
+
+parenthesized<foo>
+  = "(" s:foo ")" { s }
 
 // Arithmetic
 
@@ -12,12 +16,27 @@ pub arithmetic_expression -> XFlowValue
 
 pub arithmetic -> i64
     = #infix<integer> {
-        #L x "+" y { x + y }
-           x "-" y { x - y }
-        #L x "*" y { x * y }
-           x "/" y { x / y }
-        #R x "^" y { x.pow(y as u32) }
+        #L x plus y { x + y }
+           x minus y { x - y }
+        #L x times y { x * y }
+           x division y { x / y }
+        #R x power y { x.pow(y as u32) }
     }
+
+plus -> ()
+ = _ "+" _
+
+minus -> ()
+ = _ "-" _
+
+times -> ()
+ = _ "*" _
+
+division -> ()
+ = _ "/" _
+
+power -> ()
+ = _ "^" _
 
 // Boolean
 
@@ -25,7 +44,7 @@ pub boolean_expression -> XFlowValue
   = e:boolean_test { XFlowValue::Boolean(e) }
 
 boolean_test -> bool
-  = not
+  = boolean_not
   / numeric_boolean_result
   / boolean_boolean_result
 
@@ -39,13 +58,25 @@ numeric_boolean_result -> bool
 
 boolean_boolean_result -> bool
     = #infix<boolean> {
-        #L l "==" r { l == r }
-           l "!=" r { l != r }
-        #R l "&&" r { l && r }
-           l "||" r { l || r }
+        #L l boolean_equals r { l == r }
+           l boolean_not_equals r { l != r }
+        #R l boolean_and r { l && r }
+           l boolean_or r { l || r }
     }
 
-not -> bool
+boolean_equals -> ()
+  = _ "==" _
+
+boolean_not_equals -> ()
+  = _ "!=" _
+
+boolean_and -> ()
+  = _ "&&" _
+
+boolean_or -> ()
+  = _ "||" _
+
+boolean_not -> bool
   = "!" l:boolean { !l }
 
 // Primitives
@@ -60,7 +91,6 @@ boolean -> bool
 
 integer -> i64
   = n:$([0-9]+) { n.parse().unwrap() }
-
 
 pub variables -> Vec<String>
   = variable*
