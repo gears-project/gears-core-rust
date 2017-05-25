@@ -1,11 +1,13 @@
 extern crate env_logger;
 extern crate xflow;
-use xflow::*;
 
+use xflow::*;
+use xfstruct::*;
+use xfstate::*;
 
 fn expect_integer(input: &str, expected: i64) -> () {
     let _ = env_logger::init();
-    match flox::parse_arithmetic(input) {
+    match flox::parse(input) {
         Err(err) => {
             println!("Parsing result for ('{:?}') is {:?}", input, err);
             assert!(false);
@@ -133,4 +135,31 @@ fn test_flox_atom() {
 fn test_combined_expressions() {
     let _ = env_logger::init();
     // expect_integer("(2)", 2);
+}
+
+#[test]
+fn test_variables() {
+    let _ = env_logger::init();
+    let mut state = XFState::default();
+    state.add(&XFlowVariable {
+        name: "CounterValue".to_owned(),
+        vtype: XFlowValueType::Integer,
+        value: XFlowValue::Integer(0),
+    });
+    let input = "$CounterValue";
+    let expected = 0;
+
+    match flox::parse_context(input, &state) {
+        Err(err) => {
+            println!("Parsing result for ('{:?}') is {:?}", input, err);
+            assert!(false);
+        }
+        Ok(res) => {
+            println!("Parsing result for ('{:?}') is {:?}", input, res);
+            match res {
+                xfstruct::XFlowValue::Integer(res) => assert_eq!(res, expected),
+                _ => assert!(false),
+            }
+        }
+    }
 }

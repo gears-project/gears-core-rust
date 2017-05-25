@@ -96,26 +96,13 @@ boolean -> bool
 integer -> i64
   = n:$([0-9]+) { n.parse().unwrap() }
 
-// pub variables -> Vec<String>
-//   = variable*
-
 variable -> XFlowValue
- = "+" s:$([A-Za-z]+) {?
+ = "$" s:$([A-Za-z]+) {?
     match context.get(s) {
         Some(val) => Ok(val.value.to_owned()),
-        None => Err("No value found")
+        None => Err("Value not found in local state")
     }
 }
-
-// variable -> String
-//  = "+" s:$([A-Za-z]+) { s.to_string() }
-
-// variable -> XFlowValue
-//   = "+" s:$([A-Za-z]+) {
-//     match context.get(s) {
-//         Some(res) => res,
-//     }
-//   }
 
 space -> ()
   = " "

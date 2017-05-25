@@ -11,9 +11,18 @@ pub enum Error {
     ParseError(String),
 }
 
+pub fn parse_context(input: &str, state: &XFState) -> Result<XFlowValue, Error> {
+    match flox_grammar::expression(input, &state) {
+        Ok(res) => Ok(res),
+        Err(err) => {
+            Err(Error::ParseError(format!("Bad expression {:?} - Error : {:?}", input, err)))
+        }
+    }
+}
+
 pub fn parse(input: &str) -> Result<XFlowValue, Error> {
     let state = XFState::default();
-    match flox_grammar::arithmetic_expression(input, &state) {
+    match flox_grammar::expression(input, &state) {
         Ok(res) => Ok(res),
         Err(err) => {
             Err(Error::ParseError(format!("Bad expression {:?} - Error : {:?}", input, err)))
