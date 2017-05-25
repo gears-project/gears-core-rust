@@ -1,7 +1,11 @@
 use xfstruct::{XFlowValue};
+use xfstate::{XFState};
+
+#![arguments(context: &XFState)]
 
 pub expression -> XFlowValue
   = parenthesized<expression>
+  / variable
   / arithmetic_expression
   / boolean_expression
   / atom
@@ -92,11 +96,26 @@ boolean -> bool
 integer -> i64
   = n:$([0-9]+) { n.parse().unwrap() }
 
-pub variables -> Vec<String>
-  = variable*
+// pub variables -> Vec<String>
+//   = variable*
 
-variable -> String
-  = "+" s:$([A-Za-z]+) { s.to_string() }
+variable -> XFlowValue
+ = "+" s:$([A-Za-z]+) {?
+    match context.get(s) {
+        Some(val) => Ok(val.value.to_owned()),
+        None => Err("No value found")
+    }
+}
+
+// variable -> String
+//  = "+" s:$([A-Za-z]+) { s.to_string() }
+
+// variable -> XFlowValue
+//   = "+" s:$([A-Za-z]+) {
+//     match context.get(s) {
+//         Some(res) => res,
+//     }
+//   }
 
 space -> ()
   = " "
