@@ -59,6 +59,36 @@ impl<'a> XFlowRunner<'a> {
         }
     }
 
+    pub fn new_with_input(xflow: &'a XFlowStruct,
+                          dispatcher: &'a Dispatcher<'a>,
+                          input: &'a XFState)
+                          -> Result<XFlowRunner<'a>, String> {
+
+        let mut state = XFState::default();
+
+        for (_, xvar) in &input.store {
+            state.add(xvar);
+        }
+
+        for xvar in &xflow.variables.local {
+            state.add(xvar);
+        }
+
+        match xflow.get_entry_node() {
+            Ok(node) => {
+                Ok(XFlowRunner {
+                    status: XFlowStatus::Initialized,
+                    xflow: xflow,
+                    dispatcher: dispatcher,
+                    state: state,
+                    current_node: Some(node),
+                    output: None,
+                })
+            }
+            _ => Err("Unable to init XFlowRunner".to_owned()),
+        }
+    }
+
     pub fn can_run(&self) -> bool {
         match self.status {
             XFlowStatus::Initialized | XFlowStatus::Running => true,

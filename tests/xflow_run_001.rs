@@ -3,6 +3,7 @@ extern crate env_logger;
 extern crate xflow;
 
 use xflow::xfstruct::*;
+use xflow::xfstate::*;
 use xflow::xfrunner::*;
 use xflow::dispatcher::*;
 use xflow::actiondispatch;
@@ -28,21 +29,32 @@ fn test_run_10_steps() {
     assert_eq!(xfs.nodes.len(), 10);
 
     let dispatcher = build_dispatcher();
-    let mut xfrunner = XFlowRunner::new(&xfs, &dispatcher);
 
-    assert_eq!(xfrunner.can_run(), true);
+    let mut state = XFState::default();
+    state.add(&XFlowVariable {
+        name: "CounterValue".to_owned(),
+        vtype: XFlowValueType::Integer,
+        value: XFlowValue::Integer(0),
+    });
 
-    let mut i = 1;
+    match XFlowRunner::new_with_input(&xfs, &dispatcher, &state) {
+        Ok(mut xfrunner) => {
+            assert_eq!(xfrunner.can_run(), true);
 
-    loop {
-        xfrunner.step();
-        if xfrunner.is_completed() {
-            break;
+            let mut i = 1;
+
+            loop {
+                xfrunner.step();
+                if xfrunner.is_completed() {
+                    break;
+                }
+                i += 1;
+            }
+            assert_eq!(i, xfs.nodes.len());
         }
-        i += 1;
+        Err(_) => assert!(false),
     }
 
-    assert_eq!(i, xfs.nodes.len());
 }
 
 #[test]

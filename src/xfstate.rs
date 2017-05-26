@@ -6,7 +6,7 @@ pub type XFStore = HashMap<String, XFlowVariable>;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct XFState {
-    store: XFStore,
+    pub store: XFStore,
 }
 
 fn copy_xvar(xvar: &XFlowVariable) -> XFlowVariable {
