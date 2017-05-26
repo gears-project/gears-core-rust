@@ -27,6 +27,31 @@ pub arithmetic -> i64
         #R x power y { x.pow(y as u32) }
     }
 
+// Boolean
+
+pub boolean_expression -> XFlowValue
+  = e:boolean_test { XFlowValue::Boolean(e) }
+
+boolean_test -> bool
+  = boolean_result
+
+boolean_result -> bool
+  = not
+  / l:integer eq r:integer { l == r }
+  / l:integer ne r:integer { l != r }
+  / l:integer gt r:integer { l > r }
+  / l:integer lt r:integer { l < r }
+  / l:integer gte r:integer { l >= r }
+  / l:integer lte r:integer { l <= r }
+  / #infix<boolean> {
+      #L l eq r { l == r }
+         l ne r { l != r }
+      #R l and r { l && r }
+         l or r { l || r }
+  }
+
+// Operators
+
 plus -> ()
  = _ "+" _
 
@@ -42,45 +67,31 @@ division -> ()
 power -> ()
  = _ "^" _
 
-// Boolean
+eq -> ()
+ = _ "==" _
 
-pub boolean_expression -> XFlowValue
-  = e:boolean_test { XFlowValue::Boolean(e) }
+ne -> ()
+ = _ "!=" _
 
-boolean_test -> bool
-  = boolean_not
-  / numeric_boolean_result
-  / boolean_boolean_result
+gt -> ()
+ = _ ">" _
 
-numeric_boolean_result -> bool
-  = l:integer _ "==" _ r:integer { l == r }
-  / l:integer _ "!=" _ r:integer { l != r }
-  / l:integer _ ">" _ r:integer { l > r }
-  / l:integer _ "<" _ r:integer { l < r }
-  / l:integer _ ">=" _ r:integer { l >= r }
-  / l:integer _ "<=" _ r:integer { l <= r }
+lt -> ()
+ = _ "<" _
 
-boolean_boolean_result -> bool
-    = #infix<boolean> {
-        #L l boolean_equals r { l == r }
-           l boolean_not_equals r { l != r }
-        #R l boolean_and r { l && r }
-           l boolean_or r { l || r }
-    }
+gte -> ()
+ = _ ">=" _
 
-boolean_equals -> ()
-  = _ "==" _
+lte -> ()
+ = _ "<=" _
 
-boolean_not_equals -> ()
-  = _ "!=" _
+and -> ()
+ = _ "&&" _
 
-boolean_and -> ()
-  = _ "&&" _
+or -> ()
+ = _ "||" _
 
-boolean_or -> ()
-  = _ "||" _
-
-boolean_not -> bool
+not -> bool
   = "!" l:boolean { !l }
 
 // Primitives
