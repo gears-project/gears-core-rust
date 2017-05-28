@@ -23,46 +23,10 @@ pub struct XFlowRunner<'a> {
 }
 
 impl<'a> XFlowRunner<'a> {
-    pub fn new(xflow: &'a XFlowStruct, dispatcher: &'a Dispatcher<'a>) -> XFlowRunner<'a> {
-
-        let mut state = XFState::default();
-
-        // for xvar in &xflow.variables.input {
-        //     state.add(xvar);
-        // }
-
-        for xvar in &xflow.variables.local {
-            state.add(xvar);
-        }
-
-        match xflow.get_entry_node() {
-            Ok(node) => {
-                XFlowRunner {
-                    status: XFlowStatus::Initialized,
-                    xflow: xflow,
-                    dispatcher: dispatcher,
-                    state: state,
-                    current_node: Some(node),
-                    output: None,
-                }
-            }
-            _ => {
-                XFlowRunner {
-                    status: XFlowStatus::Uninitialized,
-                    xflow: xflow,
-                    dispatcher: dispatcher,
-                    state: state,
-                    current_node: None,
-                    output: None,
-                }
-            }
-        }
-    }
-
-    pub fn new_with_input(xflow: &'a XFlowStruct,
-                          dispatcher: &'a Dispatcher<'a>,
-                          input: &'a XFState)
-                          -> Result<XFlowRunner<'a>, String> {
+    pub fn new(xflow: &'a XFlowStruct,
+               dispatcher: &'a Dispatcher<'a>,
+               input: &'a XFState)
+               -> Result<XFlowRunner<'a>, String> {
 
         let mut state = XFState::default();
 

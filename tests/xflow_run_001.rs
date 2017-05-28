@@ -29,10 +29,9 @@ fn test_run_10_steps() {
     assert_eq!(xfs.nodes.len(), 10);
 
     let dispatcher = build_dispatcher();
-
     let state = XFState::default();
 
-    match XFlowRunner::new_with_input(&xfs, &dispatcher, &state) {
+    match XFlowRunner::new(&xfs, &dispatcher, &state) {
         Ok(mut xfrunner) => {
             assert_eq!(xfrunner.can_run(), true);
 
@@ -47,7 +46,10 @@ fn test_run_10_steps() {
             }
             assert_eq!(i, xfs.nodes.len());
         }
-        Err(_) => assert!(false),
+        Err(err) => {
+            println!("{:?}", err);
+            assert!(false);
+        }
     }
 
 }
@@ -63,13 +65,19 @@ fn test_run_simple_branch() {
     assert_eq!(xfs.branches.len(), 2);
 
     let dispatcher = build_dispatcher();
-    let mut xfrunner = XFlowRunner::new(&xfs, &dispatcher);
+    let state = XFState::default();
 
-    assert_eq!(xfrunner.can_run(), true);
-
-    xfrunner.run();
-
-    assert_eq!(xfrunner.is_completed_ok(), true);
+    match XFlowRunner::new(&xfs, &dispatcher, &state) {
+        Ok(mut xfrunner) => {
+            assert_eq!(xfrunner.can_run(), true);
+            xfrunner.run();
+            assert_eq!(xfrunner.is_completed_ok(), true);
+        }
+        Err(err) => {
+            println!("{:?}", err);
+            assert!(false);
+        }
+    }
 }
 
 #[test]
@@ -80,15 +88,20 @@ fn test_run_arithmetic() {
     let xfs = XFlowStruct::from_json(&json_string);
 
     let dispatcher = build_dispatcher();
-    let mut xfrunner = XFlowRunner::new(&xfs, &dispatcher);
-
-    xfrunner.run();
-
-    assert_eq!(xfrunner.is_completed_ok(), true);
-
-    match xfrunner.get_output().unwrap().get("ReturnValue").unwrap().value {
-        XFlowValue::Integer(i) => assert_eq!(i, 3),
-        _ => assert!(false),
+    let state = XFState::default();
+    match XFlowRunner::new(&xfs, &dispatcher, &state) {
+        Ok(mut xfrunner) => {
+            xfrunner.run();
+            assert_eq!(xfrunner.is_completed_ok(), true);
+            match xfrunner.get_output().unwrap().get("ReturnValue").unwrap().value {
+                XFlowValue::Integer(i) => assert_eq!(i, 3),
+                _ => assert!(false),
+            }
+        }
+        Err(err) => {
+            println!("{:?}", err);
+            assert!(false);
+        }
     }
 }
 
@@ -100,21 +113,29 @@ fn test_run_arithmetic_multiple_return_values() {
     let xfs = XFlowStruct::from_json(&json_string);
 
     let dispatcher = build_dispatcher();
-    let mut xfrunner = XFlowRunner::new(&xfs, &dispatcher);
+    let state = XFState::default();
+    match XFlowRunner::new(&xfs, &dispatcher, &state) {
+        Ok(mut xfrunner) => {
 
-    xfrunner.run();
+            xfrunner.run();
 
-    assert_eq!(xfrunner.is_completed_ok(), true);
+            assert_eq!(xfrunner.is_completed_ok(), true);
 
-    match xfrunner.get_output() {
-        Ok(xfstate) => {
-            match xfstate.get("ReturnValueA").unwrap().value {
-                XFlowValue::Integer(i) => assert_eq!(i, 3),
-                _ => assert!(false),
-            }
-            match xfstate.get("ReturnValueB").unwrap().value {
-                XFlowValue::Integer(i) => assert_eq!(i, 16),
-                _ => assert!(false),
+            match xfrunner.get_output() {
+                Ok(xfstate) => {
+                    match xfstate.get("ReturnValueA").unwrap().value {
+                        XFlowValue::Integer(i) => assert_eq!(i, 3),
+                        _ => assert!(false),
+                    }
+                    match xfstate.get("ReturnValueB").unwrap().value {
+                        XFlowValue::Integer(i) => assert_eq!(i, 16),
+                        _ => assert!(false),
+                    }
+                }
+                Err(err) => {
+                    println!("{:?}", err);
+                    assert!(false);
+                }
             }
         }
         Err(err) => {
@@ -122,5 +143,4 @@ fn test_run_arithmetic_multiple_return_values() {
             assert!(false);
         }
     }
-
 }
