@@ -20,6 +20,11 @@ fn build_dispatcher<'a>() -> Dispatcher<'a> {
     dispatcher
 }
 
+fn fail_and_report_error(err: String) -> () {
+    println!("{:?}", err);
+    assert!(false);
+}
+
 #[test]
 fn test_run_10_steps() {
     let _ = env_logger::init();
@@ -46,10 +51,7 @@ fn test_run_10_steps() {
             }
             assert_eq!(i, xfs.nodes.len());
         }
-        Err(err) => {
-            println!("{:?}", err);
-            assert!(false);
-        }
+        Err(err) => fail_and_report_error(err),
     }
 
 }
@@ -73,10 +75,7 @@ fn test_run_simple_branch() {
             xfrunner.run();
             assert_eq!(xfrunner.is_completed_ok(), true);
         }
-        Err(err) => {
-            println!("{:?}", err);
-            assert!(false);
-        }
+        Err(err) => fail_and_report_error(err),
     }
 }
 
@@ -98,10 +97,7 @@ fn test_run_arithmetic() {
                 _ => assert!(false),
             }
         }
-        Err(err) => {
-            println!("{:?}", err);
-            assert!(false);
-        }
+        Err(err) => fail_and_report_error(err),
     }
 }
 
@@ -132,15 +128,9 @@ fn test_run_arithmetic_multiple_return_values() {
                         _ => assert!(false),
                     }
                 }
-                Err(err) => {
-                    println!("{:?}", err);
-                    assert!(false);
-                }
+                Err(err) => fail_and_report_error(err),
             }
         }
-        Err(err) => {
-            println!("{:?}", err);
-            assert!(false);
-        }
+        Err(err) => fail_and_report_error(err),
     }
 }
