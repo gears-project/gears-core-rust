@@ -30,12 +30,7 @@ fn test_run_10_steps() {
 
     let dispatcher = build_dispatcher();
 
-    let mut state = XFState::default();
-    state.add(&XFlowVariable {
-        name: "CounterValue".to_owned(),
-        vtype: XFlowValueType::Integer,
-        value: XFlowValue::Integer(0),
-    });
+    let state = XFState::default();
 
     match XFlowRunner::new_with_input(&xfs, &dispatcher, &state) {
         Ok(mut xfrunner) => {
