@@ -135,7 +135,7 @@ fn test_all_good_flows_validate() {
         let xfs = XFlowStruct::from_json(&json_string);
 
         let res = Validation::validate(&xfs);
-        if res.len() != 0 {
+        if !res.is_empty() {
             println!("ERROR: Flow listed as good does not validate : {} - {:?}",
                      flow,
                      res);
@@ -164,7 +164,7 @@ fn test_no_bad_flows_validate() {
 
         let res = Validation::validate(&xfs);
 
-        if res.len() == 0 {
+        if res.is_empty() {
             println!("ERROR: Flow listed as bad validates OK : {}", flow);
             assert!(false);
         }

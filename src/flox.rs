@@ -12,7 +12,7 @@ pub enum Error {
 }
 
 pub fn parse_context(input: &str, state: &XFState) -> Result<XFlowValue, Error> {
-    match flox_grammar::expression(input, &state) {
+    match flox_grammar::expression(input, state) {
         Ok(res) => Ok(res),
         Err(err) => {
             Err(Error::ParseError(format!("Bad expression {:?} - Error : {:?}", input, err)))

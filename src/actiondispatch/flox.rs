@@ -32,7 +32,7 @@ impl Flox {
                         match params.get("expression") {
                             Some(val) => {
                                 debug!("Expression : {}", val);
-                                match flox::parse(val.as_str().unwrap()) {
+                                match flox::parse_context(val.as_str().unwrap(), &state) {
                                     Ok(res) => {
                                         debug!("Expression {} - Result - {:?}", val, res);
                                         state.add(&XFlowVariable {
