@@ -34,6 +34,7 @@ pub boolean_expression -> XFlowValue
 
 boolean_test -> bool
   = boolean_result
+  / boolean
 
 boolean_result -> bool
   = not

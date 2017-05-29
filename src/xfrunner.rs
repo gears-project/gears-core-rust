@@ -30,8 +30,18 @@ impl<'a> XFlowRunner<'a> {
 
         let mut state = XFState::default();
 
-        for (_, xvar) in &input.store {
-            state.add(xvar);
+        for xvardef in &xflow.variables.input {
+            match input.get(&xvardef.name) {
+                Some(xvar) => {
+                    println!("ADD VAR");
+                    state.add(xvar)
+                }
+                None => {
+                    let err = format!("Missing required xvar in input parameters : {}",
+                                      xvardef.name);
+                    return Err(err);
+                }
+            }
         }
 
         for xvar in &xflow.variables.local {

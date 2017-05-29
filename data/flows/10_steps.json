@@ -14,11 +14,10 @@
   ],
   "variables" : {
     "input" : [
-      {
-        "name": "CounterValue",
-        "vtype": "number",
-        "value": 0
-      }
+       {
+         "name": "CounterValue",
+         "vtype": "number"
+       }
     ],
     "output" : [
       {

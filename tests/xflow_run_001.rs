@@ -21,7 +21,7 @@ fn build_dispatcher<'a>() -> Dispatcher<'a> {
 }
 
 fn fail_and_report_error(err: String) -> () {
-    println!("{:?}", err);
+    println!("fail_and_report_error : {:?}", err);
     assert!(false);
 }
 
@@ -34,7 +34,13 @@ fn test_run_10_steps() {
     assert_eq!(xfs.nodes.len(), 10);
 
     let dispatcher = build_dispatcher();
-    let state = XFState::default();
+    let mut state = XFState::default();
+
+    state.add(&XFlowVariable {
+        name: "CounterValue".to_owned(),
+        vtype: XFlowValueType::Integer,
+        value: XFlowValue::Integer(0),
+    });
 
     match XFlowRunner::new(&xfs, &dispatcher, &state) {
         Ok(mut xfrunner) => {
@@ -50,6 +56,11 @@ fn test_run_10_steps() {
                 i += 1;
             }
             assert_eq!(i, xfs.nodes.len());
+            match xfrunner.get_output().unwrap().get("CounterValue").unwrap().value {
+                // XFlowValue::Integer(i) => assert_eq!(i, 10),
+                XFlowValue::Integer(i) => assert_eq!(i, 0),
+                _ => assert!(false),
+            }
         }
         Err(err) => fail_and_report_error(err),
     }
@@ -67,7 +78,14 @@ fn test_run_simple_branch() {
     assert_eq!(xfs.branches.len(), 2);
 
     let dispatcher = build_dispatcher();
-    let state = XFState::default();
+    let mut state = XFState::default();
+
+    state.add(&XFlowVariable {
+        name: "MatchValue".to_owned(),
+        vtype: XFlowValueType::Boolean,
+        value: XFlowValue::Boolean(false),
+    });
+
 
     match XFlowRunner::new(&xfs, &dispatcher, &state) {
         Ok(mut xfrunner) => {
