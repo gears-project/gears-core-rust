@@ -119,8 +119,8 @@ fn test_xfs_get_nodes_of_type() {
     assert_eq!(xfs.get_nodes_of_type("flow").len(), 2);
 }
 
-// partof: #TST-purpose-format-json
 #[test]
+// #TST-serialization-json
 fn test_xfs_from_json() {
     let _ = env_logger::init();
 
