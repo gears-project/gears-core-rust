@@ -1,0 +1,23 @@
+[REQ-purpose]
+text = '''
+The purpose of this project is to provide a portable, extensible flow execution
+engine.
+
+Examples can be found in {repo}/data/
+
+'''
+
+[REQ-purpose-format-json]
+text = '''
+All flows can be serialized to or deserialized from JSON.
+
+'''
+
+[SPC-purpose-format-json]
+text = '''
+Flow serialization is performed using **serde-json**
+
+'''
+
+
+

@@ -5,6 +5,7 @@ use errors::XFlowError;
 
 pub type XFlowEdge = (i32, i32);
 
+// partof: #SPC-purpose-format-json
 #[derive(Serialize, Deserialize, Debug)]
 pub struct XFlowStruct {
     pub id: String,
