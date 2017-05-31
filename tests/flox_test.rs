@@ -136,6 +136,7 @@ fn test_combined_expressions() {
     let _ = env_logger::init();
     expect_integer("(2)", 2);
     expect_integer("(2+2)", 4);
+    expect_boolean("(2 == 2)", true);
 }
 
 #[test]

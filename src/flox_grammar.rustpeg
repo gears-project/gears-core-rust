@@ -17,20 +17,22 @@ parenthesized<foo>
 
 pub arithmetic_expression -> XFlowValue
   = e:arithmetic { XFlowValue::Integer(e) }
+  / parenthesized<arithmetic_expression>
 
 pub arithmetic -> i64
-    = #infix<integer> {
-        #L x plus y { x + y }
-           x minus y { x - y }
-        #L x times y { x * y }
-           x division y { x / y }
-        #R x power y { x.pow(y as u32) }
-    }
+  = #infix<integer> {
+      #L x plus y { x + y }
+         x minus y { x - y }
+      #L x times y { x * y }
+         x division y { x / y }
+      #R x power y { x.pow(y as u32) }
+  }
 
 // Boolean
 
 pub boolean_expression -> XFlowValue
   = e:boolean_test { XFlowValue::Boolean(e) }
+  / parenthesized<boolean_expression>
 
 boolean_test -> bool
   = boolean_result
@@ -38,6 +40,7 @@ boolean_test -> bool
 
 boolean_result -> bool
   = not
+  / parenthesized<boolean_test>
   / l:integer eq r:integer { l == r }
   / l:integer ne r:integer { l != r }
   / l:integer gt r:integer { l > r }
@@ -109,12 +112,8 @@ integer -> i64
   = n:$([0-9]+) { n.parse().unwrap() }
 
 variable -> XFlowValue
- = "$" s:$([A-Za-z]+) {?
-    match context.get(s) {
-        Some(val) => Ok(val.value.to_owned()),
-        None => Err("Value not found in local state")
-    }
-}
+ = b:boolean_variable { XFlowValue::Boolean(b) }
+ / i:integer_variable { XFlowValue::Integer(i) }
 
 boolean_variable -> bool
  = "$" s:$([A-Za-z]+) {?
