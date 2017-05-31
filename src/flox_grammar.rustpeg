@@ -102,8 +102,8 @@ atom -> XFlowValue
  / b:boolean { XFlowValue::Boolean(b) }
 
 boolean -> bool
- = b:"true" { true }
- / b:"false" { false }
+ = "true" { true }
+ / "false" { false }
 
 integer -> i64
   = n:$([0-9]+) { n.parse().unwrap() }
@@ -112,6 +112,32 @@ variable -> XFlowValue
  = "$" s:$([A-Za-z]+) {?
     match context.get(s) {
         Some(val) => Ok(val.value.to_owned()),
+        None => Err("Value not found in local state")
+    }
+}
+
+boolean_variable -> bool
+ = "$" s:$([A-Za-z]+) {?
+    match context.get(s) {
+        Some(val) => {
+            match val.value {
+                XFlowValue::Boolean(b) => Ok(b),
+                _ => Err("Incorrect Value Found")
+            }
+        }
+        None => Err("Value not found in local state")
+    }
+}
+
+integer_variable -> i64
+ = "$" s:$([A-Za-z]+) {?
+    match context.get(s) {
+        Some(val) => {
+            match val.value {
+                XFlowValue::Integer(i) => Ok(i),
+                _ => Err("Incorrect Value Found")
+            }
+        }
         None => Err("Value not found in local state")
     }
 }
