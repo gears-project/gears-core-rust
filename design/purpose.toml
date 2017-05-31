@@ -39,7 +39,24 @@ capable of,
  - Performing numeric arithmetic
  - Performing boolean arithmetic
  - Binding to contextual variables at run-time
-
 '''
 
+[REQ-xflow-call]
+text = '''
+An xflow shall be able to call another xflow.
+'''
+
+[SPC-xflow-call]
+text = '''
+An xflow shall have a node of type 'call' which,
+
+ - Can invoke another xflow, named in its node parameters
+ - Can pass local variables
+ - Can assign the return values to local variables
+'''
+
+[TST-xflow-call]
+text = '''
+Tests that have xflows invoking other xflows and using the result.
+'''
 
