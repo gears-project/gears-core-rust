@@ -1,0 +1,45 @@
+[REQ-purpose]
+text = '''
+The purpose of this project is to provide a portable, extensible flow execution
+engine.
+
+Examples can be found in {repo}/data/
+
+'''
+
+[REQ-serialization]
+text = '''
+Flows shall be serialized and deserialized in different formats.
+
+Serialization and deserialization shall be possible with,
+ - json
+
+'''
+
+[REQ-serialization-json]
+text = '''
+All flows can be serialized to or deserialized from JSON.
+'''
+
+[SPC-serialization-json]
+text = '''
+Flow serialization is performed using **serde-json**
+'''
+
+[TST-serialization-json]
+text = '''
+Flow serialization tests
+'''
+
+[REQ-flox]
+text = '''
+An evaluation environment shall be available with an expression-based language
+capable of,
+
+ - Performing numeric arithmetic
+ - Performing boolean arithmetic
+ - Binding to contextual variables at run-time
+
+'''
+
+

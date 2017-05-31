@@ -23,13 +23,26 @@ pub struct XFlowRunner<'a> {
 }
 
 impl<'a> XFlowRunner<'a> {
-    pub fn new(xflow: &'a XFlowStruct, dispatcher: &'a Dispatcher<'a>) -> XFlowRunner<'a> {
+    pub fn new(xflow: &'a XFlowStruct,
+               dispatcher: &'a Dispatcher<'a>,
+               input: &'a XFState)
+               -> Result<XFlowRunner<'a>, String> {
 
         let mut state = XFState::default();
 
-        // for xvar in &xflow.variables.input {
-        //     state.add(xvar);
-        // }
+        for xvardef in &xflow.variables.input {
+            match input.get(&xvardef.name) {
+                Some(xvar) => {
+                    println!("ADD VAR");
+                    state.add(xvar)
+                }
+                None => {
+                    let err = format!("Missing required xvar in input parameters : {}",
+                                      xvardef.name);
+                    return Err(err);
+                }
+            }
+        }
 
         for xvar in &xflow.variables.local {
             state.add(xvar);
@@ -37,25 +50,16 @@ impl<'a> XFlowRunner<'a> {
 
         match xflow.get_entry_node() {
             Ok(node) => {
-                XFlowRunner {
+                Ok(XFlowRunner {
                     status: XFlowStatus::Initialized,
                     xflow: xflow,
                     dispatcher: dispatcher,
                     state: state,
                     current_node: Some(node),
                     output: None,
-                }
+                })
             }
-            _ => {
-                XFlowRunner {
-                    status: XFlowStatus::Uninitialized,
-                    xflow: xflow,
-                    dispatcher: dispatcher,
-                    state: state,
-                    current_node: None,
-                    output: None,
-                }
-            }
+            _ => Err("Unable to init XFlowRunner".to_owned()),
         }
     }
 

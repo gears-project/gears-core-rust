@@ -1,32 +1,31 @@
 use xfstruct::{XFlowValue};
+use xfstate::{XFState};
+
+#![arguments(context: &XFState)]
 
 pub expression -> XFlowValue
-  = boolean_expression
+  = parenthesized<expression>
+  / variable
   / arithmetic_expression
+  / boolean_expression
   / atom
 
-/// Arithmetic
+parenthesized<foo>
+  = "(" s:foo ")" { s }
+
+// Arithmetic
 
 pub arithmetic_expression -> XFlowValue
-  = e:equation { XFlowValue::Integer(e) }
+  = e:arithmetic { XFlowValue::Integer(e) }
 
-equation -> i64
-  = mul
-  / div
-  / add
-  / sub
-
-add -> i64
-  = i:int _ "+" _ j:int { i + j }
-
-sub -> i64
-  = i:int _ "-" _ j:int { i - j }
-
-mul -> i64
-  = i:int _ "*" _ j:int { i * j }
-
-div -> i64
-  = i:int _ "/" _ j:int { i / j }
+pub arithmetic -> i64
+    = #infix<integer> {
+        #L x plus y { x + y }
+           x minus y { x - y }
+        #L x times y { x * y }
+           x division y { x / y }
+        #R x power y { x.pow(y as u32) }
+    }
 
 // Boolean
 
@@ -34,45 +33,64 @@ pub boolean_expression -> XFlowValue
   = e:boolean_test { XFlowValue::Boolean(e) }
 
 boolean_test -> bool
-  = equals
-  / not_equals
-  / greater_than
-  / less_than
-  / greater_or_equal
-  / less_or_equal
-  / and
-  / or
-  / not
-  / xor
+  = boolean_result
+  / boolean
 
-equals -> bool
-  = l:int _ "==" _ r:int { l == r }
-  / l:boolean _ "==" _ r:boolean { l == r }
+boolean_result -> bool
+  = not
+  / l:integer eq r:integer { l == r }
+  / l:integer ne r:integer { l != r }
+  / l:integer gt r:integer { l > r }
+  / l:integer lt r:integer { l < r }
+  / l:integer gte r:integer { l >= r }
+  / l:integer lte r:integer { l <= r }
+  / #infix<boolean> {
+      #L l eq r { l == r }
+         l ne r { l != r }
+      #R l and r { l && r }
+         l or r { l || r }
+  }
 
-not_equals -> bool
-  = l:int _ "!=" _ r:int { l != r }
-  / l:boolean _ "!=" _ r:boolean { l != r }
+// Operators
 
-greater_than -> bool
-  = l:int _ ">" _ r:int { l > r }
+plus -> ()
+ = _ "+" _
 
-less_than -> bool
-  = l:int _ "<" _ r:int { l < r }
+minus -> ()
+ = _ "-" _
 
-greater_or_equal -> bool
-  = l:int _ ">=" _ r:int { l >= r }
+times -> ()
+ = _ "*" _
 
-less_or_equal -> bool
-  = l:int _ "<=" _ r:int { l <= r }
+division -> ()
+ = _ "/" _
 
-and -> bool
-  = l:boolean _ "&&" _ r:boolean { l && r }
+power -> ()
+ = _ "^" _
 
-or -> bool
-  = l:boolean _ "||" _ r:boolean { l || r }
+eq -> ()
+ = _ "==" _
 
-xor -> bool
-  = l:boolean _ "^" _ r:boolean { l && r }
+ne -> ()
+ = _ "!=" _
+
+gt -> ()
+ = _ ">" _
+
+lt -> ()
+ = _ "<" _
+
+gte -> ()
+ = _ ">=" _
+
+lte -> ()
+ = _ "<=" _
+
+and -> ()
+ = _ "&&" _
+
+or -> ()
+ = _ "||" _
 
 not -> bool
   = "!" l:boolean { !l }
@@ -80,15 +98,49 @@ not -> bool
 // Primitives
 
 atom -> XFlowValue
- = i:int { XFlowValue::Integer(i) }
+ = i:integer { XFlowValue::Integer(i) }
  / b:boolean { XFlowValue::Boolean(b) }
 
 boolean -> bool
- = b:"true" { true }
- / b:"false" { false }
+ = "true" { true }
+ / "false" { false }
 
-int -> i64
+integer -> i64
   = n:$([0-9]+) { n.parse().unwrap() }
+
+variable -> XFlowValue
+ = "$" s:$([A-Za-z]+) {?
+    match context.get(s) {
+        Some(val) => Ok(val.value.to_owned()),
+        None => Err("Value not found in local state")
+    }
+}
+
+boolean_variable -> bool
+ = "$" s:$([A-Za-z]+) {?
+    match context.get(s) {
+        Some(val) => {
+            match val.value {
+                XFlowValue::Boolean(b) => Ok(b),
+                _ => Err("Incorrect Value Found")
+            }
+        }
+        None => Err("Value not found in local state")
+    }
+}
+
+integer_variable -> i64
+ = "$" s:$([A-Za-z]+) {?
+    match context.get(s) {
+        Some(val) => {
+            match val.value {
+                XFlowValue::Integer(i) => Ok(i),
+                _ => Err("Incorrect Value Found")
+            }
+        }
+        None => Err("Value not found in local state")
+    }
+}
 
 space -> ()
   = " "

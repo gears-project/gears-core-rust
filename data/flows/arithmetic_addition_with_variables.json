@@ -17,12 +17,12 @@
       {
         "name"  : "ValueA",
         "vtype"  : "number",
-        "value" : "4"
+        "value" : 4
       },
       {
         "name"  : "ValueB",
         "vtype"  : "number",
-        "value" : "5"
+        "value" : 5
       }
     ],
     "output" : [
@@ -33,9 +33,9 @@
     ],
     "local" : [
       {
-        "vtype" : "boolean",
+        "vtype" : "number",
         "name" : "ReturnValue",
-        "value" : "false"
+        "value" : 0
       }
     ]
   },

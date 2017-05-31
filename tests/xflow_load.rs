@@ -120,6 +120,7 @@ fn test_xfs_get_nodes_of_type() {
 }
 
 #[test]
+// #TST-serialization-json
 fn test_xfs_from_json() {
     let _ = env_logger::init();
 
@@ -170,7 +171,7 @@ fn test_xfs_from_json() {
 fn test_xfs_from_json_string() {
     let _ = env_logger::init();
 
-    let empty_flow = read_json_file("data/flows/empty.json");
+    let empty_flow = read_json_file("data/bad_flows/empty.json");
     let xfs = XFlowStruct::from_json(&empty_flow);
 
     assert_eq!(xfs.name, "empty".to_string());

@@ -1,10 +1,12 @@
 use serde_json;
+use std::collections::HashSet;
 
 use errors::XFlowError;
 
 pub type XFlowEdge = (i32, i32);
 
 #[derive(Serialize, Deserialize, Debug)]
+// partof: SPC-serialization-json
 pub struct XFlowStruct {
     pub id: String,
     pub version: i32,
@@ -17,6 +19,7 @@ pub struct XFlowStruct {
 }
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
+// partof: #SPC-serialization-json
 pub enum XFlowValueType {
     #[serde(rename="string")]
     String,
@@ -152,6 +155,24 @@ impl XFlowStruct {
     /// ```
     pub fn from_json(json_string: &str) -> XFlowStruct {
         serde_json::from_str(json_string).unwrap()
+    }
+
+    pub fn all_variable_names(&self) -> HashSet<String> {
+        let mut vars = HashSet::<String>::new();
+
+        for xvar in &self.variables.input {
+            vars.insert(xvar.name.clone());
+        }
+
+        for xvar in &self.variables.local {
+            vars.insert(xvar.name.clone());
+        }
+
+        for xvar in &self.variables.output {
+            vars.insert(xvar.name.clone());
+        }
+
+        vars
     }
 
     pub fn get_in_edges(&self, node: &XFlowNode) -> Vec<&XFlowEdge> {
