@@ -102,10 +102,6 @@ not -> bool
 
 // Primitives
 
-atom -> XFlowValue
-  = i:integer { XFlowValue::Integer(i) }
-  / b:boolean { XFlowValue::Boolean(b) }
-
 boolean -> bool
   = "true" { true }
   / "false" { false }
@@ -151,4 +147,8 @@ space -> ()
   / "\r"
 
 _ = space*
+
+atom -> XFlowValue
+  = i:integer { XFlowValue::Integer(i) }
+  / b:boolean { XFlowValue::Boolean(b) }
 
