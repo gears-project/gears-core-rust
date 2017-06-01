@@ -25,6 +25,28 @@ fn fail_and_report_error(err: String) -> () {
     assert!(false);
 }
 
+fn run_xflow(flow_file: &str) -> Result<XFState, String> {
+
+    let json_string = read_json_file(flow_file);
+    let xfs = XFlowStruct::from_json(&json_string);
+    let dispatcher = build_dispatcher();
+    let state = XFState::default();
+
+    match XFlowRunner::new(&xfs, &dispatcher, &state) {
+        Ok(mut xfrunner) => {
+            assert_eq!(xfrunner.can_run(), true);
+            xfrunner.run();
+            Ok(xfrunner.get_output().unwrap())
+        }
+        Err(err) => {
+            let res = err.clone();
+            fail_and_report_error(err);
+            Err(res)
+        }
+    }
+
+}
+
 #[test]
 fn test_run_10_steps() {
     let _ = env_logger::init();
@@ -57,7 +79,6 @@ fn test_run_10_steps() {
             }
             assert_eq!(i, xfs.nodes.len());
             match xfrunner.get_output().unwrap().get("CounterValue").unwrap().value {
-                // XFlowValue::Integer(i) => assert_eq!(i, 10),
                 XFlowValue::Integer(i) => assert_eq!(i, 8),
                 _ => assert!(false),
             }
@@ -101,16 +122,9 @@ fn test_run_simple_branch() {
 fn test_run_arithmetic() {
     let _ = env_logger::init();
 
-    let json_string = read_json_file("data/flows/arithmetic_addition.json");
-    let xfs = XFlowStruct::from_json(&json_string);
-
-    let dispatcher = build_dispatcher();
-    let state = XFState::default();
-    match XFlowRunner::new(&xfs, &dispatcher, &state) {
-        Ok(mut xfrunner) => {
-            xfrunner.run();
-            assert_eq!(xfrunner.is_completed_ok(), true);
-            match xfrunner.get_output().unwrap().get("ReturnValue").unwrap().value {
+    match run_xflow("data/flows/arithmetic_addition.json") {
+        Ok(output) => {
+            match output.get("ReturnValue").unwrap().value {
                 XFlowValue::Integer(i) => assert_eq!(i, 3),
                 _ => assert!(false),
             }
@@ -123,30 +137,15 @@ fn test_run_arithmetic() {
 fn test_run_arithmetic_multiple_return_values() {
     let _ = env_logger::init();
 
-    let json_string = read_json_file("data/flows/arithmetic_addition_multiple_return_values.json");
-    let xfs = XFlowStruct::from_json(&json_string);
-
-    let dispatcher = build_dispatcher();
-    let state = XFState::default();
-    match XFlowRunner::new(&xfs, &dispatcher, &state) {
-        Ok(mut xfrunner) => {
-
-            xfrunner.run();
-
-            assert_eq!(xfrunner.is_completed_ok(), true);
-
-            match xfrunner.get_output() {
-                Ok(xfstate) => {
-                    match xfstate.get("ReturnValueA").unwrap().value {
-                        XFlowValue::Integer(i) => assert_eq!(i, 3),
-                        _ => assert!(false),
-                    }
-                    match xfstate.get("ReturnValueB").unwrap().value {
-                        XFlowValue::Integer(i) => assert_eq!(i, 16),
-                        _ => assert!(false),
-                    }
-                }
-                Err(err) => fail_and_report_error(err),
+    match run_xflow("data/flows/arithmetic_addition_multiple_return_values.json") {
+        Ok(output) => {
+            match output.get("ReturnValueA").unwrap().value {
+                XFlowValue::Integer(i) => assert_eq!(i, 3),
+                _ => assert!(false),
+            }
+            match output.get("ReturnValueB").unwrap().value {
+                XFlowValue::Integer(i) => assert_eq!(i, 16),
+                _ => assert!(false),
             }
         }
         Err(err) => fail_and_report_error(err),
