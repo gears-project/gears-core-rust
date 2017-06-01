@@ -58,7 +58,7 @@ fn test_run_10_steps() {
             assert_eq!(i, xfs.nodes.len());
             match xfrunner.get_output().unwrap().get("CounterValue").unwrap().value {
                 // XFlowValue::Integer(i) => assert_eq!(i, 10),
-                XFlowValue::Integer(i) => assert_eq!(i, 0),
+                XFlowValue::Integer(i) => assert_eq!(i, 8),
                 _ => assert!(false),
             }
         }

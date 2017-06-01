@@ -5,21 +5,17 @@ use xfstate::{XFState};
 
 pub expression -> XFlowValue
   = parenthesized<expression>
-  / variable
   / arithmetic_expression
   / boolean_expression
+  / variable
   / atom
-
-parenthesized<foo>
-  = "(" s:foo ")" { s }
 
 // Arithmetic
 
 pub arithmetic_expression -> XFlowValue
   = e:arithmetic { XFlowValue::Integer(e) }
-  / parenthesized<arithmetic_expression>
 
-pub arithmetic -> i64
+arithmetic -> i64
   = #infix<integer> {
       #L x plus y { x + y }
          x minus y { x - y }
@@ -27,6 +23,7 @@ pub arithmetic -> i64
          x division y { x / y }
       #R x power y { x.pow(y as u32) }
   }
+  / parenthesized<arithmetic>
 
 // Boolean
 
@@ -55,6 +52,9 @@ boolean_infix -> bool
   / not
   / parenthesized<boolean_test>
   / boolean
+
+parenthesized<foo>
+  = "(" s:foo ")" { s }
 
 // Operators
 
@@ -103,30 +103,32 @@ not -> bool
 // Primitives
 
 atom -> XFlowValue
- = i:integer { XFlowValue::Integer(i) }
- / b:boolean { XFlowValue::Boolean(b) }
+  = i:integer { XFlowValue::Integer(i) }
+  / b:boolean { XFlowValue::Boolean(b) }
 
 boolean -> bool
- = "true" { true }
- / "false" { false }
+  = "true" { true }
+  / "false" { false }
+  / boolean_variable
 
 integer -> i64
   = n:$([0-9]+) { n.parse().unwrap() }
+  / integer_variable
 
 variable -> XFlowValue
- = b:boolean_variable { XFlowValue::Boolean(b) }
- / i:integer_variable { XFlowValue::Integer(i) }
+  = i:integer_variable { XFlowValue::Integer(i) }
+  / b:boolean_variable { XFlowValue::Boolean(b) }
 
 boolean_variable -> bool
- = "$" s:$([A-Za-z]+) {?
+  = "$" s:$([A-Za-z]+) {?
     match context.get(s) {
         Some(val) => {
             match val.value {
                 XFlowValue::Boolean(b) => Ok(b),
-                _ => Err("Incorrect Value Found")
+                _ => Err("Incorrect Value Found (Boolean)")
             }
         }
-        None => Err("Value not found in local state")
+        None => Err("Value not found in local state (Boolean)")
     }
 }
 

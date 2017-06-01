@@ -153,8 +153,8 @@ fn test_variables() {
         vtype: XFlowValueType::Integer,
         value: XFlowValue::Integer(0),
     });
-    let input = "$CounterValue";
-    let expected = 0;
+    let input = "$CounterValue+1";
+    let expected = 1;
 
     match flox::parse_context(input, &state) {
         Err(err) => {
