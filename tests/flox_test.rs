@@ -5,6 +5,23 @@ use xflow::*;
 use xfstruct::*;
 use xfstate::*;
 
+fn expect_context_integer(input: &str, context: &XFState, expected: i64) -> () {
+    let _ = env_logger::init();
+    match flox::parse_context(input, context) {
+        Err(err) => {
+            println!("Parsing result for ('{:?}') is {:?}", input, err);
+            assert!(false);
+        }
+        Ok(res) => {
+            println!("Parsing result for ('{:?}') is {:?}", input, res);
+            match res {
+                xfstruct::XFlowValue::Integer(res) => assert_eq!(res, expected),
+                _ => assert!(false),
+            }
+        }
+    }
+}
+
 fn expect_integer(input: &str, expected: i64) -> () {
     let _ = env_logger::init();
     match flox::parse(input) {
@@ -16,6 +33,23 @@ fn expect_integer(input: &str, expected: i64) -> () {
             println!("Parsing result for ('{:?}') is {:?}", input, res);
             match res {
                 xfstruct::XFlowValue::Integer(res) => assert_eq!(res, expected),
+                _ => assert!(false),
+            }
+        }
+    }
+}
+
+fn expect_context_boolean(input: &str, context: &XFState, expected: bool) -> () {
+    let _ = env_logger::init();
+    match flox::parse_context(input, context) {
+        Err(err) => {
+            println!("Parsing result for ('{:?}') is {:?}", input, err);
+            assert!(false);
+        }
+        Ok(res) => {
+            println!("Parsing result for ('{:?}') is {:?}", input, res);
+            match res {
+                xfstruct::XFlowValue::Boolean(res) => assert_eq!(res, expected),
                 _ => assert!(false),
             }
         }
@@ -153,20 +187,24 @@ fn test_variables() {
         vtype: XFlowValueType::Integer,
         value: XFlowValue::Integer(0),
     });
-    let input = "$CounterValue+1";
-    let expected = 1;
 
-    match flox::parse_context(input, &state) {
-        Err(err) => {
-            println!("Parsing result for ('{:?}') is {:?}", input, err);
-            assert!(false);
-        }
-        Ok(res) => {
-            println!("Parsing result for ('{:?}') is {:?}", input, res);
-            match res {
-                xfstruct::XFlowValue::Integer(res) => assert_eq!(res, expected),
-                _ => assert!(false),
-            }
-        }
-    }
+    state.add(&XFlowVariable {
+        name: "ComparisonValue".to_owned(),
+        vtype: XFlowValueType::Boolean,
+        value: XFlowValue::Boolean(true),
+    });
+
+    expect_context_integer("$CounterValue+1", &state, 1);
+    expect_context_integer("$CounterValue+99", &state, 99);
+    expect_context_integer("$CounterValue-99", &state, -99);
+    expect_context_boolean("$ComparisonValue==true", &state, true);
+    expect_context_boolean("$ComparisonValue == true", &state, true);
+    expect_context_boolean("$ComparisonValue == false", &state, false);
+    expect_context_boolean("$ComparisonValue!=true", &state, false);
+    expect_context_boolean("$ComparisonValue != true", &state, false);
+    expect_context_boolean("$ComparisonValue != false", &state, true);
+    expect_context_boolean("$ComparisonValue && true", &state, true);
+    expect_context_boolean("$ComparisonValue&&true", &state, true);
+    expect_context_boolean("$ComparisonValue && false", &state, false);
+
 }
