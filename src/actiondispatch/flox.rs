@@ -26,40 +26,32 @@ impl Flox {
         let node_params = FloxParameters::from_optional_value(&node.parameters).unwrap();
         match node.action.as_ref() {
             "evalexpr" => {
-                info!("Flox: evalexpr {} - {} - {:?}", node.id, state, node_params);
-                match node.parameters {
-                    Some(ref params) => {
-                        match params.get("expression") {
-                            Some(val) => {
-                                debug!("Expression : {}", val);
-                                match flox::parse_context(val.as_str().unwrap(), &state) {
-                                    Ok(res) => {
-                                        debug!("Expression {} - Result - {:?}", val, res);
-                                        state.add(&XFlowVariable {
-                                            name: node_params.returns.name,
-                                            vtype: node_params.returns.vtype,
-                                            value: res.clone(),
-                                        });
-                                    }
-                                    Err(err) => {
-                                        error!("Expression {} - Result - {:?}", val, err);
-                                    }
-                                };
-                            }
-                            None => {
-                                error!("No expression found in parameters");
-                            }
-                        }
+                info!("Flox: evalexpr: '{}' - state: '{}' - params: '{:?}'",
+                      node.id,
+                      state,
+                      node_params);
+                let expr = node_params.expression.as_str();
+                debug!("Expression: '{}'", expr);
+                match flox::parse_context(node_params.expression.as_str(), &state) {
+                    Ok(res) => {
+                        debug!("Expression: '{}' - Result: '{:?}'", expr, res);
+                        state.add(&XFlowVariable {
+                            name: node_params.returns.name,
+                            vtype: node_params.returns.vtype,
+                            value: res.clone(),
+                        });
                     }
-                    None => {
-                        error!("No parameters found in node");
+                    Err(err) => {
+                        error!("Expression: '{}' - Result: '{:?}'", expr, err);
                     }
+
                 }
             }
             _ => {
-                error!("Unimplemented/unhandled action : {} - {}", node.id, state);
+                error!("Unimplemented/unhandled action id: '{}' - state: '{}'",
+                       node.id,
+                       state);
             }
-
         }
     }
 }
