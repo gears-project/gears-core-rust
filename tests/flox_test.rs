@@ -137,6 +137,11 @@ fn test_combined_expressions() {
     expect_integer("(2)", 2);
     expect_integer("(2+2)", 4);
     expect_boolean("(2 == 2)", true);
+    expect_boolean("(true && true)", true);
+    expect_boolean("(true && true && true)", true);
+    expect_boolean("(true && false && true)", false);
+    expect_boolean("(true && false || true)", true);
+    expect_boolean("true && false || true", true);
 }
 
 #[test]

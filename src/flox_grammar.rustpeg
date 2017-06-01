@@ -32,27 +32,29 @@ pub arithmetic -> i64
 
 pub boolean_expression -> XFlowValue
   = e:boolean_test { XFlowValue::Boolean(e) }
-  / parenthesized<boolean_expression>
 
 boolean_test -> bool
   = boolean_result
-  / boolean
 
 boolean_result -> bool
-  = not
-  / parenthesized<boolean_test>
-  / l:integer eq r:integer { l == r }
+  = l:integer eq r:integer { l == r }
   / l:integer ne r:integer { l != r }
   / l:integer gt r:integer { l > r }
   / l:integer lt r:integer { l < r }
   / l:integer gte r:integer { l >= r }
   / l:integer lte r:integer { l <= r }
-  / #infix<boolean> {
+  / boolean_infix
+
+boolean_infix -> bool
+  = #infix<boolean> {
       #L l eq r { l == r }
          l ne r { l != r }
       #R l and r { l && r }
          l or r { l || r }
   }
+  / not
+  / parenthesized<boolean_test>
+  / boolean
 
 // Operators
 
