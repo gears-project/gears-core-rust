@@ -4,18 +4,20 @@ use xfstate::{XFState};
 #![arguments(context: &XFState)]
 
 pub expression -> XFlowValue
-  = parenthesized<expression>
+  = boolean_expression
   / arithmetic_expression
-  / boolean_expression
   / variable
   / atom
 
 // Arithmetic
 
 pub arithmetic_expression -> XFlowValue
-  = e:arithmetic { XFlowValue::Integer(e) }
+  = e:arithmetic_test { XFlowValue::Integer(e) }
 
-arithmetic -> i64
+arithmetic_test -> i64
+  = arithmetic_infix
+
+arithmetic_infix -> i64
   = #infix<integer> {
       #L x plus y { x + y }
          x minus y { x - y }
@@ -23,7 +25,8 @@ arithmetic -> i64
          x division y { x / y }
       #R x power y { x.pow(y as u32) }
   }
-  / parenthesized<arithmetic>
+  / parenthesized<arithmetic_infix>
+  / integer
 
 // Boolean
 
@@ -49,8 +52,8 @@ boolean_infix -> bool
       #R l and r { l && r }
          l or r { l || r }
   }
+  / parenthesized<boolean_result>
   / not
-  / parenthesized<boolean_test>
   / boolean
 
 parenthesized<foo>
@@ -103,7 +106,8 @@ not -> bool
 // Primitives
 
 boolean -> bool
-  = "true" { true }
+  = parenthesized<boolean_test>
+  / "true" { true }
   / "false" { false }
   / boolean_variable
 
@@ -146,7 +150,8 @@ space -> ()
   / "\n"
   / "\r"
 
-_ = space*
+_ -> ()
+  = space*
 
 atom -> XFlowValue
   = i:integer { XFlowValue::Integer(i) }

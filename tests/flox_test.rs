@@ -222,6 +222,18 @@ fn test_variables() {
     expect_context_integer("$CounterValue+1", &state, 1);
     expect_context_integer("$CounterValue+99", &state, 99);
     expect_context_integer("$CounterValue-99", &state, -99);
+    expect_context_integer("($One + $Two)", &state, 3);
+    expect_context_integer("($One + $Two + $Two)", &state, 5);
+    // expect_context_integer("(($One + $Two) + $Two)", &state, 5);
+
+    expect_context_boolean("$CounterValue > 0", &state, false);
+    expect_context_boolean("$CounterValue == 0", &state, true);
+    expect_context_boolean("($CounterValue == 0)", &state, true);
+    expect_context_boolean("($CounterValue == 0) && true", &state, true);
+    expect_context_boolean("($CounterValue == 0) || false", &state, true);
+    expect_context_boolean("($CounterValue == 0) && false", &state, false);
+
+
     expect_context_boolean("$ComparisonValue==true", &state, true);
     expect_context_boolean("$ComparisonValue == true", &state, true);
     expect_context_boolean("$ComparisonValue == false", &state, false);
@@ -234,10 +246,34 @@ fn test_variables() {
 
     expect_context_boolean("$TrueValue && $FalseValue", &state, false);
     expect_context_boolean("$TrueValue && $TrueValue && $TrueValue", &state, true);
+    expect_context_boolean("(($TrueValue && $TrueValue) && $TrueValue)", &state, true);
+    expect_context_boolean("((($TrueValue && $TrueValue) && $TrueValue) && $TrueValue)",
+                           &state,
+                           true);
+
+    expect_context_boolean("((($TrueValue && $TrueValue) && $TrueValue) && $FalseValue)",
+                           &state,
+                           false);
+
+    expect_context_boolean("((($TrueValue && $TrueValue) && $TrueValue) && ($FalseValue || \
+                            $TrueValue))",
+                           &state,
+                           true);
+
+    expect_context_boolean("((($TrueValue && $FalseValue) && $TrueValue) && ($FalseValue || \
+                            $TrueValue))",
+                           &state,
+                           false);
+
+    expect_context_boolean("((($TrueValue && $FalseValue) && $TrueValue) && ($FalseValue \
+                            ||\n \r \n\n $TrueValue))",
+                           &state,
+                           false);
 
     expect_context_boolean("$TrueValue == $FalseValue", &state, false);
     expect_context_boolean("$TrueValue != $FalseValue", &state, true);
     expect_context_boolean("$TrueValue == $TrueValue", &state, true);
+    expect_context_boolean("($TrueValue == $TrueValue)", &state, true);
 
 
 }
