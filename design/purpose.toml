@@ -66,6 +66,12 @@ text = '''
 Variables
 '''
 
+[TST-flox-variable-extraction]
+text = '''
+This test demonstrates the successful extraction of variable names from a flox
+string.
+'''
+
 [TST-serialization-json]
 text = '''
 Flow serialization tests

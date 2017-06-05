@@ -13,7 +13,7 @@ fn expect_context_integer(input: &str, context: &XFState, expected: i64) -> () {
             assert!(false);
         }
         Ok(res) => {
-            println!("Parsing result for ('{:?}') is {:?}", input, res);
+            // println!("Parsing result for ('{:?}') is {:?}", input, res);
             match res {
                 xfstruct::XFlowValue::Integer(res) => assert_eq!(res, expected),
                 _ => assert!(false),
@@ -30,7 +30,7 @@ fn expect_integer(input: &str, expected: i64) -> () {
             assert!(false);
         }
         Ok(res) => {
-            println!("Parsing result for ('{:?}') is {:?}", input, res);
+            // println!("Parsing result for ('{:?}') is {:?}", input, res);
             match res {
                 xfstruct::XFlowValue::Integer(res) => assert_eq!(res, expected),
                 _ => assert!(false),
@@ -47,7 +47,7 @@ fn expect_context_boolean(input: &str, context: &XFState, expected: bool) -> () 
             assert!(false);
         }
         Ok(res) => {
-            println!("Parsing result for ('{:?}') is {:?}", input, res);
+            // println!("Parsing result for ('{:?}') is {:?}", input, res);
             match res {
                 xfstruct::XFlowValue::Boolean(res) => assert_eq!(res, expected),
                 _ => assert!(false),
@@ -64,7 +64,7 @@ fn expect_boolean(input: &str, expected: bool) -> () {
             assert!(false);
         }
         Ok(res) => {
-            println!("Parsing result for ('{:?}') is {:?}", input, res);
+            // println!("Parsing result for ('{:?}') is {:?}", input, res);
             match res {
                 xfstruct::XFlowValue::Boolean(res) => assert_eq!(res, expected),
                 _ => assert!(false),
@@ -233,7 +233,6 @@ fn test_variables() {
     expect_context_boolean("($CounterValue == 0) || false", &state, true);
     expect_context_boolean("($CounterValue == 0) && false", &state, false);
 
-
     expect_context_boolean("$ComparisonValue==true", &state, true);
     expect_context_boolean("$ComparisonValue == true", &state, true);
     expect_context_boolean("$ComparisonValue == false", &state, false);
@@ -274,6 +273,44 @@ fn test_variables() {
     expect_context_boolean("$TrueValue != $FalseValue", &state, true);
     expect_context_boolean("$TrueValue == $TrueValue", &state, true);
     expect_context_boolean("($TrueValue == $TrueValue)", &state, true);
+}
+
+#[test]
+// #TST-flox-variable-extraction
+fn test_variable_extraction() {
+    let _ = env_logger::init();
+
+    match flox::extract_variable_names("$CounterValue+6") {
+        Ok(res) => assert_eq!(res, vec!["CounterValue"]),
+        Err(err) => {
+            println!("Error {:?}", err);
+            assert!(false)
+        }
+    }
+
+    match flox::extract_variable_names("6+$CounterValue+6") {
+        Ok(res) => assert_eq!(res, vec!["CounterValue"]),
+        Err(err) => {
+            println!("Error {:?}", err);
+            assert!(false)
+        }
+    }
+
+    match flox::extract_variable_names("6+$CounterValue+6+$CounterValue") {
+        Ok(res) => assert_eq!(res, vec!["CounterValue", "CounterValue"]),
+        Err(err) => {
+            println!("Error {:?}", err);
+            assert!(false)
+        }
+    }
+
+    match flox::extract_variable_names("6+$CounterValue+6+$CounterValue / $ComparisonValue") {
+        Ok(res) => assert_eq!(res, vec!["CounterValue", "CounterValue", "ComparisonValue"]),
+        Err(err) => {
+            println!("Error {:?}", err);
+            assert!(false)
+        }
+    }
 
 
 }

@@ -3,6 +3,15 @@ use xfstate::{XFState};
 
 #![arguments(context: &XFState)]
 
+pub variable_names -> Vec<&'input str>
+  = variable_name*
+
+variable_name -> &'input str
+ = non_variable_start* "$" s:$([A-Za-z]+) non_variable_start* { s }
+
+non_variable_start -> ()
+ = $([^$]) {}
+
 pub expression -> XFlowValue
   = boolean_expression
   / arithmetic_expression

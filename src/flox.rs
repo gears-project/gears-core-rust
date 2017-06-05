@@ -49,3 +49,13 @@ pub fn parse_boolean(input: &str) -> Result<XFlowValue, Error> {
         }
     }
 }
+// #SPC-flox-variable-extraction
+pub fn extract_variable_names(input: &str) -> Result<Vec<&str>, Error> {
+    let state = XFState::default();
+    match flox_grammar::variable_names(input, &state) {
+        Ok(res) => Ok(res),
+        Err(err) => {
+            Err(Error::ParseError(format!("Bad expression {:?} - Error : {:?}", input, err)))
+        }
+    }
+}
