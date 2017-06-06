@@ -83,24 +83,40 @@ impl<'a> XFlowRunner<'a> {
         self.status == XFlowStatus::Finished
     }
 
-    pub fn run(&mut self) -> () {
+    pub fn run(&mut self) -> Result<(), String> {
+        // XXX: Clean up error handling
         while self.can_run() {
-            self.step();
+            match self.step() {
+                Ok(()) => (),
+                Err(err) => {
+                    error!("{}", err);
+                }
+            }
+        }
+        if self.is_completed_ok() {
+            Ok(())
+        } else {
+            let msg = format!("Unhandled error has occurred while running flow");
+            Err(msg)
         }
     }
 
-    pub fn step(&mut self) -> () {
+    pub fn step(&mut self) -> Result<(), String> {
         self.next_node();
-        self.run_node();
+        self.run_node()
     }
 
-    fn run_node(&mut self) -> () {
+    fn run_node(&mut self) -> Result<(), String> {
         let st = &mut self.state;
         if let Some(node) = self.current_node {
             self.status = XFlowStatus::Running;
-            self.dispatcher.dispatch(node, st);
+            match self.dispatcher.dispatch(node, st) {
+                Ok(_) => Ok(()),
+                Err(err) => Err(err),
+            }
         } else {
             self.status = XFlowStatus::Finished;
+            Ok(())
         }
     }
 
