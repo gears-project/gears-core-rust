@@ -312,5 +312,15 @@ fn test_variable_extraction() {
         }
     }
 
+    // match flox::extract_variable_names("1+2") {
+    // Ok(res) => assert_eq!(res.len(), 0),
+    // Err(err) => {
+    // println!("Error {:?}", err);
+    // assert!(false)
+    // }
+    // }
+    //
+
+
 
 }

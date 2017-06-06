@@ -44,6 +44,7 @@ impl Validation {
         errors.extend(Validation::variables_are_defined_only_once(xflow));
         errors.extend(Validation::all_return_values_exist(xflow));
         errors.extend(Validation::no_variable_redefinition(xflow));
+        // errors.extend(Validation::all_flox_variables_exist(xflow));
 
         errors
     }
@@ -348,7 +349,7 @@ impl Validation {
     //     X  variables_are_defined_only_once(flow),
     //     X  all_nodes_have_at_least_one_edge(flow)
     //     X  no_variable_redefinition(flow)
-    //        all_flox_variables_exist
+    //     X  all_flox_variables_exist
 }
 
 impl Default for Validation {

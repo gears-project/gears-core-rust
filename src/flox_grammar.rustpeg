@@ -3,15 +3,6 @@ use xfstate::{XFState};
 
 #![arguments(context: &XFState)]
 
-pub variable_names -> Vec<&'input str>
-  = variable_name*
-
-variable_name -> &'input str
- = non_variable_start* "$" s:$([A-Za-z]+) non_variable_start* { s }
-
-non_variable_start -> ()
- = $([^$]) {}
-
 pub expression -> XFlowValue
   = boolean_expression
   / arithmetic_expression
@@ -24,9 +15,6 @@ pub arithmetic_expression -> XFlowValue
   = e:arithmetic_test { XFlowValue::Integer(e) }
 
 arithmetic_test -> i64
-  = arithmetic_infix
-
-arithmetic_infix -> i64
   = #infix<integer> {
       #L x plus y { x + y }
          x minus y { x - y }
@@ -34,7 +22,7 @@ arithmetic_infix -> i64
          x division y { x / y }
       #R x power y { x.pow(y as u32) }
   }
-  / parenthesized<arithmetic_infix>
+  / parenthesized<arithmetic_test>
   / integer
 
 // Boolean
@@ -43,9 +31,6 @@ pub boolean_expression -> XFlowValue
   = e:boolean_test { XFlowValue::Boolean(e) }
 
 boolean_test -> bool
-  = boolean_result
-
-boolean_result -> bool
   = l:integer eq r:integer { l == r }
   / l:integer ne r:integer { l != r }
   / l:integer gt r:integer { l > r }
@@ -61,7 +46,7 @@ boolean_infix -> bool
       #R l and r { l && r }
          l or r { l || r }
   }
-  / parenthesized<boolean_result>
+  / parenthesized<boolean_test>
   / not
   / boolean
 
@@ -165,4 +150,18 @@ _ -> ()
 atom -> XFlowValue
   = i:integer { XFlowValue::Integer(i) }
   / b:boolean { XFlowValue::Boolean(b) }
+
+//
+// Supporting utilities
+//
+
+pub variable_names -> Vec<&'input str>
+  = var_name*
+  / x:non_var_start* { Vec::<&'input str>::new() }
+
+var_name -> &'input str
+ = non_var_start* "$" s:$([A-Za-z]+)non_var_start* { s }
+
+non_var_start -> ()
+ = $([^$]) {}
 
