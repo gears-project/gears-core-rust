@@ -39,6 +39,7 @@ impl<'a> XFlowRunner<'a> {
                 None => {
                     let err = format!("Missing required xvar in input parameters : {}",
                                       xvardef.name);
+                    error!("{}", err);
                     return Err(err);
                 }
             }
@@ -189,21 +190,24 @@ impl<'a> XFlowRunner<'a> {
                     if xvar_local.vtype == xvar_out.vtype {
                         state.add(xvar_local);
                     } else {
-                        error!("Output var '{}' has a different type than its local one",
-                               &xvar_out.name);
-                        return Err(format!("Output var '{}' has a different type than its local \
-                                            one",
-                                           &xvar_out.name));
+                        let msg = format!("Output var '{}' has a different type than its local \
+                                           one",
+                                          &xvar_out.name);
+
+                        error!("{}", msg);
+                        return Err(msg);
                     }
                 } else {
-                    error!("Required var '{:?}' not found in state!", &xvar_out.name);
-                    return Err(format!("Required var '{}' not found in state!", &xvar_out.name));
+                    let msg = format!("Required var '{:?}' not found in state!", &xvar_out.name);
+                    error!("{}", msg);
+                    return Err(msg);
                 }
             }
             Ok(state)
         } else {
-            error!("Called before xflow has finished!");
-            Err("Called before xflow has finished!".to_owned())
+            let msg = "Called before xflow has finished!".to_owned();
+            error!("{}", msg);
+            Err(msg)
         }
     }
 }
