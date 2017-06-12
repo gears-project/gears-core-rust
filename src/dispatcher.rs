@@ -15,17 +15,24 @@ impl<'a> Dispatcher<'a> {
         self.receivers.insert(name.to_owned(), receiver_box);
     }
 
-    pub fn dispatch(&self, xfnode: &XFlowNode, xfstate: &mut XFState) -> Result<(), ()> {
+    pub fn dispatch(&self, xfnode: &XFlowNode, xfstate: &mut XFState) -> Result<(), String> {
         info!("Nodetype {}, action {}", xfnode.nodetype, xfnode.action);
 
         if let Some(receiver) = self.receivers.get(&xfnode.nodetype) {
-            receiver.dispatch(xfnode, xfstate);
-            Ok(())
+            match receiver.dispatch(xfnode, xfstate) {
+                Ok(()) => Ok(()),
+                Err(()) => {
+                    let msg = format!("An error has occurred dispatching, but this is currently not handled");
+                    error!("{}", msg);
+                    Err(msg)
+                }
+            }
         } else {
-            error!("No dispatcher found for {}/{}!",
-                   xfnode.nodetype,
-                   xfnode.action);
-            Err(())
+            let msg = format!("No dispatcher found for {}/{}!",
+                              xfnode.nodetype,
+                              xfnode.action);
+            error!("{}", msg);
+            Err(msg)
         }
 
     }

@@ -39,6 +39,7 @@ impl<'a> XFlowRunner<'a> {
                 None => {
                     let err = format!("Missing required xvar in input parameters : {}",
                                       xvardef.name);
+                    error!("{}", err);
                     return Err(err);
                 }
             }
@@ -83,24 +84,40 @@ impl<'a> XFlowRunner<'a> {
         self.status == XFlowStatus::Finished
     }
 
-    pub fn run(&mut self) -> () {
+    pub fn run(&mut self) -> Result<(), String> {
+        // XXX: Clean up error handling
         while self.can_run() {
-            self.step();
+            match self.step() {
+                Ok(()) => (),
+                Err(err) => {
+                    error!("{}", err);
+                }
+            }
+        }
+        if self.is_completed_ok() {
+            Ok(())
+        } else {
+            let msg = format!("Unhandled error has occurred while running flow");
+            Err(msg)
         }
     }
 
-    pub fn step(&mut self) -> () {
+    pub fn step(&mut self) -> Result<(), String> {
         self.next_node();
-        self.run_node();
+        self.run_node()
     }
 
-    fn run_node(&mut self) -> () {
+    fn run_node(&mut self) -> Result<(), String> {
         let st = &mut self.state;
         if let Some(node) = self.current_node {
             self.status = XFlowStatus::Running;
-            self.dispatcher.dispatch(node, st);
+            match self.dispatcher.dispatch(node, st) {
+                Ok(_) => Ok(()),
+                Err(err) => Err(err),
+            }
         } else {
             self.status = XFlowStatus::Finished;
+            Ok(())
         }
     }
 
@@ -173,21 +190,24 @@ impl<'a> XFlowRunner<'a> {
                     if xvar_local.vtype == xvar_out.vtype {
                         state.add(xvar_local);
                     } else {
-                        error!("Output var '{}' has a different type than its local one",
-                               &xvar_out.name);
-                        return Err(format!("Output var '{}' has a different type than its local \
-                                            one",
-                                           &xvar_out.name));
+                        let msg = format!("Output var '{}' has a different type than its local \
+                                           one",
+                                          &xvar_out.name);
+
+                        error!("{}", msg);
+                        return Err(msg);
                     }
                 } else {
-                    error!("Required var '{:?}' not found in state!", &xvar_out.name);
-                    return Err(format!("Required var '{}' not found in state!", &xvar_out.name));
+                    let msg = format!("Required var '{:?}' not found in state!", &xvar_out.name);
+                    error!("{}", msg);
+                    return Err(msg);
                 }
             }
             Ok(state)
         } else {
-            error!("Called before xflow has finished!");
-            Err("Called before xflow has finished!".to_owned())
+            let msg = "Called before xflow has finished!".to_owned();
+            error!("{}", msg);
+            Err(msg)
         }
     }
 }

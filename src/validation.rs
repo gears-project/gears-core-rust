@@ -1,4 +1,5 @@
 use xfstruct::*;
+use flox;
 use std::collections::{HashSet, HashMap};
 
 #[derive(Debug)]
@@ -43,6 +44,7 @@ impl Validation {
         errors.extend(Validation::variables_are_defined_only_once(xflow));
         errors.extend(Validation::all_return_values_exist(xflow));
         errors.extend(Validation::no_variable_redefinition(xflow));
+        // errors.extend(Validation::all_flox_variables_exist(xflow));
 
         errors
     }
@@ -299,6 +301,46 @@ impl Validation {
         errors
     }
 
+    pub fn all_flox_variables_exist(xflow: &XFlowStruct) -> Vec<ValidationError> {
+        let mut errors = Vec::<ValidationError>::new();
+
+        let nodes = xflow.get_nodes_of_type(&"flox");
+        let names_in_xflow = xflow.get_all_variable_names();
+
+        for node in nodes {
+            match node.parameters {
+                Some(ref params) => {
+                    match params.get("expression") {
+                        Some(expr) => {
+                            // XXX: Remove unwraps
+                            for flox_var in flox::extract_variable_names(expr.as_str().unwrap())
+                                .unwrap() {
+                                if !names_in_xflow.contains(flox_var) {
+                                    errors.push(ValidationError {
+                                        code: 1,
+                                        message: format!("Flox expression references variable \
+                                                          '{}' which is not defined in this flow",
+                                                         flox_var),
+                                        paths: vec![format!("/nodes/{}", node.id)],
+                                    });
+                                }
+                            }
+                        }
+                        None => {
+                            // XXX This should not happen
+                        }
+                    }
+                }
+                None => {
+                    // XXX This should not happen
+                }
+            }
+        }
+
+        errors
+    }
+
+
     //     X  all_edges_have_nodes(flow),
     //     X  has_one_entry_node(flow),
     //     X  has_terminal_nodes(flow),
@@ -307,6 +349,7 @@ impl Validation {
     //     X  variables_are_defined_only_once(flow),
     //     X  all_nodes_have_at_least_one_edge(flow)
     //     X  no_variable_redefinition(flow)
+    //     X  all_flox_variables_exist
 }
 
 impl Default for Validation {

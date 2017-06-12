@@ -4,28 +4,26 @@ use xfstate::{XFState};
 #![arguments(context: &XFState)]
 
 pub expression -> XFlowValue
-  = parenthesized<expression>
-  / variable
+  = boolean_expression
   / arithmetic_expression
-  / boolean_expression
+  / variable
   / atom
-
-parenthesized<foo>
-  = "(" s:foo ")" { s }
 
 // Arithmetic
 
 pub arithmetic_expression -> XFlowValue
-  = e:arithmetic { XFlowValue::Integer(e) }
+  = e:arithmetic_test { XFlowValue::Integer(e) }
 
-pub arithmetic -> i64
-    = #infix<integer> {
-        #L x plus y { x + y }
-           x minus y { x - y }
-        #L x times y { x * y }
-           x division y { x / y }
-        #R x power y { x.pow(y as u32) }
-    }
+arithmetic_test -> i64
+  = #infix<integer> {
+      #L x plus y { x + y }
+         x minus y { x - y }
+      #L x times y { x * y }
+         x division y { x / y }
+      #R x power y { x.pow(y as u32) }
+  }
+  / parenthesized<arithmetic_test>
+  / integer
 
 // Boolean
 
@@ -33,23 +31,27 @@ pub boolean_expression -> XFlowValue
   = e:boolean_test { XFlowValue::Boolean(e) }
 
 boolean_test -> bool
-  = boolean_result
-  / boolean
-
-boolean_result -> bool
-  = not
-  / l:integer eq r:integer { l == r }
+  = l:integer eq r:integer { l == r }
   / l:integer ne r:integer { l != r }
   / l:integer gt r:integer { l > r }
   / l:integer lt r:integer { l < r }
   / l:integer gte r:integer { l >= r }
   / l:integer lte r:integer { l <= r }
-  / #infix<boolean> {
+  / boolean_infix
+
+boolean_infix -> bool
+  = #infix<boolean> {
       #L l eq r { l == r }
          l ne r { l != r }
       #R l and r { l && r }
          l or r { l || r }
   }
+  / parenthesized<boolean_test>
+  / not
+  / boolean
+
+parenthesized<foo>
+  = "(" s:foo ")" { s }
 
 // Operators
 
@@ -97,35 +99,30 @@ not -> bool
 
 // Primitives
 
-atom -> XFlowValue
- = i:integer { XFlowValue::Integer(i) }
- / b:boolean { XFlowValue::Boolean(b) }
-
 boolean -> bool
- = "true" { true }
- / "false" { false }
+  = parenthesized<boolean_test>
+  / "true" { true }
+  / "false" { false }
+  / boolean_variable
 
 integer -> i64
   = n:$([0-9]+) { n.parse().unwrap() }
+  / integer_variable
 
 variable -> XFlowValue
- = "$" s:$([A-Za-z]+) {?
-    match context.get(s) {
-        Some(val) => Ok(val.value.to_owned()),
-        None => Err("Value not found in local state")
-    }
-}
+  = i:integer_variable { XFlowValue::Integer(i) }
+  / b:boolean_variable { XFlowValue::Boolean(b) }
 
 boolean_variable -> bool
- = "$" s:$([A-Za-z]+) {?
+  = "$" s:$([A-Za-z]+) {?
     match context.get(s) {
         Some(val) => {
             match val.value {
                 XFlowValue::Boolean(b) => Ok(b),
-                _ => Err("Incorrect Value Found")
+                _ => Err("Incorrect Value Found (Boolean)")
             }
         }
-        None => Err("Value not found in local state")
+        None => Err("Value not found in local state (Boolean)")
     }
 }
 
@@ -147,5 +144,24 @@ space -> ()
   / "\n"
   / "\r"
 
-_ = space*
+_ -> ()
+  = space*
+
+atom -> XFlowValue
+  = i:integer { XFlowValue::Integer(i) }
+  / b:boolean { XFlowValue::Boolean(b) }
+
+//
+// Supporting utilities
+//
+
+pub variable_names -> Vec<&'input str>
+  = var_name*
+  / x:non_var_start* { Vec::<&'input str>::new() }
+
+var_name -> &'input str
+ = non_var_start* "$" s:$([A-Za-z]+)non_var_start* { s }
+
+non_var_start -> ()
+ = $([^$]) {}
 

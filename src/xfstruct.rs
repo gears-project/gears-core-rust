@@ -251,14 +251,43 @@ impl XFlowStruct {
         }
     }
 
-    //     pub fn get_nodes<F>(&self, func: &F) -> Vec<&XFlowNode>
-    //         where F: Fn(&XFlowNode) -> bool
-    //     {
-    //         self.nodes
-    //             .iter()
-    //             .filter(func)
-    //             .collect::<Vec<&XFlowNode>>()
-    //     }
+    pub fn get_all_variable_names(&self) -> HashSet<String> {
+        let mut names = HashSet::<String>::new();
+
+        for xvar in &self.variables.local {
+            let name = xvar.name.clone();
+            if !names.contains(&name) {
+                names.insert(name);
+            }
+        }
+
+        for xvar in &self.variables.input {
+            let name = xvar.name.clone();
+            if !names.contains(&name) {
+                names.insert(name);
+            }
+        }
+
+        for xvar in &self.variables.output {
+            let name = xvar.name.clone();
+            if !names.contains(&name) {
+                names.insert(name);
+            }
+        }
+
+        names
+
+    }
+
+    // pub fn get_nodes<F>(&self, func: &F) -> Vec<&XFlowNode>
+    // where F: Fn(&XFlowNode) -> bool
+    // {
+    // self.nodes
+    // .iter()
+    // .filter(func)
+    // .collect::<Vec<&XFlowNode>>()
+    // }
+    //
 }
 
 impl Default for XFlowStruct {

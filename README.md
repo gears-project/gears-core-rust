@@ -16,6 +16,7 @@
 
     RUST_BACKTRACE=1 RUST_LOG=xflow=debug cargo watch -x "test -- --nocapture"
 
+    RUST_BACKTRACE=1 RUST_LOG=xflow=debug cargo watch -x "test --features peg/trace -- --nocapture"
 
 See https://doc.rust-lang.org/log/env_logger/ for more logging options
 
