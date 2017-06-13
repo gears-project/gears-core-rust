@@ -9,11 +9,10 @@ fn expect_context_integer(input: &str, context: &XFState, expected: i64) -> () {
     let _ = env_logger::init();
     match flox::parse_context(input, context) {
         Err(err) => {
-            println!("Parsing result for ('{:?}') is {:?}", input, err);
+            println!("Error parsing result for ('{:?}') is {:?}", input, err);
             assert!(false);
         }
         Ok(res) => {
-            // println!("Parsing result for ('{:?}') is {:?}", input, res);
             match res {
                 xfstruct::XFlowValue::Integer(res) => assert_eq!(res, expected),
                 _ => assert!(false),
@@ -26,11 +25,10 @@ fn expect_integer(input: &str, expected: i64) -> () {
     let _ = env_logger::init();
     match flox::parse(input) {
         Err(err) => {
-            println!("Parsing result for ('{:?}') is {:?}", input, err);
+            println!("Error parsing result for ('{:?}') is {:?}", input, err);
             assert!(false);
         }
         Ok(res) => {
-            // println!("Parsing result for ('{:?}') is {:?}", input, res);
             match res {
                 xfstruct::XFlowValue::Integer(res) => assert_eq!(res, expected),
                 _ => assert!(false),
@@ -43,11 +41,10 @@ fn expect_context_boolean(input: &str, context: &XFState, expected: bool) -> () 
     let _ = env_logger::init();
     match flox::parse_context(input, context) {
         Err(err) => {
-            println!("Parsing result for ('{:?}') is {:?}", input, err);
+            println!("Error parsing result for ('{:?}') is {:?}", input, err);
             assert!(false);
         }
         Ok(res) => {
-            // println!("Parsing result for ('{:?}') is {:?}", input, res);
             match res {
                 xfstruct::XFlowValue::Boolean(res) => assert_eq!(res, expected),
                 _ => assert!(false),
@@ -60,11 +57,10 @@ fn expect_boolean(input: &str, expected: bool) -> () {
     let _ = env_logger::init();
     match flox::parse_boolean(input) {
         Err(err) => {
-            println!("Parsing result for ('{:?}') is {:?}", input, err);
+            println!("Error parsing result for ('{:?}') is {:?}", input, err);
             assert!(false);
         }
         Ok(res) => {
-            // println!("Parsing result for ('{:?}') is {:?}", input, res);
             match res {
                 xfstruct::XFlowValue::Boolean(res) => assert_eq!(res, expected),
                 _ => assert!(false),
@@ -153,7 +149,7 @@ fn test_flox_atom() {
     let _ = env_logger::init();
     match flox::parse("1") {
         Err(err) => {
-            println!("Parsing result for ('{:?}') is {:?}", "1", err);
+            println!("Error parsing result for ('{:?}') is {:?}", "1", err);
             assert!(false);
         }
         Ok(res) => {
@@ -312,14 +308,13 @@ fn test_variable_extraction() {
         }
     }
 
-    // match flox::extract_variable_names("1+2") {
-    // Ok(res) => assert_eq!(res.len(), 0),
-    // Err(err) => {
-    // println!("Error {:?}", err);
-    // assert!(false)
-    // }
-    // }
-    //
+    match flox::extract_variable_names("1+2") {
+        Ok(res) => assert_eq!(res.len(), 0),
+        Err(err) => {
+            println!("Error {:?}", err);
+            assert!(false)
+        }
+    }
 
 }
 
@@ -371,7 +366,7 @@ fn test_variable_error_reporting() {
         Err(err) => {
             println!("flox::extract_variable_names Error {:?}", err);
             match err {
-                flox::Error::ParseError(_) => assert!(false),
+                flox::Error::ParseError(_) => assert!(true),
             }
         }
     }
