@@ -184,40 +184,40 @@ fn test_variables() {
     let _ = env_logger::init();
     let mut state = XFState::default();
     state.add(&XFlowVariable {
-        name: "CounterValue".to_owned(),
-        vtype: XFlowValueType::Integer,
-        value: XFlowValue::Integer(0),
-    });
+                  name: "CounterValue".to_owned(),
+                  vtype: XFlowValueType::Integer,
+                  value: XFlowValue::Integer(0),
+              });
 
     state.add(&XFlowVariable {
-        name: "ComparisonValue".to_owned(),
-        vtype: XFlowValueType::Boolean,
-        value: XFlowValue::Boolean(true),
-    });
+                  name: "ComparisonValue".to_owned(),
+                  vtype: XFlowValueType::Boolean,
+                  value: XFlowValue::Boolean(true),
+              });
 
     state.add(&XFlowVariable {
-        name: "TrueValue".to_owned(),
-        vtype: XFlowValueType::Boolean,
-        value: XFlowValue::Boolean(true),
-    });
+                  name: "TrueValue".to_owned(),
+                  vtype: XFlowValueType::Boolean,
+                  value: XFlowValue::Boolean(true),
+              });
 
     state.add(&XFlowVariable {
-        name: "FalseValue".to_owned(),
-        vtype: XFlowValueType::Boolean,
-        value: XFlowValue::Boolean(false),
-    });
+                  name: "FalseValue".to_owned(),
+                  vtype: XFlowValueType::Boolean,
+                  value: XFlowValue::Boolean(false),
+              });
 
     state.add(&XFlowVariable {
-        name: "One".to_owned(),
-        vtype: XFlowValueType::Integer,
-        value: XFlowValue::Integer(1),
-    });
+                  name: "One".to_owned(),
+                  vtype: XFlowValueType::Integer,
+                  value: XFlowValue::Integer(1),
+              });
 
     state.add(&XFlowVariable {
-        name: "Two".to_owned(),
-        vtype: XFlowValueType::Integer,
-        value: XFlowValue::Integer(2),
-    });
+                  name: "Two".to_owned(),
+                  vtype: XFlowValueType::Integer,
+                  value: XFlowValue::Integer(2),
+              });
 
     expect_context_integer("$CounterValue+1", &state, 1);
     expect_context_integer("$CounterValue+99", &state, 99);
@@ -321,6 +321,59 @@ fn test_variable_extraction() {
     // }
     //
 
+}
 
+#[test]
+// #TST-flox-variable-error-reporting
+fn test_variable_error_reporting() {
+    let _ = env_logger::init();
+
+    match flox::parse_arithmetic("snork") {
+        Ok(_) => assert!(false),
+        Err(err) => {
+            match err {
+                flox::Error::ParseError(_) => assert!(true),
+            }
+        }
+    }
+
+    match flox::parse("snork") {
+        Ok(_) => assert!(false),
+        Err(err) => {
+            match err {
+                flox::Error::ParseError(_) => assert!(true),
+            }
+        }
+    }
+
+    match flox::parse_boolean("snork") {
+        Ok(_) => assert!(false),
+        Err(err) => {
+            match err {
+                flox::Error::ParseError(_) => assert!(true),
+            }
+        }
+    }
+
+    let state = XFState::default();
+
+    match flox::parse_context("snork", &state) {
+        Ok(_) => assert!(false),
+        Err(err) => {
+            match err {
+                flox::Error::ParseError(_) => assert!(true),
+            }
+        }
+    }
+
+    match flox::extract_variable_names("snork") {
+        Ok(_) => assert!(false),
+        Err(err) => {
+            println!("flox::extract_variable_names Error {:?}", err);
+            match err {
+                flox::Error::ParseError(_) => assert!(true),
+            }
+        }
+    }
 
 }
