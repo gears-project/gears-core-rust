@@ -141,8 +141,12 @@ integer_variable -> i64
 
 space -> ()
   = " "
-  / "\n"
+  / newline
+
+newline -> ()
+  = "\n"
   / "\r"
+  / "\r\n"
 
 _ -> ()
   = space*
@@ -157,10 +161,10 @@ atom -> XFlowValue
 
 pub variable_names -> Vec<&'input str>
   = var_name*
-  / x:non_var_start* { Vec::<&'input str>::new() }
+  / !var_name { Vec::<&'input str>::new() }
 
 var_name -> &'input str
- = non_var_start* "$" s:$([A-Za-z]+)non_var_start* { s }
+ = non_var_start* "$" s:$([A-Za-z]+) non_var_start* { s }
 
 non_var_start -> ()
  = $([^$]) {}

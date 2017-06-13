@@ -367,11 +367,11 @@ fn test_variable_error_reporting() {
     }
 
     match flox::extract_variable_names("snork") {
-        Ok(_) => assert!(false),
+        Ok(_) => assert!(true),
         Err(err) => {
             println!("flox::extract_variable_names Error {:?}", err);
             match err {
-                flox::Error::ParseError(_) => assert!(true),
+                flox::Error::ParseError(_) => assert!(false),
             }
         }
     }

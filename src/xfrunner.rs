@@ -52,13 +52,13 @@ impl<'a> XFlowRunner<'a> {
         match xflow.get_entry_node() {
             Ok(node) => {
                 Ok(XFlowRunner {
-                    status: XFlowStatus::Initialized,
-                    xflow: xflow,
-                    dispatcher: dispatcher,
-                    state: state,
-                    current_node: Some(node),
-                    output: None,
-                })
+                       status: XFlowStatus::Initialized,
+                       xflow: xflow,
+                       dispatcher: dispatcher,
+                       state: state,
+                       current_node: Some(node),
+                       output: None,
+                   })
             }
             _ => Err("Unable to init XFlowRunner".to_owned()),
         }
@@ -147,17 +147,15 @@ impl<'a> XFlowRunner<'a> {
                         .get_out_branches(current_node.id)
                         .iter()
                         .filter({
-                            |branch| {
-                                let xv = self.state
-                                    .get(&branch.xvar
-                                        .name);
-                                if let Some(xvar) = xv {
-                                    *xvar == branch.xvar
-                                } else {
-                                    false
-                                }
-                            }
-                        })
+                                    |branch| {
+                                        let xv = self.state.get(&branch.xvar.name);
+                                        if let Some(xvar) = xv {
+                                            *xvar == branch.xvar
+                                        } else {
+                                            false
+                                        }
+                                    }
+                                })
                         .cloned()
                         .collect();
                     match branches.len() {

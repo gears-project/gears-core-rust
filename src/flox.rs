@@ -53,9 +53,13 @@ pub fn parse_boolean(input: &str) -> Result<XFlowValue, Error> {
 pub fn extract_variable_names(input: &str) -> Result<Vec<&str>, Error> {
     let state = XFState::default();
     match flox_grammar::variable_names(input, &state) {
+        //
+        // XXX: Currently reporting zero variables for bad expressions
+        //
         Ok(res) => Ok(res),
-        Err(err) => {
-            Err(Error::ParseError(format!("Bad expression {:?} - Error : {:?}", input, err)))
+        Err(_ /* err */) => {
+            Ok(Vec::<&str>::default())
+            // Err(Error::ParseError(format!("Bad expression {:?} - Error : {:?}", input, err)))
         }
     }
 }

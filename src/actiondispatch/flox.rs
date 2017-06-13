@@ -36,10 +36,10 @@ impl Flox {
                     Ok(res) => {
                         debug!("Expression: '{}' - Result: '{:?}'", expr, res);
                         state.add(&XFlowVariable {
-                            name: node_params.returns.name,
-                            vtype: node_params.returns.vtype,
-                            value: res.clone(),
-                        });
+                                      name: node_params.returns.name,
+                                      vtype: node_params.returns.vtype,
+                                      value: res.clone(),
+                                  });
                     }
                     Err(err) => {
                         error!("Expression: '{}' - Result: '{:?}'", expr, err);
