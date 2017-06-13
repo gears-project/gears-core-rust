@@ -80,6 +80,14 @@ fn test_flox_arithmetic() {
     expect_integer("10-2", 8);
     expect_integer("10^2", 100);
     expect_integer("3^3", 27);
+    expect_integer("(3^3)", 27);
+    expect_integer("((3^(3)))", 27);
+    expect_integer("(3)", 3);
+    expect_integer("(3) + 1", 4);
+    expect_integer("(3)^1", 3);
+    expect_integer("(3)^(2+1)", 27);
+    expect_integer("(3+(3+3+(3+3)))", 15);
+    expect_integer("(3+(5-2)+(3+3+(3+3)))", 18);
 }
 
 #[test]
@@ -126,6 +134,7 @@ fn test_flox_boolean() {
     expect_boolean("true || false", true);
     expect_boolean("false|| false", false);
     expect_boolean("false ||true", true);
+    expect_boolean("(((false || true) && true))", true);
 }
 
 #[test]
@@ -172,6 +181,13 @@ fn test_combined_expressions() {
     expect_boolean("(true && false && true)", false);
     expect_boolean("(true && false || true)", true);
     expect_boolean("true && false || true", true);
+    expect_boolean("(2 == 2) || false", true);
+    expect_boolean("(2 < 2) || false", false);
+    expect_boolean("(1 < 2) || (5 > 2)", true);
+    expect_boolean("(1 < 2) && (5 > 2)", true);
+    expect_boolean("(((1 < 2) && (5 > 2)) && false)", false);
+    expect_boolean("(((1 < 2) && (5 > 2)) || false)", true);
+    expect_boolean("(true && ((1 < 2) && (5 > 2)))", true);
 }
 
 #[test]
@@ -220,7 +236,7 @@ fn test_variables() {
     expect_context_integer("$CounterValue-99", &state, -99);
     expect_context_integer("($One + $Two)", &state, 3);
     expect_context_integer("($One + $Two + $Two)", &state, 5);
-    // expect_context_integer("(($One + $Two) + $Two)", &state, 5);
+    expect_context_integer("(($One + $Two) + $Two)", &state, 5);
 
     expect_context_boolean("$CounterValue > 0", &state, false);
     expect_context_boolean("$CounterValue == 0", &state, true);
@@ -269,6 +285,7 @@ fn test_variables() {
     expect_context_boolean("$TrueValue != $FalseValue", &state, true);
     expect_context_boolean("$TrueValue == $TrueValue", &state, true);
     expect_context_boolean("($TrueValue == $TrueValue)", &state, true);
+
 }
 
 #[test]

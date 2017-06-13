@@ -8,6 +8,7 @@ pub expression -> XFlowValue
   / arithmetic_expression
   / variable
   / atom
+  / parenthesized<expression>
 
 // Arithmetic
 
@@ -22,7 +23,6 @@ arithmetic_test -> i64
          x division y { x / y }
       #R x power y { x.pow(y as u32) }
   }
-  / parenthesized<arithmetic_test>
   / integer
 
 // Boolean
@@ -100,14 +100,17 @@ not -> bool
 // Primitives
 
 boolean -> bool
-  = parenthesized<boolean_test>
-  / "true" { true }
+  = "true" { true }
   / "false" { false }
   / boolean_variable
+  / parenthesized<boolean_test>
+  / parenthesized<boolean>
 
 integer -> i64
   = n:$([0-9]+) { n.parse().unwrap() }
   / integer_variable
+  / parenthesized<integer>
+  / parenthesized<arithmetic_test>
 
 variable -> XFlowValue
   = i:integer_variable { XFlowValue::Integer(i) }
