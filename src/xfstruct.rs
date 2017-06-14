@@ -21,11 +21,11 @@ pub struct XFlowStruct {
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 // partof: #SPC-serialization-json
 pub enum XFlowValueType {
-    #[serde(rename="string")]
+    #[serde(rename = "string")]
     String,
-    #[serde(rename="number")]
+    #[serde(rename = "number")]
     Integer,
-    #[serde(rename="boolean")]
+    #[serde(rename = "boolean")]
     Boolean,
 }
 
@@ -105,8 +105,8 @@ impl XFlowStruct {
         self.nodes
             .iter()
             .filter({
-                |node| node.nodetype == nodetype && node.action == action
-            })
+                        |node| node.nodetype == nodetype && node.action == action
+                    })
             .collect()
 
     }
@@ -125,8 +125,8 @@ impl XFlowStruct {
         self.nodes
             .iter()
             .filter({
-                |node| node.nodetype == nodetype
-            })
+                        |node| node.nodetype == nodetype
+                    })
             .collect()
     }
 
@@ -180,8 +180,8 @@ impl XFlowStruct {
         self.edges
             .iter()
             .filter({
-                |edge| edge.1 == node.id
-            })
+                        |edge| edge.1 == node.id
+                    })
             .collect()
     }
 
@@ -190,8 +190,8 @@ impl XFlowStruct {
         self.edges
             .iter()
             .filter({
-                |edge| edge.0 == node.id
-            })
+                        |edge| edge.0 == node.id
+                    })
             .collect()
     }
 
@@ -200,8 +200,8 @@ impl XFlowStruct {
         self.branches
             .iter()
             .filter({
-                |branch| edge.0 == branch.edge.0 && edge.1 == branch.edge.1
-            })
+                        |branch| edge.0 == branch.edge.0 && edge.1 == branch.edge.1
+                    })
             .collect()
     }
 
@@ -210,8 +210,8 @@ impl XFlowStruct {
         self.branches
             .iter()
             .filter({
-                |branch| branch.edge.0 == id
-            })
+                        |branch| branch.edge.0 == id
+                    })
             .collect()
     }
 
@@ -236,8 +236,8 @@ impl XFlowStruct {
         let nodes: Vec<&XFlowNode> = self.nodes
             .iter()
             .filter({
-                |node| node.id == id
-            })
+                        |node| node.id == id
+                    })
             .collect();
 
         match nodes.len() {

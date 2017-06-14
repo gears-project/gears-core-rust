@@ -8,6 +8,7 @@ pub expression -> XFlowValue
   / arithmetic_expression
   / variable
   / atom
+  / parenthesized<expression>
 
 // Arithmetic
 
@@ -22,7 +23,6 @@ arithmetic_test -> i64
          x division y { x / y }
       #R x power y { x.pow(y as u32) }
   }
-  / parenthesized<arithmetic_test>
   / integer
 
 // Boolean
@@ -100,14 +100,17 @@ not -> bool
 // Primitives
 
 boolean -> bool
-  = parenthesized<boolean_test>
-  / "true" { true }
+  = "true" { true }
   / "false" { false }
   / boolean_variable
+  / parenthesized<boolean_test>
+  / parenthesized<boolean>
 
 integer -> i64
   = n:$([0-9]+) { n.parse().unwrap() }
   / integer_variable
+  / parenthesized<integer>
+  / parenthesized<arithmetic_test>
 
 variable -> XFlowValue
   = i:integer_variable { XFlowValue::Integer(i) }
@@ -141,8 +144,12 @@ integer_variable -> i64
 
 space -> ()
   = " "
-  / "\n"
+  / newline
+
+newline -> ()
+  = "\n"
   / "\r"
+  / "\r\n"
 
 _ -> ()
   = space*
@@ -157,10 +164,10 @@ atom -> XFlowValue
 
 pub variable_names -> Vec<&'input str>
   = var_name*
-  / x:non_var_start* { Vec::<&'input str>::new() }
+  / !var_name { Vec::<&'input str>::new() }
 
 var_name -> &'input str
- = non_var_start* "$" s:$([A-Za-z]+)non_var_start* { s }
+ = non_var_start* "$" s:$([A-Za-z]+) non_var_start* { s }
 
 non_var_start -> ()
  = $([^$]) {}
