@@ -124,6 +124,7 @@ fn test_flox_boolean() {
 
     expect_boolean("!false", true);
     expect_boolean("!true", false);
+    expect_boolean("!(true)", false);
 
     expect_boolean("true&&true", true);
     expect_boolean("true && false", false);
@@ -285,6 +286,13 @@ fn test_variables() {
     expect_context_boolean("$TrueValue != $FalseValue", &state, true);
     expect_context_boolean("$TrueValue == $TrueValue", &state, true);
     expect_context_boolean("($TrueValue == $TrueValue)", &state, true);
+
+    expect_context_boolean("!($TrueValue)", &state, false);
+    expect_context_boolean("!$TrueValue", &state, false);
+
+    expect_context_boolean("!($TrueValue == $TrueValue)", &state, false);
+    expect_context_boolean("!($TrueValue != $TrueValue)", &state, true);
+    expect_context_boolean("!(($TrueValue != $TrueValue) || false)", &state, true);
 
 }
 

@@ -46,8 +46,8 @@ boolean_infix -> bool
       #R l and r { l && r }
          l or r { l || r }
   }
-  / parenthesized<boolean_test>
   / not
+  / parenthesized<boolean_test>
   / boolean
 
 parenthesized<foo>
@@ -96,6 +96,7 @@ or -> ()
 
 not -> bool
   = "!" l:boolean { !l }
+  / "!" l:parenthesized<boolean> { !l }
 
 // Primitives
 

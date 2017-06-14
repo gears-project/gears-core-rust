@@ -1,0 +1,84 @@
+{
+    "doctype": "domain",
+    "doctype_version": 1,
+    "id": "post_model_1",
+    "name" : "Forum Model",
+    "version" : 1,
+    "doc" : {
+        "events": {
+            "change":[],
+            "update":[],
+            "read":[],
+            "delete":[],
+            "all":[
+                "xflow_debug_all_erd_events"
+            ]
+        },
+        "entities": [
+            {
+                "id": "post",
+                "attributes": [
+                    {
+                        "name": "title",
+                        "vtype": "string",
+                        "storage": "persistent",
+                        "access": "user",
+                        "default": "",
+                        "validations": [
+                            "xflow_string_value_required"
+                        ]
+                    },
+                    {
+                        "name": "body",
+                        "vtype": "string",
+                        "storage": "persistent",
+                        "access": "user",
+                        "default": "",
+                        "validations": [
+                            "xflow_string_value_required"
+                        ]
+                    },
+                    {
+                        "name": "created",
+                        "vtype": "string",
+                        "access": "system",
+                        "storage": "persistent",
+                        "default": "",
+                        "validations": [
+                            "xflow_string_value_required"
+                        ]
+                    }
+                ],
+                "references" : [
+                    {
+                        "rtype": "hasmany",
+                        "ltype": "local",
+                        "name": "comment"
+                    }
+                ]
+            },
+            {
+                "id": "comment",
+                "attributes": [
+                    {
+                        "name": "post",
+                        "vtype": "string",
+                        "storage": "persistent",
+                        "default": "",
+                        "validations": [
+                            "xflow_string_value_required"
+                        ]
+                    }
+                ],
+                "references" : [
+                    {
+                        "rtype": "hasmany",
+                        "ltype": "local",
+                        "name": "comment"
+                    }
+                ]
+            }
+        ]
+    }
+}
+
