@@ -16,7 +16,7 @@
         },
         "entities": [
             {
-                "id": "post",
+                "name": "post",
                 "attributes": [
                     {
                         "name": "title",
@@ -51,14 +51,14 @@
                 ],
                 "references" : [
                     {
+                        "name": "comment",
                         "rtype": "hasmany",
-                        "ltype": "local",
-                        "name": "comment"
+                        "ltype": "local"
                     }
                 ]
             },
             {
-                "id": "comment",
+                "name": "comment",
                 "attributes": [
                     {
                         "name": "post",
@@ -72,9 +72,10 @@
                 ],
                 "references" : [
                     {
+                        "name": "comment",
                         "rtype": "hasmany",
                         "ltype": "local",
-                        "name": "comment"
+                        "other": "comment"
                     }
                 ]
             }

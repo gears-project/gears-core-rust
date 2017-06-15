@@ -1,0 +1,49 @@
+{
+    "doctype": "form",
+    "doctype_version": 1,
+    "id": "start_form_1",
+    "name" : "List Posts",
+    "version" : 1,
+    "doc" : {
+        "title": "Lists Posts",
+        "components" : [
+            {
+                "component" : "row",
+                "config" : { },
+                "components" : [
+                    {
+                        "component": "column3",
+                        "config" : { },
+                        "components": []
+                    }, {
+                        "component": "column6",
+                        "config" : { },
+                        "components" : [
+                            {
+                                "component": "header1",
+                                "config": {
+                                    "text": "List of Posts"
+                                }
+                            }
+                        ]
+                    }, {
+                        "component": "column3",
+                        "config" : { },
+                        "components" : []
+                    }
+                ]
+            }, {
+                "component": "datatable",
+                "config" : {
+                    "entity": "post",
+                    "attributes": ["title", "body"],
+                    "eventbindings" : {
+                        "rowClicked" : "appflow_post_clicked",
+                        "rowDoubleClicked" : "appflow_post_double_clicked"
+                    }
+                },
+                "components" : []
+            }
+        ]
+    }
+}
