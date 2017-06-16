@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use actiondispatch::dispatchable::Dispatchable;
+use runtime::actiondispatch::dispatchable::Dispatchable;
 use structure::xflow::XFlowNode;
 use xfstate::XFState;
 

@@ -1,6 +1,6 @@
 use structure::xflow::*;
 use xfstate::*;
-use dispatcher::*;
+use runtime::dispatcher::*;
 
 #[derive(Debug, PartialEq)]
 pub enum XFlowStatus {

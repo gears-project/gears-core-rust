@@ -4,9 +4,9 @@ extern crate xflow;
 
 use xflow::structure::xflow::*;
 use xflow::xfstate::*;
-use xflow::xfrunner::*;
-use xflow::dispatcher::*;
-use xflow::actiondispatch;
+use xflow::runtime::xfrunner::*;
+use xflow::runtime::dispatcher::*;
+use xflow::runtime::actiondispatch;
 
 mod helper;
 use helper::read_json_file;
