@@ -83,7 +83,7 @@ impl XFlowStruct {
     ///
     /// # Example
     /// ```
-    /// use xflow::xfstruct::{XFlowStruct};
+    /// use xflow::structure::xflow::{XFlowStruct};
     /// let xfs = XFlowStruct::default();
     /// xfs.to_string();
     /// ```
@@ -95,7 +95,7 @@ impl XFlowStruct {
     ///
     /// # Example
     /// ```
-    /// use xflow::xfstruct::{XFlowStruct};
+    /// use xflow::structure::xflow::{XFlowStruct};
     /// let xfs = XFlowStruct::default();
     /// let nodes = xfs.get_nodes_by("flow", "start");
     /// assert_eq!(nodes.len(), 0);
@@ -115,7 +115,7 @@ impl XFlowStruct {
     ///
     /// # Example
     /// ```
-    /// use xflow::xfstruct::{XFlowStruct};
+    /// use xflow::structure::xflow::{XFlowStruct};
     /// let xfs = XFlowStruct::default();
     /// let nodes = xfs.get_nodes_of_type("flow");
     /// assert_eq!(nodes.len(), 0);
@@ -134,7 +134,7 @@ impl XFlowStruct {
     ///
     /// # Example
     /// ```
-    /// use xflow::xfstruct::{XFlowStruct};
+    /// use xflow::structure::xflow::{XFlowStruct};
     /// let xfs = XFlowStruct::default();
     /// xfs.to_json();
     /// ```
@@ -146,7 +146,7 @@ impl XFlowStruct {
     ///
     /// # Example
     /// ```
-    /// use xflow::xfstruct::{XFlowStruct};
+    /// use xflow::structure::xflow::{XFlowStruct};
     ///
     /// let empty_flow = "{\"id\":\"empty\",\"name\":\"empty\",\"version\":1,\"requirements\":[{\"xtype\":\"flow\",\"version\":1},{\"xtype\":\"flox\",\"version\":1}],\"variables\":{\"input\":[],\"output\":[],\"local\":[]},\"nodes\":[],\"edges\":[],\"branches\":[]}";
     ///
@@ -295,7 +295,7 @@ impl Default for XFlowStruct {
     ///
     /// # Example
     /// ```
-    /// use xflow::xfstruct::{XFlowStruct};
+    /// use xflow::structure::xflow::{XFlowStruct};
     /// let xfs = XFlowStruct::default();
     /// println!("XFlow version {}", xfs.id);
     /// ```

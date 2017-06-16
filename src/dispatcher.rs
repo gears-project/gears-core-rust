@@ -1,6 +1,7 @@
-use actiondispatch::dispatchable::Dispatchable;
 use std::collections::HashMap;
-use xfstruct::XFlowNode;
+
+use actiondispatch::dispatchable::Dispatchable;
+use structure::xflow::XFlowNode;
 use xfstate::XFState;
 
 type Receivers<'a> = HashMap<String, Box<Dispatchable + 'a>>;

@@ -1,4 +1,4 @@
-use xfstruct::XFlowValue;
+use structure::xflow::XFlowValue;
 use xfstate::XFState;
 
 #[allow(dead_code)]

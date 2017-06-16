@@ -2,7 +2,7 @@ extern crate env_logger;
 
 extern crate xflow;
 use xflow::validation::*;
-use xflow::xfstruct::*;
+use xflow::structure::xflow::*;
 
 #[test]
 fn test_validation_default() {

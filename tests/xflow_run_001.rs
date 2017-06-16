@@ -2,7 +2,7 @@ extern crate env_logger;
 
 extern crate xflow;
 
-use xflow::xfstruct::*;
+use xflow::structure::xflow::*;
 use xflow::xfstate::*;
 use xflow::xfrunner::*;
 use xflow::dispatcher::*;
@@ -59,10 +59,10 @@ fn test_run_10_steps() {
     let mut state = XFState::default();
 
     state.add(&XFlowVariable {
-        name: "CounterValue".to_owned(),
-        vtype: XFlowValueType::Integer,
-        value: XFlowValue::Integer(0),
-    });
+                  name: "CounterValue".to_owned(),
+                  vtype: XFlowValueType::Integer,
+                  value: XFlowValue::Integer(0),
+              });
 
     match XFlowRunner::new(&xfs, &dispatcher, &state) {
         Ok(mut xfrunner) => {
@@ -78,7 +78,12 @@ fn test_run_10_steps() {
                 i += 1;
             }
             assert_eq!(i, xfs.nodes.len());
-            match xfrunner.get_output().unwrap().get("CounterValue").unwrap().value {
+            match xfrunner
+                      .get_output()
+                      .unwrap()
+                      .get("CounterValue")
+                      .unwrap()
+                      .value {
                 XFlowValue::Integer(i) => assert_eq!(i, 8),
                 _ => assert!(false),
             }
@@ -102,10 +107,10 @@ fn test_run_simple_branch() {
     let mut state = XFState::default();
 
     state.add(&XFlowVariable {
-        name: "MatchValue".to_owned(),
-        vtype: XFlowValueType::Boolean,
-        value: XFlowValue::Boolean(false),
-    });
+                  name: "MatchValue".to_owned(),
+                  vtype: XFlowValueType::Boolean,
+                  value: XFlowValue::Boolean(false),
+              });
 
 
     match XFlowRunner::new(&xfs, &dispatcher, &state) {

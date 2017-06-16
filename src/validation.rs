@@ -1,4 +1,4 @@
-use xfstruct::*;
+use structure::xflow::*;
 use flox;
 use std::collections::{HashSet, HashMap};
 

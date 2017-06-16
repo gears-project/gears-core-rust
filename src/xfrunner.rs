@@ -1,4 +1,4 @@
-use xfstruct::*;
+use structure::xflow::*;
 use xfstate::*;
 use dispatcher::*;
 

@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 use std::fmt;
-use xfstruct::XFlowVariable;
+use structure::xflow::XFlowVariable;
 
 pub type XFStore = HashMap<String, XFlowVariable>;
 

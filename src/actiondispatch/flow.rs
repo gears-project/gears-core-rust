@@ -1,5 +1,5 @@
 use actiondispatch::dispatchable::*;
-use xfstruct::*;
+use structure::xflow::*;
 use xfstate::XFState;
 
 pub struct Flow;

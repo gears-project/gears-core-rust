@@ -1,7 +1,7 @@
 use serde_json;
 use serde_json::Value;
 use actiondispatch::dispatchable::*;
-use xfstruct::*;
+use structure::xflow::*;
 use xfstate::XFState;
 use flox;
 

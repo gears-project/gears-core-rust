@@ -1,7 +1,7 @@
 extern crate env_logger;
 
 extern crate xflow;
-use xflow::xfstruct::*;
+use xflow::structure::xflow::*;
 
 mod helper;
 use helper::read_json_file;
@@ -47,13 +47,13 @@ fn create_branches(amount: i32) -> Vec<XFlowBranch> {
         let left = 5;
         let right = 5;
         branches.push(XFlowBranch {
-            xvar: XFlowVariable {
-                name: "MatchValue".to_string(),
-                vtype: XFlowValueType::String,
-                value: XFlowValue::String("Some branch".to_owned()),
-            },
-            edge: (left, right + i),
-        })
+                          xvar: XFlowVariable {
+                              name: "MatchValue".to_string(),
+                              vtype: XFlowValueType::String,
+                              value: XFlowValue::String("Some branch".to_owned()),
+                          },
+                          edge: (left, right + i),
+                      })
     }
 
     branches

@@ -1,6 +1,7 @@
 extern crate env_logger;
 extern crate xflow;
-use xflow::xfstruct::*;
+
+use xflow::structure::xflow::*;
 use xflow::validation::*;
 
 mod helper;

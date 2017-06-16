@@ -1,7 +1,7 @@
 extern crate env_logger;
 
 extern crate xflow;
-use xflow::xfstruct::*;
+use xflow::structure::xflow::*;
 
 #[test]
 fn test_xflow_default() {
