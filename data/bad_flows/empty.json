@@ -2,28 +2,32 @@
   "id": "empty",
   "name": "empty",
   "version": 1,
-  "requirements": [
-    {
-      "xtype": "flow",
-      "version": 1
+  "doctype": "xflow",
+  "doctype_version": 1,
+  "doc" : {
+    "requirements": [
+      {
+        "xtype": "flow",
+        "version": 1
+      },
+      {
+        "xtype": "flox",
+        "version": 1
+      }
+    ],
+    "variables" : {
+      "input" : [
+      ],
+      "output" : [
+      ],
+      "local" : [
+      ]
     },
-    {
-      "xtype": "flox",
-      "version": 1
-    }
-  ],
-  "variables" : {
-    "input" : [
+    "nodes": [
     ],
-    "output" : [
+    "edges": [
     ],
-    "local" : [
+    "branches" : [
     ]
-  },
-  "nodes": [
-  ],
-  "edges": [
-  ],
-  "branches" : [
-  ]
+  }
 }

@@ -28,7 +28,7 @@ fn fail_and_report_error(err: String) -> () {
 fn run_xflow(flow_file: &str) -> Result<XFState, String> {
 
     let json_string = read_json_file(flow_file);
-    let xfs = XFlowStruct::from_json(&json_string);
+    let xfs = XFlowDocument::from_json(&json_string);
     let dispatcher = build_dispatcher();
     let state = XFState::default();
 
@@ -52,8 +52,8 @@ fn test_run_10_steps() {
     let _ = env_logger::init();
 
     let json_string = read_json_file("data/flows/10_steps.json");
-    let xfs = XFlowStruct::from_json(&json_string);
-    assert_eq!(xfs.nodes.len(), 10);
+    let xfs = XFlowDocument::from_json(&json_string);
+    assert_eq!(xfs.doc.nodes.len(), 10);
 
     let dispatcher = build_dispatcher();
     let mut state = XFState::default();
@@ -77,7 +77,7 @@ fn test_run_10_steps() {
                 }
                 i += 1;
             }
-            assert_eq!(i, xfs.nodes.len());
+            assert_eq!(i, xfs.doc.nodes.len());
             match xfrunner
                       .get_output()
                       .unwrap()
@@ -98,10 +98,10 @@ fn test_run_simple_branch() {
     let _ = env_logger::init();
 
     let json_string = read_json_file("data/flows/branch_boolean.json");
-    let xfs = XFlowStruct::from_json(&json_string);
-    assert_eq!(xfs.nodes.len(), 4);
-    assert_eq!(xfs.edges.len(), 3);
-    assert_eq!(xfs.branches.len(), 2);
+    let xfs = XFlowDocument::from_json(&json_string);
+    assert_eq!(xfs.doc.nodes.len(), 4);
+    assert_eq!(xfs.doc.edges.len(), 3);
+    assert_eq!(xfs.doc.branches.len(), 2);
 
     let dispatcher = build_dispatcher();
     let mut state = XFState::default();

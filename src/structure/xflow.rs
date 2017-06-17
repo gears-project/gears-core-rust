@@ -2,15 +2,14 @@ use serde_json;
 use std::collections::HashSet;
 
 use errors::XFlowError;
+use super::common::Document;
 
+pub type XFlowDocument = Document<XFlow>;
 pub type XFlowEdge = (i32, i32);
 
 #[derive(Serialize, Deserialize, Debug)]
 // partof: SPC-serialization-json
-pub struct XFlowStruct {
-    pub id: String,
-    pub version: i32,
-    pub name: String,
+pub struct XFlow {
     pub requirements: Vec<XFlowRequirement>,
     pub variables: XFlowVariables,
     pub nodes: Vec<XFlowNode>,
@@ -78,25 +77,13 @@ pub struct XFlowBranch {
     pub xvar: XFlowVariable,
 }
 
-impl XFlowStruct {
-    /// Return a string representation of the XFlowStruct
-    ///
-    /// # Example
-    /// ```
-    /// use xflow::structure::xflow::{XFlowStruct};
-    /// let xfs = XFlowStruct::default();
-    /// xfs.to_string();
-    /// ```
-    pub fn to_string(&self) -> String {
-        format!("xflow {}", self.id)
-    }
-
+impl XFlow {
     /// Get `XFlowNode`s of `nodetype` and `action`
     ///
     /// # Example
     /// ```
-    /// use xflow::structure::xflow::{XFlowStruct};
-    /// let xfs = XFlowStruct::default();
+    /// use xflow::structure::xflow::{XFlow};
+    /// let xfs = XFlow::default();
     /// let nodes = xfs.get_nodes_by("flow", "start");
     /// assert_eq!(nodes.len(), 0);
     /// ```
@@ -115,8 +102,8 @@ impl XFlowStruct {
     ///
     /// # Example
     /// ```
-    /// use xflow::structure::xflow::{XFlowStruct};
-    /// let xfs = XFlowStruct::default();
+    /// use xflow::structure::xflow::{XFlow};
+    /// let xfs = XFlow::default();
     /// let nodes = xfs.get_nodes_of_type("flow");
     /// assert_eq!(nodes.len(), 0);
     /// ```
@@ -128,33 +115,6 @@ impl XFlowStruct {
                         |node| node.nodetype == nodetype
                     })
             .collect()
-    }
-
-    /// Return a JSON representation of the XFlowStruct
-    ///
-    /// # Example
-    /// ```
-    /// use xflow::structure::xflow::{XFlowStruct};
-    /// let xfs = XFlowStruct::default();
-    /// xfs.to_json();
-    /// ```
-    pub fn to_json(&self) -> String {
-        serde_json::to_string(&self).unwrap()
-    }
-
-    /// Initialize a XFlowStruct from a JSON string
-    ///
-    /// # Example
-    /// ```
-    /// use xflow::structure::xflow::{XFlowStruct};
-    ///
-    /// let empty_flow = "{\"id\":\"empty\",\"name\":\"empty\",\"version\":1,\"requirements\":[{\"xtype\":\"flow\",\"version\":1},{\"xtype\":\"flox\",\"version\":1}],\"variables\":{\"input\":[],\"output\":[],\"local\":[]},\"nodes\":[],\"edges\":[],\"branches\":[]}";
-    ///
-    /// let xfs = XFlowStruct::from_json(empty_flow);
-    /// println!("XFlow has version {}", xfs.version);
-    /// ```
-    pub fn from_json(json_string: &str) -> XFlowStruct {
-        serde_json::from_str(json_string).unwrap()
     }
 
     pub fn all_variable_names(&self) -> HashSet<String> {
@@ -290,29 +250,33 @@ impl XFlowStruct {
     //
 }
 
-impl Default for XFlowStruct {
-    /// Constructs a new `XFlowStruct`
+impl Default for XFlowDocument {
+    /// Constructs a new `XFlow`
     ///
     /// # Example
     /// ```
-    /// use xflow::structure::xflow::{XFlowStruct};
-    /// let xfs = XFlowStruct::default();
+    /// use xflow::structure::xflow::{XFlow};
+    /// let xfs = XFlowDocument::default();
     /// println!("XFlow version {}", xfs.id);
     /// ```
     fn default() -> Self {
-        XFlowStruct {
+        XFlowDocument {
             id: "".to_owned(),
             name: "".to_owned(),
+            doctype: "".to_owned(),
+            doctype_version: 1,
             version: 1,
-            requirements: Vec::<XFlowRequirement>::new(),
-            variables: XFlowVariables {
-                input: Vec::<XFlowVariableDefinition>::new(),
-                local: Vec::<XFlowVariable>::new(),
-                output: Vec::<XFlowVariableDefinition>::new(),
+            doc: XFlow {
+                requirements: Vec::<XFlowRequirement>::new(),
+                variables: XFlowVariables {
+                    input: Vec::<XFlowVariableDefinition>::new(),
+                    local: Vec::<XFlowVariable>::new(),
+                    output: Vec::<XFlowVariableDefinition>::new(),
+                },
+                nodes: Vec::<XFlowNode>::new(),
+                edges: Vec::<XFlowEdge>::new(),
+                branches: Vec::<XFlowBranch>::new(),
             },
-            nodes: Vec::<XFlowNode>::new(),
-            edges: Vec::<XFlowEdge>::new(),
-            branches: Vec::<XFlowBranch>::new(),
         }
     }
 }

@@ -8,7 +8,7 @@ use xflow::structure::xflow::*;
 fn test_validation_default() {
     let _ = env_logger::init();
 
-    let xfs = XFlowStruct::default();
+    let xfs = XFlowDocument::default();
     let errors = Validation::validate(&xfs);
 
     assert_eq!(errors.len(), 2)

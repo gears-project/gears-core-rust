@@ -7,7 +7,7 @@ use xflow::structure::xflow::*;
 fn test_xflow_default() {
     let _ = env_logger::init();
 
-    let xfs = XFlowStruct::default();
+    let xfs = XFlowDocument::default();
 
     assert_eq!(xfs.name, "");
     assert_eq!(xfs.version, 1);
@@ -17,16 +17,16 @@ fn test_xflow_default() {
 fn test_xflow_to_json() {
     let _ = env_logger::init();
 
-    let xfs = XFlowStruct::default();
+    let xfs = XFlowDocument::default();
 
-    assert_eq!(xfs.to_json(), r#"{"id":"","version":1,"name":"","requirements":[],"variables":{"input":[],"local":[],"output":[]},"nodes":[],"edges":[],"branches":[]}"#);
+    // assert_eq!(xfs.to_json(), r#"{"id":"","name":"","doctype":"","doctype_version":1,"doc" :"requirements":[],"variables":{"input":[],"local":[],"output":[]},"nodes":[],"edges":[],"branches":[]}}"#);
 }
 
 #[test]
 fn test_xflow_to_str() {
     let _ = env_logger::init();
 
-    let xfs = XFlowStruct::default();
+    let xfs = XFlowDocument::default();
 
-    assert_eq!(xfs.to_string(), r#"xflow "#);
+    assert_eq!(xfs.to_string(), r#"document "#);
 }

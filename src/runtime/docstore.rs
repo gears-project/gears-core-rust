@@ -1,5 +1,4 @@
 #[derive(Debug)]
-
 enum DocType {
     XFlowStruct,
 }
