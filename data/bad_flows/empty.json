@@ -1,33 +1,33 @@
 {
-  "id": "empty",
-  "name": "empty",
-  "version": 1,
-  "doctype": "xflow",
-  "doctype_version": 1,
-  "doc" : {
-    "requirements": [
-      {
-        "xtype": "flow",
-        "version": 1
-      },
-      {
-        "xtype": "flox",
-        "version": 1
-      }
-    ],
-    "variables" : {
-      "input" : [
-      ],
-      "output" : [
-      ],
-      "local" : [
-      ]
-    },
-    "nodes": [
-    ],
-    "edges": [
-    ],
-    "branches" : [
-    ]
-  }
+    "id": "empty",
+    "name": "empty",
+    "version": 1,
+    "doctype": "xflow",
+    "doctype_version": 1,
+    "doc" : {
+        "requirements": [
+            {
+                "xtype": "flow",
+                "version": 1
+            },
+            {
+                "xtype": "flox",
+                "version": 1
+            }
+        ],
+        "variables" : {
+            "input" : [
+            ],
+            "output" : [
+            ],
+            "local" : [
+            ]
+        },
+        "nodes": [
+        ],
+        "edges": [
+        ],
+        "branches" : [
+        ]
+    }
 }

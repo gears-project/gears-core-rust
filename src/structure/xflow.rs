@@ -255,7 +255,7 @@ impl Default for XFlowDocument {
     ///
     /// # Example
     /// ```
-    /// use xflow::structure::xflow::{XFlow};
+    /// use xflow::structure::xflow::{XFlowDocument};
     /// let xfs = XFlowDocument::default();
     /// println!("XFlow version {}", xfs.id);
     /// ```
@@ -266,17 +266,22 @@ impl Default for XFlowDocument {
             doctype: "".to_owned(),
             doctype_version: 1,
             version: 1,
-            doc: XFlow {
-                requirements: Vec::<XFlowRequirement>::new(),
-                variables: XFlowVariables {
-                    input: Vec::<XFlowVariableDefinition>::new(),
-                    local: Vec::<XFlowVariable>::new(),
-                    output: Vec::<XFlowVariableDefinition>::new(),
-                },
-                nodes: Vec::<XFlowNode>::new(),
-                edges: Vec::<XFlowEdge>::new(),
-                branches: Vec::<XFlowBranch>::new(),
+            doc: XFlow::default(),
+        }
+    }
+}
+impl Default for XFlow {
+    fn default() -> Self {
+        XFlow {
+            requirements: Vec::<XFlowRequirement>::new(),
+            variables: XFlowVariables {
+                input: Vec::<XFlowVariableDefinition>::new(),
+                local: Vec::<XFlowVariable>::new(),
+                output: Vec::<XFlowVariableDefinition>::new(),
             },
+            nodes: Vec::<XFlowNode>::new(),
+            edges: Vec::<XFlowEdge>::new(),
+            branches: Vec::<XFlowBranch>::new(),
         }
     }
 }

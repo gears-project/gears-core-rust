@@ -1,112 +1,116 @@
 {
-  "id": "branch",
-  "name": "branch",
-  "version": 1,
-  "requirements": [
-    {
-      "xtype": "flow",
-      "version": 1
-    },
-    {
-      "xtype": "flox",
-      "version": 1
+    "id": "branch",
+    "name": "branch",
+    "version": 1,
+    "doctype": "xflow",
+    "doctype_version": 1,
+    "doc" : {
+        "requirements": [
+            {
+                "xtype": "flow",
+                "version": 1
+            },
+            {
+                "xtype": "flox",
+                "version": 1
+            }
+        ],
+        "variables" : {
+            "input" : [
+                {
+                    "name"  : "CalcValueA",
+                    "vtype"  : "number",
+                    "value" : "1"
+                },
+                {
+                    "name"  : "CalcValueB",
+                    "vtype"  : "number",
+                    "value" : "2"
+                }
+            ],
+            "output" : [
+                {
+                    "vtype" : "number",
+                    "name" : "ReturnValue"
+                }
+            ],
+            "local" : [
+                {
+                    "name"  : "ReturnValue",
+                    "vtype"  : "number",
+                    "value" : "0"
+                }
+            ]
+        },
+        "nodes": [
+            {
+                "id": 1,
+                "nodetype": "flow",
+                "action": "start",
+                "label" : "Start",
+                "parameters": {}
+            },
+            {
+                "id": 2,
+                "nodetype": "flox",
+                "action": "evalexpr",
+                "label" : "Flox",
+                "parameters": {
+                    "expression" : "$CalcValueA<$CalcValueB",
+                    "returns"    : {
+                        "name"   : "ReturnValue",
+                        "vtype"   : "boolean"
+                    }
+                }
+            },
+            {
+                "id": 3,
+                "nodetype": "flow",
+                "action": "branch",
+                "label" : "Branch",
+                "parameters": {
+                    "name": "ReturnValue",
+                    "vtype": "boolean"
+                }
+            },
+            {
+                "id": 4,
+                "nodetype": "flow",
+                "action": "end",
+                "label" : "End",
+                "parameters": {}
+            },
+            {
+                "id": 5,
+                "nodetype": "flow",
+                "action": "end",
+                "label" : "End",
+                "parameters": {}
+            }
+        ],
+        "edges": [
+            [ 1, 2 ],
+            [ 2, 3 ],
+            [ 3, 4 ],
+            [ 3, 5 ]
+        ],
+        "branches" : [
+            {
+                "edge"   : [3,4],
+                "xvar" : {
+                    "name"  : "ReturnValue",
+                    "vtype"  : "boolean",
+                    "value" : "true"
+                }
+            },
+            {
+                "edge"   : [3,5],
+                "xvar" : {
+                    "name"  : "ReturnValue",
+                    "vtype"  : "boolean",
+                    "value" : "false"
+                }
+            }
+        ]
     }
-  ],
-  "variables" : {
-    "input" : [
-      {
-        "name"  : "CalcValueA",
-        "vtype"  : "number",
-        "value" : "1"
-      },
-      {
-        "name"  : "CalcValueB",
-        "vtype"  : "number",
-        "value" : "2"
-      }
-    ],
-    "output" : [
-      {
-        "vtype" : "number",
-        "name" : "ReturnValue"
-      }
-    ],
-    "local" : [
-      {
-        "name"  : "ReturnValue",
-        "vtype"  : "number",
-        "value" : "0"
-      }
-    ]
-  },
-  "nodes": [
-    {
-      "id": 1,
-      "nodetype": "flow",
-      "action": "start",
-      "label" : "Start",
-      "parameters": {}
-    },
-    {
-      "id": 2,
-      "nodetype": "flox",
-      "action": "evalexpr",
-      "label" : "Flox",
-      "parameters": {
-        "expression" : "$CalcValueA<$CalcValueB",
-        "returns"    : {
-          "name"   : "ReturnValue",
-          "vtype"   : "boolean"
-        }
-      }
-    },
-    {
-      "id": 3,
-      "nodetype": "flow",
-      "action": "branch",
-      "label" : "Branch",
-      "parameters": {
-        "name": "ReturnValue",
-        "vtype": "boolean"
-      }
-    },
-    {
-      "id": 4,
-      "nodetype": "flow",
-      "action": "end",
-      "label" : "End",
-      "parameters": {}
-    },
-    {
-      "id": 5,
-      "nodetype": "flow",
-      "action": "end",
-      "label" : "End",
-      "parameters": {}
-    }
-  ],
-  "edges": [
-    [ 1, 2 ],
-    [ 2, 3 ],
-    [ 3, 4 ],
-    [ 3, 5 ]
-  ],
-  "branches" : [
-    {
-      "edge"   : [3,4],
-      "xvar" : {
-          "name"  : "ReturnValue",
-          "vtype"  : "boolean",
-          "value" : "true"
-      }
-    },
-    {
-      "edge"   : [3,5],
-      "xvar" : {
-          "name"  : "ReturnValue",
-          "vtype"  : "boolean",
-          "value" : "false"
-      }
-    }
-  ]
 }
