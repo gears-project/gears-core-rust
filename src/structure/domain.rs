@@ -1,12 +1,23 @@
-pub type DomainDocument = super::common::Document<Domain>;
+use super::common::Document;
 
-#[derive(Debug, Serialize, Clone)]
+pub type DomainDocument = Document<Domain>;
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Domain {
     pub events: Events,
     pub entities: Entities,
 }
 
-#[derive(Debug, Serialize, Clone)]
+impl Default for Domain {
+    fn default() -> Self {
+        Domain {
+            events: Events::default(),
+            entities: Entities::new(),
+        }
+    }
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Events {
     pub change: Vec<String>,
     pub update: Vec<String>,
@@ -15,17 +26,28 @@ pub struct Events {
     pub all: Vec<String>,
 }
 
-#[derive(Debug, Serialize, Clone)]
+impl Default for Events {
+    fn default() -> Self {
+        Events {
+            change: Vec::<String>::new(),
+            update: Vec::<String>::new(),
+            read: Vec::<String>::new(),
+            delete: Vec::<String>::new(),
+            all: Vec::<String>::new(),
+        }
+    }
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Attribute {
     pub name: String,
     pub vtype: String,
-    pub access: String,
     pub storage: String,
     pub default: String,
     pub validations: Vec<String>,
 }
 
-#[derive(Debug, Serialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Reference {
     pub name: String,
     pub rtype: String,
@@ -33,7 +55,7 @@ pub struct Reference {
     pub target: String,
 }
 
-#[derive(Debug, Serialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Entity {
     pub name: String,
     pub attributes: Attributes,
