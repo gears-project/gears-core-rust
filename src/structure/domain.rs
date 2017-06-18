@@ -42,26 +42,34 @@ impl Default for Events {
 pub struct Attribute {
     pub name: String,
     pub vtype: String,
-    pub storage: String,
     pub default: String,
     pub validations: Vec<String>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
+pub enum ReferenceType {
+    #[serde(rename = "has_many")]
+    HasMany,
+    #[serde(rename = "belongs_to")]
+    BelongsTo,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Reference {
     pub name: String,
-    pub rtype: String,
-    pub ltype: String,
-    pub target: String,
+    pub reftype: ReferenceType,
+    pub other: String,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Entity {
     pub name: String,
     pub attributes: Attributes,
+    pub references: References,
 }
 
 pub type Entities = Vec<Entity>;
 pub type Attributes = Vec<Attribute>;
+pub type References = Vec<Reference>;
 
 impl Domain {}

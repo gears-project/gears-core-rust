@@ -9,15 +9,11 @@
         "components" : [
             {
                 "component" : "row",
-                "config" : { },
                 "components" : [
                     {
-                        "component": "column3",
-                        "config" : { },
-                        "components": []
+                        "component": "column3"
                     }, {
                         "component": "column6",
-                        "config" : { },
                         "components" : [
                             {
                                 "component": "header1",
@@ -27,9 +23,7 @@
                             }
                         ]
                     }, {
-                        "component": "column3",
-                        "config" : { },
-                        "components" : []
+                        "component": "column3"
                     }
                 ]
             }, {
@@ -41,8 +35,7 @@
                         "rowClicked" : "appflow_post_clicked",
                         "rowDoubleClicked" : "appflow_post_double_clicked"
                     }
-                },
-                "components" : []
+                }
             }
         ]
     }

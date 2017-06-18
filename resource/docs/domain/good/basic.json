@@ -21,8 +21,6 @@
                     {
                         "name": "title",
                         "vtype": "string",
-                        "storage": "persistent",
-                        "access": "user",
                         "default": "",
                         "validations": [
                             "xflow_string_value_required"
@@ -31,8 +29,6 @@
                     {
                         "name": "body",
                         "vtype": "string",
-                        "storage": "persistent",
-                        "access": "user",
                         "default": "",
                         "validations": [
                             "xflow_string_value_required"
@@ -41,8 +37,6 @@
                     {
                         "name": "created",
                         "vtype": "string",
-                        "access": "system",
-                        "storage": "persistent",
                         "default": "",
                         "validations": [
                             "xflow_string_value_required"
@@ -52,8 +46,8 @@
                 "references" : [
                     {
                         "name": "comment",
-                        "rtype": "hasmany",
-                        "ltype": "local"
+                        "reftype": "has_many",
+                        "other": "comment"
                     }
                 ]
             },
@@ -72,10 +66,9 @@
                 ],
                 "references" : [
                     {
-                        "name": "comment",
-                        "rtype": "hasmany",
-                        "ltype": "local",
-                        "other": "comment"
+                        "name": "post",
+                        "reftype": "belongs_to",
+                        "other": "post"
                     }
                 ]
             }

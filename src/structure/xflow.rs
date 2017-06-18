@@ -117,6 +117,15 @@ impl XFlow {
             .collect()
     }
 
+    /// Get a `HashSet` of all variable names in input, local and output
+    ///
+    /// # Example
+    /// ```
+    /// use xflow::structure::xflow::{XFlow};
+    /// let xfs = XFlow::default();
+    /// let names = xfs.get_all_variable_names();
+    /// assert_eq!(names.len(), 0);
+    /// ```
     pub fn all_variable_names(&self) -> HashSet<String> {
         let mut vars = HashSet::<String>::new();
 
@@ -215,49 +224,35 @@ impl XFlow {
         let mut names = HashSet::<String>::new();
 
         for xvar in &self.variables.local {
-            let name = xvar.name.clone();
-            if !names.contains(&name) {
-                names.insert(name);
+            if !names.contains(&xvar.name) {
+                names.insert(xvar.name.clone());
             }
         }
 
         for xvar in &self.variables.input {
-            let name = xvar.name.clone();
-            if !names.contains(&name) {
-                names.insert(name);
+            if !names.contains(&xvar.name) {
+                names.insert(xvar.name.clone());
             }
         }
 
         for xvar in &self.variables.output {
-            let name = xvar.name.clone();
-            if !names.contains(&name) {
-                names.insert(name);
+            if !names.contains(&xvar.name) {
+                names.insert(xvar.name.clone());
             }
         }
 
         names
-
     }
-
-    // pub fn get_nodes<F>(&self, func: &F) -> Vec<&XFlowNode>
-    // where F: Fn(&XFlowNode) -> bool
-    // {
-    // self.nodes
-    // .iter()
-    // .filter(func)
-    // .collect::<Vec<&XFlowNode>>()
-    // }
-    //
 }
 
 impl Default for XFlowDocument {
-    /// Constructs a new `XFlow`
+    /// Constructs a new `XFlowDocument`
     ///
     /// # Example
     /// ```
     /// use xflow::structure::xflow::{XFlowDocument};
     /// let xfs = XFlowDocument::default();
-    /// println!("XFlow version {}", xfs.id);
+    /// println!("XFlowDocument version {}", xfs.id);
     /// ```
     fn default() -> Self {
         XFlowDocument {
@@ -271,6 +266,14 @@ impl Default for XFlowDocument {
     }
 }
 impl Default for XFlow {
+    /// Constructs a new `XFlow`
+    ///
+    /// # Example
+    /// ```
+    /// use xflow::structure::xflow::{XFlow};
+    /// let xfs = XFlow::default();
+    /// println!("XFlow has {} requirements", xfs.requirements.len());
+    /// ```
     fn default() -> Self {
         XFlow {
             requirements: Vec::<XFlowRequirement>::new(),
