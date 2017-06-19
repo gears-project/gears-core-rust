@@ -11,32 +11,12 @@
                 "component" : "Row",
                 "components" : [
                     {
-                        "component": "Column3",
-                        "components" : []
-                    },
-                    {
-                        "component": "Column6",
-                        "components" : [
-                            {
-                                "component": "Header1",
-                                "config": {
-                                    "text": "List of Posts"
-                                }
-                            }
-                        ]
+                        "component": "Header1",
+                        "config": {
+                            "text": "Header text line"
+                        }
                     }
                 ]
-            },
-            {
-                "component": "Datatable",
-                "config" : {
-                    "entity": "post",
-                    "attributes": ["title", "body"],
-                    "eventbindings" : {
-                        "rowClicked" : "appflow_post_clicked",
-                        "rowDoubleClicked" : "appflow_post_double_clicked"
-                    }
-                }
             }
         ]
     }
