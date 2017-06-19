@@ -14,8 +14,6 @@ fn test_load_domain() {
     let json_string = read_json_file("resource/docs/domain/good/basic.json");
     let domain = DomainDocument::from_json(&json_string);
 
-    println!("Loaded domain document : {:?}", domain);
-
     assert_eq!(std::mem::size_of_val(&domain), 232);
     assert_eq!(domain.doc.events.change.len(), 0);
     assert_eq!(domain.doc.events.update.len(), 0);
