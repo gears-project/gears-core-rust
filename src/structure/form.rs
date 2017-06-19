@@ -1,37 +1,60 @@
-use serde_json::Value;
-// use std::collections::HashMap;
+use std::collections::HashMap;
 
 use super::common::Document;
 
 pub type FormDocument = Document<Form>;
+pub type Components = Vec<Component>;
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Form {
     pub title: String,
+    pub components: Vec<Component>,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+#[serde(tag = "component")]
+pub enum Component {
+    Row(Row),
+    Header1(Header1),
+    Header2(Header2),
+    Header3(Header3),
+    Column3(Column3),
+    Column6(Column6),
+    Column12(Column12),
+    Datatable(DatatableComponent),
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct LayoutComponent {
     pub components: Components,
 }
 
-pub type Components = Vec<Component>;
-
 #[derive(Debug, Serialize, Deserialize, Clone)]
-pub struct Component {
-    pub component: String,
-    pub config: Option<Value>,
-    pub components: Option<Components>,
-}
-
-/*
-#[derive(Debug, Serialize, Deserialize, Clone)]
-pub struct DatatableComponent<'a> {
-    pub name: String,
-    pub config: DatatableConfig,
-    pub components: &'a Components,
+pub struct TextComponentConfig {
+    pub text: String,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
-pub struct DatatableConfig {
+pub struct TextComponent {
+    pub config: TextComponentConfig,
+}
+
+pub type Row = LayoutComponent;
+pub type Header1 = TextComponent;
+pub type Header2 = TextComponent;
+pub type Header3 = TextComponent;
+pub type Column3 = LayoutComponent;
+pub type Column6 = LayoutComponent;
+pub type Column12 = LayoutComponent;
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct DatatableComponent {
+    pub config: DatatableComponentConfig,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct DatatableComponentConfig {
     pub entity: String,
     pub attributes: Vec<String>,
     pub eventbindings: HashMap<String, String>,
 }
-*/

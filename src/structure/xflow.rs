@@ -7,7 +7,7 @@ use super::common::Document;
 pub type XFlowDocument = Document<XFlow>;
 pub type XFlowEdge = (i32, i32);
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 // partof: SPC-serialization-json
 pub struct XFlow {
     pub requirements: Vec<XFlowRequirement>,
@@ -36,7 +36,7 @@ pub enum XFlowValue {
     Boolean(bool),
 }
 
-#[derive(Serialize, Deserialize, Debug, Eq, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 pub struct XFlowRequirement {
     pub xtype: String,
     pub version: i32,
@@ -48,21 +48,21 @@ pub struct XFlowVariableDefinition {
     pub vtype: XFlowValueType,
 }
 
-#[derive(Serialize, Deserialize, Debug, Eq, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 pub struct XFlowVariable {
     pub name: String,
     pub vtype: XFlowValueType,
     pub value: XFlowValue,
 }
 
-#[derive(Serialize, Deserialize, Debug, Eq, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 pub struct XFlowVariables {
     pub input: Vec<XFlowVariableDefinition>,
     pub local: Vec<XFlowVariable>,
     pub output: Vec<XFlowVariableDefinition>,
 }
 
-#[derive(Serialize, Deserialize, Debug, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, PartialEq, Clone)]
 pub struct XFlowNode {
     pub id: i32,
     pub nodetype: String,
@@ -71,7 +71,7 @@ pub struct XFlowNode {
     pub parameters: Option<serde_json::Value>,
 }
 
-#[derive(Serialize, Deserialize, Debug, Eq, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 pub struct XFlowBranch {
     pub edge: XFlowEdge,
     pub xvar: XFlowVariable,

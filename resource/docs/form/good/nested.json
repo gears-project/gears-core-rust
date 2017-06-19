@@ -11,8 +11,7 @@
                 "component" : "Row",
                 "components" : [
                     {
-                        "component": "Column3",
-                        "components" : []
+                        "component": "Column3"
                     },
                     {
                         "component": "Column6",
