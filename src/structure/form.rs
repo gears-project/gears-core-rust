@@ -14,13 +14,13 @@ pub struct Form {
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(tag = "component")]
 pub enum Component {
-    Row(Row),
-    Header1(Header1),
-    Header2(Header2),
-    Header3(Header3),
-    Column3(Column3),
-    Column6(Column6),
-    Column12(Column12),
+    Row(RowComponent),
+    Header1(Header1Component),
+    Header2(Header2Component),
+    Header3(Header3Component),
+    Column3(Column3Component),
+    Column6(Column6Component),
+    Column12(Column12Component),
     Datatable(DatatableComponent),
 }
 
@@ -39,13 +39,13 @@ pub struct TextComponent {
     pub config: TextComponentConfig,
 }
 
-pub type Row = LayoutComponent;
-pub type Header1 = TextComponent;
-pub type Header2 = TextComponent;
-pub type Header3 = TextComponent;
-pub type Column3 = LayoutComponent;
-pub type Column6 = LayoutComponent;
-pub type Column12 = LayoutComponent;
+pub type RowComponent = LayoutComponent;
+pub type Header1Component = TextComponent;
+pub type Header2Component = TextComponent;
+pub type Header3Component = TextComponent;
+pub type Column3Component = LayoutComponent;
+pub type Column6Component = LayoutComponent;
+pub type Column12Component = LayoutComponent;
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct DatatableComponent {
