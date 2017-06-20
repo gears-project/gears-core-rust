@@ -25,26 +25,19 @@ fn output_components(components: &Components) -> String {
 
 fn render_row(el: &RowComponent) -> String {
     let body = output_components(&el.components);
-    let out = format!(
-        r#"
-    <div class='row'>
-        {body}
-    </div>
-    "#,
-        body = body
-    );
+    let out = format!("<div class='row'>{body}</div>", body = body);
     out
 }
 fn render_header1(el: &Header1Component) -> String {
-    let out = format!("<h1>{}</h1>", el.config.text);
+    let out = format!("<h1>{text}</h1>", text = el.config.text);
     out
 }
 fn render_header2(el: &Header2Component) -> String {
-    let out = format!("<h2>{}</h2>", el.config.text);
+    let out = format!("<h2>{text}</h2>", text = el.config.text);
     out
 }
 fn render_header3(el: &Header3Component) -> String {
-    let out = format!("<h3>{}</h3>", el.config.text);
+    let out = format!("<h3>{text}</h3>", text = el.config.text);
     out
 }
 fn render_column3(el: &Column3Component) -> String {
@@ -52,10 +45,10 @@ fn render_column3(el: &Column3Component) -> String {
     let out = format!(
         r#"
     <div class='col-md-3'>
-        {}
+        {body}
     </div>
     "#,
-        body
+        body = body
     );
     out
 }
@@ -64,10 +57,10 @@ fn render_column6(el: &Column6Component) -> String {
     let out = format!(
         r#"
     <div class='col-md-6'>
-        {}
+        {body}
     </div>
     "#,
-        body
+        body = body
     );
     out
 }
@@ -76,10 +69,10 @@ fn render_column12(el: &Column12Component) -> String {
     let out = format!(
         r#"
     <div class='col-md-12'>
-        {}
+        {body}
     </div>
     "#,
-        body
+        body = body
     );
     out
 }
