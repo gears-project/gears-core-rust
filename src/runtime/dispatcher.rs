@@ -23,7 +23,7 @@ impl<'a> Dispatcher<'a> {
             match receiver.dispatch(xfnode, xfstate) {
                 Ok(()) => Ok(()),
                 Err(()) => {
-                    let msg = format!("An error has occurred dispatching, but this is currently not handled");
+                    let msg = "An error has occurred dispatching, but this is currently not handled".to_owned();
                     error!("{}", msg);
                     Err(msg)
                 }

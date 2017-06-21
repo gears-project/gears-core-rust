@@ -97,7 +97,7 @@ impl<'a> XFlowRunner<'a> {
         if self.is_completed_ok() {
             Ok(())
         } else {
-            let msg = format!("Unhandled error has occurred while running flow");
+            let msg = "Unhandled error has occurred while running flow".to_owned();
             Err(msg)
         }
     }

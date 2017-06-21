@@ -4,7 +4,7 @@ pub fn output_html(form: &FormDocument) -> String {
     output_components(&form.doc.components)
 }
 
-fn output_components(components: &Components) -> String {
+fn output_components(components: &[Component]) -> String {
     let mut out = Vec::<String>::new();
 
     for component in components {

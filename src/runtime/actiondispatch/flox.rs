@@ -32,7 +32,7 @@ impl Flox {
                       node_params);
                 let expr = node_params.expression.as_str();
                 debug!("Expression: '{}'", expr);
-                match flox::parse_context(node_params.expression.as_str(), &state) {
+                match flox::parse_context(node_params.expression.as_str(), state) {
                     Ok(res) => {
                         debug!("Expression: '{}' - Result: '{:?}'", expr, res);
                         state.add(&XFlowVariable {

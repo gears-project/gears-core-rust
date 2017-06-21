@@ -29,7 +29,6 @@ impl<T> Document<T>
     /// Initialize a Document from a JSON string
     ///
     pub fn from_json(json_string: &str) -> Self {
-        let s = json_string.clone();
-        serde_json::from_str(s).unwrap()
+        serde_json::from_str(json_string).unwrap()
     }
 }
