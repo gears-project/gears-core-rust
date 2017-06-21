@@ -1,0 +1,94 @@
+{
+    "id": "add",
+    "name": "add",
+    "version": 1,
+    "doctype": "xflow",
+    "doctype_version": 1,
+    "doc" : {
+        "requirements": [
+            {
+                "xtype": "flow",
+                "version": 1
+            },
+            {
+                "xtype": "flox",
+                "version": 1
+            }
+        ],
+        "variables" : {
+            "input" : [
+            ],
+            "output" : [
+                {
+                    "vtype" : "number",
+                    "name" : "ReturnValueA"
+                },
+                {
+                    "vtype" : "number",
+                    "name" : "ReturnValueB"
+                }
+            ],
+            "local" : [
+                {
+                    "vtype" : "number",
+                    "name" : "ReturnValueA",
+                    "value" : "0"
+                },
+                {
+                    "vtype" : "number",
+                    "name" : "ReturnValueB",
+                    "value" : "0"
+                }
+            ]
+        },
+        "nodes": [
+            {
+                "id": 1,
+                "nodetype": "flow",
+                "action": "start",
+                "label" : "Start",
+                "parameters": {}
+            },
+            {
+                "id": 2,
+                "nodetype": "flox",
+                "action": "evalexpr",
+                "label" : "Flox",
+                "parameters": {
+                    "expression" : "1+2",
+                    "returns"    : {
+                        "name"   : "ReturnValueA",
+                        "vtype"   : "number"
+                    }
+                }
+            },
+            {
+                "id": 3,
+                "nodetype": "flox",
+                "action": "evalexpr",
+                "label" : "Flox",
+                "parameters": {
+                    "expression" : "4*4",
+                    "returns"    : {
+                        "name"   : "ReturnValueB",
+                        "vtype"   : "number"
+                    }
+                }
+            },
+            {
+                "id": 4,
+                "nodetype": "flow",
+                "action": "end",
+                "label" : "End",
+                "parameters": {}
+            }
+        ],
+        "edges": [
+            [ 1, 2 ],
+            [ 2, 3 ],
+            [ 3, 4 ]
+        ],
+        "branches" :[
+        ]
+    }
+}

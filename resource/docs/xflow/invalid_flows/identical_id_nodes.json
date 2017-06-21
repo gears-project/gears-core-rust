@@ -1,0 +1,59 @@
+{
+    "id": "multiple_id",
+    "name": "multiple_id",
+    "version": 1,
+    "doctype": "xflow",
+    "doctype_version": 1,
+    "doc" : {
+        "requirements": [
+            {
+                "xtype": "flow",
+                "version": 1
+            }
+        ],
+        "variables" : {
+            "input" : [
+            ],
+            "output" : [
+            ],
+            "local" : [
+            ]
+        },
+        "nodes": [
+            {
+                "id": 1,
+                "nodetype": "flow",
+                "action": "start",
+                "label" : "Start",
+                "parameters": {}
+            },
+            {
+                "id": 1,
+                "nodetype": "flow",
+                "action": "start",
+                "label" : "Start",
+                "parameters": {}
+            },
+            {
+                "id": 2,
+                "nodetype": "flow",
+                "action": "start",
+                "label" : "Start",
+                "parameters": {}
+            },
+            {
+                "id": 3,
+                "nodetype": "flow",
+                "action": "end",
+                "label" : "End",
+                "parameters": {}
+            }
+        ],
+        "edges": [
+            [ 1, 3 ],
+            [ 2, 3 ]
+        ],
+        "branches": [
+        ]
+    }
+}

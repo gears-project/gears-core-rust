@@ -1,0 +1,71 @@
+{
+    "id": "add",
+    "name": "add",
+    "version": 1,
+    "doctype": "xflow",
+    "doctype_version": 1,
+    "doc" : {
+        "requirements": [
+            {
+                "xtype": "flow",
+                "version": 1
+            },
+            {
+                "xtype": "flox",
+                "version": 1
+            }
+        ],
+        "variables" : {
+            "input" : [
+            ],
+            "output" : [
+                {
+                    "vtype" : "number",
+                    "name" : "ReturnValue"
+                }
+            ],
+            "local" : [
+                {
+                    "vtype" : "number",
+                    "name" : "ReturnValue",
+                    "value" : "0"
+                }
+            ]
+        },
+        "nodes": [
+            {
+                "id": 1,
+                "nodetype": "flow",
+                "action": "start",
+                "label" : "Start",
+                "parameters": {}
+            },
+            {
+                "id": 2,
+                "nodetype": "flox",
+                "action": "evalexpr",
+                "label" : "Flox",
+                "parameters": {
+                    "expression" : "1+2",
+                    "returns"    : {
+                        "name"   : "ReturnValue",
+                        "vtype"   : "number"
+                    }
+                }
+            },
+            {
+                "id": 3,
+                "nodetype": "flow",
+                "action": "end",
+                "label" : "End",
+                "parameters": {}
+            }
+        ],
+        "edges": [
+            [ 1, 2 ],
+            [ 2, 3 ]
+        ],
+        "branches" :[
+        ]
+    }
+}

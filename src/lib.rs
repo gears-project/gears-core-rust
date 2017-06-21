@@ -5,11 +5,12 @@ extern crate serde_json;
 #[macro_use]
 extern crate log;
 
-pub mod actiondispatch;
-pub mod xfstruct;
 pub mod xfstate;
 pub mod validation;
 pub mod errors;
-pub mod xfrunner;
-pub mod dispatcher;
 pub mod flox;
+
+pub mod structure;
+pub mod runtime;
+pub mod generation;
+pub mod util;

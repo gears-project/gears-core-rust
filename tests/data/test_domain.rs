@@ -1,8 +1,8 @@
 extern crate env_logger;
 extern crate xflow;
 
-use xflow::structure::xflow::*;
 use xflow::*;
+use xfstruct::*;
 use xfstate::*;
 
 fn expect_context_integer(input: &str, context: &XFState, expected: i64) -> () {
@@ -14,7 +14,7 @@ fn expect_context_integer(input: &str, context: &XFState, expected: i64) -> () {
         }
         Ok(res) => {
             match res {
-                XFlowValue::Integer(res) => assert_eq!(res, expected),
+                xfstruct::XFlowValue::Integer(res) => assert_eq!(res, expected),
                 _ => assert!(false),
             }
         }
@@ -30,7 +30,7 @@ fn expect_integer(input: &str, expected: i64) -> () {
         }
         Ok(res) => {
             match res {
-                XFlowValue::Integer(res) => assert_eq!(res, expected),
+                xfstruct::XFlowValue::Integer(res) => assert_eq!(res, expected),
                 _ => assert!(false),
             }
         }
@@ -46,7 +46,7 @@ fn expect_context_boolean(input: &str, context: &XFState, expected: bool) -> () 
         }
         Ok(res) => {
             match res {
-                XFlowValue::Boolean(res) => assert_eq!(res, expected),
+                xfstruct::XFlowValue::Boolean(res) => assert_eq!(res, expected),
                 _ => assert!(false),
             }
         }
@@ -62,7 +62,7 @@ fn expect_boolean(input: &str, expected: bool) -> () {
         }
         Ok(res) => {
             match res {
-                XFlowValue::Boolean(res) => assert_eq!(res, expected),
+                xfstruct::XFlowValue::Boolean(res) => assert_eq!(res, expected),
                 _ => assert!(false),
             }
         }
@@ -164,7 +164,7 @@ fn test_flox_atom() {
         }
         Ok(res) => {
             match res {
-                XFlowValue::Integer(res) => assert_eq!(res, 1),
+                xfstruct::XFlowValue::Integer(res) => assert_eq!(res, 1),
                 _ => assert!(false),
             }
         }

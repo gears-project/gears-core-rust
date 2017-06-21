@@ -2,11 +2,11 @@ extern crate env_logger;
 
 extern crate xflow;
 
-use xflow::xfstruct::*;
+use xflow::structure::xflow::*;
 use xflow::xfstate::*;
-use xflow::xfrunner::*;
-use xflow::dispatcher::*;
-use xflow::actiondispatch;
+use xflow::runtime::xfrunner::*;
+use xflow::runtime::dispatcher::*;
+use xflow::runtime::actiondispatch;
 
 mod helper;
 use helper::read_json_file;
@@ -28,7 +28,7 @@ fn fail_and_report_error(err: String) -> () {
 fn run_xflow(flow_file: &str) -> Result<XFState, String> {
 
     let json_string = read_json_file(flow_file);
-    let xfs = XFlowStruct::from_json(&json_string);
+    let xfs = XFlowDocument::from_json(&json_string);
     let dispatcher = build_dispatcher();
     let state = XFState::default();
 
@@ -51,18 +51,18 @@ fn run_xflow(flow_file: &str) -> Result<XFState, String> {
 fn test_run_10_steps() {
     let _ = env_logger::init();
 
-    let json_string = read_json_file("data/flows/10_steps.json");
-    let xfs = XFlowStruct::from_json(&json_string);
-    assert_eq!(xfs.nodes.len(), 10);
+    let json_string = read_json_file("resource/docs/xflow/flows/10_steps.json");
+    let xfs = XFlowDocument::from_json(&json_string);
+    assert_eq!(xfs.doc.nodes.len(), 10);
 
     let dispatcher = build_dispatcher();
     let mut state = XFState::default();
 
     state.add(&XFlowVariable {
-        name: "CounterValue".to_owned(),
-        vtype: XFlowValueType::Integer,
-        value: XFlowValue::Integer(0),
-    });
+                  name: "CounterValue".to_owned(),
+                  vtype: XFlowValueType::Integer,
+                  value: XFlowValue::Integer(0),
+              });
 
     match XFlowRunner::new(&xfs, &dispatcher, &state) {
         Ok(mut xfrunner) => {
@@ -77,8 +77,13 @@ fn test_run_10_steps() {
                 }
                 i += 1;
             }
-            assert_eq!(i, xfs.nodes.len());
-            match xfrunner.get_output().unwrap().get("CounterValue").unwrap().value {
+            assert_eq!(i, xfs.doc.nodes.len());
+            match xfrunner
+                      .get_output()
+                      .unwrap()
+                      .get("CounterValue")
+                      .unwrap()
+                      .value {
                 XFlowValue::Integer(i) => assert_eq!(i, 8),
                 _ => assert!(false),
             }
@@ -92,20 +97,20 @@ fn test_run_10_steps() {
 fn test_run_simple_branch() {
     let _ = env_logger::init();
 
-    let json_string = read_json_file("data/flows/branch_boolean.json");
-    let xfs = XFlowStruct::from_json(&json_string);
-    assert_eq!(xfs.nodes.len(), 4);
-    assert_eq!(xfs.edges.len(), 3);
-    assert_eq!(xfs.branches.len(), 2);
+    let json_string = read_json_file("resource/docs/xflow/flows/branch_boolean.json");
+    let xfs = XFlowDocument::from_json(&json_string);
+    assert_eq!(xfs.doc.nodes.len(), 4);
+    assert_eq!(xfs.doc.edges.len(), 3);
+    assert_eq!(xfs.doc.branches.len(), 2);
 
     let dispatcher = build_dispatcher();
     let mut state = XFState::default();
 
     state.add(&XFlowVariable {
-        name: "MatchValue".to_owned(),
-        vtype: XFlowValueType::Boolean,
-        value: XFlowValue::Boolean(false),
-    });
+                  name: "MatchValue".to_owned(),
+                  vtype: XFlowValueType::Boolean,
+                  value: XFlowValue::Boolean(false),
+              });
 
 
     match XFlowRunner::new(&xfs, &dispatcher, &state) {
@@ -122,7 +127,7 @@ fn test_run_simple_branch() {
 fn test_run_arithmetic() {
     let _ = env_logger::init();
 
-    match run_xflow("data/flows/arithmetic_addition.json") {
+    match run_xflow("resource/docs/xflow/flows/arithmetic_addition.json") {
         Ok(output) => {
             match output.get("ReturnValue").unwrap().value {
                 XFlowValue::Integer(i) => assert_eq!(i, 3),
@@ -137,7 +142,7 @@ fn test_run_arithmetic() {
 fn test_run_arithmetic_multiple_return_values() {
     let _ = env_logger::init();
 
-    match run_xflow("data/flows/arithmetic_addition_multiple_return_values.json") {
+    match run_xflow("resource/docs/xflow/flows/arithmetic_addition_multiple_return_values.json") {
         Ok(output) => {
             match output.get("ReturnValueA").unwrap().value {
                 XFlowValue::Integer(i) => assert_eq!(i, 3),
