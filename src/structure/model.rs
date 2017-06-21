@@ -1,8 +1,12 @@
+use super::common;
 use super::domain;
 use super::xflow;
 use super::form;
 
-#[derive(Debug, Serialize, Clone)]
+
+pub type ModelDocument = common::Document<Model>;
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Model {
     pub domain: domain::DomainDocument,
     pub xflows: Vec<xflow::XFlow>,

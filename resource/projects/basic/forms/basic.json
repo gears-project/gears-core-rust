@@ -1,0 +1,23 @@
+{
+    "doctype": "form",
+    "doctype_version": 1,
+    "id": "start_form_1",
+    "name" : "List Posts",
+    "version" : 1,
+    "doc" : {
+        "title": "Lists Posts",
+        "components" : [
+            {
+                "component" : "Row",
+                "components" : [
+                    {
+                        "component": "Header1",
+                        "config": {
+                            "text": "Header text line"
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+}
