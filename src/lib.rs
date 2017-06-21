@@ -4,6 +4,7 @@ extern crate serde_derive;
 extern crate serde_json;
 #[macro_use]
 extern crate log;
+extern crate glob;
 
 pub mod xfstate;
 pub mod validation;
