@@ -51,7 +51,7 @@ fn run_xflow(flow_file: &str) -> Result<XFState, String> {
 fn test_run_10_steps() {
     let _ = env_logger::init();
 
-    let json_string = read_json_file("data/flows/10_steps.json");
+    let json_string = read_json_file("resource/docs/xflow/flows/10_steps.json");
     let xfs = XFlowDocument::from_json(&json_string);
     assert_eq!(xfs.doc.nodes.len(), 10);
 
@@ -97,7 +97,7 @@ fn test_run_10_steps() {
 fn test_run_simple_branch() {
     let _ = env_logger::init();
 
-    let json_string = read_json_file("data/flows/branch_boolean.json");
+    let json_string = read_json_file("resource/docs/xflow/flows/branch_boolean.json");
     let xfs = XFlowDocument::from_json(&json_string);
     assert_eq!(xfs.doc.nodes.len(), 4);
     assert_eq!(xfs.doc.edges.len(), 3);
@@ -127,7 +127,7 @@ fn test_run_simple_branch() {
 fn test_run_arithmetic() {
     let _ = env_logger::init();
 
-    match run_xflow("data/flows/arithmetic_addition.json") {
+    match run_xflow("resource/docs/xflow/flows/arithmetic_addition.json") {
         Ok(output) => {
             match output.get("ReturnValue").unwrap().value {
                 XFlowValue::Integer(i) => assert_eq!(i, 3),
@@ -142,7 +142,7 @@ fn test_run_arithmetic() {
 fn test_run_arithmetic_multiple_return_values() {
     let _ = env_logger::init();
 
-    match run_xflow("data/flows/arithmetic_addition_multiple_return_values.json") {
+    match run_xflow("resource/docs/xflow/flows/arithmetic_addition_multiple_return_values.json") {
         Ok(output) => {
             match output.get("ReturnValueA").unwrap().value {
                 XFlowValue::Integer(i) => assert_eq!(i, 3),

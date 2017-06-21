@@ -3,7 +3,6 @@ use super::domain;
 use super::xflow;
 use super::form;
 
-
 pub type ModelDocument = common::Document<Model>;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
