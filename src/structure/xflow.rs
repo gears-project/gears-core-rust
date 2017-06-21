@@ -245,26 +245,6 @@ impl XFlow {
     }
 }
 
-impl Default for XFlowDocument {
-    /// Constructs a new `XFlowDocument`
-    ///
-    /// # Example
-    /// ```
-    /// use xflow::structure::xflow::{XFlowDocument};
-    /// let xfs = XFlowDocument::default();
-    /// println!("XFlowDocument version {}", xfs.id);
-    /// ```
-    fn default() -> Self {
-        XFlowDocument {
-            id: "".to_owned(),
-            name: "".to_owned(),
-            doctype: "".to_owned(),
-            doctype_version: 1,
-            version: 1,
-            doc: XFlow::default(),
-        }
-    }
-}
 impl Default for XFlow {
     /// Constructs a new `XFlow`
     ///

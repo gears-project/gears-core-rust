@@ -32,3 +32,18 @@ impl<T> Document<T>
         serde_json::from_str(json_string).unwrap()
     }
 }
+
+impl<T> Default for Document<T>
+    where T: Default
+{
+    fn default() -> Self {
+        Self {
+            id: "".to_owned(),
+            name: "".to_owned(),
+            doctype: "".to_owned(),
+            doctype_version: 1,
+            version: 1,
+            doc: <T>::default(),
+        }
+    }
+}

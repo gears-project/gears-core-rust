@@ -10,3 +10,13 @@ pub struct Model {
 }
 
 impl Model {}
+
+impl Default for Model {
+    fn default() -> Self {
+        Model {
+            domain: domain::DomainDocument::default(),
+            xflows: Vec::<xflow::XFlow>::new(),
+            forms: Vec::<form::Form>::new(),
+        }
+    }
+}
