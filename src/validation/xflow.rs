@@ -14,7 +14,7 @@ impl ValidationError {
     ///
     /// # Example
     /// ```
-    /// use xflow::validation::{ValidationError};
+    /// use xflow::validation::xflow::{ValidationError};
     /// let err = ValidationError::new(1, "sample error".to_string(), Vec::<String>::new());
     /// println!("Validation error {}", err.message);
     /// ```

@@ -1,7 +1,7 @@
 extern crate env_logger;
 
 extern crate xflow;
-use xflow::validation::*;
+use xflow::validation::xflow::*;
 use xflow::structure::xflow::*;
 
 #[test]
