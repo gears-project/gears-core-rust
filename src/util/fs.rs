@@ -10,6 +10,7 @@ use std::error::Error;
 use std::fs::File;
 use std::io::prelude::*;
 use std::path::Path;
+use std;
 
 fn read_json_file(path: &Path) -> String {
     let display = path.display();
@@ -33,7 +34,45 @@ pub enum ModelLoadError {
     Unhandled,
 }
 
+fn write_file(filename: &str, data: &str) -> () {
+    let path = Path::new(filename);
+    let display = path.display();
+
+    let mut file = match File::create(&path) {
+        Err(why) => panic!("couldn't create {}: {}", display, why.description()),
+        Ok(file) => file,
+    };
+
+    match file.write_all(data.as_bytes()) {
+        Err(why) => panic!("couldn't write to {}: {}", display, why.description()),
+        Ok(_) => println!("successfully wrote to {}", display),
+    }
+}
+
 pub fn model_to_fs(model: &ModelDocument, path: &str) -> Result<(), ModelLoadError> {
+
+    let domain_path_name = format!("{}/domain", path);
+    std::fs::create_dir(&domain_path_name).unwrap();
+    let doc_filename = format!("{}/domain.json", domain_path_name);
+    let doc = &model.doc.domain;
+    write_file(&doc_filename, &doc.to_json());
+
+    let xflows_path_name = format!("{}/xflows", path);
+    std::fs::create_dir(&xflows_path_name).unwrap();
+
+    for doc in &model.doc.xflows {
+        let doc_filename = format!("{}/{}.json", xflows_path_name, doc.id);
+        write_file(&doc_filename, &doc.to_json());
+    }
+
+    let forms_path_name = format!("{}/forms", path);
+    std::fs::create_dir(&forms_path_name).unwrap();
+
+    for doc in &model.doc.forms {
+        let doc_filename = format!("{}/{}.json", forms_path_name, doc.id);
+        write_file(&doc_filename, &doc.to_json());
+    }
+
     Ok(())
 }
 
