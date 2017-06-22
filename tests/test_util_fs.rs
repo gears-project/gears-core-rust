@@ -17,7 +17,6 @@ fn test_load_basic_project() {
     println!("Model is {:?}", model);
 }
 
-
 #[test]
 fn test_model_to_and_from_fs() {
     let _ = env_logger::init();
@@ -28,13 +27,10 @@ fn test_model_to_and_from_fs() {
     let root_b = TempDir::new("model_b");
     let root_b = root_b.ok().expect("Should have created a temp directory");
 
-    println!("CREATED {}", root_b.path().display());
     let root_b_path = format!("{}", root_b.path().display());
     model_to_fs(&model_a, &root_b_path);
 
     let model_b = model_from_fs(&root_b_path).unwrap();
 
     assert_eq!(model_a.doc.xflows.len(), model_b.doc.xflows.len());
-
-
 }

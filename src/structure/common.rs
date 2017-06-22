@@ -20,9 +20,15 @@ impl<T> Document<T>
         format!("document {}", self.id)
     }
 
-    /// Return a JSON representation of the Document
+    /// Return an indented JSON representation of the Document
     ///
     pub fn to_json(&self) -> String {
+        serde_json::to_string_pretty(&self).unwrap()
+    }
+
+    /// Return a compact JSON representation of the Document
+    ///
+    pub fn to_json_compact(&self) -> String {
         serde_json::to_string(&self).unwrap()
     }
 

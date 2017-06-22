@@ -39,18 +39,25 @@ fn write_file(filename: &str, data: &str) -> () {
     let display = path.display();
 
     let mut file = match File::create(&path) {
-        Err(why) => panic!("couldn't create {}: {}", display, why.description()),
+        Err(why) => {
+            error!("couldn't create {}: {}", display, why.description());
+            panic!("couldn't create {}: {}", display, why.description());
+        }
         Ok(file) => file,
     };
 
     match file.write_all(data.as_bytes()) {
-        Err(why) => panic!("couldn't write to {}: {}", display, why.description()),
-        Ok(_) => println!("successfully wrote to {}", display),
+        Err(why) => {
+            error!("couldn't write to {}: {}", display, why.description());
+            panic!("couldn't write to {}: {}", display, why.description());
+        }
+        Ok(_) => debug!("successfully wrote to {}", display),
     }
 }
 
 pub fn model_to_fs(model: &ModelDocument, path: &str) -> Result<(), ModelLoadError> {
 
+    debug!("Writing model '{}' to directory '{}'", model.id, path);
     let domain_path_name = format!("{}/domain", path);
     std::fs::create_dir(&domain_path_name).unwrap();
     let doc_filename = format!("{}/domain.json", domain_path_name);
@@ -77,6 +84,7 @@ pub fn model_to_fs(model: &ModelDocument, path: &str) -> Result<(), ModelLoadErr
 }
 
 pub fn model_from_fs(path: &str) -> Result<ModelDocument, ModelLoadError> {
+    debug!("Reading model from directory '{}'", path);
     let mut modeldoc = ModelDocument::default();
     modeldoc.version = 2;
 
