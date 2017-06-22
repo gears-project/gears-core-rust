@@ -17,9 +17,9 @@ fn test_xflow_default() {
 fn test_xflow_to_json() {
     let _ = env_logger::init();
 
-    let xfs = XFlowDocument::default();
-
-    // assert_eq!(xfs.to_json(), r#"{"id":"","name":"","doctype":"","doctype_version":1,"doc" :"requirements":[],"variables":{"input":[],"local":[],"output":[]},"nodes":[],"edges":[],"branches":[]}}"#);
+    let xfs_a = XFlowDocument::default();
+    let xfs_b = XFlowDocument::from_json(&xfs_a.to_json());
+    assert_eq!(xfs_a.id, xfs_b.id);
 }
 
 #[test]

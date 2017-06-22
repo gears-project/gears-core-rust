@@ -57,7 +57,12 @@ fn write_file(filename: &str, data: &str) -> () {
 
 pub fn model_to_fs(model: &ModelDocument, path: &str) -> Result<(), ModelLoadError> {
 
-    debug!("Writing model '{}' to directory '{}'", model.id, path);
+    // XXX Error handling, assumption checking
+
+    debug!("Writing model id:'{}', version:'{}' to directory '{}'",
+           model.id,
+           model.version,
+           path);
     let domain_path_name = format!("{}/domain", path);
     std::fs::create_dir(&domain_path_name).unwrap();
     let doc_filename = format!("{}/domain.json", domain_path_name);
@@ -84,9 +89,11 @@ pub fn model_to_fs(model: &ModelDocument, path: &str) -> Result<(), ModelLoadErr
 }
 
 pub fn model_from_fs(path: &str) -> Result<ModelDocument, ModelLoadError> {
+
+    // XXX Error handling, assumption checking
+
     debug!("Reading model from directory '{}'", path);
     let mut modeldoc = ModelDocument::default();
-    modeldoc.version = 2;
 
     let glob_options = MatchOptions {
         case_sensitive: true,
@@ -101,7 +108,7 @@ pub fn model_from_fs(path: &str) -> Result<ModelDocument, ModelLoadError> {
             let xflow_doc: XFlowDocument = XFlowDocument::from_json(&json);
             modeldoc.doc.xflows.push(xflow_doc);
         } else {
-            // XXX
+            warn!("Unable to load doc from '{:?}'", item);
         }
     }
 
@@ -112,7 +119,7 @@ pub fn model_from_fs(path: &str) -> Result<ModelDocument, ModelLoadError> {
             let form_doc: FormDocument = FormDocument::from_json(&json);
             modeldoc.doc.forms.push(form_doc);
         } else {
-            // XXX
+            warn!("Unable to load doc from '{:?}'", item);
         }
     }
 

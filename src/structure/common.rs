@@ -1,7 +1,7 @@
 use serde;
 use serde_json;
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq, Eq)]
 pub struct Document<T> {
     pub id: String,
     pub name: String,
