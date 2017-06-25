@@ -132,3 +132,9 @@ pub fn model_from_fs(path: &str) -> Result<ModelDocument, ModelLoadError> {
 
     Ok(modeldoc)
 }
+
+pub fn init_new_model_dir(path: &str) -> Result<(), ModelLoadError> {
+    std::fs::create_dir(&path).unwrap();
+    let model = ModelDocument::default();
+    model_to_fs(&model, &path)
+}
