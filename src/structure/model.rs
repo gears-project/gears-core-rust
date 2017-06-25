@@ -8,8 +8,8 @@ pub type ModelDocument = common::Document<Model>;
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Model {
     pub domain: domain::DomainDocument,
-    pub xflows: Vec<xflow::XFlow>,
-    pub forms: Vec<form::Form>,
+    pub xflows: Vec<xflow::XFlowDocument>,
+    pub forms: Vec<form::FormDocument>,
 }
 
 impl Model {}
@@ -18,8 +18,8 @@ impl Default for Model {
     fn default() -> Self {
         Model {
             domain: domain::DomainDocument::default(),
-            xflows: Vec::<xflow::XFlow>::new(),
-            forms: Vec::<form::Form>::new(),
+            xflows: Vec::<xflow::XFlowDocument>::new(),
+            forms: Vec::<form::FormDocument>::new(),
         }
     }
 }

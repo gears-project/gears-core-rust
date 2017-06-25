@@ -1,0 +1,156 @@
+{
+    "doctype": "form",
+    "doctype_version": 1,
+    "id": "start_form_1",
+    "name" : "List Posts",
+    "version" : 1,
+    "doc" : {
+        "title": "Lists Posts",
+        "components" : [
+            {
+                "component" : "Row",
+                "components" : [
+                    {
+                        "component": "Column3",
+                        "components": []
+                    },
+                    {
+                        "component": "Column6",
+                        "components" : [
+                            {
+                                "component": "Header1",
+                                "config": {
+                                    "text": "Lists of Posts"
+                                }
+                            },
+                            {
+                                "component" : "Row",
+                                "components" : [
+                                    {
+                                        "component": "Column3",
+                                        "components": [
+                                            {
+                                                "component": "Datatable",
+                                                "config" : {
+                                                    "entity": "post",
+                                                    "attributes": ["title", "body"],
+                                                    "eventbindings" : {
+                                                        "rowClicked" : "appflow_post_clicked",
+                                                        "rowDoubleClicked" : "appflow_post_double_clicked"
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "component": "Datatable",
+                                                "config" : {
+                                                    "entity": "post",
+                                                    "attributes": ["title", "body"],
+                                                    "eventbindings" : {
+                                                        "rowClicked" : "appflow_post_clicked",
+                                                        "rowDoubleClicked" : "appflow_post_double_clicked"
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "component": "Column3",
+                                        "components": [
+                                            {
+                                                "component": "Datatable",
+                                                "config" : {
+                                                    "entity": "post",
+                                                    "attributes": ["title", "body"],
+                                                    "eventbindings" : {
+                                                        "rowClicked" : "appflow_post_clicked",
+                                                        "rowDoubleClicked" : "appflow_post_double_clicked"
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "component": "Datatable",
+                                                "config" : {
+                                                    "entity": "post",
+                                                    "attributes": ["title", "body"],
+                                                    "eventbindings" : {
+                                                        "rowClicked" : "appflow_post_clicked",
+                                                        "rowDoubleClicked" : "appflow_post_double_clicked"
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "component": "Column3",
+                                        "components": [
+                                            {
+                                                "component": "Datatable",
+                                                "config" : {
+                                                    "entity": "post",
+                                                    "attributes": ["title", "body"],
+                                                    "eventbindings" : {
+                                                        "rowClicked" : "appflow_post_clicked",
+                                                        "rowDoubleClicked" : "appflow_post_double_clicked"
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "component": "Datatable",
+                                                "config" : {
+                                                    "entity": "post",
+                                                    "attributes": ["title", "body"],
+                                                    "eventbindings" : {
+                                                        "rowClicked" : "appflow_post_clicked",
+                                                        "rowDoubleClicked" : "appflow_post_double_clicked"
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "component": "Column3",
+                                        "components": [
+                                            {
+                                                "component": "Datatable",
+                                                "config" : {
+                                                    "entity": "post",
+                                                    "attributes": ["title", "body"],
+                                                    "eventbindings" : {
+                                                        "rowClicked" : "appflow_post_clicked",
+                                                        "rowDoubleClicked" : "appflow_post_double_clicked"
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "component": "Datatable",
+                                                "config" : {
+                                                    "entity": "post",
+                                                    "attributes": ["title", "body"],
+                                                    "eventbindings" : {
+                                                        "rowClicked" : "appflow_post_clicked",
+                                                        "rowDoubleClicked" : "appflow_post_double_clicked"
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "component": "Datatable",
+                "config" : {
+                    "entity": "post",
+                    "attributes": ["title", "body"],
+                    "eventbindings" : {
+                        "rowClicked" : "appflow_post_clicked",
+                        "rowDoubleClicked" : "appflow_post_double_clicked"
+                    }
+                }
+            }
+        ]
+    }
+}

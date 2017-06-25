@@ -19,11 +19,14 @@ crate-type = ["rlib", "dylib"] # staticlib, bin
 [dependencies]
 serde = "1.0"
 serde_json = "1.0"
+serde_yaml = "0.7"
 serde_derive = "1.0"
 log = "0.3"
+glob = "0.2.11"
 
 [dev-dependencies]
 env_logger = "0.4"
+tempdir =  "0.3"
 
 [build-dependencies]
 peg = { version = "0.5" }

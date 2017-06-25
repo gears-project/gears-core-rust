@@ -32,10 +32,7 @@ impl<'a> XFlowRunner<'a> {
 
         for xvardef in &xflow.doc.variables.input {
             match input.get(&xvardef.name) {
-                Some(xvar) => {
-                    println!("ADD VAR");
-                    state.add(xvar)
-                }
+                Some(xvar) => state.add(xvar),
                 None => {
                     let err = format!("Missing required xvar in input parameters : {}",
                                       xvardef.name);

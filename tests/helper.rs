@@ -5,6 +5,7 @@ use std::fs::File;
 use std::io::prelude::*;
 use std::path::Path;
 
+#[allow(dead_code)]
 pub fn read_json_file(filename: &str) -> String {
     // Create a path to the desired file
     let path = Path::new(filename);

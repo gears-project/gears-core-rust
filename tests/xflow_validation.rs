@@ -2,7 +2,7 @@ extern crate env_logger;
 extern crate xflow;
 
 use xflow::structure::xflow::*;
-use xflow::validation::*;
+use xflow::validation::xflow::*;
 
 mod helper;
 use helper::read_json_file;
