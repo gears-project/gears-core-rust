@@ -1,4 +1,3 @@
-use serde_json;
 use std::collections::HashSet;
 
 use errors::XFlowError;
@@ -38,7 +37,7 @@ pub enum XFlowValue {
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 pub struct XFlowRequirement {
-    pub xtype: String,
+    pub xtype: XFlowNodeType,
     pub version: i32,
 }
 
@@ -65,10 +64,45 @@ pub struct XFlowVariables {
 #[derive(Serialize, Deserialize, Debug, PartialEq, Clone)]
 pub struct XFlowNode {
     pub id: i32,
-    pub nodetype: String,
+    pub nodetype: XFlowNodeType,
     pub label: String,
     pub action: String,
-    pub parameters: Option<serde_json::Value>,
+    pub parameters: Option<XFlowNodeParameters>,
+}
+
+#[derive(Serialize, Deserialize, Debug, PartialEq, Clone, Hash, Eq)]
+pub enum XFlowNodeType {
+    #[serde(rename = "flow")]
+    Flow,
+    #[serde(rename = "flox")]
+    Flox,
+    #[serde(rename = "call")]
+    Call,
+}
+
+#[derive(Serialize, Deserialize, Debug, PartialEq, Clone)]
+#[serde(tag = "nodetype")]
+pub enum XFlowNodeParameters {
+    Flow(FlowParameters),
+    Flox(FloxParameters),
+    Call(CallParameters),
+}
+
+#[derive(Serialize, Deserialize, Debug, PartialEq, Clone)]
+pub struct FlowParameters {
+    pub nodetype: XFlowNodeType,
+}
+
+#[derive(Serialize, Deserialize, Debug, PartialEq, Clone)]
+pub struct FloxParameters {
+    pub nodetype: XFlowNodeType,
+    pub expression: String,
+    pub returns: XFlowVariableDefinition,
+}
+
+#[derive(Serialize, Deserialize, Debug, PartialEq, Clone)]
+pub struct CallParameters {
+    pub nodetype: XFlowNodeType,
 }
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
@@ -84,15 +118,15 @@ impl XFlow {
     /// ```
     /// use xflow::structure::xflow::{XFlow};
     /// let xfs = XFlow::default();
-    /// let nodes = xfs.get_nodes_by("flow", "start");
+    /// let nodes = xfs.get_nodes_by(&XFlowNodeType::Flow, "start");
     /// assert_eq!(nodes.len(), 0);
     /// ```
-    pub fn get_nodes_by(&self, nodetype: &str, action: &str) -> Vec<&XFlowNode> {
+    pub fn get_nodes_by(&self, nodetype: &XFlowNodeType, action: &str) -> Vec<&XFlowNode> {
 
         self.nodes
             .iter()
             .filter({
-                        |node| node.nodetype == nodetype && node.action == action
+                        |node| node.nodetype == *nodetype && node.action == action
                     })
             .collect()
 
@@ -102,17 +136,17 @@ impl XFlow {
     ///
     /// # Example
     /// ```
-    /// use xflow::structure::xflow::{XFlow};
+    /// use xflow::structure::xflow::{XFlow, XFlowNodeType};
     /// let xfs = XFlow::default();
-    /// let nodes = xfs.get_nodes_of_type("flow");
+    /// let nodes = xfs.get_nodes_of_type(&XFlowNodeType::Flow);
     /// assert_eq!(nodes.len(), 0);
     /// ```
-    pub fn get_nodes_of_type(&self, nodetype: &str) -> Vec<&XFlowNode> {
+    pub fn get_nodes_of_type(&self, nodetype: &XFlowNodeType) -> Vec<&XFlowNode> {
 
         self.nodes
             .iter()
             .filter({
-                        |node| node.nodetype == nodetype
+                        |node| node.nodetype == *nodetype
                     })
             .collect()
     }
@@ -185,7 +219,7 @@ impl XFlow {
     }
 
     pub fn get_entry_node(&self) -> Result<&XFlowNode, XFlowError> {
-        let res = self.get_nodes_by("flow", "start");
+        let res = self.get_nodes_by(&XFlowNodeType::Flow, "start");
         match res.len() {
             0 => Err(XFlowError::NoEntryNode),
             1 => Ok(res[0]),
@@ -194,7 +228,7 @@ impl XFlow {
     }
 
     pub fn get_terminal_nodes(&self) -> Result<Vec<&XFlowNode>, XFlowError> {
-        let res = self.get_nodes_by("flow", "end");
+        let res = self.get_nodes_by(&XFlowNodeType::Flow, "end");
         match res.len() {
             0 => Err(XFlowError::NoTerminalNode),
             _ => Ok(res),

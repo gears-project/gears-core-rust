@@ -93,7 +93,7 @@ impl Validation {
     pub fn has_one_entry_node(xflow: &XFlowDocument) -> Vec<ValidationError> {
         let mut errors = Vec::<ValidationError>::new();
 
-        let res = xflow.doc.get_nodes_by("flow", "start");
+        let res = xflow.doc.get_nodes_by(&XFlowNodeType::Flow, "start");
         match res.len() {
             0 => {
                 errors.push(ValidationError {
@@ -120,7 +120,7 @@ impl Validation {
     pub fn has_terminal_nodes(xflow: &XFlowDocument) -> Vec<ValidationError> {
         let mut errors = Vec::<ValidationError>::new();
 
-        let res = xflow.doc.get_nodes_by("flow", "end");
+        let res = xflow.doc.get_nodes_by(&XFlowNodeType::Flow, "end");
 
         if let 0 = res.len() {
             errors.push(ValidationError {
@@ -171,7 +171,7 @@ impl Validation {
             .map({
                      |req| req.xtype.clone()
                  })
-            .collect::<Vec<String>>();
+            .collect::<Vec<XFlowNodeType>>();
 
         for node in &xflow.doc.nodes {
 
@@ -180,7 +180,7 @@ impl Validation {
                     code: 1,
                     message: format!(
                         "XFlow node '{}' has an unmatched capability requirement \
-                                      '{}'",
+                                      '{:?}'",
                         node.id,
                         node.nodetype
                     ),
@@ -321,31 +321,33 @@ impl Validation {
     pub fn all_flox_variables_exist(xflow: &XFlowDocument) -> Vec<ValidationError> {
         let mut errors = Vec::<ValidationError>::new();
 
-        let nodes = xflow.doc.get_nodes_of_type("flox");
+        let nodes = xflow.doc.get_nodes_of_type(&XFlowNodeType::Flow);
         let names_in_xflow = xflow.doc.get_all_variable_names();
 
         for node in nodes {
-            if let Some(ref params) = node.parameters {
-                if let Some(expr) = params.get("expression") {
-                    // XXX: Remove unwraps
-                    for flox_var in flox::extract_variable_names(expr.as_str().unwrap()).unwrap() {
-                        if !names_in_xflow.contains(flox_var) {
-                            errors.push(ValidationError {
-                                code: 1,
-                                message: format!(
-                                    "Flox expression references variable \
+            match node.parameters {
+                Some(ref params) => {
+                    match params {
+                        &XFlowNodeParameters::Flox(ref flox_params) => {
+                            for flox_var in flox::extract_variable_names(&flox_params.expression)
+                                    .unwrap() {
+                                if !names_in_xflow.contains(flox_var) {
+                                    errors.push(ValidationError {
+                                        code: 1,
+                                        message: format!(
+                                            "Flox expression references variable \
                                                           '{}' which is not defined in this flow",
-                                    flox_var
-                                ),
-                                paths: vec![format!("/nodes/{}", node.id)],
-                            });
+                                            flox_var
+                                        ),
+                                        paths: vec![format!("/nodes/{}", node.id)],
+                                    });
+                                }
+                            }
                         }
+                        _ => {}
                     }
-                } else {
-                    // XXX This should not happen
                 }
-            } else {
-                // XXX this should not happen
+                None => {}
             }
         }
 

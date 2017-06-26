@@ -9,7 +9,7 @@ use helper::read_json_file;
 fn create_node(id: i32) -> XFlowNode {
     XFlowNode {
         id: id,
-        nodetype: "flow".to_string(),
+        nodetype: XFlowNodeType::Flow,
         action: "some action".to_string(),
         label: "some name".to_string(),
         parameters: None,
@@ -110,7 +110,7 @@ fn test_xfs_entry() {
     let json_string = read_json_file("resource/docs/xflow/flows/10_steps.json");
     let xfs = XFlowDocument::from_json(&json_string);
 
-    assert_eq!(xfs.doc.get_nodes_by("flow", "start").len(), 1);
+    assert_eq!(xfs.doc.get_nodes_by(&XFlowNodeType::Flow, "start").len(), 1);
 }
 
 #[test]
@@ -120,7 +120,7 @@ fn test_xfs_doc_get_nodes_of_type() {
     let json_string = read_json_file("resource/docs/xflow/flows/10_steps.json");
     let xfs = XFlowDocument::from_json(&json_string);
 
-    assert_eq!(xfs.doc.get_nodes_of_type("flow").len(), 2);
+    assert_eq!(xfs.doc.get_nodes_of_type(&XFlowNodeType::Flow).len(), 2);
 }
 
 #[test]
