@@ -13,7 +13,7 @@ pub struct Document<T> {
 }
 
 impl<T> Document<T>
-    where T: serde::Serialize + serde::de::DeserializeOwned
+    where T: serde::Serialize + serde::de::DeserializeOwned + Eq
 {
     /// Return a string representation of the Document
     ///

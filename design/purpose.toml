@@ -1,3 +1,35 @@
+[REQ-purpose]
+text = '''
+The purpose of this project is to provide datastructures and tooling for the
+manipulation and execution of a portable representation (model) of an
+application containing,
+
+ - a data model (domain)
+ - user interfaces (ui)
+ - state transisitions (app-flow)
+ - validations (using xflow)
+ - graph-based execution (xflow)
+ - an evaluation language (flox)
+ - internationalization (i18n)
+
+All aspects of the model shall be serializable to and deserializable from
+multiple formats as well as having a plain-text, filesystem-based
+representation suitable for management under a version-control system.
+
+All aspects of the model manipulation and artifact generation shall be suitable
+for integration in existing build-pipelines and development processes.
+
+Examples can be found in {repo}/resources/
+
+'''
+
+[REQ-portability]
+text = '''
+The project shall be available for a wide variety of operating systems and platforms.
+The project shall be suitable for embedding in other environments.
+
+'''
+
 [REQ-flox]
 text = '''
 An evaluation environment shall be available with an expression-based language
@@ -8,28 +40,34 @@ capable of,
  - Binding to contextual variables at run-time
 '''
 
-[REQ-purpose]
-text = '''
-The purpose of this project is to provide a portable, extensible flow execution
-engine.
-
-Examples can be found in {repo}/data/
-
-'''
-
 [REQ-serialization]
-partof = "REQ-purpose"
 text = '''
 Flows shall be serialized and deserialized in different formats.
 
 Serialization and deserialization shall be possible with,
  - json
+ - yaml
 
+'''
+
+[REQ-serialization-fs]
+text = '''
+All models can be serialized to or deserialized from a filesystem. The
+filesystem format shall,
+
+ - Have a separate file for each document in the model
+ = Be human readable (indented output, not compact)
+ - Be suitable for management by a version control system
 '''
 
 [REQ-serialization-json]
 text = '''
-All flows can be serialized to or deserialized from JSON.
+All models can be serialized to or deserialized from JSON.
+'''
+
+[REQ-serialization-yaml]
+text = '''
+All models can be serialized to or deserialized from YAML.
 '''
 
 [REQ-xflow-call]
@@ -37,28 +75,11 @@ text = '''
 An xflow shall be able to call another xflow.
 '''
 
-[SPC-flox-variables]
+[REQ-artifact-testing]
 text = '''
-Any variables that are available in an xflow should be available for evaluation
-in a flox expression.
-
-These are,
- - Boolean
- - Integer
-'''
-
-[SPC-serialization-json]
-text = '''
-Flow serialization is performed using **serde-json**
-'''
-
-[SPC-xflow-call]
-text = '''
-An xflow shall have a node of type 'call' which,
-
- - Can invoke another xflow, named in its node parameters
- - Can pass local variables
- - Can assign the return values to local variables
+As part of the artifact generation, suitable testing artifacts shall be
+generated to assert the validity of the assumptions made in the artifact
+generation. E.g. Selenium tests for browser-based artifacts.
 '''
 
 [TST-flox-variables]
@@ -72,9 +93,19 @@ This test demonstrates the successful extraction of variable names from a flox
 string.
 '''
 
+[TST-serialization-fs]
+text = '''
+Model serialization tests demonstrating the serialization to and deserialization from a filesystem
+'''
+
 [TST-serialization-json]
 text = '''
-Flow serialization tests
+Model serialization tests demonstrating the serialization to and deserialization from JSON
+'''
+
+[TST-serialization-yaml]
+text = '''
+Model serialization tests demonstrating the serialization to and deserialization from YAML
 '''
 
 [TST-xflow-call]
