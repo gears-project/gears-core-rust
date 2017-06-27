@@ -29,7 +29,9 @@
                 "nodetype": "flow",
                 "action": "start",
                 "label" : "Start",
-                "parameters": {}
+                "parameters": {
+                    "nodetype": "flow"
+                }
             },
             {
                 "id": 2,
@@ -37,6 +39,7 @@
                 "action": "evalexpr",
                 "label" : "eval expr",
                 "parameters": {
+                    "nodetype": "flox",
                     "expression" : "$UnavailableVariable + 1",
                     "name" : "RandoVariable"
                 }
@@ -46,7 +49,9 @@
                 "nodetype": "flow",
                 "action": "end",
                 "label" : "End",
-                "parameters": {}
+                "parameters": {
+                    "nodetype": "flow"
+                }
             }
         ],
         "edges": [

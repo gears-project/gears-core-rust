@@ -43,7 +43,10 @@
                 "nodetype": "flow",
                 "action": "start",
                 "label" : "Start",
-                "parameters": {}
+                "parameters": {
+                    "flow" : {
+                    }
+                }
             },
             {
                 "id": 2,
@@ -51,10 +54,12 @@
                 "action": "evalexpr",
                 "label" : "Start",
                 "parameters": {
-                    "expression" : "$CounterValue+1",
-                    "returns"    : {
-                        "name"   : "CounterValue",
-                        "vtype"   : "number"
+                    "flox" : {
+                        "expression" : "$CounterValue+1",
+                        "returns"    : {
+                            "name"   : "CounterValue",
+                            "vtype"   : "number"
+                        }
                     }
                 }
             },
@@ -64,10 +69,12 @@
                 "action": "evalexpr",
                 "label" : "Start",
                 "parameters": {
-                    "expression" : "$CounterValue>5",
-                    "returns"    : {
-                        "name"   : "LoopValue",
-                        "vtype"   : "boolean"
+                    "flox" : {
+                        "expression" : "$CounterValue>5",
+                        "returns"    : {
+                            "name"   : "LoopValue",
+                            "vtype"   : "boolean"
+                        }
                     }
                 }
             },
@@ -77,8 +84,10 @@
                 "action": "branch",
                 "label" : "Start",
                 "parameters": {
-                    "name": "LoopValue",
-                    "vtype": "boolean"
+                    "flow" : {
+                        "name": "LoopValue",
+                        "vtype": "boolean"
+                    }
                 }
             },
             {
@@ -86,7 +95,10 @@
                 "nodetype": "flow",
                 "action": "end",
                 "label" : "Start",
-                "parameters": {}
+                "parameters": {
+                    "flow" : {
+                    }
+                }
             }
         ],
         "edges": [

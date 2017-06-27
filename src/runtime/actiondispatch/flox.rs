@@ -15,47 +15,40 @@ impl Flox {
     fn process_node(&self, node: &XFlowNode, state: &mut XFState) -> () {
         debug!("Flox: {} - {}", node.id, state);
         match node.parameters {
-            Some(ref p) => {
-                match p {
-                    &XFlowNodeParameters::Flox(ref node_params) => {
-                        match node.action.as_ref() {
-                            "evalexpr" => {
-                                info!("Flox: evalexpr: '{}' - state: '{}' - params: '{:?}'",
-                                      node.id,
-                                      state,
-                                      node_params);
-                                let expr = node_params.expression.as_str();
-                                debug!("Expression: '{}'", expr);
-                                match flox::parse_context(node_params.expression.as_str(), state) {
-                                    Ok(res) => {
-                                        debug!("Expression: '{}' - Result: '{:?}'", expr, res);
-                                        state.add(&XFlowVariable {
-                                                      name: node_params.returns.name.clone(),
-                                                      vtype: node_params.returns.vtype.clone(),
-                                                      value: res.clone(),
-                                                  });
-                                    }
-                                    Err(err) => {
-                                        error!("Expression: '{}' - Result: '{:?}'", expr, err);
-                                    }
+            XFlowNodeParameters::Flox(ref node_params) => {
+                match node.action.as_ref() {
+                    "evalexpr" => {
+                        info!("Flox: evalexpr: '{}' - state: '{}' - params: '{:?}'",
+                              node.id,
+                              state,
+                              node_params);
+                        let expr = node_params.expression.as_str();
+                        debug!("Expression: '{}'", expr);
+                        match flox::parse_context(node_params.expression.as_str(), state) {
+                            Ok(res) => {
+                                debug!("Expression: '{}' - Result: '{:?}'", expr, res);
+                                state.add(&XFlowVariable {
+                                              name: node_params.returns.name.clone(),
+                                              vtype: node_params.returns.vtype.clone(),
+                                              value: res.clone(),
+                                          });
+                            }
+                            Err(err) => {
+                                error!("Expression: '{}' - Result: '{:?}'", expr, err);
+                            }
 
-                                }
-                            }
-                            _ => {
-                                error!("Unimplemented/unhandled action id: '{}' - state: '{}'",
-                                       node.id,
-                                       state);
-                            }
                         }
                     }
                     _ => {
-                        error!("Incorrect NodeType dispatched to Flox processor {:?}!",
-                               node);
+                        error!("Unimplemented/unhandled action id: '{}' - state: '{}'",
+                               node.id,
+                               state);
                     }
                 }
             }
-            None => {
-                error!("NO PARAMS!");
+            _ => {
+                error!("Incorrect NodeType dispatched to Flox processor {:?}!",
+                       node);
             }
         }
     }

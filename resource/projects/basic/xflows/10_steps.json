@@ -1,168 +1,190 @@
 {
-  "id": "steps",
-  "name": "steps",
-  "version": 1,
-  "doctype": "xflow",
-  "doctype_version": 1,
-  "doc" : {
-    "requirements": [
-      {
-        "xtype": "flow",
-        "version": 1
-      },
-      {
-        "xtype": "flox",
-        "version": 1
-      }
-    ],
-    "variables" : {
-      "input" : [
-         {
-           "name": "CounterValue",
-           "vtype": "number"
-         }
-      ],
-      "output" : [
-        {
-          "name": "CounterValue",
-          "vtype": "number"
-        }
-      ],
-      "local" : [
-      ]
-    },
-    "nodes": [
-      {
-        "id": 1,
-        "nodetype": "flow",
-        "action": "start",
-        "label" : "Start",
-        "parameters": {}
-      },
-      {
-        "id": 2,
-        "nodetype": "flox",
-        "action": "evalexpr",
-        "label" : "Increment",
-        "parameters": {
-          "expression" : "$CounterValue+1",
-          "returns"    : {
-            "name"   : "CounterValue",
-            "vtype"   : "number"
-          }
-        }
-      },
-      {
-        "id": 3,
-        "nodetype": "flox",
-        "action": "evalexpr",
-        "label" : "Increment",
-        "parameters": {
-          "expression" : "$CounterValue+1",
-          "returns"    : {
-            "name"   : "CounterValue",
-            "vtype"   : "number"
-          }
-        }
-      },
-      {
-        "id": 4,
-        "nodetype": "flox",
-        "action": "evalexpr",
-        "label" : "Increment",
-        "parameters": {
-          "expression" : "$CounterValue+1",
-          "returns"    : {
-            "name"   : "CounterValue",
-            "vtype"   : "number"
-          }
-        }
-      },
-      {
-        "id": 5,
-        "nodetype": "flox",
-        "action": "evalexpr",
-        "label" : "Increment",
-        "parameters": {
-          "expression" : "$CounterValue+1",
-          "returns"    : {
-            "name"   : "CounterValue",
-            "vtype"   : "number"
-          }
-        }
-      },
-      {
-        "id": 6,
-        "nodetype": "flox",
-        "action": "evalexpr",
-        "label" : "Increment",
-        "parameters": {
-          "expression" : "$CounterValue+1",
-          "returns"    : {
-            "name"   : "CounterValue",
-            "vtype"   : "number"
-          }
-        }
-      },
-      {
-        "id": 7,
-        "nodetype": "flox",
-        "action": "evalexpr",
-        "label" : "Increment",
-        "parameters": {
-          "expression" : "$CounterValue+1",
-          "returns"    : {
-            "name"   : "CounterValue",
-            "vtype"   : "number"
-          }
-        }
-      },
-      {
-        "id": 8,
-        "nodetype": "flox",
-        "action": "evalexpr",
-        "label" : "Increment",
-        "parameters": {
-          "expression" : "$CounterValue+1",
-          "returns"    : {
-            "name"   : "CounterValue",
-            "vtype"   : "number"
-          }
-        }
-      },
-      {
-        "id": 9,
-        "nodetype": "flox",
-        "action": "evalexpr",
-        "label" : "Increment",
-        "parameters": {
-          "expression" : "$CounterValue+1",
-          "returns"    : {
-            "name"   : "CounterValue",
-            "vtype"   : "number"
-          }
-        }
-      },
-      {
-        "id": 10,
-        "nodetype": "flow",
-        "action": "end",
-        "label" : "End",
-        "parameters": {}
-      }
-    ],
-    "edges": [
-      [ 1, 2 ],
-      [ 2, 3 ],
-      [ 3, 4 ],
-      [ 4, 5 ],
-      [ 5, 6 ],
-      [ 6, 7 ],
-      [ 7, 8 ],
-      [ 8, 9 ],
-      [ 9, 10 ]
-    ],
-    "branches" : [
-    ]
-  }
+    "id": "steps",
+    "name": "steps",
+    "version": 1,
+    "doctype": "xflow",
+    "doctype_version": 1,
+    "doc" : {
+        "requirements": [
+            {
+                "xtype": "flow",
+                "version": 1
+            },
+            {
+                "xtype": "flox",
+                "version": 1
+            }
+        ],
+        "variables" : {
+            "input" : [
+                {
+                    "name": "CounterValue",
+                    "vtype": "number"
+                }
+            ],
+            "output" : [
+                {
+                    "name": "CounterValue",
+                    "vtype": "number"
+                }
+            ],
+            "local" : [
+            ]
+        },
+        "nodes": [
+            {
+                "id": 1,
+                "nodetype": "flow",
+                "action": "start",
+                "label" : "Start",
+                "parameters": {
+                    "flow" : {
+                    }
+                }
+            },
+            {
+                "id": 2,
+                "nodetype": "flox",
+                "action": "evalexpr",
+                "label" : "Increment",
+                "parameters": {
+                    "flox": {
+                        "expression" : "$CounterValue+1",
+                        "returns"    : {
+                            "name"   : "CounterValue",
+                            "vtype"   : "number"
+                        }
+                    }
+                }
+            },
+            {
+                "id": 3,
+                "nodetype": "flox",
+                "action": "evalexpr",
+                "label" : "Increment",
+                "parameters": {
+                    "flox": {
+                        "expression" : "$CounterValue+1",
+                        "returns"    : {
+                            "name"   : "CounterValue",
+                            "vtype"   : "number"
+                        }
+                    }
+                }
+            },
+            {
+                "id": 4,
+                "nodetype": "flox",
+                "action": "evalexpr",
+                "label" : "Increment",
+                "parameters": {
+                    "flox" : {
+                        "expression" : "$CounterValue+1",
+                        "returns"    : {
+                            "name"   : "CounterValue",
+                            "vtype"   : "number"
+                        }
+                    }
+                }
+            },
+            {
+                "id": 5,
+                "nodetype": "flox",
+                "action": "evalexpr",
+                "label" : "Increment",
+                "parameters": {
+                    "flox" : {
+                        "expression" : "$CounterValue+1",
+                        "returns"    : {
+                            "name"   : "CounterValue",
+                            "vtype"   : "number"
+                        }
+                    }
+                }
+            },
+            {
+                "id": 6,
+                "nodetype": "flox",
+                "action": "evalexpr",
+                "label" : "Increment",
+                "parameters": {
+                    "flox" : {
+                        "expression" : "$CounterValue+1",
+                        "returns"    : {
+                            "name"   : "CounterValue",
+                            "vtype"   : "number"
+                        }
+                    }
+                }
+            },
+            {
+                "id": 7,
+                "nodetype": "flox",
+                "action": "evalexpr",
+                "label" : "Increment",
+                "parameters": {
+                    "flox" : {
+                        "expression" : "$CounterValue+1",
+                        "returns"    : {
+                            "name"   : "CounterValue",
+                            "vtype"   : "number"
+                        }
+                    }
+                }
+            },
+            {
+                "id": 8,
+                "nodetype": "flox",
+                "action": "evalexpr",
+                "label" : "Increment",
+                "parameters": {
+                    "flox": {
+                        "expression" : "$CounterValue+1",
+                        "returns"    : {
+                            "name"   : "CounterValue",
+                            "vtype"   : "number"
+                        }
+                    }
+                }
+            },
+            {
+                "id": 9,
+                "nodetype": "flox",
+                "action": "evalexpr",
+                "label" : "Increment",
+                "parameters": {
+                    "flox" : {
+                        "expression" : "$CounterValue+1",
+                        "returns"    : {
+                            "name"   : "CounterValue",
+                            "vtype"   : "number"
+                        }
+                    }
+                }
+            },
+            {
+                "id": 10,
+                "nodetype": "flow",
+                "action": "end",
+                "label" : "End",
+                "parameters": {
+                    "flow" : {
+                    }
+                }
+            }
+        ],
+        "edges": [
+            [ 1, 2 ],
+            [ 2, 3 ],
+            [ 3, 4 ],
+            [ 4, 5 ],
+            [ 5, 6 ],
+            [ 6, 7 ],
+            [ 7, 8 ],
+            [ 8, 9 ],
+            [ 9, 10 ]
+        ],
+        "branches" : [
+        ]
+    }
 }

@@ -67,7 +67,7 @@ pub struct XFlowNode {
     pub nodetype: XFlowNodeType,
     pub label: String,
     pub action: String,
-    pub parameters: Option<XFlowNodeParameters>,
+    pub parameters: XFlowNodeParameters,
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Clone, Hash, Eq)]
@@ -81,29 +81,32 @@ pub enum XFlowNodeType {
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Clone)]
-#[serde(tag = "nodetype")]
 pub enum XFlowNodeParameters {
+    #[serde(rename = "flow")]
     Flow(FlowParameters),
+    #[serde(rename = "flox")]
     Flox(FloxParameters),
+    #[serde(rename = "call")]
     Call(CallParameters),
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Clone)]
-pub struct FlowParameters {
-    pub nodetype: XFlowNodeType,
+pub struct FlowParameters {}
+
+impl Default for FlowParameters {
+    fn default() -> Self {
+        FlowParameters {}
+    }
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Clone)]
 pub struct FloxParameters {
-    pub nodetype: XFlowNodeType,
     pub expression: String,
     pub returns: XFlowVariableDefinition,
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Clone)]
-pub struct CallParameters {
-    pub nodetype: XFlowNodeType,
-}
+pub struct CallParameters {}
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 pub struct XFlowBranch {
@@ -116,7 +119,7 @@ impl XFlow {
     ///
     /// # Example
     /// ```
-    /// use xflow::structure::xflow::{XFlow};
+    /// use xflow::structure::xflow::{XFlow, XFlowNodeType};
     /// let xfs = XFlow::default();
     /// let nodes = xfs.get_nodes_by(&XFlowNodeType::Flow, "start");
     /// assert_eq!(nodes.len(), 0);

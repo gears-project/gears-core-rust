@@ -48,7 +48,10 @@
                 "nodetype": "flow",
                 "action": "start",
                 "label" : "Start",
-                "parameters": {}
+                "parameters": {
+                    "flow" : {
+                    }
+                }
             },
             {
                 "id": 2,
@@ -56,10 +59,12 @@
                 "action": "evalexpr",
                 "label" : "Flox",
                 "parameters": {
-                    "expression" : "$CalcValueA<$CalcValueB",
-                    "returns"    : {
-                        "name"   : "ReturnValue",
-                        "vtype"   : "boolean"
+                    "flox" : {
+                        "expression" : "$CalcValueA<$CalcValueB",
+                        "returns"    : {
+                            "name"   : "ReturnValue",
+                            "vtype"   : "boolean"
+                        }
                     }
                 }
             },
@@ -69,8 +74,10 @@
                 "action": "branch",
                 "label" : "Branch",
                 "parameters": {
-                    "name": "ReturnValue",
-                    "vtype": "boolean"
+                    "flow" : {
+                        "name": "ReturnValue",
+                        "vtype": "boolean"
+                    }
                 }
             },
             {
@@ -78,14 +85,20 @@
                 "nodetype": "flow",
                 "action": "end",
                 "label" : "End",
-                "parameters": {}
+                "parameters": {
+                    "flow" : {
+                    }
+                }
             },
             {
                 "id": 5,
                 "nodetype": "flow",
                 "action": "end",
                 "label" : "End",
-                "parameters": {}
+                "parameters": {
+                    "flow" : {
+                    }
+                }
             }
         ],
         "edges": [

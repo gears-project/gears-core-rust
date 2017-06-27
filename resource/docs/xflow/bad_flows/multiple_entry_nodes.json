@@ -25,21 +25,30 @@
                 "nodetype": "flow",
                 "action": "start",
                 "label" : "Start",
-                "parameters": {}
+                "parameters": {
+                   "flow" : {
+                   }
+                }
             },
             {
                 "id": 2,
                 "nodetype": "flow",
                 "action": "start",
                 "label" : "Start",
-                "parameters": {}
+                "parameters": {
+                    "flow" : {
+                    }
+                }
             },
             {
                 "id": 3,
                 "nodetype": "flow",
                 "action": "end",
                 "label" : "End",
-                "parameters": {}
+                "parameters": {
+                    "flow" : {
+                    }
+                }
             }
         ],
         "edges": [

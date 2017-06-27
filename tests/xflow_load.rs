@@ -12,7 +12,7 @@ fn create_node(id: i32) -> XFlowNode {
         nodetype: XFlowNodeType::Flow,
         action: "some action".to_string(),
         label: "some name".to_string(),
-        parameters: None,
+        parameters: XFlowNodeParameters::Flow(FlowParameters::default()),
     }
 }
 

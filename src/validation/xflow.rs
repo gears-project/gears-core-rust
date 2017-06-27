@@ -326,28 +326,22 @@ impl Validation {
 
         for node in nodes {
             match node.parameters {
-                Some(ref params) => {
-                    match params {
-                        &XFlowNodeParameters::Flox(ref flox_params) => {
-                            for flox_var in flox::extract_variable_names(&flox_params.expression)
-                                    .unwrap() {
-                                if !names_in_xflow.contains(flox_var) {
-                                    errors.push(ValidationError {
-                                        code: 1,
-                                        message: format!(
-                                            "Flox expression references variable \
+                XFlowNodeParameters::Flox(ref flox_params) => {
+                    for flox_var in flox::extract_variable_names(&flox_params.expression).unwrap() {
+                        if !names_in_xflow.contains(flox_var) {
+                            errors.push(ValidationError {
+                                code: 1,
+                                message: format!(
+                                    "Flox expression references variable \
                                                           '{}' which is not defined in this flow",
-                                            flox_var
-                                        ),
-                                        paths: vec![format!("/nodes/{}", node.id)],
-                                    });
-                                }
-                            }
+                                    flox_var
+                                ),
+                                paths: vec![format!("/nodes/{}", node.id)],
+                            });
                         }
-                        _ => {}
                     }
                 }
-                None => {}
+                _ => {}
             }
         }
 
