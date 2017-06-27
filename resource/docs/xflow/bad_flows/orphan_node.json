@@ -29,7 +29,10 @@
                 "nodetype": "flow",
                 "action": "start",
                 "label" : "Start",
-                "parameters": {}
+                "parameters": {
+                    "flow" : {
+                    }
+                }
             },
             {
                 "id": 2,
@@ -37,10 +40,12 @@
                 "action": "evalexpr",
                 "label" : "Orphan Node - no edges",
                 "parameters": {
-                    "expression" : "1+2",
-                    "returns"    : {
-                        "name"   : "ReturnValue",
-                        "vtype"   : "number"
+                    "flox" : {
+                        "expression" : "1+2",
+                        "returns"    : {
+                            "name"   : "ReturnValue",
+                            "vtype"   : "number"
+                        }
                     }
                 }
             },
@@ -49,7 +54,10 @@
                 "nodetype": "flow",
                 "action": "end",
                 "label" : "End",
-                "parameters": {}
+                "parameters": {
+                    "flow" : {
+                    }
+                }
             }
         ],
         "edges": [

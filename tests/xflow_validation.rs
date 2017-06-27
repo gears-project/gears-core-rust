@@ -127,7 +127,7 @@ fn test_all_good_flows_validate() {
                      "branch_boolean_and_expressions_return.json",
                      "branch_boolean_condition.json",
                      "branch_boolean.json",
-                     "create_object.json",
+                     // "create_object.json",
                      "loop_5x.json",
                      "loop_infinite.json"];
 

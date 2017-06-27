@@ -43,7 +43,10 @@
                 "nodetype": "flow",
                 "action": "start",
                 "label" : "Start",
-                "parameters": {}
+                "parameters": {
+                    "flow" : {
+                    }
+                }
             },
             {
                 "id": 2,
@@ -51,8 +54,10 @@
                 "action": "branch",
                 "label" : "Branch",
                 "parameters": {
-                    "name": "MatchValue",
-                    "vtype": "boolean"
+                    "flow" : {
+                        "name": "MatchValue",
+                        "vtype": "boolean"
+                    }
                 }
             },
             {
@@ -60,14 +65,20 @@
                 "nodetype": "flow",
                 "action": "end",
                 "label" : "End",
-                "parameters": {}
+                "parameters": {
+                    "flow" : {
+                    }
+                }
             },
             {
                 "id": 4,
                 "nodetype": "flow",
                 "action": "end",
                 "label" : "End",
-                "parameters": {}
+                "parameters": {
+                    "flow" : {
+                    }
+                }
             }
         ],
         "edges": [

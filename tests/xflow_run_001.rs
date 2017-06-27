@@ -15,8 +15,8 @@ fn build_dispatcher<'a>() -> Dispatcher<'a> {
     let mut dispatcher = Dispatcher::default();
     let flow_receiver = actiondispatch::flow::Flow::default();
     let flox_receiver = actiondispatch::flox::Flox::default();
-    dispatcher.register_receiver("flow", flow_receiver);
-    dispatcher.register_receiver("flox", flox_receiver);
+    dispatcher.register_receiver(XFlowNodeType::Flow, flow_receiver);
+    dispatcher.register_receiver(XFlowNodeType::Flox, flox_receiver);
     dispatcher
 }
 

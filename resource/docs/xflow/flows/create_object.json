@@ -47,7 +47,10 @@
                 "nodetype": "flow",
                 "action": "start",
                 "label" : "Start",
-                "parameters": {}
+                "parameters": {
+                    "flow" : {
+                    }
+                }
             },
             {
                 "id": 2,
@@ -55,7 +58,9 @@
                 "action": "create",
                 "label" : "Create User",
                 "parameters": {
-                    "object": "User"
+                    "object": {
+                        "object": "User"
+                    }
                 }
             },
             {
@@ -64,9 +69,11 @@
                 "action": "setattributes",
                 "label" : "Set name",
                 "parameters": {
-                    "object": "User",
-                    "attributes": {
-                        "name": "Joe Blow"
+                    "object": {
+                        "object": "User",
+                        "attributes": {
+                            "name": "Joe Blow"
+                        }
                     }
                 }
             },
@@ -76,7 +83,9 @@
                 "action": "save",
                 "label" : "Save User",
                 "parameters": {
-                    "object": "User"
+                    "object": {
+                        "object": "User"
+                    }
                 }
             },
             {
@@ -84,7 +93,10 @@
                 "nodetype": "flow",
                 "action": "end",
                 "label" : "End",
-                "parameters": {}
+                "parameters": {
+                    "flow": {
+                    }
+                }
             }
         ],
         "edges": [

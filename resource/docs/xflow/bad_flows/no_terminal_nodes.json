@@ -34,7 +34,10 @@
                 "nodetype": "flow",
                 "action": "start",
                 "label" : "Start",
-                "parameters": {}
+                "parameters": {
+                    "flow" : {
+                    }
+                }
             },
             {
                 "id": 3,
@@ -42,8 +45,13 @@
                 "action": "evalexpr",
                 "label" : "eval expression",
                 "parameters": {
-                    "name" : "ReturnValue",
-                    "expression" : "1 + 1"
+                    "flox" : {
+                        "expression" : "1 + 1",
+                        "returns"    : {
+                            "name"   : "ReturnValue",
+                            "vtype"   : "number"
+                        }
+                    }
                 }
             }
         ],

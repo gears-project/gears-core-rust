@@ -7,7 +7,7 @@
     "doc" : {
         "requirements": [
             {
-                "xtype": "fnord",
+                "xtype": "flox",
                 "version": 3
             }
         ],
@@ -25,14 +25,20 @@
                 "nodetype": "flow",
                 "action": "start",
                 "label" : "Start",
-                "parameters": {}
+                "parameters": {
+                    "flow" : {
+                    }
+                }
             },
             {
                 "id": 3,
                 "nodetype": "flow",
                 "action": "end",
                 "label" : "End",
-                "parameters": {}
+                "parameters": {
+                    "flow" : {
+                    }
+                }
             }
         ],
         "edges": [
