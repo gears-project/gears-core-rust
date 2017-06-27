@@ -2,7 +2,7 @@ use super::common::Document;
 
 pub type DomainDocument = Document<Domain>;
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 pub struct Domain {
     pub events: Events,
     pub entities: Entities,
@@ -17,7 +17,7 @@ impl Default for Domain {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 pub struct Events {
     pub change: Vec<String>,
     pub update: Vec<String>,
@@ -38,7 +38,7 @@ impl Default for Events {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 pub struct Attribute {
     pub name: String,
     pub vtype: String,
@@ -46,7 +46,7 @@ pub struct Attribute {
     pub validations: Vec<String>,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 pub enum ReferenceType {
     #[serde(rename = "has_many")]
     HasMany,
@@ -54,14 +54,14 @@ pub enum ReferenceType {
     BelongsTo,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 pub struct Reference {
     pub name: String,
     pub reftype: ReferenceType,
     pub other: String,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 pub struct Entity {
     pub name: String,
     pub attributes: Attributes,

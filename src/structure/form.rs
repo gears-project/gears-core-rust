@@ -5,13 +5,13 @@ use super::common::Document;
 pub type FormDocument = Document<Form>;
 pub type Components = Vec<Component>;
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 pub struct Form {
     pub title: String,
     pub components: Vec<Component>,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 #[serde(tag = "component")]
 pub enum Component {
     Row(RowComponent),
@@ -24,18 +24,19 @@ pub enum Component {
     Datatable(DatatableComponent),
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 pub struct LayoutComponent {
     pub components: Components,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 pub struct TextComponentConfig {
     pub text: String,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 pub struct TextComponent {
+    #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
     pub config: TextComponentConfig,
 }
 
@@ -47,12 +48,12 @@ pub type Column3Component = LayoutComponent;
 pub type Column6Component = LayoutComponent;
 pub type Column12Component = LayoutComponent;
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 pub struct DatatableComponent {
     pub config: DatatableComponentConfig,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 pub struct DatatableComponentConfig {
     pub entity: String,
     pub attributes: Vec<String>,

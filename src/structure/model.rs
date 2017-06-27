@@ -5,7 +5,7 @@ use super::form;
 
 pub type ModelDocument = common::Document<Model>;
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, Eq, PartialEq)]
 pub struct Model {
     pub domain: domain::DomainDocument,
     pub xflows: Vec<xflow::XFlowDocument>,

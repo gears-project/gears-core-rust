@@ -6,7 +6,7 @@ use super::common::Document;
 pub type XFlowDocument = Document<XFlow>;
 pub type XFlowEdge = (i32, i32);
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, Eq, PartialEq)]
 // partof: SPC-serialization-json
 pub struct XFlow {
     pub requirements: Vec<XFlowRequirement>,
@@ -61,7 +61,7 @@ pub struct XFlowVariables {
     pub output: Vec<XFlowVariableDefinition>,
 }
 
-#[derive(Serialize, Deserialize, Debug, PartialEq, Clone)]
+#[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Clone)]
 pub struct XFlowNode {
     pub id: i32,
     pub nodetype: XFlowNodeType,
@@ -80,7 +80,7 @@ pub enum XFlowNodeType {
     Call,
 }
 
-#[derive(Serialize, Deserialize, Debug, PartialEq, Clone)]
+#[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Clone)]
 pub enum XFlowNodeParameters {
     #[serde(rename = "flow")]
     Flow(FlowParameters),
@@ -90,7 +90,7 @@ pub enum XFlowNodeParameters {
     Call(CallParameters),
 }
 
-#[derive(Serialize, Deserialize, Debug, PartialEq, Clone)]
+#[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Clone)]
 pub struct FlowParameters {}
 
 impl Default for FlowParameters {
@@ -99,13 +99,13 @@ impl Default for FlowParameters {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug, PartialEq, Clone)]
+#[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Clone)]
 pub struct FloxParameters {
     pub expression: String,
     pub returns: XFlowVariableDefinition,
 }
 
-#[derive(Serialize, Deserialize, Debug, PartialEq, Clone)]
+#[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Clone)]
 pub struct CallParameters {}
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
