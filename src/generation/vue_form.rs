@@ -1,7 +1,7 @@
-use structure::form::*;
+use structure::page::*;
 
-pub fn output_html(form: &FormDocument) -> String {
-    output_components(&form.doc.components)
+pub fn output_html(page: &PageDocument) -> String {
+    output_components(&page.doc.components)
 }
 
 fn output_components(components: &[Component]) -> String {

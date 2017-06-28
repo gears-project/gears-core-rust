@@ -1,7 +1,7 @@
 use super::common;
 use super::domain;
 use super::xflow;
-use super::form;
+use super::page;
 
 pub type ModelDocument = common::Document<Model>;
 
@@ -9,7 +9,7 @@ pub type ModelDocument = common::Document<Model>;
 pub struct Model {
     pub domain: domain::DomainDocument,
     pub xflows: Vec<xflow::XFlowDocument>,
-    pub forms: Vec<form::FormDocument>,
+    pub pages: Vec<page::PageDocument>,
 }
 
 impl Model {}
@@ -19,7 +19,7 @@ impl Default for Model {
         Model {
             domain: domain::DomainDocument::default(),
             xflows: Vec::<xflow::XFlowDocument>::new(),
-            forms: Vec::<form::FormDocument>::new(),
+            pages: Vec::<page::PageDocument>::new(),
         }
     }
 }

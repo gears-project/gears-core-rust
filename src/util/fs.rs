@@ -1,6 +1,6 @@
 use structure::model::ModelDocument;
 use structure::xflow::XFlowDocument;
-use structure::form::FormDocument;
+use structure::page::PageDocument;
 use structure::domain::DomainDocument;
 
 use glob::glob_with;
@@ -77,11 +77,11 @@ pub fn model_to_fs(model: &ModelDocument, path: &str) -> Result<(), ModelLoadErr
         write_file(&doc_filename, &doc.to_json());
     }
 
-    let forms_path_name = format!("{}/forms", path);
-    std::fs::create_dir(&forms_path_name).unwrap();
+    let pages_path_name = format!("{}/pages", path);
+    std::fs::create_dir(&pages_path_name).unwrap();
 
-    for doc in &model.doc.forms {
-        let doc_filename = format!("{}/{}.json", forms_path_name, doc.id);
+    for doc in &model.doc.pages {
+        let doc_filename = format!("{}/{}.json", pages_path_name, doc.id);
         write_file(&doc_filename, &doc.to_json());
     }
 
@@ -112,12 +112,12 @@ pub fn model_from_fs(path: &str) -> Result<ModelDocument, ModelLoadError> {
         }
     }
 
-    let form_files_path = format!("{}/forms/*", path);
-    for item in glob_with(&form_files_path, &glob_options).unwrap() {
+    let page_files_path = format!("{}/pages/*", path);
+    for item in glob_with(&page_files_path, &glob_options).unwrap() {
         if let Ok(path) = item {
             let json = read_json_file(&path);
-            let form_doc: FormDocument = FormDocument::from_json(&json);
-            modeldoc.doc.forms.push(form_doc);
+            let page_doc: PageDocument = PageDocument::from_json(&json);
+            modeldoc.doc.pages.push(page_doc);
         } else {
             warn!("Unable to load doc from '{:?}'", item);
         }

@@ -17,8 +17,8 @@ fn test_load_model() {
     assert_eq!(model_a.id, model_c.id);
     assert_eq!(model_a.doc, model_c.doc);
     assert_eq!(model_a.doc.xflows.len(), model_c.doc.xflows.len());
-    assert_eq!(model_a.doc.forms[0].to_json(),
-               model_c.doc.forms[0].to_json());
+    assert_eq!(model_a.doc.pages[0].to_json(),
+               model_c.doc.pages[0].to_json());
     assert_eq!(model_a.doc.xflows[0].to_json(),
                model_c.doc.xflows[0].to_json());
 }

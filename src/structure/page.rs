@@ -2,11 +2,11 @@ use std::collections::HashMap;
 
 use super::common::Document;
 
-pub type FormDocument = Document<Form>;
+pub type PageDocument = Document<Page>;
 pub type Components = Vec<Component>;
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
-pub struct Form {
+pub struct Page {
     pub title: String,
     pub components: Vec<Component>,
 }
