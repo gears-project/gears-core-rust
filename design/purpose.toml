@@ -25,8 +25,9 @@ Examples can be found in {repo}/resources/
 
 [REQ-portability]
 text = '''
-The project shall be available for a wide variety of operating systems and platforms.
-The project shall be suitable for embedding in other environments.
+
+ - The project shall be available for a wide variety of operating systems and platforms.
+ - The project shall be suitable for embedding in other environments.
 
 '''
 
