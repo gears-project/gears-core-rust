@@ -95,7 +95,6 @@ fn render_datatable(el: &DatatableComponent) -> String {
     );
     out
 }
-
 fn render_form(el: &FormComponent) -> String {
     let body = output_components(&el.components);
     let out = format!(
@@ -112,7 +111,6 @@ fn render_form(el: &FormComponent) -> String {
     );
     out
 }
-
 fn render_text_input(el: &TextInputComponent) -> String {
     let out = format!(
         r#"
@@ -124,7 +122,6 @@ fn render_text_input(el: &TextInputComponent) -> String {
     );
     out
 }
-
 fn render_label(el: &LabelComponent) -> String {
     let out = format!(
         r#"
@@ -136,7 +133,6 @@ fn render_label(el: &LabelComponent) -> String {
     );
     out
 }
-
 fn render_button(el: &ButtonComponent) -> String {
     let out = format!(
         r#"
