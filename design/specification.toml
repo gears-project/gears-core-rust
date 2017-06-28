@@ -8,6 +8,10 @@ These are,
  - Integer
 '''
 
+[SPC-serialization-fs]
+text = '''
+Model serialization to and deserialization from filesystem is implemented in a utility module.
+'''
 [SPC-serialization-json]
 text = '''
 Model serialization is performed using **serde_json**

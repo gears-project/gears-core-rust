@@ -41,6 +41,27 @@ capable of,
  - Binding to contextual variables at run-time
 '''
 
+[REQ-xflow]
+text = '''
+A graph-based, platform independent format for describing logic shall be available.
+
+The format shall be suitable for, amongst others,
+
+ - Graph analysis
+ - Graph rendering
+'''
+
+[REQ-pages]
+text = '''
+A platform independent format for describing application pages shall be available.
+'''
+
+[REQ-domain]
+text = '''
+A platform independent format for describing a data model shall be available.
+
+'''
+
 [REQ-serialization]
 text = '''
 Flows shall be serialized and deserialized in different formats.

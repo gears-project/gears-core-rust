@@ -56,6 +56,7 @@ fn write_file(filename: &str, data: &str) -> () {
 }
 
 pub fn model_to_fs(model: &ModelDocument, path: &str) -> Result<(), ModelLoadError> {
+    // partof: #SPC-serialization-fs
 
     // XXX Error handling, assumption checking
 
@@ -89,6 +90,7 @@ pub fn model_to_fs(model: &ModelDocument, path: &str) -> Result<(), ModelLoadErr
 }
 
 pub fn model_from_fs(path: &str) -> Result<ModelDocument, ModelLoadError> {
+    // partof: SPC-serialization-fs
 
     // XXX Error handling, assumption checking
 

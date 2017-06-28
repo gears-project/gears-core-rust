@@ -11,6 +11,7 @@ mod helper;
 
 #[test]
 fn test_load_basic_project() {
+    // partof: TST-serialization-fs
     let _ = env_logger::init();
     if let Ok(model) = model_from_fs(&"resource/projects/basic") {
         assert_eq!(model.version, 1);
@@ -22,6 +23,7 @@ fn test_load_basic_project() {
 #[test]
 fn test_model_to_and_from_fs() {
     let _ = env_logger::init();
+    // partof: #TST-serialization-fs
 
     let model_a = model_from_fs(&"resource/projects/basic").unwrap();
 
