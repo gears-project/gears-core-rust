@@ -78,7 +78,7 @@ All models can be serialized to or deserialized from a filesystem. The
 filesystem format shall,
 
  - Have a separate file for each document in the model
- = Be human readable (indented output, not compact)
+ - Be human readable (indented output, not compact)
  - Be suitable for management by a version control system
 '''
 

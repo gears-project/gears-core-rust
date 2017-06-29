@@ -15,4 +15,4 @@ exclude_artifact_paths = ["{repo}/.git", "{repo}/resource", "{repo}/target"]
 code_paths = ["{repo}/src", "{repo}/tests"]
 
 # directories to exclude when searching through code
-exclude_code_paths = ["{repo}/target", "{repo}/resource", "{repo}/.git"]
+exclude_code_paths = [] # ["{repo}/target", "{repo}/resource", "{repo}/.git"]

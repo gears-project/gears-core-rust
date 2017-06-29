@@ -1,1 +1,1 @@
-pub mod vue_form;
+pub mod page_to_vue_template;
