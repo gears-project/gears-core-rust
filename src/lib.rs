@@ -7,6 +7,8 @@ extern crate serde_yaml;
 extern crate log;
 extern crate glob;
 
+extern crate ratel;
+
 pub mod xfstate;
 pub mod errors;
 pub mod flox;

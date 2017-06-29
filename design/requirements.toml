@@ -104,6 +104,21 @@ generated to assert the validity of the assumptions made in the artifact
 generation. E.g. Selenium tests for browser-based artifacts.
 '''
 
+[REQ-artifact-generation-model]
+text = '''
+
+'''
+
+[REQ-artifact-generation-xflow]
+text = '''
+
+'''
+
+[REQ-artifact-generation-page]
+text = '''
+
+'''
+
 [TST-flox-variables]
 text = '''
 Variables
