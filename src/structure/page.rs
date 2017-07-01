@@ -26,6 +26,7 @@ pub enum Component {
     TextInput(TextInputComponent),
     Label(LabelComponent),
     Button(ButtonComponent),
+    FormControlGroup(FormControlGroupComponent),
 }
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
@@ -37,6 +38,11 @@ pub struct ContainerComponent<T> {
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 pub struct ConfigOnlyComponent<T> {
     pub config: T,
+}
+
+#[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
+pub struct FormControlGroupComponent {
+    pub config: FormControlGroupConfig,
 }
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
@@ -87,4 +93,29 @@ pub struct LabelConfig {
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 pub struct ButtonConfig {
     pub text: String,
+}
+
+#[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
+pub enum FormControlType {
+    Text,
+    Radio,
+    Checkbox,
+}
+
+impl FormControlType {
+    pub fn to_text(&self) -> String {
+        match self {
+            &FormControlType::Text => "text".to_owned(),
+            &FormControlType::Radio => "radio".to_owned(),
+            &FormControlType::Checkbox => "checkbox".to_owned(),
+        }
+    }
+}
+
+#[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
+pub struct FormControlGroupConfig {
+    pub label: String,
+    pub placeholder: String,
+    pub validation_message: String,
+    pub form_control_type: FormControlType,
 }

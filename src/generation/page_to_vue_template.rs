@@ -21,6 +21,7 @@ fn output_components(components: &[Component]) -> String {
             &Component::TextInput(ref c) => render_text_input(c),
             &Component::Label(ref c) => render_label(c),
             &Component::Button(ref c) => render_button(c),
+            &Component::FormControlGroup(ref c) => render_form_control_group(c),
         };
         out.push(res)
     }
@@ -141,6 +142,29 @@ fn render_button(el: &ButtonComponent) -> String {
     </div>
     "#,
         text = el.config.text
+    );
+    out
+}
+fn render_form_control_group(el: &FormControlGroupComponent) -> String {
+    let out = format!(
+        r#"
+    <form>
+        <FormGroup>
+            <ControlLabel>{label}</ControlLabel>
+            <FormControl
+                type="{form_control_type}"
+				value="XXXvalueXXX"
+                placeholder="{placeholder}
+            />
+            <FormControl.Feedback />
+            <HelpBlock>{validation_message}</HelpBlock>
+        </FormGroup>
+    </form>
+    "#,
+        label = el.config.label,
+        placeholder = el.config.placeholder,
+        validation_message = el.config.validation_message,
+        form_control_type = el.config.form_control_type.to_text()
     );
     out
 }
