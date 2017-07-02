@@ -149,12 +149,14 @@ fn render_form_control_group(el: &FormControlGroupComponent) -> String {
     let out = format!(
         r#"
     <form>
-        <FormGroup>
+        <FormGroup
+            validationState="success"
+        >
             <ControlLabel>{label}</ControlLabel>
             <FormControl
                 type="{form_control_type}"
-				value="XXXvalueXXX"
                 placeholder="{placeholder}
+				value="XXXvalueXXX"
             />
             <FormControl.Feedback />
             <HelpBlock>{validation_message}</HelpBlock>

@@ -39,11 +39,17 @@ impl Default for Events {
 }
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
+pub struct Validation {
+    pub message: String,
+    pub xflow: String,
+}
+
+#[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 pub struct Attribute {
     pub name: String,
     pub vtype: String,
     pub default: String,
-    pub validations: Vec<String>,
+    pub validations: Vec<Validation>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]

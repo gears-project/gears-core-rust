@@ -23,7 +23,10 @@
                         "vtype": "string",
                         "default": "",
                         "validations": [
-                            "xflow_string_value_required"
+                            {
+                                "message": "Value is required",
+                                "xflow": "xflow_string_value_required"
+                            }
                         ]
                     },
                     {
@@ -31,7 +34,10 @@
                         "vtype": "string",
                         "default": "",
                         "validations": [
-                            "xflow_string_value_required"
+                            {
+                                "message": "Value is required",
+                                "xflow": "xflow_string_value_required"
+                            }
                         ]
                     },
                     {
@@ -39,7 +45,10 @@
                         "vtype": "string",
                         "default": "",
                         "validations": [
-                            "xflow_string_value_required"
+                            {
+                                "message": "Value is required",
+                                "xflow": "xflow_string_value_required"
+                            }
                         ]
                     }
                 ],
@@ -60,7 +69,10 @@
                         "storage": "persistent",
                         "default": "",
                         "validations": [
-                            "xflow_string_value_required"
+                            {
+                                "message": "Value is required",
+                                "xflow": "xflow_string_value_required"
+                            }
                         ]
                     }
                 ],
@@ -75,4 +87,5 @@
         ]
     }
 }
+
 
