@@ -16,7 +16,12 @@ pub struct Model {
     pub translations: Vec<translation::TranslationDocument>,
 }
 
-impl Model {}
+impl Model {
+    pub fn as_locale(&self, locale: &str) -> Model {
+        let mut model = self.clone();
+        model
+    }
+}
 
 impl Default for Model {
     fn default() -> Self {
@@ -34,6 +39,7 @@ impl Default for Model {
 pub struct ModelConfig {
     pub default_locale: String,
     pub active_locale: String,
+    pub locales: Vec<String>,
 }
 
 impl Default for ModelConfig {
@@ -41,6 +47,7 @@ impl Default for ModelConfig {
         ModelConfig {
             default_locale: "en_US".to_owned(),
             active_locale: "en_US".to_owned(),
+            locales: vec!["en_US".to_owned()],
         }
     }
 }

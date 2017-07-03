@@ -2,6 +2,8 @@ use serde;
 use serde_json;
 use serde_yaml;
 
+use structure::translation::TranslationDocument;
+
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq, Eq)]
 pub struct Document<T> {
     pub id: String,
@@ -86,5 +88,33 @@ impl I18NString {
             key: "".to_owned(),
             value: s,
         }
+    }
+}
+
+impl I18NString {
+    pub fn translate(&self, translation: &TranslationDocument) -> Self {
+        I18NString {
+            locale: translation.doc.locale.clone(),
+            key: self.key.clone(),
+            value: translation
+                .doc
+                .items
+                .get(&self.key)
+                .unwrap_or(&I18NString::new("".to_owned()))
+                .value
+                .clone(),
+        }
+    }
+
+    pub fn translate_self(&mut self, translation: &TranslationDocument) -> () {
+        self.locale = translation.doc.locale.clone();
+        self.value = translation
+            .doc
+            .items
+            .get(&self.key)
+            .unwrap_or(&I18NString::new("".to_owned()))
+            .value
+            .clone();
+
     }
 }
