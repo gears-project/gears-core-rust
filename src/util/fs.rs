@@ -1,4 +1,4 @@
-use structure::model::ModelDocument;
+use structure::model::{ModelDocument, ModelConfigDocument};
 use structure::xflow::XFlowDocument;
 use structure::page::PageDocument;
 use structure::domain::DomainDocument;
@@ -64,6 +64,11 @@ pub fn model_to_fs(model: &ModelDocument, path: &str) -> Result<(), ModelLoadErr
            model.id,
            model.version,
            path);
+
+    let model_config_doc_filename = format!("{}/config.json", path);
+    let model_config_doc = &model.doc.config;
+    write_file(&model_config_doc_filename, &model_config_doc.to_json());
+
     let domain_path_name = format!("{}/domain", path);
     std::fs::create_dir(&domain_path_name).unwrap();
     let doc_filename = format!("{}/domain.json", domain_path_name);
@@ -124,6 +129,13 @@ pub fn model_from_fs(path: &str) -> Result<ModelDocument, ModelLoadError> {
             warn!("Unable to load doc from '{:?}'", item);
         }
     }
+
+    let model_config_filename = format!("{}/config.json", path);
+    let model_config_path = Path::new(&model_config_filename);
+    let model_config_json = read_json_file(&model_config_path);
+    let model_config: ModelConfigDocument = ModelConfigDocument::from_json(&model_config_json);
+
+    modeldoc.doc.config = model_config;
 
     let domain_filename = format!("{}/domain/domain.json", path);
     let domain_path = Path::new(&domain_filename);

@@ -1,0 +1,12 @@
+{
+    "doctype": "model",
+    "doctype_version": 1,
+    "id": "basic_model",
+    "name" : "Basic Model",
+    "version" : 1,
+    "doc" : {
+        "default_locale": "en_US",
+        "active_locale": "en_US"
+    }
+}
+
