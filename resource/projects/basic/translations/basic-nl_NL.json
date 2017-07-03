@@ -1,0 +1,23 @@
+{
+    "doctype": "translations",
+    "doctype_version": 1,
+    "id": "nl_NL_basic",
+    "name" : "nl_NL_basic",
+    "version" : 1,
+    "doc" : {
+        "language": "nl",
+        "country": "NL",
+        "items": {
+            "domain/entities/attributes/validations/message/1" : {
+                "locale": "nl_NL",
+                "key": "domain/entities/attributes/validations/message/1",
+                "value": "Een waarde is vereist"
+            },
+            "domain/entities/attributes/validations/message/2" : {
+                "locale": "nl_NL",
+                "key": "domain/entities/attributes/validations/message/1",
+                "value": "Een waarde is vereist"
+            }
+        }
+    }
+}

@@ -2,6 +2,7 @@ use structure::model::{ModelDocument, ModelConfigDocument};
 use structure::xflow::XFlowDocument;
 use structure::page::PageDocument;
 use structure::domain::DomainDocument;
+use structure::translation::TranslationDocument;
 
 use glob::glob_with;
 use glob::MatchOptions;
@@ -91,6 +92,14 @@ pub fn model_to_fs(model: &ModelDocument, path: &str) -> Result<(), ModelLoadErr
         write_file(&doc_filename, &doc.to_json());
     }
 
+    let translations_path_name = format!("{}/translations", path);
+    std::fs::create_dir(&translations_path_name).unwrap();
+
+    for doc in &model.doc.translations {
+        let doc_filename = format!("{}/{}.json", translations_path_name, doc.id);
+        write_file(&doc_filename, &doc.to_json());
+    }
+
     Ok(())
 }
 
@@ -125,6 +134,17 @@ pub fn model_from_fs(path: &str) -> Result<ModelDocument, ModelLoadError> {
             let json = read_json_file(&path);
             let page_doc: PageDocument = PageDocument::from_json(&json);
             modeldoc.doc.pages.push(page_doc);
+        } else {
+            warn!("Unable to load doc from '{:?}'", item);
+        }
+    }
+
+    let translation_files_path = format!("{}/translations/*", path);
+    for item in glob_with(&translation_files_path, &glob_options).unwrap() {
+        if let Ok(path) = item {
+            let json = read_json_file(&path);
+            let translation_doc: TranslationDocument = TranslationDocument::from_json(&json);
+            modeldoc.doc.translations.push(translation_doc);
         } else {
             warn!("Unable to load doc from '{:?}'", item);
         }

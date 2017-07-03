@@ -65,7 +65,7 @@ A platform independent format for describing a data model shall be available.
 [REQ-i18n]
 text = '''
 
- - All user-facing text will be translatable into XXX
+All user-facing text will be translatable into an arbitrary number of languages, identified by ISO 639-2 code, optionally extended with a regional code identified with a two-letter country code from ISO-3166-2.
 
 '''
 

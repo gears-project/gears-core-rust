@@ -2,6 +2,7 @@ use super::common;
 use super::domain;
 use super::xflow;
 use super::page;
+use super::translation;
 
 pub type ModelDocument = common::Document<Model>;
 pub type ModelConfigDocument = common::Document<ModelConfig>;
@@ -12,6 +13,7 @@ pub struct Model {
     pub domain: domain::DomainDocument,
     pub xflows: Vec<xflow::XFlowDocument>,
     pub pages: Vec<page::PageDocument>,
+    pub translations: Vec<translation::TranslationDocument>,
 }
 
 impl Model {}
@@ -23,6 +25,7 @@ impl Default for Model {
             domain: domain::DomainDocument::default(),
             xflows: Vec::<xflow::XFlowDocument>::new(),
             pages: Vec::<page::PageDocument>::new(),
+            translations: Vec::<translation::TranslationDocument>::new(),
         }
     }
 }
