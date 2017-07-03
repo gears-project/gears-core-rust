@@ -1,13 +1,13 @@
 use std::collections::HashMap;
 
-use super::common::Document;
+use super::common::{Document, I18NString};
 
 pub type PageDocument = Document<Page>;
 pub type Components = Vec<Component>;
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 pub struct Page {
-    pub title: String,
+    pub title: I18NString,
     pub components: Vec<Component>,
 }
 
@@ -65,7 +65,7 @@ pub type ButtonComponent = ConfigOnlyComponent<ButtonConfig>;
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 pub struct TextConfig {
-    pub text: String,
+    pub text: I18NString,
 }
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
@@ -82,17 +82,17 @@ pub struct FormConfig {
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 pub struct TextInputConfig {
-    pub placeholder: String,
+    pub placeholder: I18NString,
 }
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 pub struct LabelConfig {
-    pub text: String,
+    pub text: I18NString,
 }
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 pub struct ButtonConfig {
-    pub text: String,
+    pub text: I18NString,
 }
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
@@ -114,8 +114,7 @@ impl FormControlType {
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 pub struct FormControlGroupConfig {
-    pub label: String,
-    pub placeholder: String,
-    pub validation_message: String,
+    pub label: I18NString,
+    pub placeholder: I18NString,
     pub form_control_type: FormControlType,
 }

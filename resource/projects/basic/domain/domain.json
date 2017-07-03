@@ -24,7 +24,11 @@
                         "default": "",
                         "validations": [
                             {
-                                "message": "Value is required",
+                                "message": {
+                                    "locale": "en_US",
+                                    "key": "domain/entities/attributes/validations/message",
+                                    "value": "Value is required"
+                                },
                                 "xflow": "xflow_string_value_required"
                             }
                         ]
@@ -35,7 +39,11 @@
                         "default": "",
                         "validations": [
                             {
-                                "message": "Value is required",
+                                "message": {
+                                    "locale": "en_US",
+                                    "key": "domain/entities/attributes/validations/message",
+                                    "value": "Value is required"
+                                },
                                 "xflow": "xflow_string_value_required"
                             }
                         ]
@@ -46,7 +54,11 @@
                         "default": "",
                         "validations": [
                             {
-                                "message": "Value is required",
+                                "message": {
+                                    "locale": "en_US",
+                                    "key": "domain/entities/attributes/validations/message",
+                                    "value": "Value is required"
+                                },
                                 "xflow": "xflow_string_value_required"
                             }
                         ]
@@ -70,7 +82,11 @@
                         "default": "",
                         "validations": [
                             {
-                                "message": "Value is required",
+                                "message": {
+                                    "locale": "en_US",
+                                    "key": "domain/entities/attributes/validations/message",
+                                    "value": "Value is required"
+                                },
                                 "xflow": "xflow_string_value_required"
                             }
                         ]
@@ -87,5 +103,4 @@
         ]
     }
 }
-
 

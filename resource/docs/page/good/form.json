@@ -5,7 +5,11 @@
     "name" : "Form",
     "version" : 1,
     "doc" : {
-        "title": "Lists Posts",
+        "title": {
+            "locale": "en_US",
+            "key": "page/title",
+            "value": "Lists Posts"
+        },
         "components" : [
             {
                 "component" : "Form",
@@ -22,7 +26,11 @@
                                     {
                                         "component" : "Label",
                                         "config": {
-                                            "text": "Name"
+                                            "text": {
+                                                "locale": "en_US",
+                                                "key": "page/components/1",
+                                                "value": "Name"
+                                            }
                                         }
                                     }
                                 ]
@@ -33,7 +41,11 @@
                                     {
                                         "component" : "TextInput",
                                         "config": {
-                                            "placeholder": "Please enter a name"
+                                            "placeholder": {
+                                                "locale": "en_US",
+                                                "key": "page/components/2",
+                                                "value": "Please enter a name"
+                                            }
                                         }
                                     }
                                 ]
@@ -44,7 +56,11 @@
                                     {
                                         "component" : "Button",
                                         "config": {
-                                            "text": "Submit"
+                                            "text": {
+                                                "locale": "en_US",
+                                                "key": "page/components/3",
+                                                "value": "Submit"
+                                            }
                                         }
                                     }
                                 ]

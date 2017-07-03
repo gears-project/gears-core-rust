@@ -1,4 +1,4 @@
-use super::common::Document;
+use super::common::{Document, I18NString};
 
 pub type DomainDocument = Document<Domain>;
 
@@ -40,7 +40,7 @@ impl Default for Events {
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 pub struct Validation {
-    pub message: String,
+    pub message: I18NString,
     pub xflow: String,
 }
 

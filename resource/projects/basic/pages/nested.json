@@ -5,7 +5,11 @@
     "name" : "List Posts",
     "version" : 1,
     "doc" : {
-        "title": "Lists Posts",
+        "title": {
+            "locale": "en_US",
+            "key": "page/title",
+            "value": "Lists Posts"
+        },
         "components" : [
             {
                 "component" : "Row",
@@ -20,7 +24,11 @@
                             {
                                 "component": "Header1",
                                 "config": {
-                                    "text": "Lists of Posts"
+                                    "text": {
+                                        "locale": "en_US",
+                                        "key": "page/components/1",
+                                        "value": "Lists of posts"
+                                    }
                                 }
                             },
                             {

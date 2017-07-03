@@ -74,7 +74,17 @@ impl<T> Default for Document<T>
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq, Eq)]
 pub struct I18NString {
-    locale: String,
-    key: String,
-    value: String,
+    pub locale: String,
+    pub key: String,
+    pub value: String,
+}
+
+impl I18NString {
+    fn new(s: String) -> I18NString {
+        I18NString {
+            locale: "en_US".to_owned(),
+            key: "".to_owned(),
+            value: s,
+        }
+    }
 }

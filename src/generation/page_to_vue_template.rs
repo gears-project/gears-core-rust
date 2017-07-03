@@ -34,15 +34,15 @@ fn render_row(el: &RowComponent) -> String {
     out
 }
 fn render_header1(el: &Header1Component) -> String {
-    let out = format!("<h1>{text}</h1>", text = el.config.text);
+    let out = format!("<h1>{text}</h1>", text = el.config.text.value);
     out
 }
 fn render_header2(el: &Header2Component) -> String {
-    let out = format!("<h2>{text}</h2>", text = el.config.text);
+    let out = format!("<h2>{text}</h2>", text = el.config.text.value);
     out
 }
 fn render_header3(el: &Header3Component) -> String {
-    let out = format!("<h3>{text}</h3>", text = el.config.text);
+    let out = format!("<h3>{text}</h3>", text = el.config.text.value);
     out
 }
 fn render_column3(el: &Column3Component) -> String {
@@ -119,7 +119,7 @@ fn render_text_input(el: &TextInputComponent) -> String {
         {placeholder}
     </div>
     "#,
-        placeholder = el.config.placeholder
+        placeholder = el.config.placeholder.value
     );
     out
 }
@@ -130,7 +130,7 @@ fn render_label(el: &LabelComponent) -> String {
         {text}
     </div>
     "#,
-        text = el.config.text
+        text = el.config.text.value
     );
     out
 }
@@ -141,7 +141,7 @@ fn render_button(el: &ButtonComponent) -> String {
         {text}
     </div>
     "#,
-        text = el.config.text
+        text = el.config.text.value
     );
     out
 }
@@ -159,13 +159,12 @@ fn render_form_control_group(el: &FormControlGroupComponent) -> String {
 				value="XXXvalueXXX"
             />
             <FormControl.Feedback />
-            <HelpBlock>{validation_message}</HelpBlock>
+            <HelpBlock>XXXvalidation_messageXXX</HelpBlock>
         </FormGroup>
     </form>
     "#,
-        label = el.config.label,
-        placeholder = el.config.placeholder,
-        validation_message = el.config.validation_message,
+        label = el.config.label.value,
+        placeholder = el.config.placeholder.value,
         form_control_type = el.config.form_control_type.to_text()
     );
     out
