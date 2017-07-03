@@ -62,6 +62,13 @@ A platform independent format for describing a data model shall be available.
 
 '''
 
+[REQ-i18n]
+text = '''
+
+ - All user-facing text will be translatable into XXX
+
+'''
+
 [REQ-serialization]
 text = '''
 Flows shall be serialized and deserialized in different formats.

@@ -71,3 +71,10 @@ impl<T> Default for Document<T>
         }
     }
 }
+
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq, Eq)]
+pub struct I18NString {
+    locale: String,
+    key: String,
+    value: String,
+}
