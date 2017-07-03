@@ -80,7 +80,7 @@ pub struct I18NString {
 }
 
 impl I18NString {
-    fn new(s: String) -> I18NString {
+    pub fn new(s: String) -> I18NString {
         I18NString {
             locale: "en_US".to_owned(),
             key: "".to_owned(),
