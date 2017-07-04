@@ -8,8 +8,8 @@ use xflow::runtime::xfrunner::*;
 use xflow::runtime::dispatcher::*;
 use xflow::runtime::actiondispatch;
 
-mod helper;
-use helper::read_json_file;
+mod common;
+use common::load_doc;
 
 fn build_dispatcher<'a>() -> Dispatcher<'a> {
     let mut dispatcher = Dispatcher::default();
@@ -27,8 +27,7 @@ fn fail_and_report_error(err: String) -> () {
 
 fn run_xflow(flow_file: &str) -> Result<XFState, String> {
 
-    let json_string = read_json_file(flow_file);
-    let xfs = XFlowDocument::from_json(&json_string);
+    let xfs = load_doc::<XFlowDocument>(flow_file);
     let dispatcher = build_dispatcher();
     let state = XFState::default();
 
@@ -51,8 +50,7 @@ fn run_xflow(flow_file: &str) -> Result<XFState, String> {
 fn test_run_10_steps() {
     let _ = env_logger::init();
 
-    let json_string = read_json_file("resource/docs/xflow/flows/10_steps.json");
-    let xfs = XFlowDocument::from_json(&json_string);
+    let xfs = load_doc::<XFlowDocument>("resource/docs/xflow/flows/10_steps.json");
     assert_eq!(xfs.doc.nodes.len(), 10);
 
     let dispatcher = build_dispatcher();
@@ -97,8 +95,7 @@ fn test_run_10_steps() {
 fn test_run_simple_branch() {
     let _ = env_logger::init();
 
-    let json_string = read_json_file("resource/docs/xflow/flows/branch_boolean.json");
-    let xfs = XFlowDocument::from_json(&json_string);
+    let xfs = load_doc::<XFlowDocument>("resource/docs/xflow/flows/branch_boolean.json");
     assert_eq!(xfs.doc.nodes.len(), 4);
     assert_eq!(xfs.doc.edges.len(), 3);
     assert_eq!(xfs.doc.branches.len(), 2);
