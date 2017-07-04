@@ -1,6 +1,7 @@
 use std::collections::HashMap;
 
-use super::common::{Document, I18NString};
+use super::common::{Document, I18NString, Translatable};
+use super::translation::TranslationDocument;
 
 pub type PageDocument = Document<Page>;
 pub type Components = Vec<Component>;
@@ -117,4 +118,34 @@ pub struct FormControlGroupConfig {
     pub label: I18NString,
     pub placeholder: I18NString,
     pub form_control_type: FormControlType,
+}
+
+
+fn translate_component(c: &mut Component, t: &TranslationDocument) -> () {
+    match c {
+        &mut Component::Label(ref mut c) => c.config.text.translate_self(&t),
+        &mut Component::Button(ref mut c) => c.config.text.translate_self(&t),
+        &mut Component::TextInput(ref mut c) => c.config.placeholder.translate_self(&t),
+        &mut Component::Column3(ref mut c) => translate_components(&mut c.components, &t),
+        // XXX: Implement others
+        _ => {}
+    }
+}
+
+fn translate_components(components: &mut Components, t: &TranslationDocument) -> () {
+    for ref mut component in components {
+        translate_component(component, &t);
+    }
+}
+
+impl Translatable for PageDocument {
+    fn translate_in_place(&mut self, t: &TranslationDocument) -> () {
+        translate_components(&mut self.doc.components, &t);
+    }
+
+    fn translate(&self, t: &TranslationDocument) -> PageDocument {
+        let mut doc = self.clone();
+        doc.translate_in_place(&t);
+        doc
+    }
 }

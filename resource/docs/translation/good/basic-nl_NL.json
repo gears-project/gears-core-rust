@@ -5,6 +5,7 @@
     "name" : "nl_NL_basic",
     "version" : 1,
     "doc" : {
+        "locale": "nl_NL",
         "language": "nl",
         "country": "NL",
         "items": {

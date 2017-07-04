@@ -1,4 +1,5 @@
-use super::common::{Document, I18NString};
+use super::common::{Document, I18NString, Translatable};
+use structure::translation::TranslationDocument;
 
 pub type DomainDocument = Document<Domain>;
 
@@ -75,7 +76,25 @@ pub struct Entity {
 }
 
 pub type Entities = Vec<Entity>;
+
 pub type Attributes = Vec<Attribute>;
 pub type References = Vec<Reference>;
 
 impl Domain {}
+
+impl Translatable for DomainDocument {
+    fn translate_in_place(&mut self, t: &TranslationDocument) -> () {
+        for entity in &mut self.doc.entities {
+            for attribute in &mut entity.attributes {
+                for validation in &mut attribute.validations {
+                    validation.message.translate_self(&t);
+                }
+            }
+        }
+    }
+    fn translate(&self, t: &TranslationDocument) -> DomainDocument {
+        let mut doc = self.clone();
+        doc.translate_in_place(&t);
+        doc
+    }
+}

@@ -115,6 +115,10 @@ impl I18NString {
             .unwrap_or(&I18NString::new("".to_owned()))
             .value
             .clone();
-
     }
+}
+
+pub trait Translatable {
+    fn translate_in_place(&mut self, t: &TranslationDocument) -> ();
+    fn translate(&self, t: &TranslationDocument) -> Self;
 }
