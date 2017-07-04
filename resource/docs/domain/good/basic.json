@@ -26,7 +26,7 @@
                             {
                                 "message": {
                                     "locale": "en_US",
-                                    "key": "domain/entities/attributes/validations/message/1",
+                                    "key": "a_value_is_required",
                                     "value": "Value is required"
                                 },
                                 "xflow": "xflow_string_value_required"
@@ -41,7 +41,7 @@
                             {
                                 "message": {
                                     "locale": "en_US",
-                                    "key": "domain/entities/attributes/validations/message/2",
+                                    "key": "a_value_is_required",
                                     "value": "Value is required"
                                 },
                                 "xflow": "xflow_string_value_required"
@@ -56,7 +56,7 @@
                             {
                                 "message": {
                                     "locale": "en_US",
-                                    "key": "domain/entities/attributes/validations/message/3",
+                                    "key": "a_value_is_required",
                                     "value": "Value is required"
                                 },
                                 "xflow": "xflow_string_value_required"
@@ -84,7 +84,7 @@
                             {
                                 "message": {
                                     "locale": "en_US",
-                                    "key": "domain/entities/attributes/validations/message/4",
+                                    "key": "a_value_is_required",
                                     "value": "Value is required"
                                 },
                                 "xflow": "xflow_string_value_required"

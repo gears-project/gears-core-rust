@@ -7,7 +7,7 @@
     "doc" : {
         "title": {
             "locale": "en_US",
-            "key": "list_posts",
+            "key": "page/title",
             "value": "Lists Posts"
         },
         "components" : [

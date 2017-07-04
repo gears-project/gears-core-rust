@@ -4,7 +4,6 @@ use super::xflow;
 use super::page;
 use super::translation::TranslationDocument;
 
-
 pub type ModelDocument = Document<Model>;
 pub type ModelConfigDocument = Document<ModelConfig>;
 
@@ -31,7 +30,6 @@ impl Default for Model {
 
 impl ModelDocument {
     pub fn as_locale(&self, locale: &str) -> Result<ModelDocument, String> {
-        let translation = &self.doc.translations[0];
 
         let res: Vec<&TranslationDocument> = self.doc
             .translations
@@ -50,7 +48,7 @@ impl ModelDocument {
         match x {
             Ok(translation) => {
                 let mut model = self.clone();
-                model.translate(&translation);
+                model.translate_in_place(&translation);
                 Ok(model)
             }
             Err(err) => Err(err.to_string()),
@@ -64,6 +62,7 @@ impl Translatable for ModelDocument {
         for ref mut page in &mut self.doc.pages {
             page.translate_in_place(&t);
         }
+        self.doc.domain.translate_in_place(&t);
     }
 
     fn translate(&self, t: &TranslationDocument) -> ModelDocument {
