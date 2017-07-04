@@ -13,5 +13,5 @@ fn test_load_basic_translation_document() {
     let json_string = read_json_file("resource/docs/translation/good/basic-nl_NL.json");
     let doc = TranslationDocument::from_json(&json_string);
 
-    println!("Loaded domain document : {:?}", doc);
+    println!("Loaded translation document : {:?}", doc);
 }

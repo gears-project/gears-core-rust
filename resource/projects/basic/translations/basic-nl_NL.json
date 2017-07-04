@@ -9,15 +9,15 @@
         "language": "nl",
         "country": "NL",
         "items": {
-            "domain/entities/attributes/validations/message/1" : {
+            "a_value_is_required" : {
                 "locale": "nl_NL",
-                "key": "domain/entities/attributes/validations/message/1",
+                "key": "a_value_is_required",
                 "value": "Een waarde is vereist"
             },
-            "domain/entities/attributes/validations/message/2" : {
+            "list_posts" : {
                 "locale": "nl_NL",
-                "key": "domain/entities/attributes/validations/message/1",
-                "value": "Een waarde is vereist"
+                "key": "list_posts",
+                "value": "Lijst met posten"
             }
         }
     }

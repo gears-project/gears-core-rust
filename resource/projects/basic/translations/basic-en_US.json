@@ -1,23 +1,23 @@
 {
     "doctype": "translations",
     "doctype_version": 1,
-    "id": "nl_NL_basic",
-    "name" : "nl_NL_basic",
+    "id": "en_US_basic",
+    "name" : "en_US_basic",
     "version" : 1,
     "doc" : {
-        "locale": "nl_NL",
+        "locale": "en_US",
         "language": "nl",
         "country": "NL",
         "items": {
             "a_value_is_required" : {
-                "locale": "nl_NL",
+                "locale": "en_US",
                 "key": "a_value_is_required",
-                "value": "Een waarde is vereist"
+                "value": "A value is required"
             },
             "list_posts" : {
-                "locale": "nl_NL",
+                "locale": "en_US",
                 "key": "list_posts",
-                "value": "Lijst met posten"
+                "value": "List posts"
             }
         }
     }

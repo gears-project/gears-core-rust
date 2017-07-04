@@ -13,7 +13,7 @@ fn test_load_basic_form_document() {
     let json_string = read_json_file("resource/docs/page/good/basic.json");
     let doc = PageDocument::from_json(&json_string);
 
-    println!("Loaded domain document : {:?}", doc);
+    println!("Loaded page document : {:?}", doc);
 
 }
 
@@ -24,6 +24,6 @@ fn test_load_nested_form_document() {
     let json_string = read_json_file("resource/docs/page/good/nested.json");
     let doc = PageDocument::from_json(&json_string);
 
-    println!("Loaded domain document : {:?}", doc);
+    println!("Loaded page document : {:?}", doc);
 
 }

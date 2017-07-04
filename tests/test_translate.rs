@@ -19,12 +19,9 @@ fn test_translate_model() {
     let model_en_nl = model_en.clone();
     model_en_nl.as_locale(&"nl_NL").unwrap();
 
-    let model_en_nl_en = model_en.clone();
+    let model_en_nl_en = model_en_nl.clone();
     model_en_nl_en.as_locale(&"en_US").unwrap();
 
-    // println!("MOOOODE2EEL {:?}", model_en);
-    // println!("MOOOODEEEEL {:?}", model_en_nl);
-
     // assert_ne!(model_en, model_en_nl);
-    // assert_eq!(model_en, model_en_nl_en);
+    assert_eq!(model_en, model_en_nl_en);
 }

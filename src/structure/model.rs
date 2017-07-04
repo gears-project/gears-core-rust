@@ -33,10 +33,29 @@ impl ModelDocument {
     pub fn as_locale(&self, locale: &str) -> Result<ModelDocument, String> {
         let translation = &self.doc.translations[0];
 
-        let mut model = self.clone();
-        model.translate(&translation);
+        let res: Vec<&TranslationDocument> = self.doc
+            .translations
+            .iter()
+            .filter({
+                        |t| t.doc.locale == locale
+                    })
+            .collect();
 
-        Ok(model)
+        let x = match res.len() {
+            0 => Err("Locale not available in this document"),
+            1 => Ok(res[0]),
+            _ => Err("More than one instance of this locale available in this document"),
+        };
+
+        match x {
+            Ok(translation) => {
+                let mut model = self.clone();
+                model.translate(&translation);
+                Ok(model)
+            }
+            Err(err) => Err(err.to_string()),
+        }
+
     }
 }
 
