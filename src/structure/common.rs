@@ -91,13 +91,23 @@ impl I18NString {
     }
 }
 
-impl I18NString {
-    pub fn translate(&self, translation: &TranslationDocument) -> Self {
+impl Default for I18NString {
+    fn default() -> I18NString {
         I18NString {
-            locale: translation.doc.locale.clone(),
+            locale: "en_US".to_owned(),
+            key: "-no-key-".to_owned(),
+            value: "-no-value-".to_owned(),
+        }
+    }
+}
+
+
+impl I18NString {
+    pub fn translate(&self, t: &TranslationDocument) -> Self {
+        I18NString {
+            locale: t.doc.locale.clone(),
             key: self.key.clone(),
-            value: translation
-                .doc
+            value: t.doc
                 .items
                 .get(&self.key)
                 .unwrap_or(&I18NString::new("".to_owned()))
@@ -106,15 +116,20 @@ impl I18NString {
         }
     }
 
-    pub fn translate_self(&mut self, translation: &TranslationDocument) -> () {
-        self.locale = translation.doc.locale.clone();
-        self.value = translation
-            .doc
-            .items
-            .get(&self.key)
-            .unwrap_or(&I18NString::new("".to_owned()))
-            .value
-            .clone();
+    pub fn translate_self(&mut self, t: &TranslationDocument) -> () {
+        match t.doc.items.get(&self.key) {
+            Some(t) => {
+                self.locale = t.locale.clone();
+                self.value = t.value.clone();
+            }
+            None => {
+                warn!("No translation found for '{:?}'", self.key);
+                self.locale = "en_XX".to_owned();
+                self.value = "-no-value-".to_owned();
+            }
+        };
+
+        debug!("Translated value is '{:?}'", self.value);
     }
 }
 

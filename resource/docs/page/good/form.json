@@ -7,7 +7,7 @@
     "doc" : {
         "title": {
             "locale": "en_US",
-            "key": "page/title",
+            "key": "list_posts",
             "value": "Lists Posts"
         },
         "components" : [
@@ -28,7 +28,7 @@
                                         "config": {
                                             "text": {
                                                 "locale": "en_US",
-                                                "key": "page/components/1",
+                                                "key": "name",
                                                 "value": "Name"
                                             }
                                         }
@@ -43,7 +43,7 @@
                                         "config": {
                                             "placeholder": {
                                                 "locale": "en_US",
-                                                "key": "page/components/2",
+                                                "key": "please_enter_a_name",
                                                 "value": "Please enter a name"
                                             }
                                         }
@@ -58,7 +58,7 @@
                                         "config": {
                                             "text": {
                                                 "locale": "en_US",
-                                                "key": "page/components/3",
+                                                "key": "submit",
                                                 "value": "Submit"
                                             }
                                         }

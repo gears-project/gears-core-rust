@@ -18,6 +18,26 @@
                 "locale": "nl_NL",
                 "key": "list_posts",
                 "value": "Lijst met posten"
+            },
+            "main_header_1" : {
+                "locale": "nl_NL",
+                "key": "main_header_1",
+                "value": "Hoofd Tekst 1"
+            },
+            "name" : {
+                "locale": "nl_NL",
+                "key": "name",
+                "value": "Naam"
+            },
+            "please_enter_a_name" : {
+                "locale": "nl_NL",
+                "key": "please_enter_a_name",
+                "value": "Vul aub een naam in"
+            },
+            "submit" : {
+                "locale": "nl_NL",
+                "key": "submit",
+                "value": "Submitten"
             }
         }
     }

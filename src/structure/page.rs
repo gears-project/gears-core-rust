@@ -123,6 +123,9 @@ pub struct FormControlGroupConfig {
 
 fn translate_component(c: &mut Component, t: &TranslationDocument) -> () {
     match c {
+        &mut Component::Header1(ref mut c) => c.config.text.translate_self(&t),
+        &mut Component::Header2(ref mut c) => c.config.text.translate_self(&t),
+        &mut Component::Header3(ref mut c) => c.config.text.translate_self(&t),
         &mut Component::Label(ref mut c) => c.config.text.translate_self(&t),
         &mut Component::Button(ref mut c) => c.config.text.translate_self(&t),
         &mut Component::TextInput(ref mut c) => c.config.placeholder.translate_self(&t),
@@ -140,6 +143,7 @@ fn translate_components(components: &mut Components, t: &TranslationDocument) ->
 
 impl Translatable for PageDocument {
     fn translate_in_place(&mut self, t: &TranslationDocument) -> () {
+        self.doc.title.translate_self(&t);
         translate_components(&mut self.doc.components, &t);
     }
 

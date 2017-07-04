@@ -7,7 +7,7 @@
     "doc" : {
         "title": {
             "locale": "en_US",
-            "key": "page/title",
+            "key": "list_posts",
             "value": "Lists Posts"
         },
         "components" : [
@@ -26,7 +26,7 @@
                                 "config": {
                                     "text": {
                                         "locale": "en_US",
-                                        "key": "page/components/1",
+                                        "key": "list_posts",
                                         "value": "Lists of posts"
                                     }
                                 }

@@ -18,6 +18,26 @@
                 "locale": "en_US",
                 "key": "list_posts",
                 "value": "List posts"
+            },
+            "main_header_1" : {
+                "locale": "en_US",
+                "key": "main_header_1",
+                "value": "Main Header 1"
+            },
+            "name" : {
+                "locale": "en_US",
+                "key": "name",
+                "value": "Name"
+            },
+            "please_enter_a_name" : {
+                "locale": "en_US",
+                "key": "please_enter_a_name",
+                "value": "Please enter a name"
+            },
+            "submit" : {
+                "locale": "en_US",
+                "key": "submit",
+                "value": "Submit"
             }
         }
     }
