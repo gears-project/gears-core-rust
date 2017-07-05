@@ -1,0 +1,158 @@
+[REQ-purpose]
+text = '''
+The purpose of this project is to provide datastructures and tooling for the
+manipulation and execution of a portable representation (model) of an
+application containing,
+
+ - a data model (domain)
+ - user interfaces (ui)
+ - state transisitions (app-flow)
+ - validations (using xflow)
+ - graph-based execution (xflow)
+ - an evaluation language (flox)
+ - internationalization (i18n)
+
+All aspects of the model shall be serializable to and deserializable from
+multiple formats as well as having a plain-text, filesystem-based
+representation suitable for management under a version-control system.
+
+All aspects of the model manipulation and artifact generation shall be suitable
+for integration in existing build-pipelines and development processes.
+
+Examples can be found in {repo}/resources/
+
+'''
+
+[REQ-portability]
+text = '''
+
+ - The project shall be available for a wide variety of operating systems and platforms.
+ - The project shall be suitable for embedding in other environments.
+
+'''
+
+[REQ-flox]
+text = '''
+An evaluation environment shall be available with an expression-based language
+capable of,
+
+ - Performing numeric arithmetic
+ - Performing boolean arithmetic
+ - Binding to contextual variables at run-time
+'''
+
+[REQ-xflow]
+text = '''
+A graph-based, platform independent format for describing logic shall be available.
+
+The format shall be suitable for, amongst others,
+
+ - Graph analysis
+ - Graph rendering
+'''
+
+[REQ-pages]
+text = '''
+A platform independent format for describing application pages shall be available.
+'''
+
+[REQ-domain]
+text = '''
+A platform independent format for describing a data model shall be available.
+
+'''
+
+[REQ-i18n]
+text = '''
+
+All user-facing text will be translatable into an arbitrary number of languages, identified by ISO 639-2 code, optionally extended with a regional code identified with a two-letter country code from ISO-3166-2.
+
+'''
+
+[REQ-serialization]
+text = '''
+Flows shall be serialized and deserialized in different formats.
+
+Serialization and deserialization shall be possible with,
+ - json
+ - yaml
+
+'''
+
+[REQ-serialization-fs]
+text = '''
+All models can be serialized to or deserialized from a filesystem. The
+filesystem format shall,
+
+ - Have a separate file for each document in the model
+ - Be human readable (indented output, not compact)
+ - Be suitable for management by a version control system
+'''
+
+[REQ-serialization-json]
+text = '''
+All models can be serialized to or deserialized from JSON.
+'''
+
+[REQ-serialization-yaml]
+text = '''
+All models can be serialized to or deserialized from YAML.
+'''
+
+[REQ-xflow-call]
+text = '''
+An xflow shall be able to call another xflow.
+'''
+
+[REQ-artifact-testing]
+text = '''
+As part of the artifact generation, suitable testing artifacts shall be
+generated to assert the validity of the assumptions made in the artifact
+generation. E.g. Selenium tests for browser-based artifacts.
+'''
+
+[REQ-artifact-generation-model]
+text = '''
+
+'''
+
+[REQ-artifact-generation-xflow]
+text = '''
+
+'''
+
+[REQ-artifact-generation-page]
+text = '''
+
+'''
+
+[TST-flox-variables]
+text = '''
+Variables
+'''
+
+[TST-flox-variable-extraction]
+text = '''
+This test demonstrates the successful extraction of variable names from a flox
+string.
+'''
+
+[TST-serialization-fs]
+text = '''
+Model serialization tests demonstrating the serialization to and deserialization from a filesystem
+'''
+
+[TST-serialization-json]
+text = '''
+Model serialization tests demonstrating the serialization to and deserialization from JSON
+'''
+
+[TST-serialization-yaml]
+text = '''
+Model serialization tests demonstrating the serialization to and deserialization from YAML
+'''
+
+[TST-xflow-call]
+text = '''
+Tests that have xflows invoking other xflows and using the result.
+'''

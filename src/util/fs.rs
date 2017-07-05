@@ -1,7 +1,8 @@
-use structure::model::ModelDocument;
+use structure::model::{ModelDocument, ModelConfigDocument};
 use structure::xflow::XFlowDocument;
-use structure::form::FormDocument;
+use structure::page::PageDocument;
 use structure::domain::DomainDocument;
+use structure::translation::TranslationDocument;
 
 use glob::glob_with;
 use glob::MatchOptions;
@@ -56,6 +57,7 @@ fn write_file(filename: &str, data: &str) -> () {
 }
 
 pub fn model_to_fs(model: &ModelDocument, path: &str) -> Result<(), ModelLoadError> {
+    // partof: #SPC-serialization-fs
 
     // XXX Error handling, assumption checking
 
@@ -63,6 +65,11 @@ pub fn model_to_fs(model: &ModelDocument, path: &str) -> Result<(), ModelLoadErr
            model.id,
            model.version,
            path);
+
+    let model_config_doc_filename = format!("{}/config.json", path);
+    let model_config_doc = &model.doc.config;
+    write_file(&model_config_doc_filename, &model_config_doc.to_json());
+
     let domain_path_name = format!("{}/domain", path);
     std::fs::create_dir(&domain_path_name).unwrap();
     let doc_filename = format!("{}/domain.json", domain_path_name);
@@ -77,11 +84,19 @@ pub fn model_to_fs(model: &ModelDocument, path: &str) -> Result<(), ModelLoadErr
         write_file(&doc_filename, &doc.to_json());
     }
 
-    let forms_path_name = format!("{}/forms", path);
-    std::fs::create_dir(&forms_path_name).unwrap();
+    let pages_path_name = format!("{}/pages", path);
+    std::fs::create_dir(&pages_path_name).unwrap();
 
-    for doc in &model.doc.forms {
-        let doc_filename = format!("{}/{}.json", forms_path_name, doc.id);
+    for doc in &model.doc.pages {
+        let doc_filename = format!("{}/{}.json", pages_path_name, doc.id);
+        write_file(&doc_filename, &doc.to_json());
+    }
+
+    let translations_path_name = format!("{}/translations", path);
+    std::fs::create_dir(&translations_path_name).unwrap();
+
+    for doc in &model.doc.translations {
+        let doc_filename = format!("{}/{}.json", translations_path_name, doc.id);
         write_file(&doc_filename, &doc.to_json());
     }
 
@@ -89,6 +104,7 @@ pub fn model_to_fs(model: &ModelDocument, path: &str) -> Result<(), ModelLoadErr
 }
 
 pub fn model_from_fs(path: &str) -> Result<ModelDocument, ModelLoadError> {
+    // partof: SPC-serialization-fs
 
     // XXX Error handling, assumption checking
 
@@ -112,16 +128,34 @@ pub fn model_from_fs(path: &str) -> Result<ModelDocument, ModelLoadError> {
         }
     }
 
-    let form_files_path = format!("{}/forms/*", path);
-    for item in glob_with(&form_files_path, &glob_options).unwrap() {
+    let page_files_path = format!("{}/pages/*", path);
+    for item in glob_with(&page_files_path, &glob_options).unwrap() {
         if let Ok(path) = item {
             let json = read_json_file(&path);
-            let form_doc: FormDocument = FormDocument::from_json(&json);
-            modeldoc.doc.forms.push(form_doc);
+            let page_doc: PageDocument = PageDocument::from_json(&json);
+            modeldoc.doc.pages.push(page_doc);
         } else {
             warn!("Unable to load doc from '{:?}'", item);
         }
     }
+
+    let translation_files_path = format!("{}/translations/*", path);
+    for item in glob_with(&translation_files_path, &glob_options).unwrap() {
+        if let Ok(path) = item {
+            let json = read_json_file(&path);
+            let translation_doc: TranslationDocument = TranslationDocument::from_json(&json);
+            modeldoc.doc.translations.push(translation_doc);
+        } else {
+            warn!("Unable to load doc from '{:?}'", item);
+        }
+    }
+
+    let model_config_filename = format!("{}/config.json", path);
+    let model_config_path = Path::new(&model_config_filename);
+    let model_config_json = read_json_file(&model_config_path);
+    let model_config: ModelConfigDocument = ModelConfigDocument::from_json(&model_config_json);
+
+    modeldoc.doc.config = model_config;
 
     let domain_filename = format!("{}/domain/domain.json", path);
     let domain_path = Path::new(&domain_filename);

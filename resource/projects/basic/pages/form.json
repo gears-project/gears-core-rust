@@ -1,0 +1,74 @@
+{
+    "doctype": "form",
+    "doctype_version": 1,
+    "id": "start_form_1",
+    "name" : "Form",
+    "version" : 1,
+    "doc" : {
+        "title": {
+            "locale": "en_US",
+            "key": "list_posts",
+            "value": "Lists Posts"
+        },
+        "components" : [
+            {
+                "component" : "Form",
+                "config": {
+                    "entity": "Post"
+                },
+                "components" : [
+                    {
+                        "component": "Row",
+                        "components": [
+                            {
+                                "component": "Column3",
+                                "components": [
+                                    {
+                                        "component" : "Label",
+                                        "config": {
+                                            "text": {
+                                                "locale": "en_US",
+                                                "key": "name",
+                                                "value": "Name"
+                                            }
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                "component": "Column3",
+                                "components": [
+                                    {
+                                        "component" : "TextInput",
+                                        "config": {
+                                            "placeholder": {
+                                                "locale": "en_US",
+                                                "key": "please_enter_a_name",
+                                                "value": "Please enter a name"
+                                            }
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                "component": "Column3",
+                                "components": [
+                                    {
+                                        "component" : "Button",
+                                        "config": {
+                                            "text": {
+                                                "locale": "en_US",
+                                                "key": "submit",
+                                                "value": "Submit"
+                                            }
+                                        }
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}

@@ -1,0 +1,34 @@
+[SPC-flox-variables]
+text = '''
+Any variables that are available in an xflow should be available for evaluation
+in a flox expression.
+
+These are,
+ - Boolean
+ - Integer
+'''
+
+[SPC-serialization-fs]
+text = '''
+Model serialization to and deserialization from filesystem is implemented in a utility module.
+'''
+[SPC-serialization-json]
+text = '''
+Model serialization is performed using **serde_json**
+'''
+
+[SPC-serialization-yaml]
+text = '''
+Model serialization is performed using **serde_yaml**
+'''
+
+[SPC-xflow-call]
+text = '''
+An xflow shall have a node of type 'call' which,
+
+ - Can invoke another xflow, named in its node parameters
+ - Can pass local variables
+ - Can assign the return values to local variables
+'''
+
+

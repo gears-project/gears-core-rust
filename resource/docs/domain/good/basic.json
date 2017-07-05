@@ -23,7 +23,14 @@
                         "vtype": "string",
                         "default": "",
                         "validations": [
-                            "xflow_string_value_required"
+                            {
+                                "message": {
+                                    "locale": "en_US",
+                                    "key": "a_value_is_required",
+                                    "value": "Value is required"
+                                },
+                                "xflow": "xflow_string_value_required"
+                            }
                         ]
                     },
                     {
@@ -31,7 +38,14 @@
                         "vtype": "string",
                         "default": "",
                         "validations": [
-                            "xflow_string_value_required"
+                            {
+                                "message": {
+                                    "locale": "en_US",
+                                    "key": "a_value_is_required",
+                                    "value": "Value is required"
+                                },
+                                "xflow": "xflow_string_value_required"
+                            }
                         ]
                     },
                     {
@@ -39,7 +53,14 @@
                         "vtype": "string",
                         "default": "",
                         "validations": [
-                            "xflow_string_value_required"
+                            {
+                                "message": {
+                                    "locale": "en_US",
+                                    "key": "a_value_is_required",
+                                    "value": "Value is required"
+                                },
+                                "xflow": "xflow_string_value_required"
+                            }
                         ]
                     }
                 ],
@@ -60,7 +81,14 @@
                         "storage": "persistent",
                         "default": "",
                         "validations": [
-                            "xflow_string_value_required"
+                            {
+                                "message": {
+                                    "locale": "en_US",
+                                    "key": "a_value_is_required",
+                                    "value": "Value is required"
+                                },
+                                "xflow": "xflow_string_value_required"
+                            }
                         ]
                     }
                 ],

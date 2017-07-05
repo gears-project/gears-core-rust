@@ -1,9 +1,21 @@
-#[cfg(test)]
+extern crate serde;
+extern crate serde_json;
 
 use std::error::Error;
 use std::fs::File;
 use std::io::prelude::*;
 use std::path::Path;
+
+use self::serde::de::DeserializeOwned;
+
+#[allow(dead_code)]
+pub fn load_doc<T>(path: &str) -> T
+    where T: DeserializeOwned
+{
+    let json_string = read_json_file(path);
+    let v: T = serde_json::from_str(&json_string).unwrap();
+    v
+}
 
 #[allow(dead_code)]
 pub fn read_json_file(filename: &str) -> String {

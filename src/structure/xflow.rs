@@ -65,8 +65,8 @@ pub struct XFlowVariables {
 pub struct XFlowNode {
     pub id: i32,
     pub nodetype: XFlowNodeType,
-    pub label: String,
     pub action: String,
+    pub label: String,
     pub parameters: XFlowNodeParameters,
 }
 

@@ -3,8 +3,8 @@ extern crate env_logger;
 extern crate xflow;
 use xflow::structure::xflow::*;
 
-mod helper;
-use helper::read_json_file;
+mod common;
+use common::load_doc;
 
 fn create_node(id: i32) -> XFlowNode {
     XFlowNode {
@@ -106,20 +106,14 @@ fn test_xfs_fields() {
 // #[should_panic]
 fn test_xfs_entry() {
     let _ = env_logger::init();
-
-    let json_string = read_json_file("resource/docs/xflow/flows/10_steps.json");
-    let xfs = XFlowDocument::from_json(&json_string);
-
+    let xfs = load_doc::<XFlowDocument>("resource/docs/xflow/flows/10_steps.json");
     assert_eq!(xfs.doc.get_nodes_by(&XFlowNodeType::Flow, "start").len(), 1);
 }
 
 #[test]
 fn test_xfs_doc_get_nodes_of_type() {
     let _ = env_logger::init();
-
-    let json_string = read_json_file("resource/docs/xflow/flows/10_steps.json");
-    let xfs = XFlowDocument::from_json(&json_string);
-
+    let xfs = load_doc::<XFlowDocument>("resource/docs/xflow/flows/10_steps.json");
     assert_eq!(xfs.doc.get_nodes_of_type(&XFlowNodeType::Flow).len(), 2);
 }
 
@@ -127,10 +121,7 @@ fn test_xfs_doc_get_nodes_of_type() {
 // #TST-serialization-json
 fn test_xfs_from_json() {
     let _ = env_logger::init();
-
-    let json_string = read_json_file("resource/docs/xflow/flows/10_steps.json");
-    let xfs = XFlowDocument::from_json(&json_string);
-
+    let xfs = load_doc::<XFlowDocument>("resource/docs/xflow/flows/10_steps.json");
     assert_eq!(xfs.name, "steps".to_string());
     assert_eq!(xfs.doc.nodes.len(), 10);
     assert_eq!(xfs.doc.edges.len(), 9);
@@ -174,9 +165,7 @@ fn test_xfs_from_json() {
 #[test]
 fn test_xfs_from_json_string() {
     let _ = env_logger::init();
-
-    let empty_flow = read_json_file("resource/docs/xflow/bad_flows/empty.json");
-    let xfs = XFlowDocument::from_json(&empty_flow);
+    let xfs = load_doc::<XFlowDocument>("resource/docs/xflow/bad_flows/empty.json");
 
     assert_eq!(xfs.name, "empty".to_string());
     assert_eq!(xfs.doc.nodes.len(), 0);
@@ -187,12 +176,7 @@ fn test_xfs_from_json_string() {
 #[test]
 fn test_mem_profile() {
     let _ = env_logger::init();
-
-    use std;
-    let json_string = read_json_file("resource/docs/xflow/flows/10_steps.json");
-    let xfs = XFlowDocument::from_json(&json_string);
+    let xfs = load_doc::<XFlowDocument>("resource/docs/xflow/flows/10_steps.json");
 
     assert_eq!(std::mem::size_of_val(&xfs), 256);
-
-    // println!("size of `10 steps flow` in bytes: {}", std::mem::size_of_val(&xfs));
 }

@@ -4,20 +4,18 @@ extern crate xflow;
 use xflow::structure::xflow::*;
 use xflow::validation::xflow::*;
 
-mod helper;
-use helper::read_json_file;
+mod common;
+use common::load_doc;
 
 #[test]
 fn test_init_validation() {
-    let json_string = read_json_file("resource/docs/xflow/flows/10_steps.json");
-    let xfs = XFlowDocument::from_json(&json_string);
+    let xfs = load_doc::<XFlowDocument>("resource/docs/xflow/flows/10_steps.json");
     assert_eq!(xfs.doc.nodes.len(), 10);
 }
 
 #[test]
 fn test_validations_ok() {
-    let json_string = read_json_file("resource/docs/xflow/flows/10_steps.json");
-    let xfs = XFlowDocument::from_json(&json_string);
+    let xfs = load_doc::<XFlowDocument>("resource/docs/xflow/flows/10_steps.json");
 
     let res_a = Validation::all_edges_have_nodes(&xfs);
     assert_eq!(res_a.len(), 0);
@@ -37,8 +35,7 @@ fn test_validations_ok() {
 
 #[test]
 fn test_validations_edges_have_nodes() {
-    let json_string = read_json_file("resource/docs/xflow/bad_flows/edges_without_nodes.json");
-    let xfs = XFlowDocument::from_json(&json_string);
+    let xfs = load_doc::<XFlowDocument>("resource/docs/xflow/bad_flows/edges_without_nodes.json");
 
     let res_a = Validation::all_edges_have_nodes(&xfs);
 
@@ -50,8 +47,7 @@ fn test_validations_edges_have_nodes() {
 
 #[test]
 fn test_validations_all_nodes_have_edges() {
-    let json_string = read_json_file("resource/docs/xflow/bad_flows/orphan_node.json");
-    let xfs = XFlowDocument::from_json(&json_string);
+    let xfs = load_doc::<XFlowDocument>("resource/docs/xflow/bad_flows/orphan_node.json");
 
     let res_a = Validation::all_nodes_have_at_least_one_edge(&xfs);
 
@@ -63,8 +59,7 @@ fn test_validations_all_nodes_have_edges() {
 
 #[test]
 fn test_validations_has_one_entry_node() {
-    let json_string = read_json_file("resource/docs/xflow/bad_flows/multiple_entry_nodes.json");
-    let xfs = XFlowDocument::from_json(&json_string);
+    let xfs = load_doc::<XFlowDocument>("resource/docs/xflow/bad_flows/multiple_entry_nodes.json");
 
     let res_a = Validation::has_one_entry_node(&xfs);
 
@@ -76,8 +71,7 @@ fn test_validations_has_one_entry_node() {
 
 #[test]
 fn test_validations_has_one_entry_node_ii() {
-    let json_string = read_json_file("resource/docs/xflow/bad_flows/no_entry_nodes.json");
-    let xfs = XFlowDocument::from_json(&json_string);
+    let xfs = load_doc::<XFlowDocument>("resource/docs/xflow/bad_flows/no_entry_nodes.json");
 
     let res_a = Validation::has_one_entry_node(&xfs);
 
@@ -89,8 +83,7 @@ fn test_validations_has_one_entry_node_ii() {
 
 #[test]
 fn test_validations_has_terminal_nodes() {
-    let json_string = read_json_file("resource/docs/xflow/bad_flows/no_terminal_nodes.json");
-    let xfs = XFlowDocument::from_json(&json_string);
+    let xfs = load_doc::<XFlowDocument>("resource/docs/xflow/bad_flows/no_terminal_nodes.json");
 
     let res_a = Validation::has_terminal_nodes(&xfs);
 
@@ -102,8 +95,7 @@ fn test_validations_has_terminal_nodes() {
 
 #[test]
 fn test_all_node_actions_have_matching_requirements() {
-    let json_string = read_json_file("resource/docs/xflow/bad_flows/bad_capabilities.json");
-    let xfs = XFlowDocument::from_json(&json_string);
+    let xfs = load_doc::<XFlowDocument>("resource/docs/xflow/bad_flows/bad_capabilities.json");
 
     let res_a = Validation::all_node_actions_have_matching_requirements(&xfs);
 
@@ -132,8 +124,8 @@ fn test_all_good_flows_validate() {
                      "loop_infinite.json"];
 
     for flow in flows {
-        let json_string = read_json_file((format!("resource/docs/xflow/flows/{}", flow)).as_str());
-        let xfs = XFlowDocument::from_json(&json_string);
+        let xfs = load_doc::<XFlowDocument>((format!("resource/docs/xflow/flows/{}", flow))
+                                                .as_str());
 
         let res = Validation::validate(&xfs);
         if !res.is_empty() {
@@ -160,10 +152,8 @@ fn test_no_bad_flows_validate() {
                      "unreferenced_variables.json"];
 
     for flow in flows {
-        let json_string = read_json_file((format!("resource/docs/xflow/bad_flows/{}", flow))
-                                             .as_str());
-        let xfs = XFlowDocument::from_json(&json_string);
-
+        let xfs = load_doc::<XFlowDocument>((format!("resource/docs/xflow/bad_flows/{}", flow))
+                                                .as_str());
         let res = Validation::validate(&xfs);
 
         if res.is_empty() {
