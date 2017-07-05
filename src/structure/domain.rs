@@ -97,4 +97,18 @@ impl Translatable for DomainDocument {
         doc.translate_in_place(&t);
         doc
     }
+
+    fn all_i18n_strings(&self) -> Vec<&I18NString> {
+        let mut ts = Vec::<&I18NString>::new();
+
+        for entity in &self.doc.entities {
+            for attribute in &entity.attributes {
+                for validation in &attribute.validations {
+                    ts.push(&validation.message);
+                }
+            }
+        }
+
+        ts
+    }
 }

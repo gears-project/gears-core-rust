@@ -136,4 +136,5 @@ impl I18NString {
 pub trait Translatable {
     fn translate_in_place(&mut self, t: &TranslationDocument) -> ();
     fn translate(&self, t: &TranslationDocument) -> Self;
+    fn all_i18n_strings(&self) -> Vec<&I18NString>;
 }

@@ -121,6 +121,33 @@ pub struct FormControlGroupConfig {
 }
 
 
+fn collect_i18nstring(c: &Component) -> Vec<&I18NString> {
+    let mut res = Vec::<&I18NString>::new();
+
+    match c {
+        &Component::Header1(ref c) => res.push(&c.config.text),
+        &Component::Header2(ref c) => res.push(&c.config.text),
+        &Component::Header3(ref c) => res.push(&c.config.text),
+        &Component::Label(ref c) => res.push(&c.config.text),
+        &Component::Button(ref c) => res.push(&c.config.text),
+        &Component::TextInput(ref c) => res.push(&c.config.placeholder),
+        &Component::Column3(ref c) => res.append(&mut collect_i18nstrings(&c.components)),
+        &Component::Column6(ref c) => res.append(&mut collect_i18nstrings(&c.components)),
+        &Component::Column12(ref c) => res.append(&mut collect_i18nstrings(&c.components)),
+        // XXX: Implement others
+        _ => {}
+    }
+    res
+}
+
+fn collect_i18nstrings(components: &Components) -> Vec<&I18NString> {
+    let mut res = Vec::<&I18NString>::new();
+    for component in components {
+        res.append(&mut collect_i18nstring(&component));
+    }
+    res
+}
+
 fn translate_component(c: &mut Component, t: &TranslationDocument) -> () {
     match c {
         &mut Component::Header1(ref mut c) => c.config.text.translate_self(&t),
@@ -130,6 +157,8 @@ fn translate_component(c: &mut Component, t: &TranslationDocument) -> () {
         &mut Component::Button(ref mut c) => c.config.text.translate_self(&t),
         &mut Component::TextInput(ref mut c) => c.config.placeholder.translate_self(&t),
         &mut Component::Column3(ref mut c) => translate_components(&mut c.components, &t),
+        &mut Component::Column6(ref mut c) => translate_components(&mut c.components, &t),
+        &mut Component::Column12(ref mut c) => translate_components(&mut c.components, &t),
         // XXX: Implement others
         _ => {}
     }
@@ -151,5 +180,9 @@ impl Translatable for PageDocument {
         let mut doc = self.clone();
         doc.translate_in_place(&t);
         doc
+    }
+
+    fn all_i18n_strings(&self) -> Vec<&I18NString> {
+        collect_i18nstrings(&self.doc.components)
     }
 }

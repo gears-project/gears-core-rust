@@ -4,13 +4,14 @@ use super::common::{Document, I18NString};
 use std::collections::HashMap;
 
 pub type TranslationDocument = Document<Translation>;
+pub type TranslationMap = HashMap<String, I18NString>;
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 pub struct Translation {
     pub locale: String,
     pub language: String,
     pub country: String,
-    pub items: HashMap<String, I18NString>,
+    pub items: TranslationMap,
 }
 
 impl Default for Translation {
