@@ -1,5 +1,7 @@
 use structure::xflow::*;
 
+// XXX
+#[allow(unused_imports)]
 use ratel::grammar::*;
 use ratel::codegen::*;
 use ratel::parser::parse;

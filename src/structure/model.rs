@@ -86,32 +86,39 @@ impl ModelDocument {
         }
     }
 
-    /*
-    pub fn pad_all_translations(&mut self) -> () {
-        unimplemented!();
+    fn all_i18n_strings_map(&self) -> HashMap<String, &I18NString> {
         let mut i18n_items_in_model = HashMap::<String, &I18NString>::new();
         for item in self.all_i18n_strings() {
-            i18n_items_in_model.insert(item.key.clone(), item);
+            i18n_items_in_model.insert(item.key.clone(), &item);
         }
+        i18n_items_in_model
+    }
 
-        let locales = self.doc.config.doc.locales.clone();
+    pub fn pad_all_translations(&mut self) -> () {
 
-        for locale in locales {
-            match self.get_translation(&locale) {
-                Ok(ref mut t) => {
-                    pad_translation_doc(t, &i18n_items_in_model);
-                }
-                Err(_) => {
-                    let mut t = TranslationDocument::default();
-                    t.doc.locale = locale.clone();
-                    // self.doc.translations.push(t);
-                    // pad_translation_doc(t, &i18n_items_in_model);
-                }
-            };
+        let missing: Vec<&String> = self.doc
+            .config
+            .doc
+            .locales
+            .iter()
+            .filter(|l| !self.has_translation(l))
+            .collect();
 
+        for locale in missing {
+            info!("Adding new translation for locale '{:?}'", locale);
+            let mut t = TranslationDocument::default();
+            t.doc.locale = locale.clone();
+            for (key, item) in self.all_i18n_strings_map() {
+                let new_item = I18NString {
+                    key: item.key.clone(),
+                    locale: locale.clone(),
+                    value: format!("-untranslated-:{}", item.value),
+                };
+                t.doc.items.insert(new_item.key.clone(), new_item);
+            }
+            self.doc.translations.push(t);
         }
     }
-    */
 }
 
 impl Translatable for ModelDocument {

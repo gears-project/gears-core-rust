@@ -54,3 +54,17 @@ fn test_translate_basic_domain() {
     assert_ne!(domain, domain_nl);
     assert_ne!(domain_nl, domain_en);
 }
+
+#[test]
+fn test_translate_model_add_translations() {
+    let _ = env_logger::init();
+    // partof: TST-i18n
+
+    let mut model = model_from_fs(&"resource/projects/basic").unwrap();
+    model.doc.config.doc.locales.push("es_ES".to_owned());
+    model.pad_all_translations();
+
+    let model_es = model.as_locale(&"es_ES").unwrap();
+
+    assert_ne!(model, model_es);
+}
