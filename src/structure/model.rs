@@ -36,12 +36,15 @@ fn pad_translation_doc(t: &mut TranslationDocument,
     for (key, item) in strings_in_model {
         if !t.doc.items.contains_key(key) {
             let value = format!("UNTRANSLATED {:?}", item.value);
-            t.doc.items.insert(key.clone(),
-                               I18NString {
-                                   locale: t.doc.locale.clone(),
-                                   key: key.clone(),
-                                   value: value,
-                               });
+            let item = I18NString {
+                locale: t.doc.locale.clone(),
+                key: key.clone(),
+                value: value,
+            };
+            debug!("Untranslated string, locale :'{:?}', value '{:?}'",
+                   item.locale,
+                   item.value);
+            t.doc.items.insert(key.clone(), item);
         }
     }
 }
