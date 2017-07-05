@@ -18,10 +18,10 @@ impl Flox {
             XFlowNodeParameters::Flox(ref node_params) => {
                 match node.action.as_ref() {
                     "evalexpr" => {
-                        info!("Flox: evalexpr: '{}' - state: '{}' - params: '{:?}'",
-                              node.id,
-                              state,
-                              node_params);
+                        debug!("Flox: evalexpr: '{}' - state: '{}' - params: '{:?}'",
+                               node.id,
+                               state,
+                               node_params);
                         let expr = node_params.expression.as_str();
                         debug!("Expression: '{}'", expr);
                         match flox::parse_context(node_params.expression.as_str(), state) {

@@ -21,7 +21,7 @@ impl<'a> Dispatcher<'a> {
     }
 
     pub fn dispatch(&self, xfnode: &XFlowNode, xfstate: &mut XFState) -> Result<(), String> {
-        info!("Nodetype {:?}, action {}", xfnode.nodetype, xfnode.action);
+        debug!("Nodetype {:?}, action {}", xfnode.nodetype, xfnode.action);
 
         if let Some(receiver) = self.receivers.get(&xfnode.nodetype) {
             match receiver.dispatch(xfnode, xfstate) {
