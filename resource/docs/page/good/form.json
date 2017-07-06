@@ -1,7 +1,7 @@
 {
     "doctype": "form",
     "doctype_version": 1,
-    "id": "start_form_1",
+    "id": "form",
     "name" : "Form",
     "version" : 1,
     "doc" : {

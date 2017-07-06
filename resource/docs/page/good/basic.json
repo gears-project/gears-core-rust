@@ -1,7 +1,7 @@
 {
     "doctype": "form",
     "doctype_version": 1,
-    "id": "start_form_1",
+    "id": "basic",
     "name" : "List Posts",
     "version" : 1,
     "doc" : {
