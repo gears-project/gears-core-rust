@@ -113,7 +113,6 @@ impl ModelDocument {
     }
 
     pub fn add_locale(&mut self, locale: &str) -> Result<(), String> {
-
         if !self.has_locale(&locale) {
             self.doc.config.doc.locales.push(locale.to_owned());
             Ok(())
@@ -137,6 +136,7 @@ impl ModelDocument {
             info!("Adding new translation for locale '{:?}'", locale);
             let mut t = TranslationDocument::default();
             t.doc.locale = locale.clone();
+            t.id = locale.clone();
             for (key, item) in self.all_i18n_strings_map() {
                 let new_item = I18NString {
                     key: item.key.clone(),
