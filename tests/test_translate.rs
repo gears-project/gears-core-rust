@@ -65,6 +65,14 @@ fn test_translate_model_add_translations() {
     model.pad_all_translations();
 
     let model_es = model.as_locale(&"es_ES").unwrap();
+    let model_en = model.as_locale(&"en_US").unwrap();
+    let model_nl = model.as_locale(&"nl_NL").unwrap();
 
     assert_ne!(model, model_es);
+    assert_ne!(model, model_nl);
+
+    assert_eq!(model_en.all_i18n_strings().len(),
+               model_es.all_i18n_strings().len());
+    assert_eq!(model_en.all_i18n_strings().len(),
+               model_nl.all_i18n_strings().len());
 }
