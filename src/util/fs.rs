@@ -56,6 +56,18 @@ fn write_file(filename: &str, data: &str) -> () {
     }
 }
 
+fn create_dir(path: &str) -> () {
+    debug!("Creating directory '{:?}'", path);
+    match std::fs::create_dir(&path) {
+        Ok(_) => {
+            debug!("Created directory '{:?}' : OK", path);
+        }
+        Err(_) => {
+            error!("Error creating directory '{:?}'", path);
+        }
+    };
+}
+
 pub fn model_to_fs(model: &ModelDocument, path: &str) -> Result<(), ModelLoadError> {
     // partof: #SPC-serialization-fs
 
@@ -71,13 +83,13 @@ pub fn model_to_fs(model: &ModelDocument, path: &str) -> Result<(), ModelLoadErr
     write_file(&model_config_doc_filename, &model_config_doc.to_json());
 
     let domain_path_name = format!("{}/domain", path);
-    std::fs::create_dir(&domain_path_name).unwrap();
+    create_dir(&domain_path_name);
     let doc_filename = format!("{}/domain.json", domain_path_name);
     let doc = &model.doc.domain;
     write_file(&doc_filename, &doc.to_json());
 
     let xflows_path_name = format!("{}/xflows", path);
-    std::fs::create_dir(&xflows_path_name).unwrap();
+    create_dir(&xflows_path_name);
 
     for doc in &model.doc.xflows {
         let doc_filename = format!("{}/{}.json", xflows_path_name, doc.id);
@@ -85,7 +97,7 @@ pub fn model_to_fs(model: &ModelDocument, path: &str) -> Result<(), ModelLoadErr
     }
 
     let pages_path_name = format!("{}/pages", path);
-    std::fs::create_dir(&pages_path_name).unwrap();
+    create_dir(&pages_path_name);
 
     for doc in &model.doc.pages {
         let doc_filename = format!("{}/{}.json", pages_path_name, doc.id);
@@ -93,10 +105,10 @@ pub fn model_to_fs(model: &ModelDocument, path: &str) -> Result<(), ModelLoadErr
     }
 
     let translations_path_name = format!("{}/translations", path);
-    std::fs::create_dir(&translations_path_name).unwrap();
+    create_dir(&translations_path_name);
 
     for doc in &model.doc.translations {
-        let doc_filename = format!("{}/{}.json", translations_path_name, doc.id);
+        let doc_filename = format!("{}/{}.json", translations_path_name, doc.doc.locale);
         write_file(&doc_filename, &doc.to_json());
     }
 
@@ -168,7 +180,7 @@ pub fn model_from_fs(path: &str) -> Result<ModelDocument, ModelLoadError> {
 }
 
 pub fn init_new_model_dir(path: &str) -> Result<(), ModelLoadError> {
-    std::fs::create_dir(&path).unwrap();
+    create_dir(&path);
     let model = ModelDocument::default();
     model_to_fs(&model, &path)
 }

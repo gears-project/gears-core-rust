@@ -94,6 +94,35 @@ impl ModelDocument {
         i18n_items_in_model
     }
 
+    pub fn has_locale(&self, locale: &str) -> bool {
+        let res: Vec<&String> = self.doc
+            .config
+            .doc
+            .locales
+            .iter()
+            .filter({
+                        |l1| *l1 == locale
+                    })
+            .collect();
+
+        match res.len() {
+            0 => false,
+            _ => true,
+        }
+
+    }
+
+    pub fn add_locale(&mut self, locale: &str) -> Result<(), String> {
+
+        if !self.has_locale(&locale) {
+            self.doc.config.doc.locales.push(locale.to_owned());
+            Ok(())
+        } else {
+            let msg = format!("add_locale : The locale '{:?}' already exists", locale);
+            Err(msg)
+        }
+    }
+
     pub fn pad_all_translations(&mut self) -> () {
 
         let missing: Vec<&String> = self.doc
