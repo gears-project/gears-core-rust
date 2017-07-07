@@ -85,8 +85,8 @@ pub fn model_to_fs(model: &ModelDocument, path: &str) -> Result<(), ModelLoadErr
     let domain_path_name = format!("{}/domain", path);
     create_dir(&domain_path_name);
     let doc_filename = format!("{}/domain.json", domain_path_name);
-    let doc = &model.doc.domain;
-    write_file(&doc_filename, &doc.to_json());
+
+    write_file(&doc_filename, &model.doc.domain.to_json());
 
     let xflows_path_name = format!("{}/xflows", path);
     create_dir(&xflows_path_name);
@@ -180,7 +180,7 @@ pub fn model_from_fs(path: &str) -> Result<ModelDocument, ModelLoadError> {
 }
 
 pub fn init_new_model_dir(path: &str) -> Result<(), ModelLoadError> {
-    create_dir(&path);
+    create_dir(path);
     let model = ModelDocument::default();
     model_to_fs(&model, &path)
 }

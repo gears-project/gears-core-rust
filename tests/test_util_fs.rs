@@ -23,10 +23,10 @@ fn test_model_to_and_from_fs() {
     let _ = env_logger::init();
     // partof: #TST-serialization-fs
 
-    let model_a = model_from_fs(&"resource/projects/basic").unwrap();
+    let model_a = model_from_fs("resource/projects/basic").unwrap();
 
     let root_b = TempDir::new("model_b");
-    let root_b = root_b.ok().expect("Should have created a temp directory");
+    let root_b = root_b.expect("Should have created a temp directory");
 
     let root_b_path = format!("{}", root_b.path().display());
     match model_to_fs(&model_a, &root_b_path) {
