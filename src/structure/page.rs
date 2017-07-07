@@ -156,11 +156,18 @@ fn translate_component(c: &mut Component, t: &TranslationDocument) -> () {
         &mut Component::Label(ref mut c) => c.config.text.translate_self(&t),
         &mut Component::Button(ref mut c) => c.config.text.translate_self(&t),
         &mut Component::TextInput(ref mut c) => c.config.placeholder.translate_self(&t),
+
         &mut Component::Column3(ref mut c) => translate_components(&mut c.components, &t),
         &mut Component::Column6(ref mut c) => translate_components(&mut c.components, &t),
         &mut Component::Column12(ref mut c) => translate_components(&mut c.components, &t),
-        // XXX: Implement others
-        _ => {}
+        &mut Component::Row(ref mut c) => translate_components(&mut c.components, &t),
+
+        &mut Component::Datatable(ref mut c) => {}
+        &mut Component::Form(ref mut c) => {}
+        &mut Component::FormControlGroup(ref mut c) => {
+            c.config.label.translate_self(&t);
+            c.config.placeholder.translate_self(&t);
+        }
     }
 }
 

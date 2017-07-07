@@ -2,30 +2,7 @@ use structure::xflow::*;
 use flox;
 use std::collections::{HashSet, HashMap};
 
-#[derive(Debug)]
-pub struct ValidationError {
-    pub code: i32,
-    pub message: String,
-    pub paths: Vec<String>,
-}
-
-impl ValidationError {
-    /// Constructs a new `ValidationError`
-    ///
-    /// # Example
-    /// ```
-    /// use xflow::validation::xflow::{ValidationError};
-    /// let err = ValidationError::new(1, "sample error".to_string(), Vec::<String>::new());
-    /// println!("Validation error {}", err.message);
-    /// ```
-    pub fn new(code: i32, message: String, paths: Vec<String>) -> ValidationError {
-        ValidationError {
-            code: code,
-            message: message,
-            paths: paths,
-        }
-    }
-}
+use validation::common::ValidationError;
 
 #[derive(Debug)]
 pub struct Validation {
