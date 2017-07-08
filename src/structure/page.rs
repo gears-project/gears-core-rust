@@ -105,10 +105,10 @@ pub enum FormControlType {
 
 impl FormControlType {
     pub fn to_text(&self) -> String {
-        match self {
-            &FormControlType::Text => "text".to_owned(),
-            &FormControlType::Radio => "radio".to_owned(),
-            &FormControlType::Checkbox => "checkbox".to_owned(),
+        match *self {
+            FormControlType::Text => "text".to_owned(),
+            FormControlType::Radio => "radio".to_owned(),
+            FormControlType::Checkbox => "checkbox".to_owned(),
         }
     }
 }
