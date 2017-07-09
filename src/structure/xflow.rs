@@ -35,6 +35,20 @@ pub enum XFlowValue {
     Boolean(bool),
 }
 
+impl XFlowValue {
+    pub fn string_value(&self) -> String {
+        match *self {
+            XFlowValue::String(ref s) => s.clone(),
+            XFlowValue::Integer(ref i) => i.to_string(),
+            XFlowValue::Boolean(ref b) => {
+                match *b {
+                    true => "true".to_owned(),
+                    false => "false".to_owned(),
+                }
+            }
+        }
+    }
+}
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 pub struct XFlowRequirement {
     pub xtype: XFlowNodeType,

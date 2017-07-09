@@ -11,10 +11,12 @@ use common::load_doc;
 fn test_load_basic_page_document() {
     let _ = env_logger::init();
 
-    let xflow = load_doc::<XFlowDocument>("resource/docs/xflow/flows/10_steps.json");
-    // let s = xflow_to_es5::output_es5(&xflow);
+    let xflow = load_doc::<XFlowDocument>("resource/docs/xflow/flows/branch_boolean_condition.json");
+    let s_es5 = xflow_to_es5::output_es5(&xflow);
+    let s_es = xflow_to_es5::output(&xflow);
     //
     //XXX: A little more assurance would be nice here
-    // assert_ne!(s, "");
-    // println!("JS! {}", s.into_bytes(());
+    assert_ne!(s_es, "");
+    println!("JS! {}", s_es5);
+    println!("JS LATEST! {}", s_es);
 }
