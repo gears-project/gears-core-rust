@@ -28,22 +28,24 @@ fn build_class(xflow: &XFlowDocument) -> String {
 
     let out = format!(
         r#"
-class Zork {{
+class {id} {{
+
+    local_vars = {{}}
+    input_vars = {{}}
+    output_vars = {{}}
+
     constructor(input_variables) {{
         input_variables.forEach((i)=> {{
-            this[i.name] = i.value;
+            this.local_vars[i.name] = i.value;
         }}, this);
         {local_variables}
     }}
-
-    node_id_X() {{
-    }}
-
-    node_id_Y() {{
-    }}
+    {nodes}
 }}
 "#,
-        local_variables = local_variables(&xflow)
+        id = &xflow.id,
+        local_variables = local_variables(&xflow),
+        nodes = build_nodes(&xflow)
     );
     out
 }
@@ -63,5 +65,27 @@ fn local_variables(xflow: &XFlowDocument) -> String {
              })
         .collect();
     vars.join("\r")
+
+}
+
+fn build_nodes(xflow: &XFlowDocument) -> String {
+    let vars: Vec<String> = xflow
+        .doc
+        .nodes
+        .iter()
+        .map({
+                 |node| {
+                     format!(r#" node_{id}() {{ {body} }}  "#,
+                             id = node.id,
+                             body = build_function_body(&node))
+                 }
+             })
+        .collect();
+    vars.join("\r")
+
+}
+
+fn build_function_body(node: &XFlowNode) -> String {
+    "xflow_node();".to_owned()
 
 }
