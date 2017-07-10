@@ -10,6 +10,8 @@ use xflow::generation::xflow_to_es5;
 mod common;
 use common::load_doc;
 
+// partof: #TST-artifact-generation-xflow
+//
 #[test]
 fn test_load_basic_page_document() {
     let _ = env_logger::init();
@@ -24,6 +26,6 @@ fn test_load_basic_page_document() {
     //
     //XXX: A little more assurance would be nice here
     assert_ne!(s_es, "");
-    println!("JS! {}", s_es5);
+    // println!("JS! {}", s_es5);
     println!("JS LATEST! {}", s_es);
 }

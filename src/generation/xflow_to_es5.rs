@@ -2,6 +2,8 @@ use structure::xflow::*;
 
 use ratel::{transformer, parser, codegen};
 
+// partof: #SPC-artifact-generation-xflow
+
 pub fn output(xflow: &XFlowDocument) -> String {
     let res = build_class(&xflow);
     output_js(&res)
@@ -40,6 +42,23 @@ class {id} {{
         }}, this);
         {local_variables}
     }}
+    run(callback) {{
+        this.callback = callback;
+    }}
+    exists(x) {{
+        return ((x != null) && (x != undefined));
+    }}
+    finalize(){{
+        for (name in this.output_vars) {{
+            if (this.exists(this.local_vars[name])) {{
+                this.output_vars[name] = this.local_vars[name];
+            }} else if (this.exists(this.input_vars[name])) {{
+                this.output_vars[name] = this.input_vars[name];
+            }} else {{
+                throw new Error("No var found");
+            }}
+        }}
+    }}
     {nodes}
 }}
 "#,
@@ -48,6 +67,10 @@ class {id} {{
         nodes = build_nodes(&xflow)
     );
     out
+}
+
+fn method_name_for_node_id(id: &i32) -> String {
+    format!("node_{id}", id = id)
 }
 
 fn local_variables(xflow: &XFlowDocument) -> String {
@@ -75,8 +98,8 @@ fn build_nodes(xflow: &XFlowDocument) -> String {
         .iter()
         .map({
                  |node| {
-                     format!(r#" node_{id}() {{ {body} }}  "#,
-                             id = node.id,
+                     format!(r#" {fn_id}() {{ {body} }}  "#,
+                             fn_id = method_name_for_node_id(&node.id),
                              body = build_function_body(&node, &xflow))
                  }
              })
@@ -88,7 +111,7 @@ fn build_nodes(xflow: &XFlowDocument) -> String {
 fn build_function_body(node: &XFlowNode, xflow: &XFlowDocument) -> String {
     let body = match node.nodetype {
         XFlowNodeType::Flow => build_xflow_body(&node, &xflow),
-        XFlowNodeType::Flox => "flox_node();".to_owned(),
+        XFlowNodeType::Flox => build_flox_body(&node, &xflow),
         XFlowNodeType::Call => "call_xflow();".to_owned(),
     };
 
@@ -100,24 +123,76 @@ fn build_function_body(node: &XFlowNode, xflow: &XFlowDocument) -> String {
 fn build_xflow_body(node: &XFlowNode, xflow: &XFlowDocument) -> String {
 
     match node.action.as_ref() {
-        "start" => {
-            let edges = xflow.doc.get_out_edges(node);
-            match edges.len() {
-                0 => {
-                    error!("build_xflow_body: Unable to find a connecting node");
-                    format!("")
-                }
-                1 => format!("this.node_{id}();", id = edges[0].1),
-                _ => {
-                    error!("build_xflow_body: Multiple connecting nodes from start node ");
-                    format!("")
-                }
-            }
-        }
-        "end" => format!("end();"),
-        "branch" => format!("branch();"),
+        "start" => build_node_body_call_next_node(node, xflow),
+        "end" => format!("this.finalize(); this.callback(this.output_vars);"),
+        "branch" => build_node_body_branch(node, xflow),
         _ => format!("unimplemented();"),
 
     }
+}
 
+fn build_flox_body(node: &XFlowNode, xflow: &XFlowDocument) -> String {
+    format!(
+        r#"
+    console.log('flox node');
+    {call_next_node}
+    "#,
+        call_next_node = build_node_body_call_next_node(node, xflow)
+    )
+}
+
+fn build_node_body_call_next_node(node: &XFlowNode, xflow: &XFlowDocument) -> String {
+    let edges = xflow.doc.get_out_edges(node);
+    match edges.len() {
+        0 => {
+            error!("build_node_body_call_next_node: Unable to find a connecting node");
+            format!("")
+        }
+        1 => {
+            format!("this.{fn_id}();",
+                    fn_id = method_name_for_node_id(&edges[0].1))
+        }
+        _ => {
+            error!("build_node_body_call_next_node: Multiple connecting nodes from non-branch node ");
+            format!("")
+        }
+    }
+}
+
+fn build_node_body_branch(node: &XFlowNode, xflow: &XFlowDocument) -> String {
+    let edges = xflow.doc.get_out_edges(node);
+    match edges.len() {
+        0 => {
+            error!("build_node_body_branch: Unable to find a connecting node");
+            format!("")
+        }
+        1 => {
+            error!("build_node_body_branch: Only one connecting node for a branch");
+            format!("this.{fn_id}();",
+                    fn_id = method_name_for_node_id(&edges[0].1))
+        }
+        _ => {
+            let mut res: Vec<String> = xflow
+                .doc
+                .get_out_branches(node.id)
+                .iter()
+                .map({
+                         |branch| {
+                        format!(
+                            r#"
+                            if ({var} == {condition}) {{
+                                this.{fn_id}();
+                            }}
+                             "#,
+                            var = branch.xvar.name,
+                            condition = branch.xvar.value.string_value(),
+                            fn_id = method_name_for_node_id(&branch.edge.1)
+                        )
+                    }
+                     })
+                .collect();
+            res.push(format!("throw new Error('Unhandled branch');"));
+            res.join(";")
+        }
+    }
 }

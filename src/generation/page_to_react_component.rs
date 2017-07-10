@@ -1,5 +1,7 @@
 use structure::page::*;
 
+// partof: #SPC-artifact-generation-page
+
 pub fn output_html(page: &PageDocument) -> String {
     output_components(&page.doc.components)
 }

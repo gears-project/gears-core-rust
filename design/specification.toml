@@ -8,10 +8,17 @@ These are,
  - Integer
 '''
 
+[SPC-serialization]
+text = '''
+All aspects of the Model datastructures derive the serde traits Serialize and
+Deserialize, without exceptions.
+'''
+
 [SPC-serialization-fs]
 text = '''
 Model serialization to and deserialization from filesystem is implemented in a utility module.
 '''
+
 [SPC-serialization-json]
 text = '''
 Model serialization is performed using **serde_json**
@@ -31,4 +38,19 @@ An xflow shall have a node of type 'call' which,
  - Can assign the return values to local variables
 '''
 
+
+[SPC-artifact-generation-model]
+text = '''
+
+'''
+
+[SPC-artifact-generation-xflow]
+text = '''
+XFlow models can be transformed to JavaScript code
+'''
+
+[SPC-artifact-generation-page]
+text = '''
+Page models can be transformed to React JavaScript/JSX components
+'''
 
