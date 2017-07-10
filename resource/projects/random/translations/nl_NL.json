@@ -1,0 +1,44 @@
+{
+    "doctype": "translations",
+    "doctype_version": 1,
+    "id": "nl_NL_basic",
+    "name" : "nl_NL_basic",
+    "version" : 1,
+    "doc" : {
+        "locale": "nl_NL",
+        "language": "nl",
+        "country": "NL",
+        "items": {
+            "a_value_is_required" : {
+                "locale": "nl_NL",
+                "key": "a_value_is_required",
+                "value": "Een waarde is vereist"
+            },
+            "list_posts" : {
+                "locale": "nl_NL",
+                "key": "list_posts",
+                "value": "Lijst met posten"
+            },
+            "main_header_1" : {
+                "locale": "nl_NL",
+                "key": "main_header_1",
+                "value": "Hoofd Tekst 1"
+            },
+            "name" : {
+                "locale": "nl_NL",
+                "key": "name",
+                "value": "Naam"
+            },
+            "please_enter_a_name" : {
+                "locale": "nl_NL",
+                "key": "please_enter_a_name",
+                "value": "Vul aub een naam in"
+            },
+            "submit" : {
+                "locale": "nl_NL",
+                "key": "submit",
+                "value": "Submitten"
+            }
+        }
+    }
+}

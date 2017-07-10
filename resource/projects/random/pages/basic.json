@@ -1,0 +1,31 @@
+{
+    "doctype": "form",
+    "doctype_version": 1,
+    "id": "basic",
+    "name" : "List Posts",
+    "version" : 1,
+    "doc" : {
+        "title": {
+            "locale": "en_US",
+            "key": "list_posts",
+            "value": "Lists Posts"
+        },
+        "components" : [
+            {
+                "component" : "Row",
+                "components" : [
+                    {
+                        "component": "Header1",
+                        "config": {
+                            "text": {
+                                "locale": "en_US",
+                                "key": "main_header_1",
+                                "value": "Main Header 1"
+                            }
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+}
