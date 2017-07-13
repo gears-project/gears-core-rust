@@ -162,8 +162,8 @@ fn translate_component(c: &mut Component, t: &TranslationDocument) -> () {
         Component::Column12(ref mut c) => translate_components(&mut c.components, &t),
         Component::Row(ref mut c) => translate_components(&mut c.components, &t),
 
-        Component::Datatable(ref mut c) => {}
-        Component::Form(ref mut c) => {}
+        Component::Datatable(_) => {}
+        Component::Form(_) => {}
         Component::FormControlGroup(ref mut c) => {
             c.config.label.translate_self(t);
             c.config.placeholder.translate_self(t);

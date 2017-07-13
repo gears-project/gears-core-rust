@@ -1,6 +1,7 @@
 use super::model;
 use super::xflow;
 use super::domain;
+use super::translation;
 
 use structure::model::ModelDocument;
 
@@ -39,6 +40,10 @@ pub fn validate_model(model: &ModelDocument) -> ValidationErrors {
 
     for xflow in &model.doc.xflows {
         errors.extend(xflow::Validation::validate(&xflow));
+    }
+
+    for t in &model.doc.translations {
+        errors.extend(translation::Validation::validate(&t));
     }
 
     errors

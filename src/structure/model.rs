@@ -137,7 +137,7 @@ impl ModelDocument {
             let mut t = TranslationDocument::default();
             t.doc.locale = locale.clone();
             t.id = locale.clone();
-            for (key, item) in self.all_i18n_strings_map() {
+            for (_, item) in self.all_i18n_strings_map() {
                 let new_item = I18NString {
                     key: item.key.clone(),
                     locale: locale.clone(),
