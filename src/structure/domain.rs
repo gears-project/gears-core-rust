@@ -1,6 +1,7 @@
 use super::common::{Document, I18NString, Translatable};
 use structure::translation::TranslationDocument;
 
+
 pub type DomainDocument = Document<Domain>;
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]

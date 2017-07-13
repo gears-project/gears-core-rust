@@ -3,7 +3,6 @@ use super::xflow;
 use super::domain;
 
 use structure::model::ModelDocument;
-use structure::domain::DomainDocument;
 
 #[derive(Debug)]
 pub struct ValidationError {
