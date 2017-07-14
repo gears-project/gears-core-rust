@@ -21,9 +21,12 @@
 *   Move page_to_vue, page_to_react ([0841e8fc](https://github.com/michiel/xflow-rust/commit/0841e8fc36497ee9f1bf45f6c802dda86557851d))
 *   Add ModelConfig to model top level ([48de37a2](https://github.com/michiel/xflow-rust/commit/48de37a2e946f3d4c07ab92fedde11367ff4b30c))
 *   Change page, domain text to i18nstring ([6c7c39c9](https://github.com/michiel/xflow-rust/commit/6c7c39c9aeca573d5090b988874ae5bbcaa4ed52))
-*
+
+
 <a name=""></a>
 ## 0.1.1 (2017-05-14)
+
+#### Features
 
 
 *   Add messages to validation references ([fc2979b4](https://github.com/michiel/xflow-rust/commit/fc2979b46ff7c1b21749a0d29be545c6d48edd0d))
