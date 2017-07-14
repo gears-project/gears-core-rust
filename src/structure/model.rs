@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 
 use super::common::{Document, Translatable, I18NString};
 use super::domain;
@@ -36,12 +36,15 @@ fn pad_translation_doc(t: &mut TranslationDocument,
     for (key, item) in strings_in_model {
         if !t.doc.items.contains_key(key) {
             let value = format!("UNTRANSLATED {:?}", item.value);
-            t.doc.items.insert(key.clone(),
-                               I18NString {
-                                   locale: t.doc.locale.clone(),
-                                   key: key.clone(),
-                                   value: value,
-                               });
+            let item = I18NString {
+                locale: t.doc.locale.clone(),
+                key: key.clone(),
+                value: value,
+            };
+            debug!("Untranslated string, locale :'{:?}', value '{:?}'",
+                   item.locale,
+                   item.value);
+            t.doc.items.insert(key.clone(), item);
         }
     }
 }
@@ -57,6 +60,17 @@ impl ModelDocument {
             }
             Err(err) => Err(err.to_string()),
         }
+
+    }
+
+    pub fn all_xflow_ids(&self) -> HashSet<&String> {
+        let mut xflow_ids = HashSet::<&String>::new();
+
+        for xflow in &self.doc.xflows {
+            xflow_ids.insert(&xflow.id);
+        }
+
+        xflow_ids
 
     }
 
@@ -83,32 +97,68 @@ impl ModelDocument {
         }
     }
 
-    /*
-    pub fn pad_all_translations(&mut self) -> () {
-        unimplemented!();
+    fn all_i18n_strings_map(&self) -> HashMap<String, &I18NString> {
         let mut i18n_items_in_model = HashMap::<String, &I18NString>::new();
         for item in self.all_i18n_strings() {
-            i18n_items_in_model.insert(item.key.clone(), item);
+            i18n_items_in_model.insert(item.key.clone(), &item);
+        }
+        i18n_items_in_model
+    }
+
+    pub fn has_locale(&self, locale: &str) -> bool {
+        let res: Vec<&String> = self.doc
+            .config
+            .doc
+            .locales
+            .iter()
+            .filter({
+                        |l1| *l1 == locale
+                    })
+            .collect();
+
+        match res.len() {
+            0 => false,
+            _ => true,
         }
 
-        let locales = self.doc.config.doc.locales.clone();
+    }
 
-        for locale in locales {
-            match self.get_translation(&locale) {
-                Ok(ref mut t) => {
-                    pad_translation_doc(t, &i18n_items_in_model);
-                }
-                Err(_) => {
-                    let mut t = TranslationDocument::default();
-                    t.doc.locale = locale.clone();
-                    // self.doc.translations.push(t);
-                    // pad_translation_doc(t, &i18n_items_in_model);
-                }
-            };
-
+    pub fn add_locale(&mut self, locale: &str) -> Result<(), String> {
+        if !self.has_locale(&locale) {
+            self.doc.config.doc.locales.push(locale.to_owned());
+            Ok(())
+        } else {
+            let msg = format!("add_locale : The locale '{:?}' already exists", locale);
+            Err(msg)
         }
     }
-    */
+
+    pub fn pad_all_translations(&mut self) -> () {
+
+        let missing: Vec<&String> = self.doc
+            .config
+            .doc
+            .locales
+            .iter()
+            .filter(|l| !self.has_translation(l))
+            .collect();
+
+        for locale in missing {
+            info!("Adding new translation for locale '{:?}'", locale);
+            let mut t = TranslationDocument::default();
+            t.doc.locale = locale.clone();
+            t.id = locale.clone();
+            for (_, item) in self.all_i18n_strings_map() {
+                let new_item = I18NString {
+                    key: item.key.clone(),
+                    locale: locale.clone(),
+                    value: format!("-untranslated-:{}", item.value),
+                };
+                t.doc.items.insert(new_item.key.clone(), new_item);
+            }
+            self.doc.translations.push(t);
+        }
+    }
 }
 
 impl Translatable for ModelDocument {

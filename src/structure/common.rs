@@ -118,13 +118,15 @@ impl I18NString {
 
     pub fn translate_self(&mut self, t: &TranslationDocument) -> () {
         match t.doc.items.get(&self.key) {
-            Some(t) => {
-                self.locale = t.locale.clone();
-                self.value = t.value.clone();
+            Some(item) => {
+                self.locale = item.locale.clone();
+                self.value = item.value.clone();
             }
             None => {
-                warn!("No translation found for '{:?}'", self.key);
-                self.locale = "en_XX".to_owned();
+                warn!("No translation found for '{:?}' in locale '{:?}'",
+                      self.key,
+                      t.doc.locale);
+                self.locale = t.doc.locale.clone();
                 self.value = "-no-value-".to_owned();
             }
         };

@@ -9,13 +9,13 @@ impl Flow {
         debug!("Flow: {} - {}", node.id, state);
         match node.action.as_ref() {
             "start" => {
-                info!("Start {} - {}", node.id, state);
+                debug!("Start {} - {}", node.id, state);
             }
             "end" => {
-                info!("End {} - {}", node.id, state);
+                debug!("End {} - {}", node.id, state);
             }
             "branch" => {
-                info!("Branch {} - {}", node.id, state);
+                debug!("Branch {} - {}", node.id, state);
             }
             _ => {
                 error!("Unimplemented/unhandled {} - {}", node.id, state);

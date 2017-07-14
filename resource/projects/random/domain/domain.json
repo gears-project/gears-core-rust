@@ -1,0 +1,106 @@
+{
+    "doctype": "domain",
+    "doctype_version": 1,
+    "id": "post_model_1",
+    "name" : "Forum Model",
+    "version" : 1,
+    "doc" : {
+        "events": {
+            "change":[],
+            "update":[],
+            "read":[],
+            "delete":[],
+            "all":[
+                "xflow_debug_all_erd_events"
+            ]
+        },
+        "entities": [
+            {
+                "name": "post",
+                "attributes": [
+                    {
+                        "name": "title",
+                        "vtype": "string",
+                        "default": "",
+                        "validations": [
+                            {
+                                "message": {
+                                    "locale": "en_US",
+                                    "key": "a_value_is_required",
+                                    "value": "Value is required"
+                                },
+                                "xflow": "xflow_string_value_required"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "body",
+                        "vtype": "string",
+                        "default": "",
+                        "validations": [
+                            {
+                                "message": {
+                                    "locale": "en_US",
+                                    "key": "a_value_is_required",
+                                    "value": "Value is required"
+                                },
+                                "xflow": "xflow_string_value_required"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "created",
+                        "vtype": "string",
+                        "default": "",
+                        "validations": [
+                            {
+                                "message": {
+                                    "locale": "en_US",
+                                    "key": "a_value_is_required",
+                                    "value": "Value is required"
+                                },
+                                "xflow": "xflow_string_value_required"
+                            }
+                        ]
+                    }
+                ],
+                "references" : [
+                    {
+                        "name": "comment",
+                        "reftype": "has_many",
+                        "other": "comment"
+                    }
+                ]
+            },
+            {
+                "name": "comment",
+                "attributes": [
+                    {
+                        "name": "post",
+                        "vtype": "string",
+                        "storage": "persistent",
+                        "default": "",
+                        "validations": [
+                            {
+                                "message": {
+                                    "locale": "en_US",
+                                    "key": "a_value_is_required",
+                                    "value": "Value is required"
+                                },
+                                "xflow": "xflow_string_value_required"
+                            }
+                        ]
+                    }
+                ],
+                "references" : [
+                    {
+                        "name": "post",
+                        "reftype": "belongs_to",
+                        "other": "post"
+                    }
+                ]
+            }
+        ]
+    }
+}
+

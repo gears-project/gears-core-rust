@@ -1,0 +1,109 @@
+{
+    "id": "branch",
+    "name": "branch",
+    "version": 1,
+    "doctype": "xflow",
+    "doctype_version": 1,
+    "doc" : {
+        "requirements": [
+            {
+                "xtype": "flow",
+                "version": 1
+            },
+            {
+                "xtype": "flox",
+                "version": 1
+            }
+        ],
+        "variables" : {
+            "input" : [
+                {
+                    "name"  : "MatchValue",
+                    "vtype"  : "boolean",
+                    "value" : "true"
+                }
+            ],
+            "output" : [
+                {
+                    "name" : "ReturnValue",
+                    "vtype" : "number"
+                }
+            ],
+            "local" : [
+                {
+                    "name"  : "ReturnValue",
+                    "vtype"  : "number",
+                    "value" : "0"
+                }
+            ]
+        },
+        "nodes": [
+            {
+                "id": 1,
+                "nodetype": "flow",
+                "action": "start",
+                "label" : "Start",
+                "parameters": {
+                    "flow" : {
+                    }
+                }
+            },
+            {
+                "id": 2,
+                "nodetype": "flow",
+                "action": "branch",
+                "label" : "Branch",
+                "parameters": {
+                    "flow" : {
+                        "name": "MatchValue",
+                        "vtype": "boolean"
+                    }
+                }
+            },
+            {
+                "id": 3,
+                "nodetype": "flow",
+                "action": "end",
+                "label" : "End",
+                "parameters": {
+                    "flow" : {
+                    }
+                }
+            },
+            {
+                "id": 4,
+                "nodetype": "flow",
+                "action": "end",
+                "label" : "End",
+                "parameters": {
+                    "flow" : {
+                    }
+                }
+            }
+        ],
+        "edges": [
+            [ 1, 2 ],
+            [ 2, 3 ],
+            [ 2, 4 ]
+        ],
+        "branches" : [
+            {
+                "edge"   : [2,3],
+                "xvar"  : {
+                    "name"  : "MatchValue",
+                    "vtype"  : "boolean",
+                    "value" : "true"
+                }
+            },
+            {
+                "edge"   : [2,4],
+                "name"   : "MatchValue",
+                "xvar"  : {
+                    "name"  : "MatchValue",
+                    "vtype"  : "boolean",
+                    "value" : "false"
+                }
+            }
+        ]
+    }
+}

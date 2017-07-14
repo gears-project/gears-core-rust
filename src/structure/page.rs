@@ -6,6 +6,12 @@ use super::translation::TranslationDocument;
 pub type PageDocument = Document<Page>;
 pub type Components = Vec<Component>;
 
+impl PageDocument {
+    pub fn all_xflow_references(&self) -> Vec<&String> {
+        collect_xflow_references(&self.doc.components)
+    }
+}
+
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 pub struct Page {
     pub title: I18NString,
@@ -105,10 +111,10 @@ pub enum FormControlType {
 
 impl FormControlType {
     pub fn to_text(&self) -> String {
-        match self {
-            &FormControlType::Text => "text".to_owned(),
-            &FormControlType::Radio => "radio".to_owned(),
-            &FormControlType::Checkbox => "checkbox".to_owned(),
+        match *self {
+            FormControlType::Text => "text".to_owned(),
+            FormControlType::Radio => "radio".to_owned(),
+            FormControlType::Checkbox => "checkbox".to_owned(),
         }
     }
 }
@@ -121,19 +127,66 @@ pub struct FormControlGroupConfig {
 }
 
 
+fn collect_xflow_reference(c: &Component) -> Vec<&String> {
+    let mut res = Vec::<&String>::new();
+
+    match *c {
+
+        //
+        // No xflow references
+        //
+        Component::Header1(_) => {}
+        Component::Header2(_) => {}
+        Component::Header3(_) => {}
+        Component::Label(_) => {}
+        Component::Button(_) => {}
+        Component::TextInput(_) => {}
+
+        //
+        // Containers
+        //
+        Component::Row(ref c) => res.append(&mut collect_xflow_references(&c.components)),
+        Component::Column3(ref c) => res.append(&mut collect_xflow_references(&c.components)),
+        Component::Column6(ref c) => res.append(&mut collect_xflow_references(&c.components)),
+        Component::Column12(ref c) => res.append(&mut collect_xflow_references(&c.components)),
+
+        //
+        // Containers
+        //
+        Component::Datatable(ref c) => {
+            for (_, ref xflow) in &c.config.eventbindings {
+                res.push(&xflow);
+            }
+        }
+
+        // XXX
+        _ => {}
+
+    }
+    res
+}
+
+fn collect_xflow_references(components: &Components) -> Vec<&String> {
+    let mut res = Vec::<&String>::new();
+    for component in components {
+        res.append(&mut collect_xflow_reference(&component));
+    }
+    res
+}
+
 fn collect_i18nstring(c: &Component) -> Vec<&I18NString> {
     let mut res = Vec::<&I18NString>::new();
 
-    match c {
-        &Component::Header1(ref c) => res.push(&c.config.text),
-        &Component::Header2(ref c) => res.push(&c.config.text),
-        &Component::Header3(ref c) => res.push(&c.config.text),
-        &Component::Label(ref c) => res.push(&c.config.text),
-        &Component::Button(ref c) => res.push(&c.config.text),
-        &Component::TextInput(ref c) => res.push(&c.config.placeholder),
-        &Component::Column3(ref c) => res.append(&mut collect_i18nstrings(&c.components)),
-        &Component::Column6(ref c) => res.append(&mut collect_i18nstrings(&c.components)),
-        &Component::Column12(ref c) => res.append(&mut collect_i18nstrings(&c.components)),
+    match *c {
+        Component::Header1(ref c) => res.push(&c.config.text),
+        Component::Header2(ref c) => res.push(&c.config.text),
+        Component::Header3(ref c) => res.push(&c.config.text),
+        Component::Label(ref c) => res.push(&c.config.text),
+        Component::Button(ref c) => res.push(&c.config.text),
+        Component::TextInput(ref c) => res.push(&c.config.placeholder),
+        Component::Column3(ref c) => res.append(&mut collect_i18nstrings(&c.components)),
+        Component::Column6(ref c) => res.append(&mut collect_i18nstrings(&c.components)),
+        Component::Column12(ref c) => res.append(&mut collect_i18nstrings(&c.components)),
         // XXX: Implement others
         _ => {}
     }
@@ -149,18 +202,25 @@ fn collect_i18nstrings(components: &Components) -> Vec<&I18NString> {
 }
 
 fn translate_component(c: &mut Component, t: &TranslationDocument) -> () {
-    match c {
-        &mut Component::Header1(ref mut c) => c.config.text.translate_self(&t),
-        &mut Component::Header2(ref mut c) => c.config.text.translate_self(&t),
-        &mut Component::Header3(ref mut c) => c.config.text.translate_self(&t),
-        &mut Component::Label(ref mut c) => c.config.text.translate_self(&t),
-        &mut Component::Button(ref mut c) => c.config.text.translate_self(&t),
-        &mut Component::TextInput(ref mut c) => c.config.placeholder.translate_self(&t),
-        &mut Component::Column3(ref mut c) => translate_components(&mut c.components, &t),
-        &mut Component::Column6(ref mut c) => translate_components(&mut c.components, &t),
-        &mut Component::Column12(ref mut c) => translate_components(&mut c.components, &t),
-        // XXX: Implement others
-        _ => {}
+    match *c {
+        Component::Header1(ref mut c) => c.config.text.translate_self(t),
+        Component::Header2(ref mut c) => c.config.text.translate_self(t),
+        Component::Header3(ref mut c) => c.config.text.translate_self(t),
+        Component::Label(ref mut c) => c.config.text.translate_self(t),
+        Component::Button(ref mut c) => c.config.text.translate_self(t),
+        Component::TextInput(ref mut c) => c.config.placeholder.translate_self(t),
+
+        Component::Column3(ref mut c) => translate_components(&mut c.components, &t),
+        Component::Column6(ref mut c) => translate_components(&mut c.components, &t),
+        Component::Column12(ref mut c) => translate_components(&mut c.components, &t),
+        Component::Row(ref mut c) => translate_components(&mut c.components, &t),
+
+        Component::Datatable(_) => {}
+        Component::Form(_) => {}
+        Component::FormControlGroup(ref mut c) => {
+            c.config.label.translate_self(t);
+            c.config.placeholder.translate_self(t);
+        }
     }
 }
 

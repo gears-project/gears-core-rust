@@ -2,30 +2,7 @@ use structure::xflow::*;
 use flox;
 use std::collections::{HashSet, HashMap};
 
-#[derive(Debug)]
-pub struct ValidationError {
-    pub code: i32,
-    pub message: String,
-    pub paths: Vec<String>,
-}
-
-impl ValidationError {
-    /// Constructs a new `ValidationError`
-    ///
-    /// # Example
-    /// ```
-    /// use xflow::validation::xflow::{ValidationError};
-    /// let err = ValidationError::new(1, "sample error".to_string(), Vec::<String>::new());
-    /// println!("Validation error {}", err.message);
-    /// ```
-    pub fn new(code: i32, message: String, paths: Vec<String>) -> ValidationError {
-        ValidationError {
-            code: code,
-            message: message,
-            paths: paths,
-        }
-    }
-}
+use validation::common::ValidationError;
 
 #[derive(Debug)]
 pub struct Validation {
@@ -325,23 +302,18 @@ impl Validation {
         let names_in_xflow = xflow.doc.get_all_variable_names();
 
         for node in nodes {
-            match node.parameters {
-                XFlowNodeParameters::Flox(ref flox_params) => {
-                    for flox_var in flox::extract_variable_names(&flox_params.expression).unwrap() {
-                        if !names_in_xflow.contains(flox_var) {
-                            errors.push(ValidationError {
-                                code: 1,
-                                message: format!(
-                                    "Flox expression references variable \
+            if let XFlowNodeParameters::Flox(ref flox_params) = node.parameters {
+                for flox_var in flox::extract_variable_names(&flox_params.expression).unwrap() {
+                    if !names_in_xflow.contains(flox_var) {
+                        errors.push(ValidationError {
+                                        code: 1,
+                                        message: format!("Flox expression references variable \
                                                           '{}' which is not defined in this flow",
-                                    flox_var
-                                ),
-                                paths: vec![format!("/nodes/{}", node.id)],
-                            });
-                        }
+                                                         flox_var),
+                                        paths: vec![format!("/nodes/{}", node.id)],
+                                    });
                     }
                 }
-                _ => {}
             }
         }
 
