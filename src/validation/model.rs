@@ -10,6 +10,7 @@ impl Validation {
 
         errors.extend(Validation::all_locales_have_translation_docs(&model));
         errors.extend(Validation::all_translation_docs_have_locales(&model));
+        errors.extend(Validation::all_page_xflow_references_point_to_existing_entities(&model));
 
         errors
     }
@@ -44,6 +45,29 @@ impl Validation {
                                                  &t.doc.locale),
                                 paths: vec!["/config/translations".to_owned()],
                             });
+            }
+        }
+
+        errors
+    }
+
+    pub fn all_page_xflow_references_point_to_existing_entities(model: &ModelDocument)
+                                                                -> Vec<ValidationError> {
+        debug!("all_page_xflow_references_point_to_existing_entities");
+        let mut errors = Vec::<ValidationError>::new();
+        let xflow_ids = model.all_xflow_ids();
+
+        for page in &model.doc.pages {
+            for xflow_reference in &page.all_xflow_references() {
+                if !xflow_ids.contains(xflow_reference) {
+                    let message = format!("Page: Contains a reference to xflow id '{}', which does not exist in this model",
+                                          xflow_reference);
+                    errors.push(ValidationError {
+                                    code: 1,
+                                    message: message,
+                                    paths: vec![format!("/pages/{id}", id = page.id)],
+                                });
+                }
             }
         }
 

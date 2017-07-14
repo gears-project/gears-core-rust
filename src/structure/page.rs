@@ -6,6 +6,12 @@ use super::translation::TranslationDocument;
 pub type PageDocument = Document<Page>;
 pub type Components = Vec<Component>;
 
+impl PageDocument {
+    pub fn all_xflow_references(&self) -> Vec<&String> {
+        collect_xflow_references(&self.doc.components)
+    }
+}
+
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 pub struct Page {
     pub title: I18NString,
@@ -120,6 +126,53 @@ pub struct FormControlGroupConfig {
     pub form_control_type: FormControlType,
 }
 
+
+fn collect_xflow_reference(c: &Component) -> Vec<&String> {
+    let mut res = Vec::<&String>::new();
+
+    match *c {
+
+        //
+        // No xflow references
+        //
+        Component::Header1(_) => {}
+        Component::Header2(_) => {}
+        Component::Header3(_) => {}
+        Component::Label(_) => {}
+        Component::Button(_) => {}
+        Component::TextInput(_) => {}
+
+        //
+        // Containers
+        //
+        Component::Row(ref c) => res.append(&mut collect_xflow_references(&c.components)),
+        Component::Column3(ref c) => res.append(&mut collect_xflow_references(&c.components)),
+        Component::Column6(ref c) => res.append(&mut collect_xflow_references(&c.components)),
+        Component::Column12(ref c) => res.append(&mut collect_xflow_references(&c.components)),
+
+        //
+        // Containers
+        //
+        Component::Datatable(ref c) => {
+            for (_, ref xflow) in &c.config.eventbindings {
+                res.push(&xflow);
+            }
+        }
+
+        // XXX
+        _ => {}
+
+    }
+    res
+}
+
+fn collect_xflow_references(components: &Components) -> Vec<&String> {
+    let mut res = Vec::<&String>::new();
+    for component in components {
+        res.append(&mut collect_xflow_reference(&component));
+    }
+    res
+}
 
 fn collect_i18nstring(c: &Component) -> Vec<&I18NString> {
     let mut res = Vec::<&I18NString>::new();

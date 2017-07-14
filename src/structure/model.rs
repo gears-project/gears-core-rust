@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 
 use super::common::{Document, Translatable, I18NString};
 use super::domain;
@@ -60,6 +60,17 @@ impl ModelDocument {
             }
             Err(err) => Err(err.to_string()),
         }
+
+    }
+
+    pub fn all_xflow_ids(&self) -> HashSet<&String> {
+        let mut xflow_ids = HashSet::<&String>::new();
+
+        for xflow in &self.doc.xflows {
+            xflow_ids.insert(&xflow.id);
+        }
+
+        xflow_ids
 
     }
 
