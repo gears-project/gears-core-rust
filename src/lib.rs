@@ -10,7 +10,6 @@ extern crate glob;
 extern crate ratel;
 
 pub mod xfstate;
-pub mod errors;
 pub mod flox;
 
 pub mod structure;

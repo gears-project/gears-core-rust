@@ -1,6 +1,5 @@
 use std::collections::HashSet;
 
-use errors::XFlowError;
 use super::common::Document;
 
 pub type XFlowDocument = Document<XFlow>;
@@ -14,6 +13,15 @@ pub struct XFlow {
     pub nodes: Vec<XFlowNode>,
     pub edges: Vec<XFlowEdge>,
     pub branches: Vec<XFlowBranch>,
+}
+
+#[derive(Debug)]
+pub enum XFlowError {
+    NoEntryNode,
+    NoTerminalNode,
+    MultipleEntryNodes,
+    DuplicateNodeIDs,
+    NodeNotFound,
 }
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
