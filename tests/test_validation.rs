@@ -1,11 +1,11 @@
 extern crate env_logger;
 
-extern crate xflow;
-use xflow::structure::xflow::*;
-use xflow::validation::common::*;
-use xflow::validation;
+extern crate gears;
+use gears::structure::xflow::*;
+use gears::validation::common::*;
+use gears::validation;
 
-use xflow::util::fs::*;
+use gears::util::fs::*;
 
 #[test]
 fn test_validation_default() {

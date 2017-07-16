@@ -1,8 +1,8 @@
 extern crate env_logger;
 
-extern crate xflow;
-use xflow::util::fs::*;
-use xflow::structure::model::*;
+extern crate gears;
+use gears::util::fs::*;
+use gears::structure::model::*;
 
 #[test]
 fn test_load_model() {

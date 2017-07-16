@@ -1,6 +1,6 @@
-extern crate xflow;
-use xflow::structure::xflow::*;
-use xflow::xfstate::*;
+extern crate gears;
+use gears::structure::xflow::*;
+use gears::xfstate::*;
 
 #[cfg(test)]
 #[test]

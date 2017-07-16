@@ -1,19 +1,19 @@
 [package]
-name = "xflow"
+name = "gears"
 version = "0.1.1"
 authors = ["Michiel Kalkman <michiel@nosuchtype.com>"]
-description = "XFlow implementation"
+description = "Gears core implementation"
 documentation = "https://docs.rs/xflow"
-homepage = "https://github.com/nosuchtype/xflow-rust"
-repository = "https://github.com/nosuchtype/xflow-rust.git"
+homepage = "https://github.com/gears-project/gears-core-rust"
+repository = "https://github.com/gears-project/gears-core-rust.git"
 readme = "README.md"
-keywords = ["xflow"]
+keywords = ["gears"]
 categories = []
 license = "MIT"
 build = "build.rs"
 
 [lib]
-name = "xflow"
+name = "gears"
 crate-type = ["rlib", "dylib"] # staticlib, bin
 
 [dependencies]

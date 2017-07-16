@@ -3,9 +3,9 @@ extern crate env_logger;
 extern crate ratel;
 use ratel::parser;
 
-extern crate xflow;
-use xflow::structure::xflow::*;
-use xflow::generation::xflow_to_es5;
+extern crate gears;
+use gears::structure::xflow::*;
+use gears::generation::xflow_to_es5;
 
 mod common;
 use common::load_doc;

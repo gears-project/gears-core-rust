@@ -1,8 +1,8 @@
 extern crate env_logger;
-extern crate xflow;
+extern crate gears;
 
-use xflow::structure::xflow::*;
-use xflow::*;
+use gears::structure::xflow::*;
+use gears::*;
 use xfstate::*;
 
 fn expect_context_integer(input: &str, context: &XFState, expected: i64) -> () {

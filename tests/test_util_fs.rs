@@ -1,9 +1,9 @@
 extern crate env_logger;
 extern crate tempdir;
 
-extern crate xflow;
+extern crate gears;
 
-use xflow::util::fs::{model_from_fs, model_to_fs};
+use gears::util::fs::{model_from_fs, model_to_fs};
 
 use tempdir::TempDir;
 
