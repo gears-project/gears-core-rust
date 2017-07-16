@@ -1,7 +1,7 @@
 extern crate env_logger;
 
-extern crate xflow;
-use xflow::structure::page::*;
+extern crate gears;
+use gears::structure::page::*;
 
 mod common;
 use common::load_doc;

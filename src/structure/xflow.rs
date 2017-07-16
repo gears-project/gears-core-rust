@@ -133,7 +133,7 @@ impl XFlow {
     ///
     /// # Example
     /// ```
-    /// use xflow::structure::xflow::{XFlow, XFlowNodeType};
+    /// use gears::structure::xflow::{XFlow, XFlowNodeType};
     /// let xfs = XFlow::default();
     /// let nodes = xfs.get_nodes_by(&XFlowNodeType::Flow, "start");
     /// assert_eq!(nodes.len(), 0);
@@ -153,7 +153,7 @@ impl XFlow {
     ///
     /// # Example
     /// ```
-    /// use xflow::structure::xflow::{XFlow, XFlowNodeType};
+    /// use gears::structure::xflow::{XFlow, XFlowNodeType};
     /// let xfs = XFlow::default();
     /// let nodes = xfs.get_nodes_of_type(&XFlowNodeType::Flow);
     /// assert_eq!(nodes.len(), 0);
@@ -172,7 +172,7 @@ impl XFlow {
     ///
     /// # Example
     /// ```
-    /// use xflow::structure::xflow::{XFlow};
+    /// use gears::structure::xflow::{XFlow};
     /// let xfs = XFlow::default();
     /// let names = xfs.get_all_variable_names();
     /// assert_eq!(names.len(), 0);
@@ -301,7 +301,7 @@ impl Default for XFlow {
     ///
     /// # Example
     /// ```
-    /// use xflow::structure::xflow::{XFlow};
+    /// use gears::structure::xflow::{XFlow};
     /// let xfs = XFlow::default();
     /// println!("XFlow has {} requirements", xfs.requirements.len());
     /// ```

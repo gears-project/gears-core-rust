@@ -1,12 +1,12 @@
 extern crate env_logger;
 
-extern crate xflow;
+extern crate gears;
 
-use xflow::structure::xflow::*;
-use xflow::xfstate::*;
-use xflow::runtime::xfrunner::*;
-use xflow::runtime::dispatcher::*;
-use xflow::runtime::actiondispatch;
+use gears::structure::xflow::*;
+use gears::xfstate::*;
+use gears::runtime::xfrunner::*;
+use gears::runtime::dispatcher::*;
+use gears::runtime::actiondispatch;
 
 mod common;
 use common::load_doc;
