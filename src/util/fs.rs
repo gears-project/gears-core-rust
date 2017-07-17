@@ -115,13 +115,9 @@ pub fn model_to_fs(model: &ModelDocument, path: &str) -> Result<(), ModelLoadErr
            path);
 
     let model_config_doc_filename = format!("{}/config.json", path);
-    let model_config_doc = &model.doc.config;
-    write_file(&model_config_doc_filename, &model_config_doc.to_json());
+    write_file(&model_config_doc_filename, &model.doc.config.to_json());
 
-    let domain_path_name = format!("{}/domain", path);
-    create_dir(&domain_path_name);
-    let doc_filename = format!("{}/domain.json", domain_path_name);
-
+    let doc_filename = format!("{}/domain.json", path);
     write_file(&doc_filename, &model.doc.domain.to_json());
 
     let xflows_path_name = format!("{}/xflows", path);
@@ -205,7 +201,7 @@ pub fn model_from_fs(path: &str) -> Result<ModelDocument, ModelLoadError> {
 
     modeldoc.doc.config = model_config;
 
-    let domain_filename = format!("{}/domain/domain.json", path);
+    let domain_filename = format!("{}/domain.json", path);
     let domain_path = Path::new(&domain_filename);
     let json = read_json_file(&domain_path);
     let domain: DomainDocument = DomainDocument::from_json(&json);
