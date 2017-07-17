@@ -1,6 +1,8 @@
 use validation::common::{ValidationError, ValidationErrors};
 use structure::model::ModelDocument;
 
+use std::collections::HashSet;
+
 #[derive(Debug)]
 pub struct Validation {}
 
@@ -11,6 +13,7 @@ impl Validation {
         errors.extend(Validation::all_locales_have_translation_docs(&model));
         errors.extend(Validation::all_translation_docs_have_locales(&model));
         errors.extend(Validation::all_page_xflow_references_point_to_existing_entities(&model));
+        errors.extend(Validation::all_doc_collections_have_correct_unique_keys(&model));
 
         errors
     }
@@ -68,6 +71,60 @@ impl Validation {
                                     paths: vec![format!("/pages/{id}", id = page.id)],
                                 });
                 }
+            }
+        }
+
+        errors
+    }
+
+    pub fn all_doc_collections_have_correct_unique_keys(model: &ModelDocument)
+                                                        -> Vec<ValidationError> {
+        debug!("all_doc_collections_have_correct_unique_keys");
+        let mut errors = Vec::<ValidationError>::new();
+
+        let mut xflow_ids = HashSet::<&String>::new();
+
+        for doc in &model.doc.xflows {
+            if xflow_ids.contains(&doc.id) {
+                let message = format!("xflow: Duplicate ID found in XFlow document '{}'", doc.id);
+                errors.push(ValidationError {
+                                code: 1,
+                                message: message,
+                                paths: vec![format!("/xflow/{id}", id = doc.id)],
+                            });
+            } else {
+                xflow_ids.insert(&doc.id);
+            }
+        }
+
+        let mut page_ids = HashSet::<&String>::new();
+
+        for doc in &model.doc.pages {
+            if page_ids.contains(&doc.id) {
+                let message = format!("page: Duplicate ID found in page document '{}'", doc.id);
+                errors.push(ValidationError {
+                                code: 1,
+                                message: message,
+                                paths: vec![format!("/page/{id}", id = doc.id)],
+                            });
+            } else {
+                page_ids.insert(&doc.id);
+            }
+        }
+
+        let mut translation_ids = HashSet::<&String>::new();
+
+        for doc in &model.doc.translations {
+            if translation_ids.contains(&doc.id) {
+                let message = format!("translation: Duplicate ID found in translation document '{}'",
+                                      doc.id);
+                errors.push(ValidationError {
+                                code: 1,
+                                message: message,
+                                paths: vec![format!("/translation/{id}", id = doc.id)],
+                            });
+            } else {
+                translation_ids.insert(&doc.id);
             }
         }
 
