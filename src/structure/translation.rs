@@ -1,7 +1,7 @@
-
 use super::common::{Document, I18NString};
 
-use std::collections::HashMap;
+use std::collections::{HashMap, BTreeMap};
+use serde::{Serialize, Serializer};
 
 pub type TranslationDocument = Document<Translation>;
 pub type TranslationMap = HashMap<String, I18NString>;
@@ -11,7 +11,17 @@ pub struct Translation {
     pub locale: String,
     pub language: String,
     pub country: String,
+    #[serde(serialize_with = "ordered_map")]
     pub items: TranslationMap,
+}
+
+fn ordered_map<S>(value: &HashMap<String, I18NString>, serializer: S) -> Result<S::Ok, S::Error>
+    where S: Serializer
+{
+    // partof: SPC-serialization-fs
+    // Consistent serialization
+    let ordered: BTreeMap<_, _> = value.iter().collect();
+    ordered.serialize(serializer)
 }
 
 impl Default for Translation {

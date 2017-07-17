@@ -4,8 +4,10 @@ extern crate tempdir;
 extern crate gears;
 
 use gears::util::fs::{model_from_fs, model_to_fs};
-
 use tempdir::TempDir;
+
+mod common;
+use common::load_doc;
 
 #[test]
 fn test_load_basic_project() {

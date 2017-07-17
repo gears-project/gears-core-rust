@@ -17,6 +17,11 @@ Deserialize, without exceptions.
 [SPC-serialization-fs]
 text = '''
 Model serialization to and deserialization from filesystem is implemented in a utility module.
+
+As part of the suitability for management under version control, serialization
+of all data structures should remain the same across serialization and
+deserialization cycles. Specifically, HashMaps have to be sorted on
+serialization following a consistent algorithm.
 '''
 
 [SPC-serialization-json]

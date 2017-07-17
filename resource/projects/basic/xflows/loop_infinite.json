@@ -1,6 +1,6 @@
 {
-    "id": "branch_boolean_condition",
-    "name": "branch_boolean_condition",
+    "id": "loop_infinite",
+    "name": "loop_infinite",
     "version": 1,
     "doctype": "xflow",
     "doctype_version": 1,
@@ -18,27 +18,22 @@
         "variables" : {
             "input" : [
                 {
-                    "name"  : "CalcValueA",
+                    "name"  : "CounterValue",
                     "vtype"  : "number",
-                    "value" : "1"
-                },
-                {
-                    "name"  : "CalcValueB",
-                    "vtype"  : "number",
-                    "value" : "2"
+                    "value" : "0"
                 }
             ],
             "output" : [
                 {
-                    "vtype" : "number",
-                    "name" : "ReturnValue"
+                    "name" : "CounterValue",
+                    "vtype" : "number"
                 }
             ],
             "local" : [
                 {
-                    "name"  : "ReturnValue",
-                    "vtype"  : "number",
-                    "value" : "0"
+                    "name": "LoopValue",
+                    "vtype": "boolean",
+                    "value" : "false"
                 }
             ]
         },
@@ -57,36 +52,41 @@
                 "id": 2,
                 "nodetype": "flox",
                 "action": "evalexpr",
-                "label" : "Flox",
+                "label" : "Start",
                 "parameters": {
                     "flox" : {
-                        "expression" : "$CalcValueA<$CalcValueB",
+                        "expression" : "$CounterValue+0",
                         "returns"    : {
-                            "name"   : "ReturnValue",
-                            "vtype"   : "boolean"
+                            "name"   : "CounterValue",
+                            "vtype"   : "number"
                         }
                     }
                 }
             },
             {
                 "id": 3,
-                "nodetype": "flow",
-                "action": "branch",
-                "label" : "Branch",
+                "nodetype": "flox",
+                "action": "evalexpr",
+                "label" : "Start",
                 "parameters": {
-                    "flow" : {
-                        "name": "ReturnValue",
-                        "vtype": "boolean"
+                    "flox" : {
+                        "expression" : "$CounterValue>5",
+                        "returns"    : {
+                            "name"   : "LoopValue",
+                            "vtype"   : "boolean"
+                        }
                     }
                 }
             },
             {
                 "id": 4,
                 "nodetype": "flow",
-                "action": "end",
-                "label" : "End",
+                "action": "branch",
+                "label" : "Start",
                 "parameters": {
                     "flow" : {
+                        "name": "LoopValue",
+                        "vtype": "boolean"
                     }
                 }
             },
@@ -94,7 +94,7 @@
                 "id": 5,
                 "nodetype": "flow",
                 "action": "end",
-                "label" : "End",
+                "label" : "Start",
                 "parameters": {
                     "flow" : {
                     }
@@ -105,21 +105,22 @@
             [ 1, 2 ],
             [ 2, 3 ],
             [ 3, 4 ],
-            [ 3, 5 ]
+            [ 4, 2 ],
+            [ 4, 5 ]
         ],
         "branches" : [
             {
-                "edge"   : [3,4],
-                "xvar" : {
-                    "name"  : "ReturnValue",
+                "edge"   : [4,5],
+                "xvar"  : {
+                    "name"  : "LoopValue",
                     "vtype"  : "boolean",
                     "value" : "true"
                 }
             },
             {
-                "edge"   : [3,5],
-                "xvar" : {
-                    "name"  : "ReturnValue",
+                "edge"   : [4,2],
+                "xvar"  : {
+                    "name"  : "LoopValue",
                     "vtype"  : "boolean",
                     "value" : "false"
                 }

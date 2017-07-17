@@ -1,4 +1,5 @@
-use std::collections::HashMap;
+use std::collections::{HashMap, BTreeMap};
+use serde::{Serialize, Serializer};
 
 use super::common::{Document, I18NString, Translatable};
 use super::translation::TranslationDocument;
@@ -79,7 +80,17 @@ pub struct TextConfig {
 pub struct DatatableConfig {
     pub entity: String,
     pub attributes: Vec<String>,
+    #[serde(serialize_with = "ordered_map")]
     pub eventbindings: HashMap<String, String>,
+}
+
+fn ordered_map<S>(value: &HashMap<String, String>, serializer: S) -> Result<S::Ok, S::Error>
+    where S: Serializer
+{
+    // partof: SPC-serialization-fs
+    // Consistent serialization
+    let ordered: BTreeMap<_, _> = value.iter().collect();
+    ordered.serialize(serializer)
 }
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
