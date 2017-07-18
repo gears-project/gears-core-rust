@@ -6,6 +6,7 @@ extern crate serde_yaml;
 #[macro_use]
 extern crate log;
 extern crate glob;
+extern crate uuid;
 
 extern crate ratel;
 

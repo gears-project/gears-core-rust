@@ -1,3 +1,4 @@
+use structure::common::DocumentHeader;
 use structure::model::{ModelDocument, ModelConfigDocument};
 use structure::xflow::XFlowDocument;
 use structure::page::PageDocument;
@@ -114,6 +115,9 @@ pub fn model_to_fs(model: &ModelDocument, path: &str) -> Result<(), ModelLoadErr
            model.version,
            path);
 
+    let model_header_doc_filename = format!("{}/model.json", path);
+    write_file(&model_header_doc_filename, &model.get_header().to_json());
+
     let model_config_doc_filename = format!("{}/config.json", path);
     write_file(&model_config_doc_filename, &model.doc.config.to_json());
 
@@ -153,7 +157,27 @@ pub fn model_from_fs(path: &str) -> Result<ModelDocument, ModelLoadError> {
     // XXX Error handling, assumption checking
 
     debug!("Reading model from directory '{}'", path);
-    let mut modeldoc = ModelDocument::default();
+    let model_header_filename = format!("{}/model.json", path);
+    let model_header_path = Path::new(&model_header_filename);
+    let model_header_json = read_json_file(&model_header_path);
+    let model_header: DocumentHeader = DocumentHeader::from_json(&model_header_json);
+
+    let mut modeldoc = ModelDocument::new_from_header(&model_header);
+
+    let model_config_filename = format!("{}/config.json", path);
+    let model_config_path = Path::new(&model_config_filename);
+    let model_config_json = read_json_file(&model_config_path);
+    let model_config: ModelConfigDocument = ModelConfigDocument::from_json(&model_config_json);
+
+    modeldoc.doc.config = model_config;
+
+    let domain_filename = format!("{}/domain.json", path);
+    let domain_path = Path::new(&domain_filename);
+    let json = read_json_file(&domain_path);
+    let domain: DomainDocument = DomainDocument::from_json(&json);
+
+    modeldoc.doc.domain = domain;
+
 
     let glob_options = MatchOptions {
         case_sensitive: true,
@@ -193,20 +217,6 @@ pub fn model_from_fs(path: &str) -> Result<ModelDocument, ModelLoadError> {
             warn!("Unable to load doc from '{:?}'", item);
         }
     }
-
-    let model_config_filename = format!("{}/config.json", path);
-    let model_config_path = Path::new(&model_config_filename);
-    let model_config_json = read_json_file(&model_config_path);
-    let model_config: ModelConfigDocument = ModelConfigDocument::from_json(&model_config_json);
-
-    modeldoc.doc.config = model_config;
-
-    let domain_filename = format!("{}/domain.json", path);
-    let domain_path = Path::new(&domain_filename);
-    let json = read_json_file(&domain_path);
-    let domain: DomainDocument = DomainDocument::from_json(&json);
-
-    modeldoc.doc.domain = domain;
 
     Ok(modeldoc)
 }

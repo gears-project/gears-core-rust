@@ -19,6 +19,15 @@ pub struct Page {
     pub components: Vec<Component>,
 }
 
+impl Default for Page {
+    fn default() -> Page {
+        Page {
+            title: I18NString::default(),
+            components: Vec::<Component>::new(),
+        }
+    }
+}
+
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 #[serde(tag = "component")]
 pub enum Component {
