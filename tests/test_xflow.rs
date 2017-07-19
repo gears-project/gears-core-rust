@@ -9,7 +9,7 @@ fn test_xflow_default() {
 
     let xfs = XFlowDocument::default();
 
-    assert_eq!(xfs.name, "");
+    assert_eq!(xfs.name, "default");
     assert_eq!(xfs.version, 1);
 }
 
