@@ -95,7 +95,7 @@ impl<T> Default for Document<T>
     fn default() -> Self {
         Self {
             id: Uuid::new_v4(),
-            name: "".to_owned(),
+            name: "default".to_owned(),
             doctype: "".to_owned(),
             doctype_version: 1,
             version: 1,

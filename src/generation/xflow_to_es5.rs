@@ -1,4 +1,5 @@
 use structure::xflow::*;
+use util::naming::uuid_to_label;
 
 use ratel::{transformer, parser, codegen};
 
@@ -30,7 +31,8 @@ fn build_class(xflow: &XFlowDocument) -> String {
 
     let out = format!(
         r#"
-class {id} {{
+class XFlow_{id} {{
+    /* xflow label : {name} */
 
     local_vars = {{}}
     input_vars = {{}}
@@ -62,7 +64,8 @@ class {id} {{
     {nodes}
 }}
 "#,
-        id = &xflow.name,
+        id = uuid_to_label(&xflow.id),
+        name = &xflow.name,
         local_variables = local_variables(&xflow),
         nodes = build_nodes(&xflow)
     );
