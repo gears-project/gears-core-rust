@@ -9,7 +9,7 @@ fn test_xflow_default() {
 
     let xfs = XFlowDocument::default();
 
-    assert_eq!(xfs.name, "");
+    assert_eq!(xfs.name, "default");
     assert_eq!(xfs.version, 1);
 }
 
@@ -20,13 +20,4 @@ fn test_xflow_to_json() {
     let xfs_a = XFlowDocument::default();
     let xfs_b = XFlowDocument::from_json(&xfs_a.to_json());
     assert_eq!(xfs_a.id, xfs_b.id);
-}
-
-#[test]
-fn test_xflow_to_str() {
-    let _ = env_logger::init();
-
-    let xfs = XFlowDocument::default();
-
-    assert_eq!(xfs.to_string(), r#"document "#);
 }

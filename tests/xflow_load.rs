@@ -1,4 +1,5 @@
 extern crate env_logger;
+extern crate uuid;
 
 extern crate gears;
 use gears::structure::xflow::*;
@@ -61,7 +62,7 @@ fn create_branches(amount: i32) -> Vec<XFlowBranch> {
 
 fn create_xflow_struct() -> XFlowDocument {
     XFlowDocument {
-        id: "".to_owned(),
+        id: uuid::Uuid::new_v4(),
         name: "Some name".to_string(),
         version: 1,
         doctype: "Some doctype".to_string(),
@@ -98,7 +99,6 @@ fn test_xfs_fields() {
     let xfs = create_xflow_struct();
 
     assert_eq!(xfs.version, 1);
-    assert_eq!(xfs.id, "".to_string());
     assert_eq!(xfs.name, "Some name");
 }
 
@@ -178,5 +178,5 @@ fn test_mem_profile() {
     let _ = env_logger::init();
     let xfs = load_doc::<XFlowDocument>("resource/docs/xflow/flows/10_steps.json");
 
-    assert_eq!(std::mem::size_of_val(&xfs), 256);
+    assert_eq!(std::mem::size_of_val(&xfs), 248);
 }

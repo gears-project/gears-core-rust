@@ -1,5 +1,6 @@
 use std::collections::{HashMap, BTreeMap};
 use serde::{Serialize, Serializer};
+use uuid::Uuid;
 
 use super::common::{Document, I18NString, Translatable};
 use super::translation::TranslationDocument;
@@ -8,7 +9,7 @@ pub type PageDocument = Document<Page>;
 pub type Components = Vec<Component>;
 
 impl PageDocument {
-    pub fn all_xflow_references(&self) -> Vec<&String> {
+    pub fn all_xflow_references(&self) -> Vec<&Uuid> {
         collect_xflow_references(&self.doc.components)
     }
 }
@@ -17,6 +18,15 @@ impl PageDocument {
 pub struct Page {
     pub title: I18NString,
     pub components: Vec<Component>,
+}
+
+impl Default for Page {
+    fn default() -> Page {
+        Page {
+            title: I18NString::default(),
+            components: Vec::<Component>::new(),
+        }
+    }
 }
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
@@ -81,10 +91,10 @@ pub struct DatatableConfig {
     pub entity: String,
     pub attributes: Vec<String>,
     #[serde(serialize_with = "ordered_map")]
-    pub eventbindings: HashMap<String, String>,
+    pub eventbindings: HashMap<String, Uuid>,
 }
 
-fn ordered_map<S>(value: &HashMap<String, String>, serializer: S) -> Result<S::Ok, S::Error>
+fn ordered_map<S>(value: &HashMap<String, Uuid>, serializer: S) -> Result<S::Ok, S::Error>
     where S: Serializer
 {
     // partof: SPC-serialization-fs
@@ -138,8 +148,8 @@ pub struct FormControlGroupConfig {
 }
 
 
-fn collect_xflow_reference(c: &Component) -> Vec<&String> {
-    let mut res = Vec::<&String>::new();
+fn collect_xflow_reference(c: &Component) -> Vec<&Uuid> {
+    let mut res = Vec::<&Uuid>::new();
 
     match *c {
 
@@ -177,8 +187,8 @@ fn collect_xflow_reference(c: &Component) -> Vec<&String> {
     res
 }
 
-fn collect_xflow_references(components: &Components) -> Vec<&String> {
-    let mut res = Vec::<&String>::new();
+fn collect_xflow_references(components: &Components) -> Vec<&Uuid> {
+    let mut res = Vec::<&Uuid>::new();
     for component in components {
         res.append(&mut collect_xflow_reference(&component));
     }

@@ -1,4 +1,5 @@
 use std::collections::{HashMap, HashSet};
+use uuid::Uuid;
 
 use super::common::{Document, Translatable, I18NString};
 use super::domain;
@@ -63,8 +64,8 @@ impl ModelDocument {
 
     }
 
-    pub fn all_xflow_ids(&self) -> HashSet<&String> {
-        let mut xflow_ids = HashSet::<&String>::new();
+    pub fn all_xflow_ids(&self) -> HashSet<&Uuid> {
+        let mut xflow_ids = HashSet::<&Uuid>::new();
 
         for xflow in &self.doc.xflows {
             xflow_ids.insert(&xflow.id);
@@ -147,7 +148,6 @@ impl ModelDocument {
             info!("Adding new translation for locale '{:?}'", locale);
             let mut t = TranslationDocument::default();
             t.doc.locale = locale.clone();
-            t.id = locale.clone();
             for (_, item) in self.all_i18n_strings_map() {
                 let new_item = I18NString {
                     key: item.key.clone(),
