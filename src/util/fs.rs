@@ -227,7 +227,10 @@ pub fn model_from_fs(path: &str) -> Result<ModelDocument, ModelLoadError> {
 
 pub fn init_new_model_dir(path: &str) -> Result<(), ModelLoadError> {
     create_dir(path);
-    let model = ModelDocument::default();
+    let mut model = ModelDocument::default();
+    let default_locale = model.doc.config.doc.default_locale.clone();
+    model.add_locale(&default_locale);
+    model.pad_all_translations();
     model_to_fs(&model, &path)
 }
 

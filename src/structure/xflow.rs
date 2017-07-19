@@ -144,7 +144,7 @@ impl XFlow {
     /// use gears::structure::xflow::{XFlow, XFlowNodeType};
     /// let xfs = XFlow::default();
     /// let nodes = xfs.get_nodes_by(&XFlowNodeType::Flow, "start");
-    /// assert_eq!(nodes.len(), 0);
+    /// assert_eq!(nodes.len(), 1);
     /// ```
     pub fn get_nodes_by(&self, nodetype: &XFlowNodeType, action: &str) -> Vec<&XFlowNode> {
 
@@ -164,7 +164,7 @@ impl XFlow {
     /// use gears::structure::xflow::{XFlow, XFlowNodeType};
     /// let xfs = XFlow::default();
     /// let nodes = xfs.get_nodes_of_type(&XFlowNodeType::Flow);
-    /// assert_eq!(nodes.len(), 0);
+    /// assert_eq!(nodes.len(), 2);
     /// ```
     pub fn get_nodes_of_type(&self, nodetype: &XFlowNodeType) -> Vec<&XFlowNode> {
 
@@ -314,15 +314,41 @@ impl Default for XFlow {
     /// println!("XFlow has {} requirements", xfs.requirements.len());
     /// ```
     fn default() -> Self {
+
+        let mut nodes = Vec::<XFlowNode>::new();
+        nodes.push(XFlowNode {
+                       id: 1,
+                       nodetype: XFlowNodeType::Flow,
+                       action: "start".to_owned(),
+                       label: "Start".to_owned(),
+                       parameters: XFlowNodeParameters::Flow(FlowParameters::default()),
+                   });
+        nodes.push(XFlowNode {
+                       id: 2,
+                       nodetype: XFlowNodeType::Flow,
+                       action: "end".to_owned(),
+                       label: "End".to_owned(),
+                       parameters: XFlowNodeParameters::Flow(FlowParameters::default()),
+                   });
+
+        let mut edges = Vec::<XFlowEdge>::new();
+        edges.push((1, 2));
+
+        let mut requirements = Vec::<XFlowRequirement>::new();
+        requirements.push(XFlowRequirement {
+                              xtype: XFlowNodeType::Flow,
+                              version: 1,
+                          });
+
         XFlow {
-            requirements: Vec::<XFlowRequirement>::new(),
+            requirements: requirements,
             variables: XFlowVariables {
                 input: Vec::<XFlowVariableDefinition>::new(),
                 local: Vec::<XFlowVariable>::new(),
                 output: Vec::<XFlowVariableDefinition>::new(),
             },
-            nodes: Vec::<XFlowNode>::new(),
-            edges: Vec::<XFlowEdge>::new(),
+            nodes: nodes,
+            edges: edges,
             branches: Vec::<XFlowBranch>::new(),
         }
     }

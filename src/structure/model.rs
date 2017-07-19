@@ -200,7 +200,7 @@ impl Default for ModelConfig {
         ModelConfig {
             default_locale: "en_US".to_owned(),
             active_locale: "en_US".to_owned(),
-            locales: vec!["en_US".to_owned()],
+            locales: Vec::<String>::new(),
         }
     }
 }

@@ -14,7 +14,7 @@ fn test_validation_default() {
     let xfs = XFlowDocument::default();
     let errors = validation::xflow::Validation::validate(&xfs);
 
-    assert_eq!(errors.len(), 2)
+    assert_eq!(errors.len(), 0)
 }
 
 #[test]
