@@ -62,7 +62,7 @@ class {id} {{
     {nodes}
 }}
 "#,
-        id = &xflow.id,
+        id = &xflow.name,
         local_variables = local_variables(&xflow),
         nodes = build_nodes(&xflow)
     );

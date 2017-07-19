@@ -32,6 +32,5 @@ fn test_basic_model_validation() {
     let model = model_from_fs(&"resource/projects/basic").unwrap();
     let validation_errors = validation::model::Validation::validate(&model);
 
-    // XXX
-    assert_eq!(validation_errors.len(), 18);
+    assert_eq!(validation_errors.len(), 0);
 }

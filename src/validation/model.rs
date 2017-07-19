@@ -1,6 +1,8 @@
 use validation::common::{ValidationError, ValidationErrors};
 use structure::model::ModelDocument;
 
+use uuid::Uuid;
+
 use std::collections::HashSet;
 
 #[derive(Debug)]
@@ -82,7 +84,7 @@ impl Validation {
         debug!("all_doc_collections_have_correct_unique_keys");
         let mut errors = Vec::<ValidationError>::new();
 
-        let mut xflow_ids = HashSet::<&String>::new();
+        let mut xflow_ids = HashSet::<&Uuid>::new();
 
         for doc in &model.doc.xflows {
             if xflow_ids.contains(&doc.id) {
@@ -97,7 +99,7 @@ impl Validation {
             }
         }
 
-        let mut page_ids = HashSet::<&String>::new();
+        let mut page_ids = HashSet::<&Uuid>::new();
 
         for doc in &model.doc.pages {
             if page_ids.contains(&doc.id) {
@@ -112,7 +114,7 @@ impl Validation {
             }
         }
 
-        let mut translation_ids = HashSet::<&String>::new();
+        let mut translation_ids = HashSet::<&Uuid>::new();
 
         for doc in &model.doc.translations {
             if translation_ids.contains(&doc.id) {

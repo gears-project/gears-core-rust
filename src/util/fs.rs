@@ -61,14 +61,18 @@ fn write_file(filename: &str, data: &str) -> () {
 
 fn create_dir(path: &str) -> () {
     debug!("Creating directory '{:?}'", path);
-    match std::fs::create_dir(&path) {
-        Ok(_) => {
-            debug!("Created directory '{:?}' : OK", path);
-        }
-        Err(_) => {
-            error!("Error creating directory '{:?}'", path);
-        }
-    };
+    if !Path::new(path).exists() {
+        match std::fs::create_dir(&path) {
+            Ok(_) => {
+                debug!("Created directory '{:?}' : OK", path);
+            }
+            Err(_) => {
+                error!("Error creating directory '{:?}'", path);
+            }
+        };
+    } else {
+        debug!("Directory '{:?}' exists, not creating", path);
+    }
 }
 
 pub fn build_to_react_app(model: &ModelDocument, path: &str) -> Result<(), ModelLoadError> {

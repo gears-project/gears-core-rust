@@ -7,7 +7,7 @@ use structure::translation::TranslationDocument;
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq, Eq)]
 pub struct Document<T> {
-    pub id: String,
+    pub id: Uuid,
     pub name: String,
     pub doctype: String,
     pub doctype_version: i64,
@@ -94,7 +94,7 @@ impl<T> Default for Document<T>
 {
     fn default() -> Self {
         Self {
-            id: format!("{}", Uuid::new_v4().hyphenated()),
+            id: Uuid::new_v4(),
             name: "".to_owned(),
             doctype: "".to_owned(),
             doctype_version: 1,
@@ -173,7 +173,7 @@ pub trait Translatable {
 
 #[derive(Serialize, Deserialize, Debug, Clone, Eq, PartialEq)]
 pub struct DocumentHeader {
-    pub id: String,
+    pub id: Uuid,
     pub name: String,
     pub doctype: String,
     pub doctype_version: i64,

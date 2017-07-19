@@ -12,7 +12,7 @@ fn test_load_domain() {
 
     let domain = load_doc::<DomainDocument>("resource/docs/domain/good/basic.json");
 
-    assert_eq!(std::mem::size_of_val(&domain), 232);
+    assert_eq!(std::mem::size_of_val(&domain), 224);
     assert_eq!(domain.doc.events.change.len(), 0);
     assert_eq!(domain.doc.events.update.len(), 0);
     assert_eq!(domain.doc.events.read.len(), 0);

@@ -1,7 +1,7 @@
 {
     "doctype": "form",
     "doctype_version": 1,
-    "id": "nested",
+    "id": "e4f0518a-fd0d-403e-9c20-79241c1c14ae",
     "name" : "List Posts",
     "version" : 1,
     "doc" : {
@@ -43,8 +43,8 @@
                                                     "entity": "post",
                                                     "attributes": ["title", "body"],
                                                     "eventbindings" : {
-                                                        "rowClicked" : "appflow_post_clicked",
-                                                        "rowDoubleClicked" : "appflow_post_double_clicked"
+                                                        "rowClicked" : "e4f0518a-fd0d-403e-9c20-79041c1c14ae",
+                                                        "rowDoubleClicked" : "e4f0518a-fd0d-403e-9c20-79041c1c14ae"
                                                     }
                                                 }
                                             },
@@ -54,8 +54,8 @@
                                                     "entity": "post",
                                                     "attributes": ["title", "body"],
                                                     "eventbindings" : {
-                                                        "rowClicked" : "appflow_post_clicked",
-                                                        "rowDoubleClicked" : "appflow_post_double_clicked"
+                                                        "rowClicked" : "e4f0518a-fd0d-403e-9c20-79041c1c14ae",
+                                                        "rowDoubleClicked" : "e4f0518a-fd0d-403e-9c20-79041c1c14ae"
                                                     }
                                                 }
                                             }
@@ -70,8 +70,8 @@
                                                     "entity": "post",
                                                     "attributes": ["title", "body"],
                                                     "eventbindings" : {
-                                                        "rowClicked" : "appflow_post_clicked",
-                                                        "rowDoubleClicked" : "appflow_post_double_clicked"
+                                                        "rowClicked" : "e4f0518a-fd0d-403e-9c20-79041c1c14ae",
+                                                        "rowDoubleClicked" : "e4f0518a-fd0d-403e-9c20-79041c1c14ae"
                                                     }
                                                 }
                                             },
@@ -81,8 +81,8 @@
                                                     "entity": "post",
                                                     "attributes": ["title", "body"],
                                                     "eventbindings" : {
-                                                        "rowClicked" : "appflow_post_clicked",
-                                                        "rowDoubleClicked" : "appflow_post_double_clicked"
+                                                        "rowClicked" : "e4f0518a-fd0d-403e-9c20-79041c1c14ae",
+                                                        "rowDoubleClicked" : "e4f0518a-fd0d-403e-9c20-79041c1c14ae"
                                                     }
                                                 }
                                             }
@@ -97,8 +97,8 @@
                                                     "entity": "post",
                                                     "attributes": ["title", "body"],
                                                     "eventbindings" : {
-                                                        "rowClicked" : "appflow_post_clicked",
-                                                        "rowDoubleClicked" : "appflow_post_double_clicked"
+                                                        "rowClicked" : "e4f0518a-fd0d-403e-9c20-79041c1c14ae",
+                                                        "rowDoubleClicked" : "e4f0518a-fd0d-403e-9c20-79041c1c14ae"
                                                     }
                                                 }
                                             },
@@ -108,8 +108,8 @@
                                                     "entity": "post",
                                                     "attributes": ["title", "body"],
                                                     "eventbindings" : {
-                                                        "rowClicked" : "appflow_post_clicked",
-                                                        "rowDoubleClicked" : "appflow_post_double_clicked"
+                                                        "rowClicked" : "e4f0518a-fd0d-403e-9c20-79041c1c14ae",
+                                                        "rowDoubleClicked" : "e4f0518a-fd0d-403e-9c20-79041c1c14ae"
                                                     }
                                                 }
                                             }
@@ -124,8 +124,8 @@
                                                     "entity": "post",
                                                     "attributes": ["title", "body"],
                                                     "eventbindings" : {
-                                                        "rowClicked" : "appflow_post_clicked",
-                                                        "rowDoubleClicked" : "appflow_post_double_clicked"
+                                                        "rowClicked" : "e4f0518a-fd0d-403e-9c20-79041c1c14ae",
+                                                        "rowDoubleClicked" : "e4f0518a-fd0d-403e-9c20-79041c1c14ae"
                                                     }
                                                 }
                                             },
@@ -135,8 +135,8 @@
                                                     "entity": "post",
                                                     "attributes": ["title", "body"],
                                                     "eventbindings" : {
-                                                        "rowClicked" : "appflow_post_clicked",
-                                                        "rowDoubleClicked" : "appflow_post_double_clicked"
+                                                        "rowClicked" : "e4f0518a-fd0d-403e-9c20-79041c1c14ae",
+                                                        "rowDoubleClicked" : "e4f0518a-fd0d-403e-9c20-79041c1c14ae"
                                                     }
                                                 }
                                             }
@@ -154,8 +154,8 @@
                     "entity": "post",
                     "attributes": ["title", "body"],
                     "eventbindings" : {
-                        "rowClicked" : "appflow_post_clicked",
-                        "rowDoubleClicked" : "appflow_post_double_clicked"
+                        "rowClicked" : "e4f0518a-fd0d-403e-9c20-79041c1c14ae",
+                        "rowDoubleClicked" : "e4f0518a-fd0d-403e-9c20-79041c1c14ae"
                     }
                 }
             }
