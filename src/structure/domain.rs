@@ -1,6 +1,5 @@
-use super::common::{Document, I18NString, Translatable};
+use super::common::{Document, I18NString, Translatable, Queryable};
 use structure::translation::TranslationDocument;
-
 
 pub type DomainDocument = Document<Domain>;
 
@@ -18,6 +17,8 @@ impl Default for Domain {
         }
     }
 }
+
+impl Queryable for Domain {}
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 pub struct Events {

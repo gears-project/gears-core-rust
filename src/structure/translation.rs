@@ -1,4 +1,4 @@
-use super::common::{Document, I18NString};
+use super::common::{Document, I18NString, Queryable};
 
 use std::collections::{HashMap, BTreeMap};
 use serde::{Serialize, Serializer};
@@ -34,3 +34,5 @@ impl Default for Translation {
         }
     }
 }
+
+impl Queryable for Translation {}

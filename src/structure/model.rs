@@ -1,7 +1,7 @@
 use std::collections::{HashMap, HashSet};
 use uuid::Uuid;
 
-use super::common::{Document, Translatable, I18NString};
+use super::common::{Document, Translatable, I18NString, Queryable};
 use super::domain;
 use super::xflow;
 use super::page;
@@ -30,6 +30,8 @@ impl Default for Model {
         }
     }
 }
+
+impl Queryable for Model {}
 
 fn pad_translation_doc(t: &mut TranslationDocument,
                        strings_in_model: &HashMap<String, &I18NString>)
@@ -204,3 +206,5 @@ impl Default for ModelConfig {
         }
     }
 }
+
+impl Queryable for ModelConfig {}
