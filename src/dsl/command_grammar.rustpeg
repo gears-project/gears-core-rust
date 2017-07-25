@@ -1,4 +1,4 @@
-use dsl::command::{Command, ModelComponent, DslCommand, DomainCommand, XFlowCommand};
+use dsl::command::*;
 
 pub expression -> Command
   = set
@@ -58,6 +58,9 @@ component_dsl_command -> Command
   / "with xflow " xflow_command:xflow_command {
     Command::Dsl(DslCommand::XFlow(xflow_command))
   }
+  / "with config " config_command:config_command {
+    Command::Dsl(DslCommand::Config(config_command))
+  }
 
 domain_command -> DomainCommand
   = "add entity" " " label:label {
@@ -77,3 +80,9 @@ xflow_command -> XFlowCommand
   = "add node" " " label:label {
     XFlowCommand::AddNode(label.to_string())
   }
+
+config_command -> ConfigCommand
+  = "set default_locale" " " locale:label {
+    ConfigCommand::SetDefaultLocale(locale.to_string())
+  }
+

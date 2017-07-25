@@ -198,4 +198,23 @@ fn test_dsl_change_model() {
         }
         Err(_) => assert!(false),
     }
+
+    match parse_command(&"with config set default_locale es_ES") {
+        Ok(cmd) => {
+            match cmd {
+                Command::Dsl(cmd) => {
+                    match run_command(&mut model, &cmd) {
+                        Ok(_) => {
+                            assert_eq!(model.doc.config.doc.default_locale, "es_ES".to_owned());
+                        }
+                        Err(_) => assert!(false),
+                    }
+                }
+                _ => assert!(false),
+            }
+        }
+        Err(_) => assert!(false),
+    }
+
+
 }

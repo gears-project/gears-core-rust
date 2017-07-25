@@ -1,0 +1,18 @@
+with domain add entity post;
+with domain entity post add attribute title:string;
+
+with domain entity post {
+  add attribute created:timestamp;
+  add attribute body:string;
+  add attribute user:integer;
+};
+
+with domain {
+  with entity post {
+    add attribute created:timestamp;
+    add attribute body:string;
+    add attribute user:integer;
+  };
+};
+
+

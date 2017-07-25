@@ -28,6 +28,7 @@ pub enum Command {
 pub enum DslCommand {
     Domain(DomainCommand),
     XFlow(XFlowCommand),
+    Config(ConfigCommand),
 }
 
 #[derive(Debug, Eq, PartialEq)]
@@ -41,6 +42,11 @@ pub enum DomainCommand {
 #[derive(Debug, Eq, PartialEq)]
 pub enum XFlowCommand {
     AddNode(String),
+}
+
+#[derive(Debug, Eq, PartialEq)]
+pub enum ConfigCommand {
+    SetDefaultLocale(String),
 }
 
 pub fn parse_command(input: &str) -> Result<Command, String> {
@@ -65,6 +71,14 @@ pub fn run_command(model: &mut ModelDocument, dsl_cmd: &DslCommand) -> Result<()
             use structure::xflow::*;
             println!("Unimplemented!");
             Ok(())
+        }
+        DslCommand::Config(ref config_command) => {
+            match *config_command {
+                ConfigCommand::SetDefaultLocale(ref locale) => {
+                    model.doc.config.doc.default_locale = locale.clone();
+                    Ok(())
+                }
+            }
         }
         DslCommand::Domain(ref domain_command) => {
 
