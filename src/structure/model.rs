@@ -33,9 +33,10 @@ impl Default for Model {
 
 impl Queryable for Model {}
 
-fn pad_translation_doc(t: &mut TranslationDocument,
-                       strings_in_model: &HashMap<String, &I18NString>)
-                       -> () {
+fn pad_translation_doc(
+    t: &mut TranslationDocument,
+    strings_in_model: &HashMap<String, &I18NString>,
+) -> () {
     for (key, item) in strings_in_model {
         if !t.doc.items.contains_key(key) {
             let value = format!("UNTRANSLATED {:?}", item.value);
@@ -44,9 +45,11 @@ fn pad_translation_doc(t: &mut TranslationDocument,
                 key: key.clone(),
                 value: value,
             };
-            debug!("Untranslated string, locale :'{:?}', value '{:?}'",
-                   item.locale,
-                   item.value);
+            debug!(
+                "Untranslated string, locale :'{:?}', value '{:?}'",
+                item.locale,
+                item.value
+            );
             t.doc.items.insert(key.clone(), item);
         }
     }
@@ -89,14 +92,16 @@ impl ModelDocument {
             .translations
             .iter()
             .filter({
-                        |t| t.doc.locale == locale
-                    })
+                |t| t.doc.locale == locale
+            })
             .collect();
 
         match res.len() {
             0 => Err("Locale not available in this document".to_owned()),
             1 => Ok(&res[0]),
-            _ => Err("More than one instance of this locale available in this document".to_owned()),
+            _ => Err(
+                "More than one instance of this locale available in this document".to_owned(),
+            ),
         }
     }
 
@@ -115,8 +120,8 @@ impl ModelDocument {
             .locales
             .iter()
             .filter({
-                        |l1| *l1 == locale
-                    })
+                |l1| *l1 == locale
+            })
             .collect();
 
         match res.len() {

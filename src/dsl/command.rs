@@ -72,26 +72,10 @@ pub fn run_command(model: &mut ModelDocument, dsl_cmd: &DslCommand) -> Result<()
 
             match *domain_command {
                 DomainCommand::AddEntity(ref entity) => {
-                    let entity = domain::Entity {
-                        name: entity.clone(),
-                        attributes: domain::Attributes::new(),
-                        references: domain::References::new(),
-                    };
-                    model.doc.domain.doc.entities.push(entity);
-                    Ok(())
+                    model.doc.domain.add_entity(domain::Entity::new(&entity))
                 }
 
-                DomainCommand::RemoveEntity(ref entity) => {
-                    let entities = model.doc.domain.doc.entities.clone();
-
-                    model.doc.domain.doc.entities = entities
-                        .into_iter()
-                        .filter({
-                            |e| e.name.ne(entity)
-                        })
-                        .collect();
-                    Ok(())
-                }
+                DomainCommand::RemoveEntity(ref entity) => model.doc.domain.remove_entity(&entity),
 
                 DomainCommand::AddAttribute(ref entity, ref attribute, ref attribute_type) => {
                     let attribute = domain::Attribute {
