@@ -151,8 +151,8 @@ impl XFlow {
         self.nodes
             .iter()
             .filter({
-                        |node| node.nodetype == *nodetype && node.action == action
-                    })
+                |node| node.nodetype == *nodetype && node.action == action
+            })
             .collect()
 
     }
@@ -171,8 +171,8 @@ impl XFlow {
         self.nodes
             .iter()
             .filter({
-                        |node| node.nodetype == *nodetype
-                    })
+                |node| node.nodetype == *nodetype
+            })
             .collect()
     }
 
@@ -208,8 +208,8 @@ impl XFlow {
         self.edges
             .iter()
             .filter({
-                        |edge| edge.1 == node.id
-                    })
+                |edge| edge.1 == node.id
+            })
             .collect()
     }
 
@@ -218,8 +218,8 @@ impl XFlow {
         self.edges
             .iter()
             .filter({
-                        |edge| edge.0 == node.id
-                    })
+                |edge| edge.0 == node.id
+            })
             .collect()
     }
 
@@ -228,8 +228,8 @@ impl XFlow {
         self.branches
             .iter()
             .filter({
-                        |branch| edge.0 == branch.edge.0 && edge.1 == branch.edge.1
-                    })
+                |branch| edge.0 == branch.edge.0 && edge.1 == branch.edge.1
+            })
             .collect()
     }
 
@@ -238,8 +238,8 @@ impl XFlow {
         self.branches
             .iter()
             .filter({
-                        |branch| branch.edge.0 == id
-                    })
+                |branch| branch.edge.0 == id
+            })
             .collect()
     }
 
@@ -264,8 +264,8 @@ impl XFlow {
         let nodes: Vec<&XFlowNode> = self.nodes
             .iter()
             .filter({
-                        |node| node.id == id
-                    })
+                |node| node.id == id
+            })
             .collect();
 
         match nodes.len() {
@@ -317,28 +317,28 @@ impl Default for XFlow {
 
         let mut nodes = Vec::<XFlowNode>::new();
         nodes.push(XFlowNode {
-                       id: 1,
-                       nodetype: XFlowNodeType::Flow,
-                       action: "start".to_owned(),
-                       label: "Start".to_owned(),
-                       parameters: XFlowNodeParameters::Flow(FlowParameters::default()),
-                   });
+            id: 1,
+            nodetype: XFlowNodeType::Flow,
+            action: "start".to_owned(),
+            label: "Start".to_owned(),
+            parameters: XFlowNodeParameters::Flow(FlowParameters::default()),
+        });
         nodes.push(XFlowNode {
-                       id: 2,
-                       nodetype: XFlowNodeType::Flow,
-                       action: "end".to_owned(),
-                       label: "End".to_owned(),
-                       parameters: XFlowNodeParameters::Flow(FlowParameters::default()),
-                   });
+            id: 2,
+            nodetype: XFlowNodeType::Flow,
+            action: "end".to_owned(),
+            label: "End".to_owned(),
+            parameters: XFlowNodeParameters::Flow(FlowParameters::default()),
+        });
 
         let mut edges = Vec::<XFlowEdge>::new();
         edges.push((1, 2));
 
         let mut requirements = Vec::<XFlowRequirement>::new();
         requirements.push(XFlowRequirement {
-                              xtype: XFlowNodeType::Flow,
-                              version: 1,
-                          });
+            xtype: XFlowNodeType::Flow,
+            version: 1,
+        });
 
         XFlow {
             requirements: requirements,

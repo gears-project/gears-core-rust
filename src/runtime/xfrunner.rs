@@ -23,10 +23,11 @@ pub struct XFlowRunner<'a> {
 }
 
 impl<'a> XFlowRunner<'a> {
-    pub fn new(xflow: &'a XFlowDocument,
-               dispatcher: &'a Dispatcher<'a>,
-               input: &'a XFState)
-               -> Result<XFlowRunner<'a>, String> {
+    pub fn new(
+        xflow: &'a XFlowDocument,
+        dispatcher: &'a Dispatcher<'a>,
+        input: &'a XFState,
+    ) -> Result<XFlowRunner<'a>, String> {
 
         let mut state = XFState::default();
 
@@ -34,8 +35,10 @@ impl<'a> XFlowRunner<'a> {
             match input.get(&xvardef.name) {
                 Some(xvar) => state.add(xvar),
                 None => {
-                    let err = format!("Missing required xvar in input parameters : {}",
-                                      xvardef.name);
+                    let err = format!(
+                        "Missing required xvar in input parameters : {}",
+                        xvardef.name
+                    );
                     error!("{}", err);
                     return Err(err);
                 }
@@ -49,13 +52,13 @@ impl<'a> XFlowRunner<'a> {
         match xflow.doc.get_entry_node() {
             Ok(node) => {
                 Ok(XFlowRunner {
-                       status: XFlowStatus::Initialized,
-                       xflow: xflow,
-                       dispatcher: dispatcher,
-                       state: state,
-                       current_node: Some(node),
-                       output: None,
-                   })
+                    status: XFlowStatus::Initialized,
+                    xflow: xflow,
+                    dispatcher: dispatcher,
+                    state: state,
+                    current_node: Some(node),
+                    output: None,
+                })
             }
             _ => Err("Unable to init XFlowRunner".to_owned()),
         }
@@ -74,7 +77,7 @@ impl<'a> XFlowRunner<'a> {
 
     pub fn is_completed(&self) -> bool {
         self.status == XFlowStatus::Finished || self.status == XFlowStatus::Aborted ||
-        self.status == XFlowStatus::TimedOut || self.status == XFlowStatus::InvalidState
+            self.status == XFlowStatus::TimedOut || self.status == XFlowStatus::InvalidState
     }
 
     pub fn is_completed_ok(&self) -> bool {
@@ -145,15 +148,15 @@ impl<'a> XFlowRunner<'a> {
                         .get_out_branches(current_node.id)
                         .iter()
                         .filter({
-                                    |branch| {
-                                        let xv = self.state.get(&branch.xvar.name);
-                                        if let Some(xvar) = xv {
-                                            *xvar == branch.xvar
-                                        } else {
-                                            false
-                                        }
-                                    }
-                                })
+                            |branch| {
+                                let xv = self.state.get(&branch.xvar.name);
+                                if let Some(xvar) = xv {
+                                    *xvar == branch.xvar
+                                } else {
+                                    false
+                                }
+                            }
+                        })
                         .cloned()
                         .collect();
                     match branches.len() {
@@ -186,9 +189,11 @@ impl<'a> XFlowRunner<'a> {
                     if xvar_local.vtype == xvar_out.vtype {
                         state.add(xvar_local);
                     } else {
-                        let msg = format!("Output var '{}' has a different type than its local \
+                        let msg = format!(
+                            "Output var '{}' has a different type than its local \
                                            one",
-                                          &xvar_out.name);
+                            &xvar_out.name
+                        );
 
                         error!("{}", msg);
                         return Err(msg);

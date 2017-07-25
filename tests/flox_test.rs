@@ -197,40 +197,40 @@ fn test_variables() {
     let _ = env_logger::init();
     let mut state = XFState::default();
     state.add(&XFlowVariable {
-                  name: "CounterValue".to_owned(),
-                  vtype: XFlowValueType::Integer,
-                  value: XFlowValue::Integer(0),
-              });
+        name: "CounterValue".to_owned(),
+        vtype: XFlowValueType::Integer,
+        value: XFlowValue::Integer(0),
+    });
 
     state.add(&XFlowVariable {
-                  name: "ComparisonValue".to_owned(),
-                  vtype: XFlowValueType::Boolean,
-                  value: XFlowValue::Boolean(true),
-              });
+        name: "ComparisonValue".to_owned(),
+        vtype: XFlowValueType::Boolean,
+        value: XFlowValue::Boolean(true),
+    });
 
     state.add(&XFlowVariable {
-                  name: "TrueValue".to_owned(),
-                  vtype: XFlowValueType::Boolean,
-                  value: XFlowValue::Boolean(true),
-              });
+        name: "TrueValue".to_owned(),
+        vtype: XFlowValueType::Boolean,
+        value: XFlowValue::Boolean(true),
+    });
 
     state.add(&XFlowVariable {
-                  name: "FalseValue".to_owned(),
-                  vtype: XFlowValueType::Boolean,
-                  value: XFlowValue::Boolean(false),
-              });
+        name: "FalseValue".to_owned(),
+        vtype: XFlowValueType::Boolean,
+        value: XFlowValue::Boolean(false),
+    });
 
     state.add(&XFlowVariable {
-                  name: "One".to_owned(),
-                  vtype: XFlowValueType::Integer,
-                  value: XFlowValue::Integer(1),
-              });
+        name: "One".to_owned(),
+        vtype: XFlowValueType::Integer,
+        value: XFlowValue::Integer(1),
+    });
 
     state.add(&XFlowVariable {
-                  name: "Two".to_owned(),
-                  vtype: XFlowValueType::Integer,
-                  value: XFlowValue::Integer(2),
-              });
+        name: "Two".to_owned(),
+        vtype: XFlowValueType::Integer,
+        value: XFlowValue::Integer(2),
+    });
 
     expect_context_integer("$CounterValue+1", &state, 1);
     expect_context_integer("$CounterValue+99", &state, 99);
@@ -259,28 +259,38 @@ fn test_variables() {
     expect_context_boolean("$TrueValue && $FalseValue", &state, false);
     expect_context_boolean("$TrueValue && $TrueValue && $TrueValue", &state, true);
     expect_context_boolean("(($TrueValue && $TrueValue) && $TrueValue)", &state, true);
-    expect_context_boolean("((($TrueValue && $TrueValue) && $TrueValue) && $TrueValue)",
-                           &state,
-                           true);
+    expect_context_boolean(
+        "((($TrueValue && $TrueValue) && $TrueValue) && $TrueValue)",
+        &state,
+        true,
+    );
 
-    expect_context_boolean("((($TrueValue && $TrueValue) && $TrueValue) && $FalseValue)",
-                           &state,
-                           false);
+    expect_context_boolean(
+        "((($TrueValue && $TrueValue) && $TrueValue) && $FalseValue)",
+        &state,
+        false,
+    );
 
-    expect_context_boolean("((($TrueValue && $TrueValue) && $TrueValue) && ($FalseValue || \
+    expect_context_boolean(
+        "((($TrueValue && $TrueValue) && $TrueValue) && ($FalseValue || \
                             $TrueValue))",
-                           &state,
-                           true);
+        &state,
+        true,
+    );
 
-    expect_context_boolean("((($TrueValue && $FalseValue) && $TrueValue) && ($FalseValue || \
+    expect_context_boolean(
+        "((($TrueValue && $FalseValue) && $TrueValue) && ($FalseValue || \
                             $TrueValue))",
-                           &state,
-                           false);
+        &state,
+        false,
+    );
 
-    expect_context_boolean("((($TrueValue && $FalseValue) && $TrueValue) && ($FalseValue \
+    expect_context_boolean(
+        "((($TrueValue && $FalseValue) && $TrueValue) && ($FalseValue \
                             ||\n \r \n\n $TrueValue))",
-                           &state,
-                           false);
+        &state,
+        false,
+    );
 
     expect_context_boolean("$TrueValue == $FalseValue", &state, false);
     expect_context_boolean("$TrueValue != $FalseValue", &state, true);

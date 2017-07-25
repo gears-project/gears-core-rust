@@ -80,10 +80,12 @@ pub fn build_to_react_app(model: &ModelDocument, path: &str) -> Result<(), Model
 
     // XXX Error handling, assumption checking
 
-    debug!("Building id:'{}' assets, model version:'{}' in directory '{}'",
-           model.id,
-           model.version,
-           path);
+    debug!(
+        "Building id:'{}' assets, model version:'{}' in directory '{}'",
+        model.id,
+        model.version,
+        path
+    );
 
     create_dir(&path);
     let xflow_path = format!("{path}/xflows", path = path);
@@ -114,10 +116,12 @@ pub fn model_to_fs(model: &ModelDocument, path: &str) -> Result<(), ModelLoadErr
 
     // XXX Error handling, assumption checking
 
-    debug!("Writing model id:'{}', version:'{}' to directory '{}'",
-           model.id,
-           model.version,
-           path);
+    debug!(
+        "Writing model id:'{}', version:'{}' to directory '{}'",
+        model.id,
+        model.version,
+        path
+    );
 
     let model_header_doc_filename = format!("{}/model.json", path);
     write_file(&model_header_doc_filename, &model.get_header().to_json());

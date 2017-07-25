@@ -11,13 +11,16 @@ pub struct Dispatcher<'a> {
 }
 
 impl<'a> Dispatcher<'a> {
-    pub fn register_receiver<T: Dispatchable + 'a>(&mut self,
-                                                   xflow_node_type: XFlowNodeType,
-                                                   receiver: T)
-                                                   -> () {
+    pub fn register_receiver<T: Dispatchable + 'a>(
+        &mut self,
+        xflow_node_type: XFlowNodeType,
+        receiver: T,
+    ) -> () {
         let receiver_box = Box::new(receiver);
-        self.receivers
-            .insert(xflow_node_type.to_owned(), receiver_box);
+        self.receivers.insert(
+            xflow_node_type.to_owned(),
+            receiver_box,
+        );
     }
 
     pub fn dispatch(&self, xfnode: &XFlowNode, xfstate: &mut XFState) -> Result<(), String> {
@@ -33,9 +36,11 @@ impl<'a> Dispatcher<'a> {
                 }
             }
         } else {
-            let msg = format!("No dispatcher found for {:?}/{}!",
-                              xfnode.nodetype,
-                              xfnode.action);
+            let msg = format!(
+                "No dispatcher found for {:?}/{}!",
+                xfnode.nodetype,
+                xfnode.action
+            );
             error!("{}", msg);
             Err(msg)
         }

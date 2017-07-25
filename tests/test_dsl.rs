@@ -41,24 +41,30 @@ fn test_parse_generate() {
 
     match parse_command(&"generate xflow abc") {
         Ok(cmd) => {
-            assert_eq!(cmd,
-                       Command::Generate(ModelComponent::XFlow, "abc".to_owned()))
+            assert_eq!(
+                cmd,
+                Command::Generate(ModelComponent::XFlow, "abc".to_owned())
+            )
         }
         Err(_) => assert!(false),
     }
 
     match parse_command(&"generate translation es_ES") {
         Ok(cmd) => {
-            assert_eq!(cmd,
-                       Command::Generate(ModelComponent::Translation, "es_ES".to_owned()))
+            assert_eq!(
+                cmd,
+                Command::Generate(ModelComponent::Translation, "es_ES".to_owned())
+            )
         }
         Err(_) => assert!(false),
     }
 
     match parse_command(&"generate page abc") {
         Ok(cmd) => {
-            assert_eq!(cmd,
-                       Command::Generate(ModelComponent::Page, "abc".to_owned()))
+            assert_eq!(
+                cmd,
+                Command::Generate(ModelComponent::Page, "abc".to_owned())
+            )
         }
         Err(_) => assert!(false),
     }
@@ -70,24 +76,30 @@ fn test_parse_destroy() {
 
     match parse_command(&"destroy xflow abc") {
         Ok(cmd) => {
-            assert_eq!(cmd,
-                       Command::Destroy(ModelComponent::XFlow, "abc".to_owned()))
+            assert_eq!(
+                cmd,
+                Command::Destroy(ModelComponent::XFlow, "abc".to_owned())
+            )
         }
         Err(_) => assert!(false),
     }
 
     match parse_command(&"destroy translation es_ES") {
         Ok(cmd) => {
-            assert_eq!(cmd,
-                       Command::Destroy(ModelComponent::Translation, "es_ES".to_owned()))
+            assert_eq!(
+                cmd,
+                Command::Destroy(ModelComponent::Translation, "es_ES".to_owned())
+            )
         }
         Err(_) => assert!(false),
     }
 
     match parse_command(&"destroy page abc") {
         Ok(cmd) => {
-            assert_eq!(cmd,
-                       Command::Destroy(ModelComponent::Page, "abc".to_owned()))
+            assert_eq!(
+                cmd,
+                Command::Destroy(ModelComponent::Page, "abc".to_owned())
+            )
         }
         Err(_) => assert!(false),
     }
@@ -99,41 +111,51 @@ fn test_parse_domain_dsl() {
 
     match parse_command(&"with domain add entity abc") {
         Ok(cmd) => {
-            assert_eq!(cmd,
-                       Command::Dsl(DslCommand::Domain(DomainCommand::AddEntity("abc".to_owned()))))
+            assert_eq!(
+                cmd,
+                Command::Dsl(DslCommand::Domain(
+                    DomainCommand::AddEntity("abc".to_owned()),
+                ))
+            )
         }
         Err(_) => assert!(false),
     }
 
     match parse_command(&"with domain remove entity abc") {
         Ok(cmd) => {
-            assert_eq!(cmd,
-                       Command::Dsl(DslCommand::Domain(DomainCommand::RemoveEntity("abc".to_owned()))))
+            assert_eq!(
+                cmd,
+                Command::Dsl(DslCommand::Domain(
+                    DomainCommand::RemoveEntity("abc".to_owned()),
+                ))
+            )
         }
         Err(_) => assert!(false),
     }
 
     match parse_command(&"with domain entity abc add attribute name:string") {
         Ok(cmd) => {
-            assert_eq!(cmd,
-                       Command::Dsl(
-                           DslCommand::Domain(
-                               DomainCommand::AddAttribute(
-                                   "abc".to_owned(),
-                                   "name".to_string(),
-                                   "string".to_string()))))
+            assert_eq!(
+                cmd,
+                Command::Dsl(DslCommand::Domain(DomainCommand::AddAttribute(
+                    "abc".to_owned(),
+                    "name".to_string(),
+                    "string".to_string(),
+                )))
+            )
         }
         Err(_) => assert!(false),
     }
 
     match parse_command(&"with domain entity abc remove attribute name") {
         Ok(cmd) => {
-            assert_eq!(cmd,
-                       Command::Dsl(
-                           DslCommand::Domain(
-                               DomainCommand::RemoveAttribute(
-                                   "abc".to_owned(),
-                                   "name".to_string()))))
+            assert_eq!(
+                cmd,
+                Command::Dsl(DslCommand::Domain(DomainCommand::RemoveAttribute(
+                    "abc".to_owned(),
+                    "name".to_string(),
+                )))
+            )
         }
         Err(_) => assert!(false),
     }
@@ -145,8 +167,10 @@ fn test_parse_xflow_dsl() {
 
     match parse_command(&"with xflow add node abc") {
         Ok(cmd) => {
-            assert_eq!(cmd,
-                       Command::Dsl(DslCommand::XFlow(XFlowCommand::AddNode("abc".to_owned()))))
+            assert_eq!(
+                cmd,
+                Command::Dsl(DslCommand::XFlow(XFlowCommand::AddNode("abc".to_owned())))
+            )
         }
         Err(_) => assert!(false),
     }

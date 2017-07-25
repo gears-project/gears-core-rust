@@ -97,7 +97,8 @@ pub struct DatatableConfig {
 }
 
 fn ordered_map<S>(value: &HashMap<String, Uuid>, serializer: S) -> Result<S::Ok, S::Error>
-    where S: Serializer
+where
+    S: Serializer,
 {
     // partof: SPC-serialization-fs
     // Consistent serialization

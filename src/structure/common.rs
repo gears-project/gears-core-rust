@@ -16,7 +16,8 @@ pub struct Document<T> {
 }
 
 impl<T> Document<T>
-    where T: serde::Serialize + serde::de::DeserializeOwned + Eq + Default + Queryable
+where
+    T: serde::Serialize + serde::de::DeserializeOwned + Eq + Default + Queryable,
 {
     pub fn new_from_header(header: &DocumentHeader) -> Self {
         Self {
@@ -96,7 +97,8 @@ impl<T> Document<T>
 }
 
 impl<T> Default for Document<T>
-    where T: Default
+where
+    T: Default,
 {
     fn default() -> Self {
         Self {
@@ -159,9 +161,11 @@ impl I18NString {
                 self.value = item.value.clone();
             }
             None => {
-                warn!("No translation found for '{:?}' in locale '{:?}'",
-                      self.key,
-                      t.doc.locale);
+                warn!(
+                    "No translation found for '{:?}' in locale '{:?}'",
+                    self.key,
+                    t.doc.locale
+                );
                 self.locale = t.doc.locale.clone();
                 self.value = "-no-value-".to_owned();
             }

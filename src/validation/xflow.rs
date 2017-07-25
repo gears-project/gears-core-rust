@@ -17,7 +17,9 @@ impl Validation {
         errors.extend(Validation::has_one_entry_node(xflow));
         errors.extend(Validation::has_terminal_nodes(xflow));
         errors.extend(Validation::all_nodes_have_at_least_one_edge(xflow));
-        errors.extend(Validation::all_node_actions_have_matching_requirements(xflow));
+        errors.extend(Validation::all_node_actions_have_matching_requirements(
+            xflow,
+        ));
         errors.extend(Validation::variables_are_defined_only_once(xflow));
         errors.extend(Validation::all_return_values_exist(xflow));
         errors.extend(Validation::no_variable_redefinition(xflow));
@@ -34,8 +36,8 @@ impl Validation {
             .nodes
             .iter()
             .map({
-                     |node| node.id
-                 })
+                |node| node.id
+            })
             .collect::<Vec<i32>>();
 
         node_ids.sort();
@@ -45,22 +47,18 @@ impl Validation {
 
             if !node_ids.contains(&edge.0) {
                 errors.push(ValidationError {
-                                code: 1,
-                                message: format!("Edge {:?} has no connecting node {:?}",
-                                                 edge,
-                                                 edge.0),
-                                paths: vec![format!("/edges/{:?}", edge)],
-                            });
+                    code: 1,
+                    message: format!("Edge {:?} has no connecting node {:?}", edge, edge.0),
+                    paths: vec![format!("/edges/{:?}", edge)],
+                });
             };
 
             if !node_ids.contains(&edge.1) {
                 errors.push(ValidationError {
-                                code: 1,
-                                message: format!("Edge {:?} has no connecting node {:?}",
-                                                 edge,
-                                                 edge.1),
-                                paths: vec![format!("/edges/{:?}", edge)],
-                            });
+                    code: 1,
+                    message: format!("Edge {:?} has no connecting node {:?}", edge, edge.1),
+                    paths: vec![format!("/edges/{:?}", edge)],
+                });
             };
         }
 
@@ -74,20 +72,20 @@ impl Validation {
         match res.len() {
             0 => {
                 errors.push(ValidationError {
-                                code: 1,
-                                message: "XFlow has no entry nodes".into(),
-                                paths: vec!["/nodes".into()],
-                            });
+                    code: 1,
+                    message: "XFlow has no entry nodes".into(),
+                    paths: vec!["/nodes".into()],
+                });
             }
             1 => {}
             _ => {
                 // XXX: Add multiple paths
                 //
                 errors.push(ValidationError {
-                                code: 1,
-                                message: "XFlow has multiple entry nodes".into(),
-                                paths: vec!["/nodes".to_owned()],
-                            });
+                    code: 1,
+                    message: "XFlow has multiple entry nodes".into(),
+                    paths: vec!["/nodes".to_owned()],
+                });
             }
         }
 
@@ -101,10 +99,10 @@ impl Validation {
 
         if let 0 = res.len() {
             errors.push(ValidationError {
-                            code: 1,
-                            message: "XFlow has no terminal nodes".into(),
-                            paths: vec!["/nodes".into()],
-                        });
+                code: 1,
+                message: "XFlow has no terminal nodes".into(),
+                paths: vec!["/nodes".into()],
+            });
         }
 
         errors
@@ -120,25 +118,25 @@ impl Validation {
                 .edges
                 .iter()
                 .filter({
-                            |edge| node.id == edge.0 || node.id == edge.1
-                        })
+                    |edge| node.id == edge.0 || node.id == edge.1
+                })
                 .collect::<Vec<&XFlowEdge>>();
 
             if res.is_empty() {
                 errors.push(ValidationError {
-                                code: 1,
-                                message: format!("XFlow node '{}' is not connected to an edge",
-                                                 node.id),
-                                paths: vec![format!("/nodes/{}", node.id)],
-                            });
+                    code: 1,
+                    message: format!("XFlow node '{}' is not connected to an edge", node.id),
+                    paths: vec![format!("/nodes/{}", node.id)],
+                });
             }
         }
 
         errors
     }
 
-    pub fn all_node_actions_have_matching_requirements(xflow: &XFlowDocument)
-                                                       -> Vec<ValidationError> {
+    pub fn all_node_actions_have_matching_requirements(
+        xflow: &XFlowDocument,
+    ) -> Vec<ValidationError> {
         let mut errors = Vec::<ValidationError>::new();
 
         let reqs = xflow
@@ -146,8 +144,8 @@ impl Validation {
             .requirements
             .iter()
             .map({
-                     |req| req.xtype.clone()
-                 })
+                |req| req.xtype.clone()
+            })
             .collect::<Vec<XFlowNodeType>>();
 
         for node in &xflow.doc.nodes {
@@ -176,11 +174,13 @@ impl Validation {
         for xvar in &xflow.doc.variables.input {
             if input_vars.contains(&xvar.name) {
                 errors.push(ValidationError {
-                                code: 1,
-                                message: format!("XFlow input variable '{}' defined more than once",
-                                                 xvar.name),
-                                paths: vec![format!("/variables/input/{}", xvar.name)],
-                            });
+                    code: 1,
+                    message: format!(
+                        "XFlow input variable '{}' defined more than once",
+                        xvar.name
+                    ),
+                    paths: vec![format!("/variables/input/{}", xvar.name)],
+                });
             } else {
                 input_vars.insert(xvar.name.clone());
             }
@@ -190,11 +190,13 @@ impl Validation {
         for xvar in &xflow.doc.variables.local {
             if local_vars.contains(&xvar.name) {
                 errors.push(ValidationError {
-                                code: 1,
-                                message: format!("XFlow local variable '{}' defined more than once",
-                                                 xvar.name),
-                                paths: vec![format!("/variables/local/{}", xvar.name)],
-                            });
+                    code: 1,
+                    message: format!(
+                        "XFlow local variable '{}' defined more than once",
+                        xvar.name
+                    ),
+                    paths: vec![format!("/variables/local/{}", xvar.name)],
+                });
             } else {
                 local_vars.insert(xvar.name.clone());
             }
@@ -205,8 +207,10 @@ impl Validation {
             if output_vars.contains(&xvar.name) {
                 errors.push(ValidationError {
                     code: 1,
-                    message: format!("XFlow output variable '{}' defined more than once",
-                                     xvar.name),
+                    message: format!(
+                        "XFlow output variable '{}' defined more than once",
+                        xvar.name
+                    ),
                     paths: vec![format!("/variables/output/{}", xvar.name)],
                 });
             } else {
@@ -235,8 +239,10 @@ impl Validation {
             if !locals.contains_key(&xvar.name) && !inputs.contains_key(&xvar.name) {
                 errors.push(ValidationError {
                     code: 1,
-                    message: format!("XFlow output variable '{}' has no local or input definition",
-                                     xvar.name),
+                    message: format!(
+                        "XFlow output variable '{}' has no local or input definition",
+                        xvar.name
+                    ),
                     paths: vec![format!("/variables/output/{}", xvar.name)],
                 });
             }
@@ -285,8 +291,10 @@ impl Validation {
             if locals.contains_key(&xvar.name) {
                 errors.push(ValidationError {
                     code: 1,
-                    message: format!("XFlow input variable '{}' is redefined in local scope",
-                                     xvar.name),
+                    message: format!(
+                        "XFlow input variable '{}' is redefined in local scope",
+                        xvar.name
+                    ),
                     paths: vec![format!("/variables/input/{}", xvar.name)],
                 });
             }
@@ -306,12 +314,14 @@ impl Validation {
                 for flox_var in flox::extract_variable_names(&flox_params.expression).unwrap() {
                     if !names_in_xflow.contains(flox_var) {
                         errors.push(ValidationError {
-                                        code: 1,
-                                        message: format!("Flox expression references variable \
+                            code: 1,
+                            message: format!(
+                                "Flox expression references variable \
                                                           '{}' which is not defined in this flow",
-                                                         flox_var),
-                                        paths: vec![format!("/nodes/{}", node.id)],
-                                    });
+                                flox_var
+                            ),
+                            paths: vec![format!("/nodes/{}", node.id)],
+                        });
                     }
                 }
             }
