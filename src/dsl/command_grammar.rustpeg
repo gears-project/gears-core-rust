@@ -7,7 +7,7 @@ pub expression -> Command
   / destroy
   / help
   / sync
-  / component_dsl_command
+  / cmd:dsl_command { Command::Dsl(cmd) }
 
 set -> Command
   = "set" _ key:label _ val:label {
@@ -51,15 +51,15 @@ _ -> ()
 space -> ()
   = " "
 
-component_dsl_command -> Command
+pub dsl_command -> DslCommand
   = "with domain " domain_command:domain_command {
-    Command::Dsl(DslCommand::Domain(domain_command))
+    DslCommand::Domain(domain_command)
   }
   / "with xflow " xflow_command:xflow_command {
-    Command::Dsl(DslCommand::XFlow(xflow_command))
+    DslCommand::XFlow(xflow_command)
   }
   / "with config " config_command:config_command {
-    Command::Dsl(DslCommand::Config(config_command))
+    DslCommand::Config(config_command)
   }
 
 domain_command -> DomainCommand

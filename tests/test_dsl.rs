@@ -109,52 +109,48 @@ fn test_parse_destroy() {
 fn test_parse_domain_dsl() {
     let _ = env_logger::init();
 
-    match parse_command(&"with domain add entity abc") {
+    match parse_dsl_command(&"with domain add entity abc") {
         Ok(cmd) => {
             assert_eq!(
                 cmd,
-                Command::Dsl(DslCommand::Domain(
-                    DomainCommand::AddEntity("abc".to_owned()),
-                ))
+                DslCommand::Domain(DomainCommand::AddEntity("abc".to_owned()))
             )
         }
         Err(_) => assert!(false),
     }
 
-    match parse_command(&"with domain remove entity abc") {
+    match parse_dsl_command(&"with domain remove entity abc") {
         Ok(cmd) => {
             assert_eq!(
                 cmd,
-                Command::Dsl(DslCommand::Domain(
-                    DomainCommand::RemoveEntity("abc".to_owned()),
-                ))
+                DslCommand::Domain(DomainCommand::RemoveEntity("abc".to_owned()))
             )
         }
         Err(_) => assert!(false),
     }
 
-    match parse_command(&"with domain entity abc add attribute name:string") {
+    match parse_dsl_command(&"with domain entity abc add attribute name:string") {
         Ok(cmd) => {
             assert_eq!(
                 cmd,
-                Command::Dsl(DslCommand::Domain(DomainCommand::AddAttribute(
+                DslCommand::Domain(DomainCommand::AddAttribute(
                     "abc".to_owned(),
                     "name".to_string(),
                     "string".to_string(),
-                )))
+                ))
             )
         }
         Err(_) => assert!(false),
     }
 
-    match parse_command(&"with domain entity abc remove attribute name") {
+    match parse_dsl_command(&"with domain entity abc remove attribute name") {
         Ok(cmd) => {
             assert_eq!(
                 cmd,
-                Command::Dsl(DslCommand::Domain(DomainCommand::RemoveAttribute(
+                DslCommand::Domain(DomainCommand::RemoveAttribute(
                     "abc".to_owned(),
                     "name".to_string(),
-                )))
+                ))
             )
         }
         Err(_) => assert!(false),
@@ -165,11 +161,11 @@ fn test_parse_domain_dsl() {
 fn test_parse_xflow_dsl() {
     let _ = env_logger::init();
 
-    match parse_command(&"with xflow add node abc") {
+    match parse_dsl_command(&"with xflow add node abc") {
         Ok(cmd) => {
             assert_eq!(
                 cmd,
-                Command::Dsl(DslCommand::XFlow(XFlowCommand::AddNode("abc".to_owned())))
+                DslCommand::XFlow(XFlowCommand::AddNode("abc".to_owned()))
             )
         }
         Err(_) => assert!(false),
@@ -181,36 +177,26 @@ fn test_dsl_change_model() {
     let _ = env_logger::init();
     let mut model = ModelDocument::default();
 
-    match parse_command(&"with domain add entity abc") {
+    match parse_dsl_command(&"with domain add entity abc") {
         Ok(cmd) => {
-            match cmd {
-                Command::Dsl(cmd) => {
-                    match run_command(&mut model, &cmd) {
-                        Ok(_) => {
-                            assert_eq!(model.doc.domain.doc.entities.len(), 1);
-                            assert_eq!(model.doc.domain.doc.entities[0].name, "abc".to_owned())
-                        }
-                        Err(_) => assert!(false),
-                    }
+            match run_command(&mut model, &cmd) {
+                Ok(_) => {
+                    assert_eq!(model.doc.domain.doc.entities.len(), 1);
+                    assert_eq!(model.doc.domain.doc.entities[0].name, "abc".to_owned())
                 }
-                _ => assert!(false),
+                Err(_) => assert!(false),
             }
         }
         Err(_) => assert!(false),
     }
 
-    match parse_command(&"with config set default_locale es_ES") {
+    match parse_dsl_command(&"with config set default_locale es_ES") {
         Ok(cmd) => {
-            match cmd {
-                Command::Dsl(cmd) => {
-                    match run_command(&mut model, &cmd) {
-                        Ok(_) => {
-                            assert_eq!(model.doc.config.doc.default_locale, "es_ES".to_owned());
-                        }
-                        Err(_) => assert!(false),
-                    }
+            match run_command(&mut model, &cmd) {
+                Ok(_) => {
+                    assert_eq!(model.doc.config.doc.default_locale, "es_ES".to_owned());
                 }
-                _ => assert!(false),
+                Err(_) => assert!(false),
             }
         }
         Err(_) => assert!(false),

@@ -56,13 +56,19 @@ pub fn parse_command(input: &str) -> Result<Command, String> {
     }
 }
 
+pub fn parse_dsl_command(input: &str) -> Result<DslCommand, String> {
+    match command_grammar::dsl_command(&input) {
+        Ok(res) => Ok(res),
+        Err(err) => Err(format!("{:?}", err)),
+    }
+}
+
 pub fn run_commands(model: &mut ModelDocument, dsl_cmds: Vec<&DslCommand>) -> Result<(), String> {
     for cmd in &dsl_cmds {
         run_command(model, cmd);
     }
 
     Ok(())
-
 }
 
 pub fn run_command(model: &mut ModelDocument, dsl_cmd: &DslCommand) -> Result<(), String> {
