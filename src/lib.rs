@@ -14,6 +14,7 @@ pub mod xfstate;
 pub mod flox;
 
 pub mod structure;
+pub mod dsl;
 pub mod runtime;
 pub mod generation;
 pub mod validation;

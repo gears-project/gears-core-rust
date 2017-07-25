@@ -1,0 +1,79 @@
+use dsl::command::{Command, ModelComponent, DslCommand, DomainCommand, XFlowCommand};
+
+pub expression -> Command
+  = set
+  / list
+  / generate
+  / destroy
+  / help
+  / sync
+  / component_dsl_command
+
+set -> Command
+  = "set" _ key:label _ val:label {
+    Command::Set(key, val)
+  }
+
+list -> Command
+  = "list" _ key:model_component {
+    Command::List(key)
+}
+
+generate -> Command
+  = "generate" _ key:model_component _ val:label {
+    Command::Generate(key, val)
+  }
+
+destroy -> Command
+  = "destroy" _ key:model_component _ val:label {
+    Command::Destroy(key, val)
+  }
+
+help -> Command
+ = "help" { Command::Help }
+
+sync -> Command
+ = "sync" { Command::Sync }
+
+model_component -> ModelComponent
+  = "xflow" { ModelComponent::XFlow }
+  / "page" { ModelComponent::Page }
+  / "translation" { ModelComponent::Translation }
+
+label -> String
+  = label:$([A-Za-z0-9\_]+) {
+    label.to_string()
+  }
+
+_ -> ()
+  = space*
+
+space -> ()
+  = " "
+
+component_dsl_command -> Command
+  = "with domain " domain_command:domain_command {
+    Command::Dsl(DslCommand::Domain(domain_command))
+  }
+  / "with xflow " xflow_command:xflow_command {
+    Command::Dsl(DslCommand::XFlow(xflow_command))
+  }
+
+domain_command -> DomainCommand
+  = "add entity" " " label:label {
+    DomainCommand::AddEntity(label.to_string())
+  }
+  / "remove entity" " " label:label {
+    DomainCommand::RemoveEntity(label.to_string())
+  }
+  / "entity" " " entity:label " " "add attribute" " " attr:label ":" attr_type:label {
+    DomainCommand::AddAttribute(entity.to_string(), attr.to_string(), attr_type.to_string())
+  }
+  / "entity" " " entity:label " " "remove attribute" " " attr:label {
+    DomainCommand::RemoveAttribute(entity.to_string(), attr.to_string())
+  }
+
+xflow_command -> XFlowCommand
+  = "add node" " " label:label {
+    XFlowCommand::AddNode(label.to_string())
+  }
