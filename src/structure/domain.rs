@@ -134,7 +134,7 @@ impl Entity {
         }
     }
 
-    pub fn get_attribute(self, name: &str) -> Result<&Attribute, String> {
+    pub fn get_attribute(self, name: &str) -> Result<Attribute, String> {
         let res: Vec<&Attribute> = self.attributes
             .iter()
             .filter({
@@ -143,7 +143,7 @@ impl Entity {
             .collect();
 
         if res.len() == 1 {
-            Ok(&res[0])
+            Ok(res[0].clone())
         } else {
             Err(format!("Attribute {} does not exist", name))
         }
@@ -193,7 +193,7 @@ impl Translatable for DomainDocument {
     }
 }
 
-use dsl::command::{GearsDsl, DslItem};
+use dsl::command::{GearsDsl, DslItem, command_grammar};
 
 #[derive(Debug, Eq, PartialEq)]
 pub enum DomainCommand {
@@ -208,24 +208,24 @@ pub enum DomainCommand {
 impl DomainCommand {
     fn as_dsl_item(&self) -> DslItem {
         let s = match *self {
-            DomainCommand::AddEntity(ref e) => format!("add entity {};", e),
-            DomainCommand::RemoveEntity(ref e) => format!("remove entity {};", e),
-            DomainCommand::AddAttribute(ref a, ref t) => format!("add attribute {}:{};", a, t),
-            DomainCommand::RemoveAttribute(ref a) => format!("remove attribute {};", a),
-            DomainCommand::AddValidation(ref v, ref t) => format!("add validation {} '{}';", v, t),
-            DomainCommand::RemoveValidation(ref v) => format!("remove validation {};", v),
+            DomainCommand::AddEntity(ref e) => format!("add entity {}", e),
+            DomainCommand::RemoveEntity(ref e) => format!("remove entity {}", e),
+            DomainCommand::AddAttribute(ref a, ref t) => format!("add attribute {}:{}", a, t),
+            DomainCommand::RemoveAttribute(ref a) => format!("remove attribute {}", a),
+            DomainCommand::AddValidation(ref v, ref t) => format!("add validation {} '{}'", v, t),
+            DomainCommand::RemoveValidation(ref v) => format!("remove validation {}", v),
         };
         DslItem::Command(s)
     }
 }
 
-struct DomainDslState<'a> {
+struct DomainDslState {
     indent: usize,
-    entity: Option<&'a Entity>,
-    attribute: Option<&'a Attribute>,
+    entity: Option<Entity>,
+    attribute: Option<Attribute>,
 }
 
-impl<'a> Default for DomainDslState<'a> {
+impl Default for DomainDslState {
     fn default() -> Self {
         DomainDslState {
             indent: 0,
@@ -242,35 +242,39 @@ impl GearsDsl for Domain {
         for entity in &self.entities {
             res.push(DomainCommand::AddEntity(entity.name.clone()).as_dsl_item());
 
-            res.push(DslItem::With(entity.name.clone()));
-            res.push(DslItem::BlockOpen);
-
-            for attribute in &entity.attributes {
-                res.push(
-                    DomainCommand::AddAttribute(attribute.name.clone(), attribute.vtype.clone())
-                        .as_dsl_item(),
-                );
-
-                res.push(DslItem::With(attribute.name.clone()));
-
+            if entity.attributes.len() > 0 {
+                res.push(DslItem::With(entity.name.clone()));
                 res.push(DslItem::BlockOpen);
-                for validation in &attribute.validations {
+
+                for attribute in &entity.attributes {
                     res.push(
-                        DomainCommand::AddValidation(
-                            validation.xflow.clone(),
-                            validation.message.value.clone(),
-                        ).as_dsl_item(),
+                        DomainCommand::AddAttribute(attribute.name.clone(), attribute.vtype.clone())
+                            .as_dsl_item(),
                     );
+
+                    if attribute.validations.len() > 0 {
+                        res.push(DslItem::With(attribute.name.clone()));
+
+                        res.push(DslItem::BlockOpen);
+                        for validation in &attribute.validations {
+                            res.push(
+                                DomainCommand::AddValidation(
+                                    validation.xflow.clone(),
+                                    validation.message.value.clone(),
+                                ).as_dsl_item(),
+                            );
+                        }
+                        res.push(DslItem::BlockClose);
+                    }
+
                 }
                 res.push(DslItem::BlockClose);
-
             }
-            res.push(DslItem::BlockClose);
         }
         res
     }
 
-    fn consume_dsl(&self, items: &Vec<DslItem>) -> Result<(), String> {
+    fn consume_dsl(&mut self, items: &Vec<DslItem>) -> Result<(), String> {
         let mut state = DomainDslState::default();
 
         for item in items {
@@ -280,17 +284,17 @@ impl GearsDsl for Domain {
                         0 => {
                             match self.get_entity(&s) {
                                 Ok(ref e) => {
-                                    state.entity = Some(&e);
+                                    state.entity = Some((*e).clone());
                                 }
                                 Err(err) => return Err(err),
                             }
                         }
                         1 => {
                             match state.entity {
-                                Some(ref entity) => {
-                                    match entity.get_attribute(&s) {
-                                        Ok(ref a) => {
-                                            state.attribute = Some(&a);
+                                Some(ref e) => {
+                                    match (*e).clone().get_attribute(&s) {
+                                        Ok(attr) => {
+                                            state.attribute = Some(attr);
                                         }
                                         Err(err) => return Err(err),
                                     }
@@ -316,7 +320,25 @@ impl GearsDsl for Domain {
                     state.indent += 1;
                 }
                 DslItem::Command(ref s) => {
-                    unimplemented!();
+                    match command_grammar::domain_command(&s) {
+                        Ok(cmd) => {
+                            match cmd {
+                                DomainCommand::AddEntity(e) => {
+                                    self.add_entity(Entity::new(&e));
+                                }
+                                DomainCommand::RemoveEntity(e) => {
+                                    self.remove_entity(&e);
+                                }
+                                DomainCommand::AddAttribute(attr, attr_type) => {}
+                                DomainCommand::RemoveAttribute(attr) => {}
+                                DomainCommand::AddValidation(val, val_msg) => {}
+                                DomainCommand::RemoveValidation(val) => {}
+                            }
+                        }
+                        Err(err) => {
+                            return Err(format!("Parsing error domain_command : {:?}", err));
+                        }
+                    }
                 }
             }
         }

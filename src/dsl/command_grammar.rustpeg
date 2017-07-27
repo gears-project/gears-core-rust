@@ -16,24 +16,24 @@ pub expression -> Vec<DslItem>
   = dsl_item*
 
 pub dsl_item -> DslItem
-  = "with " label:label {
+  = _ "with " label:label {
     DslItem::With(label.to_string())
   }
-  / "{" {
+  / _ "{" {
     DslItem::BlockOpen
   }
-  / "};" {
+  / _ "};" {
     DslItem::BlockClose
   }
-  / command:$([A-Za-z0-9\_\s\:\'\"]+) ";" {
+  / _ command:$([A-Za-z\ ]+) ";" {
     DslItem::Command(command.to_string())
   }
 
 pub domain_command -> DomainCommand
-  = "add entity" " " label:label ";"{
+  = "add entity" " " label:label {
     DomainCommand::AddEntity(label.to_string())
   }
-  / "remove entity" " " label:label ";" {
+  / "remove entity" " " label:label {
     DomainCommand::RemoveEntity(label.to_string())
   }
   / "add attribute" " " attr:label ":" attr_type:label {
