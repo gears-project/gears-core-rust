@@ -3,6 +3,8 @@ extern crate env_logger;
 extern crate gears;
 use gears::dsl::command::*;
 use gears::structure::model::ModelDocument;
+use gears::structure::domain::*;
+use gears::util::fs::*;
 
 #[test]
 fn test_parse_list() {
@@ -202,5 +204,54 @@ fn test_dsl_change_model() {
         Err(_) => assert!(false),
     }
 
+
+}
+
+#[test]
+fn test_dsl_generate_domain() {
+    let _ = env_logger::init();
+    let mut model = ModelDocument::default();
+
+    match parse_dsl_command(&"with domain add entity abc") {
+        Ok(cmd) => {
+            match run_command(&mut model, &cmd) {
+                Ok(_) => {
+                    assert_eq!(model.doc.domain.doc.entities.len(), 1);
+                    assert_eq!(model.doc.domain.doc.entities[0].name, "abc".to_owned())
+                }
+                Err(_) => assert!(false),
+            }
+        }
+        Err(_) => assert!(false),
+    }
+
+    use gears::structure::domain::*;
+    let dsl_items = model.doc.domain.doc.generate_dsl();
+    assert_eq!(dsl_items.len(), 4);
+    println!("MODEL DOMAIN AS STRING {:?}", dsl_out(&dsl_items));
+
+}
+
+#[test]
+fn test_dsl_generate_domain_X() {
+    let _ = env_logger::init();
+    let mut model = model_from_fs(&"resource/projects/basic").unwrap();
+
+    let e_count = model.doc.domain.doc.entities.len();
+
+    match parse_dsl_command(&"with domain add entity abc") {
+        Ok(cmd) => {
+            match run_command(&mut model, &cmd) {
+                Ok(_) => {
+                    assert_eq!(model.doc.domain.doc.entities.len(), e_count + 1);
+                }
+                Err(_) => assert!(false),
+            }
+        }
+        Err(_) => assert!(false),
+    }
+
+    let dsl = model.doc.domain.doc.generate_dsl();
+    println!("MODEL DOMAIN AS STRING {:?}", dsl_out(&dsl));
 
 }

@@ -13,30 +13,12 @@ pub enum ModelComponent {
     Translation,
 }
 
-#[derive(Debug, Eq, PartialEq)]
-pub enum Command {
-    Help,
-    Sync,
-    Set(String, String),
-    List(ModelComponent),
-    Generate(ModelComponent, String),
-    Destroy(ModelComponent, String),
-    Dsl(DslCommand),
-}
-
-#[derive(Debug, Eq, PartialEq)]
-pub enum DslCommand {
-    Domain(DomainCommand),
-    XFlow(XFlowCommand),
-    Config(ConfigCommand),
-}
-
-#[derive(Debug, Eq, PartialEq)]
-pub enum DomainCommand {
-    AddEntity(String),
-    RemoveEntity(String),
-    AddAttribute(String, String, String),
-    RemoveAttribute(String, String),
+#[derive(Debug)]
+pub enum DslItem {
+    BlockOpen,
+    BlockClose,
+    With(String),
+    Command(String),
 }
 
 #[derive(Debug, Eq, PartialEq)]
@@ -49,6 +31,12 @@ pub enum ConfigCommand {
     SetDefaultLocale(String),
 }
 
+pub trait GearsDsl {
+    fn generate_dsl(&self) -> Vec<DslItem>;
+    fn consume_dsl(&self, item: &Vec<DslItem>) -> Result<(), String>;
+}
+
+/*
 pub fn parse_command(input: &str) -> Result<Command, String> {
     match command_grammar::expression(&input) {
         Ok(res) => Ok(res),
@@ -115,4 +103,33 @@ pub fn run_command(model: &mut ModelDocument, dsl_cmd: &DslCommand) -> Result<()
             }
         }
     }
+}
+*/
+
+pub fn dsl_out(items: &Vec<DslItem>) -> String {
+    let indent_size = 4;
+    let mut indent: usize = 0;
+    let mut res = Vec::<String>::new();
+    for item in items.iter() {
+        match *item {
+            DslItem::BlockOpen => {
+                res.push(format!("{{"));
+                indent += indent_size;
+            }
+            DslItem::BlockClose => {
+                res.push(format!("}};"));
+                indent -= indent_size;
+            }
+            DslItem::With(ref s) => {
+                res.push(format!(" with {label}", label = s));
+            }
+            DslItem::Command(ref s) => {
+                res.push(format!(" {cmd};", cmd = s));
+            }
+
+        }
+    }
+
+    res.join("\n")
+
 }

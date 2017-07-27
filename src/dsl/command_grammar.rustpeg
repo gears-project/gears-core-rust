@@ -1,44 +1,5 @@
 use dsl::command::*;
-
-pub expression -> Command
-  = set
-  / list
-  / generate
-  / destroy
-  / help
-  / sync
-  / cmd:dsl_command { Command::Dsl(cmd) }
-
-set -> Command
-  = "set" _ key:label _ val:label {
-    Command::Set(key, val)
-  }
-
-list -> Command
-  = "list" _ key:model_component {
-    Command::List(key)
-}
-
-generate -> Command
-  = "generate" _ key:model_component _ val:label {
-    Command::Generate(key, val)
-  }
-
-destroy -> Command
-  = "destroy" _ key:model_component _ val:label {
-    Command::Destroy(key, val)
-  }
-
-help -> Command
- = "help" { Command::Help }
-
-sync -> Command
- = "sync" { Command::Sync }
-
-model_component -> ModelComponent
-  = "xflow" { ModelComponent::XFlow }
-  / "page" { ModelComponent::Page }
-  / "translation" { ModelComponent::Translation }
+use structure::domain::DomainCommand;
 
 label -> String
   = label:$([A-Za-z0-9\_]+) {
@@ -51,29 +12,35 @@ _ -> ()
 space -> ()
   = " "
 
-pub dsl_command -> DslCommand
-  = "with domain " domain_command:domain_command {
-    DslCommand::Domain(domain_command)
+pub expression -> Vec<DslItem>
+  = dsl_item*
+
+pub dsl_item -> DslItem
+  = "with " label:label {
+    DslItem::With(label.to_string())
   }
-  / "with xflow " xflow_command:xflow_command {
-    DslCommand::XFlow(xflow_command)
+  / "{" {
+    DslItem::BlockOpen
   }
-  / "with config " config_command:config_command {
-    DslCommand::Config(config_command)
+  / "};" {
+    DslItem::BlockClose
+  }
+  / command:$([A-Za-z0-9\_\s\:\'\"]+) ";" {
+    DslItem::Command(command.to_string())
   }
 
-domain_command -> DomainCommand
-  = "add entity" " " label:label {
+pub domain_command -> DomainCommand
+  = "add entity" " " label:label ";"{
     DomainCommand::AddEntity(label.to_string())
   }
-  / "remove entity" " " label:label {
+  / "remove entity" " " label:label ";" {
     DomainCommand::RemoveEntity(label.to_string())
   }
-  / "entity" " " entity:label " " "add attribute" " " attr:label ":" attr_type:label {
-    DomainCommand::AddAttribute(entity.to_string(), attr.to_string(), attr_type.to_string())
+  / "add attribute" " " attr:label ":" attr_type:label {
+    DomainCommand::AddAttribute(attr.to_string(), attr_type.to_string())
   }
-  / "entity" " " entity:label " " "remove attribute" " " attr:label {
-    DomainCommand::RemoveAttribute(entity.to_string(), attr.to_string())
+  / "remove attribute" " " attr:label {
+    DomainCommand::RemoveAttribute(attr.to_string())
   }
 
 xflow_command -> XFlowCommand

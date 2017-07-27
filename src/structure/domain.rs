@@ -70,7 +70,7 @@ impl Default for Events {
     }
 }
 
-impl DomainDocument {
+impl Domain {
     pub fn has_entity(&self, name: &str) -> bool {
         match self.get_entity(name) {
             Ok(_) => true,
@@ -79,8 +79,7 @@ impl DomainDocument {
     }
 
     pub fn get_entity(&self, name: &str) -> Result<&Entity, String> {
-        let res: Vec<&Entity> = self.doc
-            .entities
+        let res: Vec<&Entity> = self.entities
             .iter()
             .filter({
                 |e| e.name.eq(name)
@@ -97,15 +96,15 @@ impl DomainDocument {
         if self.has_entity(&entity.name) {
             Err(format!("Entity {} already exists", entity.name))
         } else {
-            self.doc.entities.push(entity);
+            self.entities.push(entity);
             Ok(())
         }
     }
 
     pub fn remove_entity(&mut self, entity: &str) -> Result<(), String> {
-        let entities = self.doc.entities.clone();
+        let entities = self.entities.clone();
 
-        self.doc.entities = entities
+        self.entities = entities
             .into_iter()
             .filter({
                 |e| e.name.ne(entity)
@@ -135,7 +134,6 @@ impl Entity {
         }
     }
 
-    /*
     pub fn get_attribute(self, name: &str) -> Result<&Attribute, String> {
         let res: Vec<&Attribute> = self.attributes
             .iter()
@@ -151,7 +149,6 @@ impl Entity {
         }
 
     }
-    */
 }
 
 impl Default for Domain {
@@ -164,8 +161,6 @@ impl Default for Domain {
 }
 
 impl Queryable for Domain {}
-
-impl Domain {}
 
 impl Translatable for DomainDocument {
     fn translate_in_place(&mut self, t: &TranslationDocument) -> () {
@@ -195,5 +190,136 @@ impl Translatable for DomainDocument {
         }
 
         ts
+    }
+}
+
+use dsl::command::{GearsDsl, DslItem};
+
+#[derive(Debug, Eq, PartialEq)]
+pub enum DomainCommand {
+    AddEntity(String),
+    RemoveEntity(String),
+    AddAttribute(String, String),
+    RemoveAttribute(String),
+    AddValidation(String, String),
+    RemoveValidation(String),
+}
+
+impl DomainCommand {
+    fn as_dsl_item(&self) -> DslItem {
+        let s = match *self {
+            DomainCommand::AddEntity(ref e) => format!("add entity {};", e),
+            DomainCommand::RemoveEntity(ref e) => format!("remove entity {};", e),
+            DomainCommand::AddAttribute(ref a, ref t) => format!("add attribute {}:{};", a, t),
+            DomainCommand::RemoveAttribute(ref a) => format!("remove attribute {};", a),
+            DomainCommand::AddValidation(ref v, ref t) => format!("add validation {} '{}';", v, t),
+            DomainCommand::RemoveValidation(ref v) => format!("remove validation {};", v),
+        };
+        DslItem::Command(s)
+    }
+}
+
+struct DomainDslState<'a> {
+    indent: usize,
+    entity: Option<&'a Entity>,
+    attribute: Option<&'a Attribute>,
+}
+
+impl<'a> Default for DomainDslState<'a> {
+    fn default() -> Self {
+        DomainDslState {
+            indent: 0,
+            entity: None,
+            attribute: None,
+        }
+    }
+}
+
+impl GearsDsl for Domain {
+    fn generate_dsl(&self) -> Vec<DslItem> {
+        let mut res = Vec::<DslItem>::new();
+
+        for entity in &self.entities {
+            res.push(DomainCommand::AddEntity(entity.name.clone()).as_dsl_item());
+
+            res.push(DslItem::With(entity.name.clone()));
+            res.push(DslItem::BlockOpen);
+
+            for attribute in &entity.attributes {
+                res.push(
+                    DomainCommand::AddAttribute(attribute.name.clone(), attribute.vtype.clone())
+                        .as_dsl_item(),
+                );
+
+                res.push(DslItem::With(attribute.name.clone()));
+
+                res.push(DslItem::BlockOpen);
+                for validation in &attribute.validations {
+                    res.push(
+                        DomainCommand::AddValidation(
+                            validation.xflow.clone(),
+                            validation.message.value.clone(),
+                        ).as_dsl_item(),
+                    );
+                }
+                res.push(DslItem::BlockClose);
+
+            }
+            res.push(DslItem::BlockClose);
+        }
+        res
+    }
+
+    fn consume_dsl(&self, items: &Vec<DslItem>) -> Result<(), String> {
+        let mut state = DomainDslState::default();
+
+        for item in items {
+            match *item {
+                DslItem::With(ref s) => {
+                    match state.indent {
+                        0 => {
+                            match self.get_entity(&s) {
+                                Ok(ref e) => {
+                                    state.entity = Some(&e);
+                                }
+                                Err(err) => return Err(err),
+                            }
+                        }
+                        1 => {
+                            match state.entity {
+                                Some(ref entity) => {
+                                    match entity.get_attribute(&s) {
+                                        Ok(ref a) => {
+                                            state.attribute = Some(&a);
+                                        }
+                                        Err(err) => return Err(err),
+                                    }
+                                }
+                                None => {
+                                    error!(
+                                        "consume_dsl: requesting attribute but no entity found at this level!"
+                                    );
+                                    return Err("consume_dsl: requesting attribute but no entity found at this level".to_owned());
+                                }
+                            }
+                        }
+                        _ => {
+                            error!("consume_dsl: too deeply nested!");
+                            return Err("consume_dsl: too deeply nested".to_owned());
+                        }
+                    }
+                }
+                DslItem::BlockOpen => {
+                    state.indent += 1;
+                }
+                DslItem::BlockClose => {
+                    state.indent += 1;
+                }
+                DslItem::Command(ref s) => {
+                    unimplemented!();
+                }
+            }
+        }
+        Ok(())
     }
 }
