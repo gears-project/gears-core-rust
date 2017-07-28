@@ -10,7 +10,7 @@ fn test_dsl_domain() {
 
     let mut domain = Domain::default();
     let e_count = domain.entities.len();
-    domain.interpret_dsl(&mut domain, &"add entity abc;");
+    domain.interpret_dsl(&"add entity abc;");
     assert_eq!(domain.entities.len(), e_count + 1);
 
     let dsl = domain.generate_dsl();
@@ -25,10 +25,7 @@ fn test_dsl_domain_multiple_commands() {
 
     let e_count = domain.entities.len();
 
-    domain.interpret_dsl(
-        &mut domain,
-        &"add entity abc; remove entity abc; add entity post;",
-    );
+    domain.interpret_dsl(&"add entity abc; remove entity abc; add entity post;");
     assert_eq!(domain.entities.len(), e_count + 1);
 
     let dsl = domain.generate_dsl();

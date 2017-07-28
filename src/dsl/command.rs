@@ -27,7 +27,24 @@ pub enum ConfigCommand {
 pub trait GearsDsl {
     fn generate_dsl(&self) -> Vec<DslItem>;
     fn consume_dsl(&mut self, item: &Vec<DslItem>) -> Result<(), String>;
-    fn interpret_dsl(&mut self, txt: &str) -> Result<(), String>;
+
+    fn interpret_dsl(&mut self, txt: &str) -> Result<(), String> {
+        match command_grammar::expression(&txt) {
+            Ok(dsl_items) => {
+                match self.consume_dsl(&dsl_items) {
+                    Ok(_) => Ok(()),
+                    Err(err) => {
+                        error!("interpret_dsl : error with commands : {:?}", err);
+                        return Err(format!("interpret_dsl : error with commands : {:?}", err));
+                    }
+                }
+            }
+            Err(err) => {
+                error!("interpret_dsl : error : {:?}", err);
+                return Err(format!("interpret_dsl : error : {:?}", err));
+            }
+        }
+    }
 }
 
 pub fn dsl_out(items: &Vec<DslItem>) -> String {
