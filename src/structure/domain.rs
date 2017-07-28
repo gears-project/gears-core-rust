@@ -344,4 +344,26 @@ impl GearsDsl for Domain {
         }
         Ok(())
     }
+
+    fn interpret_dsl(&mut self, txt: &str) -> Result<(), String> {
+        match command_grammar::expression(&txt) {
+            Ok(dsl_items) => {
+                match self.consume_dsl(&dsl_items) {
+                    Ok(_) => Ok(()),
+                    Err(err) => {
+                        println!("run_domain_command : error with commands : {:?}", err);
+                        return Err(format!(
+                            "run_domain_command : error with commands : {:?}",
+                            err
+                        ));
+                    }
+                }
+            }
+            Err(err) => {
+                println!("test_dsl_domain : error : {:?}", err);
+                return Err(format!("test_dsl_domain : error : {:?}", err));
+            }
+        }
+
+    }
 }

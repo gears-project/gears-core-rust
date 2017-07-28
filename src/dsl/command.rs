@@ -27,6 +27,7 @@ pub enum ConfigCommand {
 pub trait GearsDsl {
     fn generate_dsl(&self) -> Vec<DslItem>;
     fn consume_dsl(&mut self, item: &Vec<DslItem>) -> Result<(), String>;
+    fn interpret_dsl(&mut self, txt: &str) -> Result<(), String>;
 }
 
 pub fn dsl_out(items: &Vec<DslItem>) -> String {
