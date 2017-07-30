@@ -21,6 +21,7 @@ pub struct Events {
 pub type Entities = Vec<Entity>;
 pub type Attributes = Vec<Attribute>;
 pub type References = Vec<Reference>;
+pub type Validations = Vec<Validation>;
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 pub struct Validation {
@@ -70,23 +71,34 @@ impl Default for Events {
     }
 }
 
+impl Attribute {
+    pub fn new(name: &str, attr_type: &str) -> Self {
+        Attribute {
+            name: name.to_string().clone(),
+            vtype: attr_type.to_string().clone(),
+            default: "".to_string(),
+            validations: Validations::new(),
+        }
+    }
+}
+
 impl Domain {
-    pub fn has_entity(&self, name: &str) -> bool {
+    pub fn has_entity(&mut self, name: &str) -> bool {
         match self.get_entity(name) {
             Ok(_) => true,
             Err(_) => false,
         }
     }
 
-    pub fn get_entity(&self, name: &str) -> Result<&Entity, String> {
-        let res: Vec<&Entity> = self.entities
+    pub fn get_entity(&mut self, name: &str) -> Result<&Entity, String> {
+        let mut res: Vec<&Entity> = self.entities
             .iter()
             .filter({
                 |e| e.name.eq(name)
             })
             .collect();
         if res.len() == 1 {
-            Ok(&res[0])
+            Ok(&mut res[0])
         } else {
             Err(format!("Entity {} does not exist", name))
         }
@@ -141,13 +153,16 @@ impl Entity {
                 |e| e.name.eq(name)
             })
             .collect();
-
         if res.len() == 1 {
             Ok(res[0].clone())
         } else {
             Err(format!("Attribute {} does not exist", name))
         }
+    }
 
+    pub fn add_attribute(&mut self, attr: Attribute) -> Result<(), String> {
+        self.attributes.push(attr);
+        Ok(())
     }
 }
 
@@ -221,16 +236,16 @@ impl DomainCommand {
 
 struct DomainDslState {
     indent: usize,
-    entity: Option<Entity>,
-    attribute: Option<Attribute>,
+    entity: String,
+    attribute: String,
 }
 
 impl Default for DomainDslState {
     fn default() -> Self {
         DomainDslState {
             indent: 0,
-            entity: None,
-            attribute: None,
+            entity: "".to_owned(),
+            attribute: "".to_owned(),
         }
     }
 }
@@ -266,7 +281,6 @@ impl GearsDsl for Domain {
                         }
                         res.push(DslItem::BlockClose);
                     }
-
                 }
                 res.push(DslItem::BlockClose);
             }
@@ -282,30 +296,10 @@ impl GearsDsl for Domain {
                 DslItem::With(ref s) => {
                     match state.indent {
                         0 => {
-                            match self.get_entity(&s) {
-                                Ok(ref e) => {
-                                    state.entity = Some((*e).clone());
-                                }
-                                Err(err) => return Err(err),
-                            }
+                            state.entity = s.clone();
                         }
                         1 => {
-                            match state.entity {
-                                Some(ref e) => {
-                                    match (*e).clone().get_attribute(&s) {
-                                        Ok(attr) => {
-                                            state.attribute = Some(attr);
-                                        }
-                                        Err(err) => return Err(err),
-                                    }
-                                }
-                                None => {
-                                    error!(
-                                        "consume_dsl: requesting attribute but no entity found at this level!"
-                                    );
-                                    return Err("consume_dsl: requesting attribute but no entity found at this level".to_owned());
-                                }
-                            }
+                            state.attribute = s.clone();
                         }
                         _ => {
                             error!("consume_dsl: too deeply nested!");
@@ -324,24 +318,46 @@ impl GearsDsl for Domain {
                         Ok(cmd) => {
                             match cmd {
                                 DomainCommand::AddEntity(e) => {
-                                    self.add_entity(Entity::new(&e));
+                                    if state.indent != 0 {
+                                        return Err("Bad indent for Entity".to_owned());
+                                    } else {
+                                        self.add_entity(Entity::new(&e));
+                                    }
                                 }
                                 DomainCommand::RemoveEntity(e) => {
-                                    self.remove_entity(&e);
+                                    if state.indent != 0 {
+                                        return Err("Bad indent for Entity".to_owned());
+                                    } else {
+                                        self.remove_entity(&e);
+                                    }
                                 }
-                                DomainCommand::AddAttribute(attr, attr_type) => {}
+                                DomainCommand::AddAttribute(attr, attr_type) => {
+                                    /*
+                                    if state.indent != 1 {
+                                        return Err("Bad indent for Attribute".to_owned());
+                                    } else {
+                                        match self.get_entity(&state.entity) {
+                                            Ok(e) => {
+                                                e.add_attribute(
+                                                    Attribute::new(&attr, &attr_type),
+                                                );
+                                            }
+                                            Err(err) => return Err(err),
+                                        }
+                                    }
+                                    */
+                                }
                                 DomainCommand::RemoveAttribute(attr) => {}
                                 DomainCommand::AddValidation(val, val_msg) => {}
                                 DomainCommand::RemoveValidation(val) => {}
                             }
                         }
-                        Err(err) => {
-                            return Err(format!("Parsing error domain_command : {:?}", err));
-                        }
+                        Err(err) => return Err(format!("Parsing error domain_command : {:?}", err)),
                     }
                 }
             }
         }
+
         Ok(())
     }
 }

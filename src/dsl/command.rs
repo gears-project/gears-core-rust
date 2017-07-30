@@ -45,31 +45,32 @@ pub trait GearsDsl {
             }
         }
     }
-}
 
-pub fn dsl_out(items: &Vec<DslItem>) -> String {
-    let indent_size = 4;
-    let mut indent: usize = 0;
-    let mut res = Vec::<String>::new();
-    for item in items.iter() {
-        match *item {
-            DslItem::BlockOpen => {
-                res.push(format!("{{"));
-                indent += indent_size;
-            }
-            DslItem::BlockClose => {
-                res.push(format!("}};"));
-                indent -= indent_size;
-            }
-            DslItem::With(ref s) => {
-                res.push(format!(" with {label}", label = s));
-            }
-            DslItem::Command(ref s) => {
-                res.push(format!(" {cmd};", cmd = s));
+    fn to_text_dsl(&self) -> String {
+        let items = &self.generate_dsl();
+        let indent_size = 4;
+        let mut indent: usize = 0;
+        let mut res = Vec::<String>::new();
+        for item in items.iter() {
+            match *item {
+                DslItem::BlockOpen => {
+                    res.push(format!("{{"));
+                    indent += indent_size;
+                }
+                DslItem::BlockClose => {
+                    res.push(format!("}};"));
+                    indent -= indent_size;
+                }
+                DslItem::With(ref s) => {
+                    res.push(format!(" with {label}", label = s));
+                }
+                DslItem::Command(ref s) => {
+                    res.push(format!(" {cmd};", cmd = s));
+                }
             }
         }
+
+        res.join("\n")
+
     }
-
-    res.join("\n")
-
 }

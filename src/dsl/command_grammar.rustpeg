@@ -29,6 +29,8 @@ pub dsl_item -> DslItem
     DslItem::Command(command.to_string())
   }
 
+// For domain::Domain GearsDsl implementation
+
 pub domain_command -> DomainCommand
   = "add entity" " " label:label {
     DomainCommand::AddEntity(label.to_string())
