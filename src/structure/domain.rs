@@ -333,10 +333,11 @@ impl GearsDsl for Domain {
                                     }
                                 }
                                 DomainCommand::AddAttribute(attr, attr_type) => {
-                                    /*
                                     if state.indent != 1 {
                                         return Err("Bad indent for Attribute".to_owned());
                                     } else {
+                                        info!("Domain DSL");
+                                        /*
                                         match self.get_entity(&state.entity) {
                                             Ok(e) => {
                                                 e.add_attribute(
@@ -345,12 +346,18 @@ impl GearsDsl for Domain {
                                             }
                                             Err(err) => return Err(err),
                                         }
+                                        */
                                     }
-                                    */
                                 }
-                                DomainCommand::RemoveAttribute(attr) => {}
-                                DomainCommand::AddValidation(val, val_msg) => {}
-                                DomainCommand::RemoveValidation(val) => {}
+                                DomainCommand::RemoveAttribute(attr) => {
+                                    info!("Domain DSL");
+                                }
+                                DomainCommand::AddValidation(val, val_msg) => {
+                                    info!("Domain DSL");
+                                }
+                                DomainCommand::RemoveValidation(val) => {
+                                    info!("Domain DSL");
+                                }
                             }
                         }
                         Err(err) => return Err(format!("Parsing error domain_command : {:?}", err)),

@@ -52,6 +52,12 @@ pub domain_command -> DomainCommand
   / "remove attribute" " " attr:label {
     DomainCommand::RemoveAttribute(attr.to_string())
   }
+  / "add validation" " " attr:label ":" attr_type:label {
+    DomainCommand::AddValidation(attr.to_string(), attr_type.to_string())
+  }
+  / "remove validation" " " attr:label {
+    DomainCommand::RemoveValidation(attr.to_string())
+  }
 
 xflow_command -> XFlowCommand
   = "add node" " " label:label {
