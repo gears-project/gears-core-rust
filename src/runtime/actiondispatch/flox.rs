@@ -18,20 +18,22 @@ impl Flox {
             XFlowNodeParameters::Flox(ref node_params) => {
                 match node.action.as_ref() {
                     "evalexpr" => {
-                        debug!("Flox: evalexpr: '{}' - state: '{}' - params: '{:?}'",
-                               node.id,
-                               state,
-                               node_params);
+                        debug!(
+                            "Flox: evalexpr: '{}' - state: '{}' - params: '{:?}'",
+                            node.id,
+                            state,
+                            node_params
+                        );
                         let expr = node_params.expression.as_str();
                         debug!("Expression: '{}'", expr);
                         match flox::parse_context(node_params.expression.as_str(), state) {
                             Ok(res) => {
                                 debug!("Expression: '{}' - Result: '{:?}'", expr, res);
                                 state.add(&XFlowVariable {
-                                              name: node_params.returns.name.clone(),
-                                              vtype: node_params.returns.vtype.clone(),
-                                              value: res.clone(),
-                                          });
+                                    name: node_params.returns.name.clone(),
+                                    vtype: node_params.returns.vtype.clone(),
+                                    value: res.clone(),
+                                });
                             }
                             Err(err) => {
                                 error!("Expression: '{}' - Result: '{:?}'", expr, err);
@@ -40,15 +42,19 @@ impl Flox {
                         }
                     }
                     _ => {
-                        error!("Unimplemented/unhandled action id: '{}' - state: '{}'",
-                               node.id,
-                               state);
+                        error!(
+                            "Unimplemented/unhandled action id: '{}' - state: '{}'",
+                            node.id,
+                            state
+                        );
                     }
                 }
             }
             _ => {
-                error!("Incorrect NodeType dispatched to Flox processor {:?}!",
-                       node);
+                error!(
+                    "Incorrect NodeType dispatched to Flox processor {:?}!",
+                    node
+                );
             }
         }
     }

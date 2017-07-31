@@ -36,8 +36,10 @@ fn test_page_component_datatable_config_ordered_hash_deserialization() {
 
     let mut dtc_b = dtc_a.clone();
 
-    assert_eq!(serde_json::to_string_pretty(&dtc_a).unwrap(),
-               serde_json::to_string_pretty(&dtc_b).unwrap());
+    assert_eq!(
+        serde_json::to_string_pretty(&dtc_a).unwrap(),
+        serde_json::to_string_pretty(&dtc_b).unwrap()
+    );
 
     let uuid_1 = Uuid::new_v4();
     let uuid_2 = Uuid::new_v4();
@@ -62,8 +64,10 @@ fn test_page_component_datatable_config_ordered_hash_deserialization() {
     // Deserialization should be identical
     //
 
-    assert_eq!(serde_json::to_string_pretty(&dtc_a).unwrap(),
-               serde_json::to_string_pretty(&dtc_b).unwrap());
+    assert_eq!(
+        serde_json::to_string_pretty(&dtc_a).unwrap(),
+        serde_json::to_string_pretty(&dtc_b).unwrap()
+    );
 
     //
     // Also check ne condition just in case
@@ -72,7 +76,9 @@ fn test_page_component_datatable_config_ordered_hash_deserialization() {
     let uuid_5 = Uuid::new_v4();
     dtc_a.eventbindings.insert("5".to_owned(), uuid_5.clone());
 
-    assert_ne!(serde_json::to_string_pretty(&dtc_a).unwrap(),
-               serde_json::to_string_pretty(&dtc_b).unwrap());
+    assert_ne!(
+        serde_json::to_string_pretty(&dtc_a).unwrap(),
+        serde_json::to_string_pretty(&dtc_b).unwrap()
+    );
 
 }

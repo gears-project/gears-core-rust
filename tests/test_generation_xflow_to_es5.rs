@@ -16,7 +16,8 @@ use common::load_doc;
 fn test_load_basic_page_document() {
     let _ = env_logger::init();
 
-    let xflow = load_doc::<XFlowDocument>("resource/docs/xflow/flows/branch_boolean_condition.json");
+    let xflow =
+        load_doc::<XFlowDocument>("resource/docs/xflow/flows/branch_boolean_condition.json");
     let s_es5 = xflow_to_es5::output_es5(&xflow);
     let s_es = xflow_to_es5::output(&xflow);
 

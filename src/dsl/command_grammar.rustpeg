@@ -1,0 +1,71 @@
+use dsl::command::*;
+use structure::domain::DomainCommand;
+
+label -> String
+  = label:$([A-Za-z0-9\_]+) {
+    label.to_string()
+  }
+
+_ -> ()
+  = space*
+
+space -> ()
+  = " "
+
+newline -> ()
+  = "\n"
+  / "\r"
+  / "\r\n"
+
+pub expression -> Vec<DslItem>
+  = dsl_item*
+
+pub dsl_item -> DslItem
+  = _ "with " label:label {
+    DslItem::With(label.to_string())
+  }
+  / _ "{" {
+    DslItem::BlockOpen
+  }
+  / _ "};" {
+    DslItem::BlockClose
+  }
+  / _ command:$([A-Za-z\ ]+) ";" {
+    DslItem::Command(command.to_string())
+  }
+  / _ "#" command:$([A-Za-z\ ]+) newline {
+    DslItem::Comment(command.to_string())
+  }
+
+// For domain::Domain GearsDsl implementation
+
+pub domain_command -> DomainCommand
+  = "add entity" " " label:label {
+    DomainCommand::AddEntity(label.to_string())
+  }
+  / "remove entity" " " label:label {
+    DomainCommand::RemoveEntity(label.to_string())
+  }
+  / "add attribute" " " attr:label ":" attr_type:label {
+    DomainCommand::AddAttribute(attr.to_string(), attr_type.to_string())
+  }
+  / "remove attribute" " " attr:label {
+    DomainCommand::RemoveAttribute(attr.to_string())
+  }
+  / "add validation" " " attr:label ":" attr_type:label {
+    DomainCommand::AddValidation(attr.to_string(), attr_type.to_string())
+  }
+  / "remove validation" " " attr:label {
+    DomainCommand::RemoveValidation(attr.to_string())
+  }
+
+xflow_command -> XFlowCommand
+  = "add node" " " label:label {
+    XFlowCommand::AddNode(label.to_string())
+  }
+
+config_command -> ConfigCommand
+  = "set default_locale" " " locale:label {
+    ConfigCommand::SetDefaultLocale(locale.to_string())
+  }
+

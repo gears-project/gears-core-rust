@@ -16,7 +16,8 @@ pub struct Document<T> {
 }
 
 impl<T> Document<T>
-    where T: serde::Serialize + serde::de::DeserializeOwned + Eq + Default
+where
+    T: serde::Serialize + serde::de::DeserializeOwned + Eq + Default + Queryable,
 {
     pub fn new_from_header(header: &DocumentHeader) -> Self {
         Self {
@@ -51,6 +52,12 @@ impl<T> Document<T>
     ///
     pub fn to_string(&self) -> String {
         format!("document {}", self.id)
+    }
+
+    /// Return a summary of the Document
+    ///
+    pub fn summary(&self) -> String {
+        format!("Doc {:?} - {:?} - {:?}", self.doctype, self.id, self.name)
     }
 
     /// Return an indented JSON representation of the Document
@@ -90,7 +97,8 @@ impl<T> Document<T>
 }
 
 impl<T> Default for Document<T>
-    where T: Default
+where
+    T: Default,
 {
     fn default() -> Self {
         Self {
@@ -153,9 +161,11 @@ impl I18NString {
                 self.value = item.value.clone();
             }
             None => {
-                warn!("No translation found for '{:?}' in locale '{:?}'",
-                      self.key,
-                      t.doc.locale);
+                warn!(
+                    "No translation found for '{:?}' in locale '{:?}'",
+                    self.key,
+                    t.doc.locale
+                );
                 self.locale = t.doc.locale.clone();
                 self.value = "-no-value-".to_owned();
             }
@@ -170,6 +180,11 @@ pub trait Translatable {
     fn translate(&self, t: &TranslationDocument) -> Self;
     fn all_i18n_strings(&self) -> Vec<&I18NString>;
 }
+
+//
+// This struct only exists to make the top-level Model object serializable into a project's
+// model.json
+//
 
 #[derive(Serialize, Deserialize, Debug, Clone, Eq, PartialEq)]
 pub struct DocumentHeader {
@@ -221,4 +236,19 @@ impl DocumentHeader {
     pub fn from_yaml(s: &str) -> Self {
         serde_yaml::from_str(s).unwrap()
     }
+}
+
+pub enum QueryPart {
+    Item(String),
+    ListIndex(String, i32),
+    List(String),
+}
+
+pub type QueryPath = Vec<QueryPart>;
+
+// vec![Item("domain"), ListItem("
+
+pub trait Queryable {
+    // fn tree(&self) -> String;
+    // fn complete(&self) -> (String, QueryPart);
 }

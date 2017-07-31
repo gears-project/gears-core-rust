@@ -1,0 +1,37 @@
+# examples and experiments
+
+with domain add entity post;
+with domain entity post add attribute title:string;
+
+with domain entity post {
+  add attribute created:timestamp;
+  add attribute body:string;
+  add attribute user:integer;
+};
+
+with domain {
+  with entity post {
+    add attribute created:timestamp;
+    add attribute body:string;
+    add attribute user:integer;
+    with attribute user {
+        set default "none";
+        add validation "minlength" (len=5);
+        add validation "maxlength" (len=55);
+    };
+  };
+};
+
+with domain, (entity post), (attribute user) set default "some";
+with translation locale en_US, key "somekey" set value "Some Value";
+
+with query("/domain/entity[name="post"]/attribute[name="user']") {
+    set default "some";
+}
+
+with domain (entity, post) {
+    with query("/attribute[name="user"]) {
+        set default "some";
+    }
+}
+

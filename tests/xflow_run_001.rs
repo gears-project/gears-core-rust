@@ -57,10 +57,10 @@ fn test_run_10_steps() {
     let mut state = XFState::default();
 
     state.add(&XFlowVariable {
-                  name: "CounterValue".to_owned(),
-                  vtype: XFlowValueType::Integer,
-                  value: XFlowValue::Integer(0),
-              });
+        name: "CounterValue".to_owned(),
+        vtype: XFlowValueType::Integer,
+        value: XFlowValue::Integer(0),
+    });
 
     match XFlowRunner::new(&xfs, &dispatcher, &state) {
         Ok(mut xfrunner) => {
@@ -77,11 +77,11 @@ fn test_run_10_steps() {
             }
             assert_eq!(i, xfs.doc.nodes.len());
             match xfrunner
-                      .get_output()
-                      .unwrap()
-                      .get("CounterValue")
-                      .unwrap()
-                      .value {
+                .get_output()
+                .unwrap()
+                .get("CounterValue")
+                .unwrap()
+                .value {
                 XFlowValue::Integer(i) => assert_eq!(i, 8),
                 _ => assert!(false),
             }
@@ -104,10 +104,10 @@ fn test_run_simple_branch() {
     let mut state = XFState::default();
 
     state.add(&XFlowVariable {
-                  name: "MatchValue".to_owned(),
-                  vtype: XFlowValueType::Boolean,
-                  value: XFlowValue::Boolean(false),
-              });
+        name: "MatchValue".to_owned(),
+        vtype: XFlowValueType::Boolean,
+        value: XFlowValue::Boolean(false),
+    });
 
 
     match XFlowRunner::new(&xfs, &dispatcher, &state) {
@@ -139,7 +139,9 @@ fn test_run_arithmetic() {
 fn test_run_arithmetic_multiple_return_values() {
     let _ = env_logger::init();
 
-    match run_xflow("resource/docs/xflow/flows/arithmetic_addition_multiple_return_values.json") {
+    match run_xflow(
+        "resource/docs/xflow/flows/arithmetic_addition_multiple_return_values.json",
+    ) {
         Ok(output) => {
             match output.get("ReturnValueA").unwrap().value {
                 XFlowValue::Integer(i) => assert_eq!(i, 3),

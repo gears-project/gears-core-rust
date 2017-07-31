@@ -10,13 +10,16 @@ impl Validation {
     pub fn validate(domain: &DomainDocument) -> Vec<ValidationError> {
         let mut errors = Vec::<ValidationError>::new();
 
-        errors.extend(Validation::all_references_point_to_existing_entities(&domain));
+        errors.extend(Validation::all_references_point_to_existing_entities(
+            &domain,
+        ));
 
         errors
     }
 
-    pub fn all_references_point_to_existing_entities(domain: &DomainDocument)
-                                                     -> Vec<ValidationError> {
+    pub fn all_references_point_to_existing_entities(
+        domain: &DomainDocument,
+    ) -> Vec<ValidationError> {
         let mut errors = Vec::<ValidationError>::new();
 
         let mut entities = HashSet::<&String>::new();

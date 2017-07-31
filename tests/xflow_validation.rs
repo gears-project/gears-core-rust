@@ -112,26 +112,30 @@ fn test_all_node_actions_have_matching_requirements() {
 #[test]
 fn test_all_good_flows_validate() {
     let _ = env_logger::init();
-    let flows = vec!["10_steps.json",
-                     "arithmetic_addition.json",
-                     "arithmetic_addition_multiple_return_values.json",
-                     "arithmetic_addition_with_variables.json",
-                     "branch_boolean_and_expressions_return.json",
-                     "branch_boolean_condition.json",
-                     "branch_boolean.json",
-                     // "create_object.json",
-                     "loop_5x.json",
-                     "loop_infinite.json"];
+    let flows = vec![
+        "10_steps.json",
+        "arithmetic_addition.json",
+        "arithmetic_addition_multiple_return_values.json",
+        "arithmetic_addition_with_variables.json",
+        "branch_boolean_and_expressions_return.json",
+        "branch_boolean_condition.json",
+        "branch_boolean.json",
+        // "create_object.json",
+        "loop_5x.json",
+        "loop_infinite.json",
+    ];
 
     for flow in flows {
-        let xfs = load_doc::<XFlowDocument>((format!("resource/docs/xflow/flows/{}", flow))
-                                                .as_str());
+        let xfs =
+            load_doc::<XFlowDocument>((format!("resource/docs/xflow/flows/{}", flow)).as_str());
 
         let res = Validation::validate(&xfs);
         if !res.is_empty() {
-            println!("ERROR: Flow listed as good does not validate : {} - {:?}",
-                     flow,
-                     res);
+            println!(
+                "ERROR: Flow listed as good does not validate : {} - {:?}",
+                flow,
+                res
+            );
             assert!(false);
         }
     }
@@ -139,21 +143,23 @@ fn test_all_good_flows_validate() {
 
 #[test]
 fn test_no_bad_flows_validate() {
-    let flows = vec!["bad_capabilities.json",
-                     "double_variables_per_scope.json",
-                     "edges_without_nodes.json",
-                     "empty.json",
-                     "multiple_entry_nodes.json",
-                     "no_entry_nodes.json",
-                     "no_terminal_nodes.json",
-                     "orphan_node.json",
-                     "output_variable_type_mismatch.json",
-                     "redefined_local_variables.json",
-                     "unreferenced_variables.json"];
+    let flows = vec![
+        "bad_capabilities.json",
+        "double_variables_per_scope.json",
+        "edges_without_nodes.json",
+        "empty.json",
+        "multiple_entry_nodes.json",
+        "no_entry_nodes.json",
+        "no_terminal_nodes.json",
+        "orphan_node.json",
+        "output_variable_type_mismatch.json",
+        "redefined_local_variables.json",
+        "unreferenced_variables.json",
+    ];
 
     for flow in flows {
-        let xfs = load_doc::<XFlowDocument>((format!("resource/docs/xflow/bad_flows/{}", flow))
-                                                .as_str());
+        let xfs =
+            load_doc::<XFlowDocument>((format!("resource/docs/xflow/bad_flows/{}", flow)).as_str());
         let res = Validation::validate(&xfs);
 
         if res.is_empty() {

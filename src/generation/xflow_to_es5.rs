@@ -83,12 +83,14 @@ fn local_variables(xflow: &XFlowDocument) -> String {
         .local
         .iter()
         .map({
-                 |v| {
-                     format!("this.input_vars.{name} = {value};",
-                             name = v.name,
-                             value = v.value.string_value())
-                 }
-             })
+            |v| {
+                format!(
+                    "this.input_vars.{name} = {value};",
+                    name = v.name,
+                    value = v.value.string_value()
+                )
+            }
+        })
         .collect();
     vars.join("\r")
 
@@ -100,12 +102,14 @@ fn build_nodes(xflow: &XFlowDocument) -> String {
         .nodes
         .iter()
         .map({
-                 |node| {
-                     format!(r#" {fn_id}() {{ {body} }}  "#,
-                             fn_id = method_name_for_node_id(&node.id),
-                             body = build_function_body(&node, &xflow))
-                 }
-             })
+            |node| {
+                format!(
+                    r#" {fn_id}() {{ {body} }}  "#,
+                    fn_id = method_name_for_node_id(&node.id),
+                    body = build_function_body(&node, &xflow)
+                )
+            }
+        })
         .collect();
     vars.join("\r")
 
@@ -118,9 +122,11 @@ fn build_function_body(node: &XFlowNode, xflow: &XFlowDocument) -> String {
         XFlowNodeType::Call => "call_xflow();".to_owned(),
     };
 
-    format!("console.log('node-{id} called'); {body}",
-            id = node.id,
-            body = body)
+    format!(
+        "console.log('node-{id} called'); {body}",
+        id = node.id,
+        body = body
+    )
 }
 
 fn build_xflow_body(node: &XFlowNode, xflow: &XFlowDocument) -> String {
@@ -152,11 +158,15 @@ fn build_node_body_call_next_node(node: &XFlowNode, xflow: &XFlowDocument) -> St
             format!("")
         }
         1 => {
-            format!("this.{fn_id}();",
-                    fn_id = method_name_for_node_id(&edges[0].1))
+            format!(
+                "this.{fn_id}();",
+                fn_id = method_name_for_node_id(&edges[0].1)
+            )
         }
         _ => {
-            error!("build_node_body_call_next_node: Multiple connecting nodes from non-branch node ");
+            error!(
+                "build_node_body_call_next_node: Multiple connecting nodes from non-branch node "
+            );
             format!("")
         }
     }
@@ -171,8 +181,10 @@ fn build_node_body_branch(node: &XFlowNode, xflow: &XFlowDocument) -> String {
         }
         1 => {
             error!("build_node_body_branch: Only one connecting node for a branch");
-            format!("this.{fn_id}();",
-                    fn_id = method_name_for_node_id(&edges[0].1))
+            format!(
+                "this.{fn_id}();",
+                fn_id = method_name_for_node_id(&edges[0].1)
+            )
         }
         _ => {
             let mut res: Vec<String> = xflow
@@ -180,7 +192,7 @@ fn build_node_body_branch(node: &XFlowNode, xflow: &XFlowDocument) -> String {
                 .get_out_branches(node.id)
                 .iter()
                 .map({
-                         |branch| {
+                    |branch| {
                         format!(
                             r#"
                             if ({var} == {condition}) {{
@@ -192,7 +204,7 @@ fn build_node_body_branch(node: &XFlowNode, xflow: &XFlowDocument) -> String {
                             fn_id = method_name_for_node_id(&branch.edge.1)
                         )
                     }
-                     })
+                })
                 .collect();
             res.push(format!("throw new Error('Unhandled branch');"));
             res.join(";")

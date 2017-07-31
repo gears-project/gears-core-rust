@@ -1,4 +1,4 @@
-use super::common::{Document, I18NString};
+use super::common::{Document, I18NString, Queryable};
 
 use std::collections::{HashMap, BTreeMap};
 use serde::{Serialize, Serializer};
@@ -16,7 +16,8 @@ pub struct Translation {
 }
 
 fn ordered_map<S>(value: &HashMap<String, I18NString>, serializer: S) -> Result<S::Ok, S::Error>
-    where S: Serializer
+where
+    S: Serializer,
 {
     // partof: SPC-serialization-fs
     // Consistent serialization
@@ -34,3 +35,5 @@ impl Default for Translation {
         }
     }
 }
+
+impl Queryable for Translation {}

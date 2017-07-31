@@ -71,8 +71,12 @@ fn test_translate_model_add_translations() {
     assert_ne!(model, model_es);
     assert_ne!(model, model_nl);
 
-    assert_eq!(model_en.all_i18n_strings().len(),
-               model_es.all_i18n_strings().len());
-    assert_eq!(model_en.all_i18n_strings().len(),
-               model_nl.all_i18n_strings().len());
+    assert_eq!(
+        model_en.all_i18n_strings().len(),
+        model_es.all_i18n_strings().len()
+    );
+    assert_eq!(
+        model_en.all_i18n_strings().len(),
+        model_nl.all_i18n_strings().len()
+    );
 }
