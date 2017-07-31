@@ -12,6 +12,11 @@ _ -> ()
 space -> ()
   = " "
 
+newline -> ()
+  = "\n"
+  / "\r"
+  / "\r\n"
+
 pub expression -> Vec<DslItem>
   = dsl_item*
 
@@ -27,6 +32,9 @@ pub dsl_item -> DslItem
   }
   / _ command:$([A-Za-z\ ]+) ";" {
     DslItem::Command(command.to_string())
+  }
+  / _ "#" command:$([A-Za-z\ ]+) newline {
+    DslItem::Comment(command.to_string())
   }
 
 // For domain::Domain GearsDsl implementation

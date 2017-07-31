@@ -12,6 +12,7 @@ pub enum DslItem {
     BlockClose,
     With(String),
     Command(String),
+    Comment(String),
 }
 
 #[derive(Debug, Eq, PartialEq)]
@@ -67,6 +68,7 @@ pub trait GearsDsl {
                 DslItem::Command(ref s) => {
                     res.push(format!(" {cmd};", cmd = s));
                 }
+                DslItem::Comment(_) => {}
             }
         }
 

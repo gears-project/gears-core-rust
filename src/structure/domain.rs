@@ -293,6 +293,7 @@ impl GearsDsl for Domain {
 
         for item in items {
             match *item {
+                DslItem::Comment(_) => {}
                 DslItem::With(ref s) => {
                     match state.indent {
                         0 => {
