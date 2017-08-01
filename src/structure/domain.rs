@@ -208,7 +208,7 @@ impl Translatable for DomainDocument {
     }
 }
 
-use dsl::command::{GearsDsl, DslItem, command_grammar};
+use dsl::command::{GearsDsl, DslToken, command_grammar};
 
 #[derive(Debug, Eq, PartialEq)]
 pub enum DomainCommand {
@@ -221,7 +221,7 @@ pub enum DomainCommand {
 }
 
 impl DomainCommand {
-    fn as_dsl_item(&self) -> DslItem {
+    fn as_dsl_item(&self) -> DslToken {
         let s = match *self {
             DomainCommand::AddEntity(ref e) => format!("add entity {}", e),
             DomainCommand::RemoveEntity(ref e) => format!("remove entity {}", e),
@@ -230,7 +230,7 @@ impl DomainCommand {
             DomainCommand::AddValidation(ref v, ref t) => format!("add validation {} '{}'", v, t),
             DomainCommand::RemoveValidation(ref v) => format!("remove validation {}", v),
         };
-        DslItem::Command(s)
+        DslToken::Command(s)
     }
 }
 
@@ -251,15 +251,15 @@ impl Default for DomainDslState {
 }
 
 impl GearsDsl for Domain {
-    fn generate_dsl(&self) -> Vec<DslItem> {
-        let mut res = Vec::<DslItem>::new();
+    fn generate_dsl(&self) -> Vec<DslToken> {
+        let mut res = Vec::<DslToken>::new();
 
         for entity in &self.entities {
             res.push(DomainCommand::AddEntity(entity.name.clone()).as_dsl_item());
 
             if entity.attributes.len() > 0 {
-                res.push(DslItem::With(entity.name.clone()));
-                res.push(DslItem::BlockOpen);
+                res.push(DslToken::With(entity.name.clone()));
+                res.push(DslToken::BlockOpen);
 
                 for attribute in &entity.attributes {
                     res.push(
@@ -268,9 +268,9 @@ impl GearsDsl for Domain {
                     );
 
                     if attribute.validations.len() > 0 {
-                        res.push(DslItem::With(attribute.name.clone()));
+                        res.push(DslToken::With(attribute.name.clone()));
 
-                        res.push(DslItem::BlockOpen);
+                        res.push(DslToken::BlockOpen);
                         for validation in &attribute.validations {
                             res.push(
                                 DomainCommand::AddValidation(
@@ -279,22 +279,22 @@ impl GearsDsl for Domain {
                                 ).as_dsl_item(),
                             );
                         }
-                        res.push(DslItem::BlockClose);
+                        res.push(DslToken::BlockClose);
                     }
                 }
-                res.push(DslItem::BlockClose);
+                res.push(DslToken::BlockClose);
             }
         }
         res
     }
 
-    fn consume_dsl(&mut self, items: &Vec<DslItem>) -> Result<(), String> {
+    fn consume_dsl(&mut self, items: &Vec<DslToken>) -> Result<(), String> {
         let mut state = DomainDslState::default();
 
         for item in items {
             match *item {
-                DslItem::Comment(_) => {}
-                DslItem::With(ref s) => {
+                DslToken::Comment(_) => {}
+                DslToken::With(ref s) => {
                     match state.indent {
                         0 => {
                             state.entity = s.clone();
@@ -308,13 +308,13 @@ impl GearsDsl for Domain {
                         }
                     }
                 }
-                DslItem::BlockOpen => {
+                DslToken::BlockOpen => {
                     state.indent += 1;
                 }
-                DslItem::BlockClose => {
+                DslToken::BlockClose => {
                     state.indent += 1;
                 }
-                DslItem::Command(ref s) => {
+                DslToken::Command(ref s) => {
                     match command_grammar::domain_command(&s) {
                         Ok(cmd) => {
                             match cmd {

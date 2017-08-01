@@ -7,7 +7,7 @@ pub mod command_grammar {
 }
 
 #[derive(Debug)]
-pub enum DslItem {
+pub enum DslToken {
     BlockOpen,
     BlockClose,
     With(String),
@@ -26,8 +26,8 @@ pub enum ConfigCommand {
 }
 
 pub trait GearsDsl {
-    fn generate_dsl(&self) -> Vec<DslItem>;
-    fn consume_dsl(&mut self, item: &Vec<DslItem>) -> Result<(), String>;
+    fn generate_dsl(&self) -> Vec<DslToken>;
+    fn consume_dsl(&mut self, item: &Vec<DslToken>) -> Result<(), String>;
 
     fn interpret_dsl(&mut self, txt: &str) -> Result<(), String> {
         match command_grammar::expression(&txt) {
@@ -54,21 +54,21 @@ pub trait GearsDsl {
         let mut res = Vec::<String>::new();
         for item in items.iter() {
             match *item {
-                DslItem::BlockOpen => {
+                DslToken::BlockOpen => {
                     res.push(format!("{{"));
                     indent += indent_size;
                 }
-                DslItem::BlockClose => {
+                DslToken::BlockClose => {
                     res.push(format!("}};"));
                     indent -= indent_size;
                 }
-                DslItem::With(ref s) => {
+                DslToken::With(ref s) => {
                     res.push(format!(" with {label}", label = s));
                 }
-                DslItem::Command(ref s) => {
+                DslToken::Command(ref s) => {
                     res.push(format!(" {cmd};", cmd = s));
                 }
-                DslItem::Comment(_) => {}
+                DslToken::Comment(_) => {}
             }
         }
 

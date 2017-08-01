@@ -216,29 +216,29 @@ impl Queryable for ModelConfig {}
 
 // gear-dsl
 
-use dsl::command::{GearsDsl, DslItem, command_grammar};
+use dsl::command::{GearsDsl, DslToken, command_grammar};
 
 impl GearsDsl for Model {
-    fn generate_dsl(&self) -> Vec<DslItem> {
-        let mut res = Vec::<DslItem>::new();
+    fn generate_dsl(&self) -> Vec<DslToken> {
+        let mut res = Vec::<DslToken>::new();
 
-        res.push(DslItem::With("domain".to_owned()));
-        res.push(DslItem::BlockOpen);
+        res.push(DslToken::With("domain".to_owned()));
+        res.push(DslToken::BlockOpen);
         res.extend(self.domain.doc.generate_dsl());
-        res.push(DslItem::BlockClose);
+        res.push(DslToken::BlockClose);
 
         res
     }
 
-    fn consume_dsl(&mut self, items: &Vec<DslItem>) -> Result<(), String> {
+    fn consume_dsl(&mut self, items: &Vec<DslToken>) -> Result<(), String> {
 
         for item in items {
             match *item {
-                DslItem::Comment(_) => {}
-                DslItem::With(ref s) => {}
-                DslItem::BlockOpen => {}
-                DslItem::BlockClose => {}
-                DslItem::Command(ref s) => {}
+                DslToken::Comment(_) => {}
+                DslToken::With(ref s) => {}
+                DslToken::BlockOpen => {}
+                DslToken::BlockClose => {}
+                DslToken::Command(ref s) => {}
             }
         }
         Ok(())
