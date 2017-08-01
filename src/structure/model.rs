@@ -213,3 +213,34 @@ impl Default for ModelConfig {
 }
 
 impl Queryable for ModelConfig {}
+
+// gear-dsl
+
+use dsl::command::{GearsDsl, DslItem, command_grammar};
+
+impl GearsDsl for Model {
+    fn generate_dsl(&self) -> Vec<DslItem> {
+        let mut res = Vec::<DslItem>::new();
+
+        res.push(DslItem::With("domain".to_owned()));
+        res.push(DslItem::BlockOpen);
+        res.extend(self.domain.doc.generate_dsl());
+        res.push(DslItem::BlockClose);
+
+        res
+    }
+
+    fn consume_dsl(&mut self, items: &Vec<DslItem>) -> Result<(), String> {
+
+        for item in items {
+            match *item {
+                DslItem::Comment(_) => {}
+                DslItem::With(ref s) => {}
+                DslItem::BlockOpen => {}
+                DslItem::BlockClose => {}
+                DslItem::Command(ref s) => {}
+            }
+        }
+        Ok(())
+    }
+}

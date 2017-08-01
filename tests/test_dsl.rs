@@ -2,6 +2,7 @@ extern crate env_logger;
 
 extern crate gears;
 use gears::dsl::command::*;
+use gears::structure::model::Model;
 use gears::structure::domain::Domain;
 
 #[test]
@@ -48,5 +49,16 @@ fn test_dsl_domain_generate_and_consume() {
     next_domain.interpret_dsl(&script);
 
     assert_eq!(domain, next_domain);
+
+}
+
+#[test]
+fn test_dsl_model_generate() {
+    let _ = env_logger::init();
+
+    let mut model = Model::default();
+
+    println!("MODEL MODEL MODEL {:?}", model.generate_dsl());
+
 
 }

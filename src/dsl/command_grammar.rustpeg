@@ -1,5 +1,4 @@
 use dsl::command::*;
-use structure::domain::DomainCommand;
 
 label -> String
   = label:$([A-Za-z0-9\_]+) {
@@ -38,6 +37,8 @@ pub dsl_item -> DslItem
   }
 
 // For domain::Domain GearsDsl implementation
+
+use structure::domain::DomainCommand;
 
 pub domain_command -> DomainCommand
   = "add entity" " " label:label {
