@@ -15,6 +15,8 @@ pub enum DslToken {
     Comment(String),
 }
 
+pub type DslTokens = Vec<DslToken>;
+
 #[derive(Debug, Eq, PartialEq)]
 pub enum XFlowCommand {
     AddNode(String),
@@ -26,8 +28,8 @@ pub enum ConfigCommand {
 }
 
 pub trait GearsDsl {
-    fn generate_dsl(&self) -> Vec<DslToken>;
-    fn consume_dsl(&mut self, item: &Vec<DslToken>) -> Result<(), String>;
+    fn generate_dsl(&self) -> DslTokens;
+    fn consume_dsl(&mut self, item: &DslTokens) -> Result<(), String>;
 
     fn interpret_dsl(&mut self, txt: &str) -> Result<(), String> {
         match command_grammar::expression(&txt) {

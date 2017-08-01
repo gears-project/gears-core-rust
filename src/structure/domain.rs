@@ -208,7 +208,7 @@ impl Translatable for DomainDocument {
     }
 }
 
-use dsl::command::{GearsDsl, DslToken, command_grammar};
+use dsl::command::{GearsDsl, DslToken, DslTokens, command_grammar};
 
 #[derive(Debug, Eq, PartialEq)]
 pub enum DomainCommand {
@@ -251,7 +251,7 @@ impl Default for DomainDslState {
 }
 
 impl GearsDsl for Domain {
-    fn generate_dsl(&self) -> Vec<DslToken> {
+    fn generate_dsl(&self) -> DslTokens {
         let mut res = Vec::<DslToken>::new();
 
         for entity in &self.entities {
@@ -288,7 +288,7 @@ impl GearsDsl for Domain {
         res
     }
 
-    fn consume_dsl(&mut self, items: &Vec<DslToken>) -> Result<(), String> {
+    fn consume_dsl(&mut self, items: &DslTokens) -> Result<(), String> {
         let mut state = DomainDslState::default();
 
         for item in items {

@@ -216,11 +216,54 @@ impl Queryable for ModelConfig {}
 
 // gear-dsl
 
-use dsl::command::{GearsDsl, DslToken, command_grammar};
+use dsl::command::{GearsDsl, DslToken, DslTokens, command_grammar};
+
+#[derive(Debug)]
+pub enum DslAst {
+    Scope(String, DslTokens),
+    Command(String),
+    Comment(String),
+}
+
+fn tokens_to_ast(tokens: &DslTokens) -> Result<Vec<DslAst>, String> {
+    let mut res = Vec::<DslAst>::new();
+
+    let mut depth = 0;
+    let mut subject = "".to_owned();
+    let mut collection = DslTokens::new();
+
+    for token in tokens {
+        match depth {
+            0 => {
+                match *token {
+                    DslToken::BlockOpen => {
+                        depth += 1;
+                    }
+                    DslToken::BlockClose => {
+                        return Err("Early close in DslToken stream".to_owned());
+                    }
+                    DslToken::With(ref s) => {
+                        subject = s.clone();
+                    }
+                    DslToken::Comment(ref c) => {
+                        res.push(DslAst::Comment((*c).clone()));
+                    }
+                    DslToken::Command(ref c) => {
+                        res.push(DslAst::Command((*c).clone()));
+                    }
+                }
+            }
+            _ => {}
+
+        }
+    }
+
+    Ok(res)
+}
 
 impl GearsDsl for Model {
-    fn generate_dsl(&self) -> Vec<DslToken> {
-        let mut res = Vec::<DslToken>::new();
+    fn generate_dsl(&self) -> DslTokens {
+        let mut res = DslTokens::new();
 
         res.push(DslToken::With("domain".to_owned()));
         res.push(DslToken::BlockOpen);
@@ -230,7 +273,7 @@ impl GearsDsl for Model {
         res
     }
 
-    fn consume_dsl(&mut self, items: &Vec<DslToken>) -> Result<(), String> {
+    fn consume_dsl(&mut self, items: &DslTokens) -> Result<(), String> {
 
         for item in items {
             match *item {
