@@ -2,7 +2,7 @@ extern crate env_logger;
 
 extern crate gears;
 use gears::dsl::command::*;
-use gears::structure::model::{Model, tokens_as_tree, DslTree};
+use gears::structure::model::Model;
 use gears::structure::domain::Domain;
 
 
