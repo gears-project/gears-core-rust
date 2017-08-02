@@ -219,46 +219,69 @@ impl Queryable for ModelConfig {}
 use dsl::command::{GearsDsl, DslToken, DslTokens, command_grammar};
 
 #[derive(Debug)]
-pub enum DslAst {
-    Scope(String, DslTokens),
+pub enum DslTree {
+    Scope(String, Vec<DslTree>),
     Command(String),
     Comment(String),
 }
 
-fn tokens_to_ast(tokens: &DslTokens) -> Result<Vec<DslAst>, String> {
-    let mut res = Vec::<DslAst>::new();
+pub fn tokens_as_tree(tokens: &DslTokens) -> Result<Vec<DslTree>, String> {
 
-    let mut depth = 0;
-    let mut subject = "".to_owned();
-    let mut collection = DslTokens::new();
+    fn to_tree(tokens: &DslTokens, offset: &mut usize) -> Result<Vec<DslTree>, String> {
+        let mut res = Vec::<DslTree>::new();
 
-    for token in tokens {
-        match depth {
-            0 => {
-                match *token {
-                    DslToken::BlockOpen => {
-                        depth += 1;
-                    }
-                    DslToken::BlockClose => {
-                        return Err("Early close in DslToken stream".to_owned());
-                    }
-                    DslToken::With(ref s) => {
-                        subject = s.clone();
-                    }
-                    DslToken::Comment(ref c) => {
-                        res.push(DslAst::Comment((*c).clone()));
-                    }
-                    DslToken::Command(ref c) => {
-                        res.push(DslAst::Command((*c).clone()));
+        let mut subject = "".to_owned();
+
+        debug!("tokens_as_tree entry {} : {}", offset, *offset);
+
+        while *offset < tokens.len() {
+            debug!("tokens_as_tree loop {} : {}", offset, *offset);
+            match tokens[*offset] {
+                DslToken::BlockOpen => {
+                    *offset += 1;
+                    match to_tree(&tokens, offset) {
+                        Ok(out) => {
+                            res.push(DslTree::Scope(subject.clone(), out));
+                        }
+                        Err(err) => {
+                            return Err(err);
+                        }
                     }
                 }
-            }
-            _ => {}
+                DslToken::BlockClose => {
+                    return Ok(res);
+                }
+                DslToken::With(ref s) => {
+                    subject = s.clone();
 
+                    // Some lookahead
+                    if *offset >= (tokens.len() - 1) {
+                        return Err(
+                            "tokens_as_tree : Encountered Wih statement not followed by BlockOpen"
+                                .to_owned(),
+                        );
+                    } else if (tokens[*offset + 1]).ne(&DslToken::BlockOpen) {
+                        return Err(
+                            "tokens_as_tree : Encountered Wih statement not followed by BlockOpen"
+                                .to_owned(),
+                        );
+                    }
+                }
+                DslToken::Comment(ref c) => {
+                    res.push(DslTree::Comment((*c).clone()));
+                }
+                DslToken::Command(ref c) => {
+                    res.push(DslTree::Command((*c).clone()));
+                }
+            }
+            *offset += 1;
         }
+
+        Ok(res)
     }
 
-    Ok(res)
+    let mut offset: usize = 0;
+    to_tree(&tokens, &mut offset)
 }
 
 impl GearsDsl for Model {

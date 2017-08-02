@@ -6,7 +6,7 @@ pub mod command_grammar {
     include!(concat!(env!("OUT_DIR"), "/command_grammar.rs"));
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Eq)]
 pub enum DslToken {
     BlockOpen,
     BlockClose,

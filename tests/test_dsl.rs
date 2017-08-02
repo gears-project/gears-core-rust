@@ -2,8 +2,46 @@ extern crate env_logger;
 
 extern crate gears;
 use gears::dsl::command::*;
-use gears::structure::model::Model;
+use gears::structure::model::{Model, tokens_as_tree, DslTree};
 use gears::structure::domain::Domain;
+
+
+#[test]
+fn test_dsl_tokens_to_tree() {
+    let _ = env_logger::init();
+
+    let tokens = vec![
+        DslToken::With("domain".to_owned()),
+        DslToken::BlockOpen,
+
+        DslToken::With("entity post".to_owned()),
+        DslToken::BlockOpen,
+
+        DslToken::With("attibute name".to_owned()),
+        DslToken::BlockOpen,
+
+        DslToken::Comment("This adds a default value of 'zork'".to_owned()),
+        DslToken::Command("add default 'zork'".to_owned()),
+
+        DslToken::BlockClose,
+        DslToken::BlockClose,
+        DslToken::BlockClose,
+    ];
+
+    match tokens_as_tree(&tokens) {
+        Ok(tree) => {
+            assert_eq!(tree.len(), 1);
+            match tree[0] {
+                DslTree::Scope(ref e, ref v) => assert_eq!(e, "domain"),
+                _ => assert!(false),
+
+            }
+        }
+        Err(_) => {
+            assert!(false);
+        }
+    }
+}
 
 #[test]
 fn test_dsl_domain() {
