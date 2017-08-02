@@ -208,7 +208,7 @@ impl Translatable for DomainDocument {
     }
 }
 
-use dsl::command::{GearsDsl, DslToken, DslTokens, command_grammar};
+use dsl::command::{GearsDsl, DslToken, DslTokens, DslTree, command_grammar};
 
 #[derive(Debug, Eq, PartialEq)]
 pub enum DomainCommand {
@@ -288,84 +288,70 @@ impl GearsDsl for Domain {
         res
     }
 
-    fn consume_dsl(&mut self, items: &DslTokens) -> Result<(), String> {
-        let mut state = DomainDslState::default();
-
+    fn consume_dsl_tree(&mut self, items: &Vec<DslTree>) -> Result<(), String> {
         for item in items {
             match *item {
-                DslToken::Comment(_) => {}
-                DslToken::With(ref s) => {
-                    match state.indent {
-                        0 => {
-                            state.entity = s.clone();
-                        }
-                        1 => {
-                            state.attribute = s.clone();
-                        }
-                        _ => {
-                            error!("consume_dsl: too deeply nested!");
-                            return Err("consume_dsl: too deeply nested".to_owned());
+                DslTree::Command(ref s) => {
+                    self.consume_command(&s);
+                }
+                DslTree::Scope(ref s, ref tree) => {}
+                DslTree::Comment(_) => {}
+            }
+        }
+        Ok(())
+
+    }
+
+    fn consume_command(&mut self, s: &str) -> Result<(), String> {
+        let mut state = DomainDslState::default();
+
+        match command_grammar::domain_command(&s) {
+            Ok(cmd) => {
+                match cmd {
+                    DomainCommand::AddEntity(e) => {
+                        if state.indent != 0 {
+                            return Err("Bad indent for Entity".to_owned());
+                        } else {
+                            self.add_entity(Entity::new(&e));
                         }
                     }
-                }
-                DslToken::BlockOpen => {
-                    state.indent += 1;
-                }
-                DslToken::BlockClose => {
-                    state.indent += 1;
-                }
-                DslToken::Command(ref s) => {
-                    match command_grammar::domain_command(&s) {
-                        Ok(cmd) => {
-                            match cmd {
-                                DomainCommand::AddEntity(e) => {
-                                    if state.indent != 0 {
-                                        return Err("Bad indent for Entity".to_owned());
-                                    } else {
-                                        self.add_entity(Entity::new(&e));
-                                    }
-                                }
-                                DomainCommand::RemoveEntity(e) => {
-                                    if state.indent != 0 {
-                                        return Err("Bad indent for Entity".to_owned());
-                                    } else {
-                                        self.remove_entity(&e);
-                                    }
-                                }
-                                DomainCommand::AddAttribute(attr, attr_type) => {
-                                    if state.indent != 1 {
-                                        return Err("Bad indent for Attribute".to_owned());
-                                    } else {
-                                        info!("Domain DSL");
-                                        /*
-                                        match self.get_entity(&state.entity) {
-                                            Ok(e) => {
-                                                e.add_attribute(
-                                                    Attribute::new(&attr, &attr_type),
-                                                );
-                                            }
-                                            Err(err) => return Err(err),
-                                        }
-                                        */
-                                    }
-                                }
-                                DomainCommand::RemoveAttribute(attr) => {
-                                    info!("Domain DSL");
-                                }
-                                DomainCommand::AddValidation(val, val_msg) => {
-                                    info!("Domain DSL");
-                                }
-                                DomainCommand::RemoveValidation(val) => {
-                                    info!("Domain DSL");
-                                }
-                            }
+                    DomainCommand::RemoveEntity(e) => {
+                        if state.indent != 0 {
+                            return Err("Bad indent for Entity".to_owned());
+                        } else {
+                            self.remove_entity(&e);
                         }
-                        Err(err) => return Err(format!("Parsing error domain_command : {:?}", err)),
+                    }
+                    DomainCommand::AddAttribute(attr, attr_type) => {
+                        if state.indent != 1 {
+                            return Err("Bad indent for Attribute".to_owned());
+                        } else {
+                            info!("Domain DSL");
+                            /*
+                               match self.get_entity(&state.entity) {
+                               Ok(e) => {
+                               e.add_attribute(
+                               Attribute::new(&attr, &attr_type),
+                               );
+                               }
+                               Err(err) => return Err(err),
+                               }
+                               */
+                        }
+                    }
+                    DomainCommand::RemoveAttribute(attr) => {
+                        info!("Domain DSL");
+                    }
+                    DomainCommand::AddValidation(val, val_msg) => {
+                        info!("Domain DSL");
+                    }
+                    DomainCommand::RemoveValidation(val) => {
+                        info!("Domain DSL");
                     }
                 }
             }
+            Err(err) => return Err(format!("Parsing error domain_command : {:?}", err)),
         }
-
         Ok(())
     }
 }

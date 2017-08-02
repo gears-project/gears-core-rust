@@ -36,7 +36,16 @@ pub enum ConfigCommand {
 
 pub trait GearsDsl {
     fn generate_dsl(&self) -> DslTokens;
-    fn consume_dsl(&mut self, item: &DslTokens) -> Result<(), String>;
+    fn consume_dsl(&mut self, items: &DslTokens) -> Result<(), String> {
+        match tokens_as_tree(&items) {
+            Ok(tree) => self.consume_dsl_tree(&tree),
+            Err(err) => Err(err),
+        }
+    }
+
+    fn consume_dsl_tree(&mut self, tree: &Vec<DslTree>) -> Result<(), String>;
+
+    fn consume_command(&mut self, cmd: &str) -> Result<(), String>;
 
     fn generate_dsl_tree(&self) -> Result<Vec<DslTree>, String> {
         tokens_as_tree(&self.generate_dsl())
@@ -47,6 +56,23 @@ pub trait GearsDsl {
             Ok(dsl_items) => {
                 match self.consume_dsl(&dsl_items) {
                     Ok(_) => Ok(()),
+                    Err(err) => {
+                        error!("interpret_dsl : error with commands : {:?}", err);
+                        return Err(format!("interpret_dsl : error with commands : {:?}", err));
+                    }
+                }
+            }
+            Err(err) => {
+                error!("interpret_dsl : error : {:?}", err);
+                return Err(format!("interpret_dsl : error : {:?}", err));
+            }
+        }
+    }
+    fn interpret_dsl_via_tree(&mut self, txt: &str) -> Result<(), String> {
+        match command_grammar::expression(&txt) {
+            Ok(dsl_items) => {
+                match tokens_as_tree(&dsl_items) {
+                    Ok(tree) => self.consume_dsl_tree(&tree),
                     Err(err) => {
                         error!("interpret_dsl : error with commands : {:?}", err);
                         return Err(format!("interpret_dsl : error with commands : {:?}", err));
