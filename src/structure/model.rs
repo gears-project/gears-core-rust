@@ -231,22 +231,28 @@ impl GearsDsl for Model {
     }
 
     fn consume_command(&mut self, cmd: &str) -> Result<(), String> {
-        Ok(())
+        Err("consume_command: No commands at Model level".to_owned())
     }
 
     fn consume_dsl_tree(&mut self, items: &Vec<DslTree>) -> Result<(), String> {
-        Ok(())
-    }
-
-    fn consume_dsl(&mut self, items: &DslTokens) -> Result<(), String> {
-
         for item in items {
             match *item {
-                DslToken::Comment(_) => {}
-                DslToken::With(ref s) => {}
-                DslToken::BlockOpen => {}
-                DslToken::BlockClose => {}
-                DslToken::Command(ref s) => {}
+                DslTree::Scope(ref s, ref tree) => {
+                    match s.as_ref() {
+                        "domain" => {
+                            self.domain.doc.consume_dsl_tree(&tree);
+                        }
+                        _ => {
+                            return Err("No other scope implemented for Model".to_owned());
+                        }
+                    }
+                }
+                DslTree::Command(ref s) => {
+                    self.consume_command(&s);
+                }
+                DslTree::Comment(ref s) => {
+                    debug!("consume_dsl_tree comment {}", s);
+                }
             }
         }
         Ok(())

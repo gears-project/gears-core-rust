@@ -36,16 +36,15 @@ pub enum ConfigCommand {
 
 pub trait GearsDsl {
     fn generate_dsl(&self) -> DslTokens;
+    fn consume_dsl_tree(&mut self, tree: &Vec<DslTree>) -> Result<(), String>;
+    fn consume_command(&mut self, cmd: &str) -> Result<(), String>;
+
     fn consume_dsl(&mut self, items: &DslTokens) -> Result<(), String> {
         match tokens_as_tree(&items) {
             Ok(tree) => self.consume_dsl_tree(&tree),
             Err(err) => Err(err),
         }
     }
-
-    fn consume_dsl_tree(&mut self, tree: &Vec<DslTree>) -> Result<(), String>;
-
-    fn consume_command(&mut self, cmd: &str) -> Result<(), String>;
 
     fn generate_dsl_tree(&self) -> Result<Vec<DslTree>, String> {
         tokens_as_tree(&self.generate_dsl())

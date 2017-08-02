@@ -299,7 +299,6 @@ impl GearsDsl for Domain {
             }
         }
         Ok(())
-
     }
 
     fn consume_command(&mut self, s: &str) -> Result<(), String> {
