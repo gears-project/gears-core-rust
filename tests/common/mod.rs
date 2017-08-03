@@ -14,8 +14,7 @@ where
     T: DeserializeOwned,
 {
     let json_string = read_json_file(path);
-    let v: T = serde_json::from_str(&json_string).unwrap();
-    v
+    serde_json::from_str::<T>(&json_string).unwrap()
 }
 
 #[allow(dead_code)]

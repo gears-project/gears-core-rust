@@ -39,7 +39,7 @@ pub trait GearsDsl {
     fn consume_dsl_tree(&mut self, tree: &Vec<DslTree>) -> Result<(), String>;
     fn consume_command(&mut self, cmd: &str) -> Result<(), String>;
 
-    fn consume_dsl(&mut self, items: &DslTokens) -> Result<(), String> {
+    fn consume_dsl(&mut self, items: &[DslToken]) -> Result<(), String> {
         match tokens_as_tree(&items) {
             Ok(tree) => self.consume_dsl_tree(&tree),
             Err(err) => Err(err),
@@ -114,9 +114,9 @@ pub trait GearsDsl {
     }
 }
 
-pub fn tokens_as_tree(tokens: &DslTokens) -> Result<Vec<DslTree>, String> {
+pub fn tokens_as_tree(tokens: &[DslToken]) -> Result<Vec<DslTree>, String> {
 
-    fn to_tree(tokens: &DslTokens, offset: &mut usize) -> Result<Vec<DslTree>, String> {
+    fn to_tree(tokens: &[DslToken], offset: &mut usize) -> Result<Vec<DslTree>, String> {
         let mut res = Vec::<DslTree>::new();
 
         let mut subject = "".to_owned();
@@ -143,15 +143,14 @@ pub fn tokens_as_tree(tokens: &DslTokens) -> Result<Vec<DslTree>, String> {
                 DslToken::With(ref s) => {
                     subject = s.clone();
 
-                    // Some lookahead
+                    // Lookahead
                     if *offset >= (tokens.len() - 1) {
                         return Err(
-                            "tokens_as_tree : Encountered Wih statement not followed by BlockOpen"
-                                .to_owned(),
+                            "tokens_as_tree : With statement ends prematurely".to_owned(),
                         );
                     } else if (tokens[*offset + 1]).ne(&DslToken::BlockOpen) {
                         return Err(
-                            "tokens_as_tree : Encountered Wih statement not followed by BlockOpen"
+                            "tokens_as_tree : Encountered With statement not followed by BlockOpen"
                                 .to_owned(),
                         );
                     }

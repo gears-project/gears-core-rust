@@ -239,7 +239,7 @@ pub fn init_new_model_dir(path: &str) -> Result<(), ModelLoadError> {
 }
 
 pub fn is_model_dir(path: &str) -> bool {
-    match model_from_fs(&path) {
+    match model_from_fs(path) {
         Ok(_) => true,
         Err(_) => false,
     }

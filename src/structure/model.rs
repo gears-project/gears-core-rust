@@ -216,7 +216,7 @@ impl Queryable for ModelConfig {}
 
 // gear-dsl
 
-use dsl::command::{GearsDsl, DslToken, DslTokens, DslTree, command_grammar};
+use dsl::command::{GearsDsl, DslToken, DslTokens, DslTree};
 
 impl GearsDsl for Model {
     fn generate_dsl(&self) -> DslTokens {
