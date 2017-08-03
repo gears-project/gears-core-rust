@@ -1,6 +1,3 @@
-use structure::model::ModelDocument;
-use structure::domain;
-
 #[allow(dead_code)]
 pub mod command_grammar {
     include!(concat!(env!("OUT_DIR"), "/command_grammar.rs"));
@@ -57,13 +54,13 @@ pub trait GearsDsl {
                     Ok(_) => Ok(()),
                     Err(err) => {
                         error!("interpret_dsl : error with commands : {:?}", err);
-                        return Err(format!("interpret_dsl : error with commands : {:?}", err));
+                        Err(format!("interpret_dsl : error with commands : {:?}", err))
                     }
                 }
             }
             Err(err) => {
                 error!("interpret_dsl : error : {:?}", err);
-                return Err(format!("interpret_dsl : error : {:?}", err));
+                Err(format!("interpret_dsl : error : {:?}", err))
             }
         }
     }
@@ -74,13 +71,13 @@ pub trait GearsDsl {
                     Ok(tree) => self.consume_dsl_tree(&tree),
                     Err(err) => {
                         error!("interpret_dsl : error with commands : {:?}", err);
-                        return Err(format!("interpret_dsl : error with commands : {:?}", err));
+                        Err(format!("interpret_dsl : error with commands : {:?}", err))
                     }
                 }
             }
             Err(err) => {
                 error!("interpret_dsl : error : {:?}", err);
-                return Err(format!("interpret_dsl : error : {:?}", err));
+                Err(format!("interpret_dsl : error : {:?}", err))
             }
         }
     }
