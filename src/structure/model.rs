@@ -213,3 +213,48 @@ impl Default for ModelConfig {
 }
 
 impl Queryable for ModelConfig {}
+
+// gear-dsl
+
+use dsl::command::{GearsDsl, DslToken, DslTokens, DslTree};
+
+impl GearsDsl for Model {
+    fn generate_dsl(&self) -> DslTokens {
+        let mut res = DslTokens::new();
+
+        res.push(DslToken::With("domain".to_owned()));
+        res.push(DslToken::BlockOpen);
+        res.extend(self.domain.doc.generate_dsl());
+        res.push(DslToken::BlockClose);
+
+        res
+    }
+
+    fn consume_command(&mut self, cmd: &str) -> Result<(), String> {
+        Err("consume_command: No commands at Model level".to_owned())
+    }
+
+    fn consume_dsl_tree(&mut self, items: &Vec<DslTree>) -> Result<(), String> {
+        for item in items {
+            match *item {
+                DslTree::Scope(ref s, ref tree) => {
+                    match s.as_ref() {
+                        "domain" => {
+                            self.domain.doc.consume_dsl_tree(&tree);
+                        }
+                        _ => {
+                            return Err("No other scope implemented for Model".to_owned());
+                        }
+                    }
+                }
+                DslTree::Command(ref s) => {
+                    self.consume_command(&s);
+                }
+                DslTree::Comment(ref s) => {
+                    debug!("consume_dsl_tree comment {}", s);
+                }
+            }
+        }
+        Ok(())
+    }
+}

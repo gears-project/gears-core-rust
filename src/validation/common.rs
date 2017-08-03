@@ -35,7 +35,7 @@ impl ValidationError {
 pub fn validate_model(model: &ModelDocument) -> ValidationErrors {
     let mut errors = ValidationErrors::new();
 
-    errors.extend(model::Validation::validate(&model));
+    errors.extend(model::Validation::validate(model));
     errors.extend(domain::Validation::validate(&model.doc.domain));
 
     for xflow in &model.doc.xflows {

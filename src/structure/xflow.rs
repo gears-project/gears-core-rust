@@ -49,9 +49,10 @@ impl XFlowValue {
             XFlowValue::String(ref s) => s.clone(),
             XFlowValue::Integer(ref i) => i.to_string(),
             XFlowValue::Boolean(ref b) => {
-                match *b {
-                    true => "true".to_owned(),
-                    false => "false".to_owned(),
+                if *b {
+                    "true".to_owned()
+                } else {
+                    "false".to_owned()
                 }
             }
         }

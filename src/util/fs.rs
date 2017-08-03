@@ -167,21 +167,21 @@ pub fn model_from_fs(path: &str) -> Result<ModelDocument, ModelLoadError> {
     debug!("Reading model from directory '{}'", path);
     let model_header_filename = format!("{}/model.json", path);
     let model_header_path = Path::new(&model_header_filename);
-    let model_header_json = read_json_file(&model_header_path);
+    let model_header_json = read_json_file(model_header_path);
     let model_header: DocumentHeader = DocumentHeader::from_json(&model_header_json);
 
     let mut modeldoc = ModelDocument::new_from_header(&model_header);
 
     let model_config_filename = format!("{}/config.json", path);
     let model_config_path = Path::new(&model_config_filename);
-    let model_config_json = read_json_file(&model_config_path);
+    let model_config_json = read_json_file(model_config_path);
     let model_config: ModelConfigDocument = ModelConfigDocument::from_json(&model_config_json);
 
     modeldoc.doc.config = model_config;
 
     let domain_filename = format!("{}/domain.json", path);
     let domain_path = Path::new(&domain_filename);
-    let json = read_json_file(&domain_path);
+    let json = read_json_file(domain_path);
     let domain: DomainDocument = DomainDocument::from_json(&json);
 
     modeldoc.doc.domain = domain;
@@ -239,7 +239,7 @@ pub fn init_new_model_dir(path: &str) -> Result<(), ModelLoadError> {
 }
 
 pub fn is_model_dir(path: &str) -> bool {
-    match model_from_fs(&path) {
+    match model_from_fs(path) {
         Ok(_) => true,
         Err(_) => false,
     }

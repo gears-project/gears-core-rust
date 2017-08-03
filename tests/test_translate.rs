@@ -64,9 +64,9 @@ fn test_translate_model_add_translations() {
     model.doc.config.doc.locales.push("es_ES".to_owned());
     model.pad_all_translations();
 
-    let model_es = model.as_locale(&"es_ES").unwrap();
-    let model_en = model.as_locale(&"en_US").unwrap();
-    let model_nl = model.as_locale(&"nl_NL").unwrap();
+    let model_es = model.as_locale("es_ES").unwrap();
+    let model_en = model.as_locale("en_US").unwrap();
+    let model_nl = model.as_locale("nl_NL").unwrap();
 
     assert_ne!(model, model_es);
     assert_ne!(model, model_nl);

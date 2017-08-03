@@ -1,5 +1,4 @@
 use dsl::command::*;
-use structure::domain::DomainCommand;
 
 label -> String
   = label:$([A-Za-z0-9\_]+) {
@@ -17,27 +16,29 @@ newline -> ()
   / "\r"
   / "\r\n"
 
-pub expression -> Vec<DslItem>
-  = dsl_item*
+pub expression -> Vec<DslToken>
+  = dsl_token*
 
-pub dsl_item -> DslItem
+pub dsl_token -> DslToken
   = _ "with " label:label {
-    DslItem::With(label.to_string())
+    DslToken::With(label.to_string())
   }
   / _ "{" {
-    DslItem::BlockOpen
+    DslToken::BlockOpen
   }
   / _ "};" {
-    DslItem::BlockClose
+    DslToken::BlockClose
   }
   / _ command:$([A-Za-z\ ]+) ";" {
-    DslItem::Command(command.to_string())
+    DslToken::Command(command.to_string())
   }
   / _ "#" command:$([A-Za-z\ ]+) newline {
-    DslItem::Comment(command.to_string())
+    DslToken::Comment(command.to_string())
   }
 
 // For domain::Domain GearsDsl implementation
+
+use structure::domain::DomainCommand;
 
 pub domain_command -> DomainCommand
   = "add entity" " " label:label {
