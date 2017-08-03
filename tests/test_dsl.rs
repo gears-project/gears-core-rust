@@ -80,23 +80,61 @@ fn test_dsl_domain_generate_and_consume() {
 
     let e_count = domain.entities.len();
 
-    domain.interpret_dsl(&"add entity abc; remove entity abc; add entity post;");
+    match domain.interpret_dsl(&"add entity abc; remove entity abc; add entity post;") {
+        Ok(()) => {
+            assert!(true);
+        }
+        Err(_) => {
+            assert!(false);
+        }
+    }
+
     let script = domain.to_text_dsl();
 
     let mut next_domain = Domain::default();
-    next_domain.interpret_dsl(&script);
+    match next_domain.interpret_dsl(&script) {
+        Ok(()) => {
+            assert!(true);
+        }
+        Err(_) => {
+            assert!(false);
+        }
+    }
 
     assert_eq!(domain, next_domain);
 
 }
 
 #[test]
-fn test_dsl_model_generate() {
+fn test_dsl_model_interpret() {
     let _ = env_logger::init();
 
     let mut model = Model::default();
+    assert_eq!(model.domain.doc.entities.len(), 0);
 
-    println!("MODEL MODEL MODEL {:?}", model.generate_dsl());
+    let _ = model.interpret_dsl(&"with domain { add entity zork; };");
+    assert_eq!(model.domain.doc.entities.len(), 1);
 
+    let _ = model.interpret_dsl(&"with domain { remove entity zork; };");
+    assert_eq!(model.domain.doc.entities.len(), 0);
+
+}
+
+#[test]
+fn test_dsl_model_interpret_multiline() {
+    let _ = env_logger::init();
+
+    let mut model = Model::default();
+    assert_eq!(model.domain.doc.entities.len(), 0);
+
+    let _ = model.interpret_dsl(
+        &r#"with domain { add entity zork; add entity bork; add entity fnord; };"#,
+    );
+    assert_eq!(model.domain.doc.entities.len(), 3);
+
+    let _ = model.interpret_dsl(
+        &r#"with domain { remove entity zork; remove entity bork; };"#,
+    );
+    assert_eq!(model.domain.doc.entities.len(), 1);
 
 }
