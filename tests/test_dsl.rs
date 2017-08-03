@@ -80,29 +80,16 @@ fn test_dsl_domain_generate_and_consume() {
 
     let e_count = domain.entities.len();
 
-    match domain.interpret_dsl(&"add entity abc; remove entity abc; add entity post;") {
-        Ok(()) => {
-            assert!(true);
-        }
-        Err(_) => {
-            assert!(false);
-        }
-    }
+    domain
+        .interpret_dsl(&"add entity abc; remove entity abc; add entity post;")
+        .ok();
 
     let script = domain.to_text_dsl();
 
     let mut next_domain = Domain::default();
-    match next_domain.interpret_dsl(&script) {
-        Ok(()) => {
-            assert!(true);
-        }
-        Err(_) => {
-            assert!(false);
-        }
-    }
+    next_domain.interpret_dsl(&script).ok();
 
     assert_eq!(domain, next_domain);
-
 }
 
 #[test]
