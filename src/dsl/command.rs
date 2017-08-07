@@ -48,6 +48,7 @@ pub trait GearsDsl {
     }
 
     fn interpret_dsl(&mut self, txt: &str) -> Result<(), String> {
+        debug!("interpret_dsl : {}", txt);
         match command_grammar::expression(&txt) {
             Ok(dsl_items) => {
                 match self.consume_dsl(&dsl_items) {

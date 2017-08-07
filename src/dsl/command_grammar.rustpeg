@@ -47,6 +47,12 @@ pub domain_command -> DomainCommand
   / "remove entity" " " label:label {
     DomainCommand::RemoveEntity(label.to_string())
   }
+  / "list entity" {
+    DomainCommand::ListEntity
+  }
+  / "show entity" " " label:label {
+    DomainCommand::ShowEntity(label.to_string())
+  }
   / "add attribute" " " attr:label ":" attr_type:label {
     DomainCommand::AddAttribute(attr.to_string(), attr_type.to_string())
   }

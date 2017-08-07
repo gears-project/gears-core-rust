@@ -231,6 +231,7 @@ impl GearsDsl for Model {
     }
 
     fn consume_command(&mut self, cmd: &str) -> Result<(), String> {
+        error!("consume_command: No commands at Model level");
         Err("consume_command: No commands at Model level".to_owned())
     }
 

@@ -1,6 +1,8 @@
 use super::common::{Document, I18NString, Translatable, Queryable};
 use structure::translation::TranslationDocument;
 
+use std::fmt;
+
 pub type DomainDocument = Document<Domain>;
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
@@ -214,6 +216,8 @@ use dsl::command::{GearsDsl, DslToken, DslTokens, DslTree, command_grammar};
 pub enum DomainCommand {
     AddEntity(String),
     RemoveEntity(String),
+    ListEntity,
+    ShowEntity(String),
     AddAttribute(String, String),
     RemoveAttribute(String),
     AddValidation(String, String),
@@ -225,6 +229,8 @@ impl DomainCommand {
         let s = match *self {
             DomainCommand::AddEntity(ref e) => format!("add entity {}", e),
             DomainCommand::RemoveEntity(ref e) => format!("remove entity {}", e),
+            DomainCommand::ListEntity => format!("list entity"),
+            DomainCommand::ShowEntity(ref e) => format!("show entity {}", e),
             DomainCommand::AddAttribute(ref a, ref t) => format!("add attribute {}:{}", a, t),
             DomainCommand::RemoveAttribute(ref a) => format!("remove attribute {}", a),
             DomainCommand::AddValidation(ref v, ref t) => format!("add validation {} '{}'", v, t),
@@ -302,16 +308,41 @@ impl GearsDsl for Domain {
     }
 
     fn consume_command(&mut self, s: &str) -> Result<(), String> {
+        debug!("consume_command : input {:?}", s);
         let mut state = DomainDslState::default();
 
         match command_grammar::domain_command(&s) {
             Ok(cmd) => {
+                debug!("consume_command : parsed to {:?}", cmd);
                 match cmd {
                     DomainCommand::AddEntity(e) => {
                         if state.indent != 0 {
                             return Err("Bad indent for Entity".to_owned());
                         } else {
+                            debug!("consume_command : adding entity {}", e);
                             self.add_entity(Entity::new(&e));
+                        }
+                    }
+                    DomainCommand::RemoveEntity(e) => {
+                        if state.indent != 0 {
+                            return Err("Bad indent for Entity".to_owned());
+                        } else {
+                            self.remove_entity(&e);
+                        }
+                    }
+                    DomainCommand::ListEntity => {
+                        for entity in &self.entities {
+                            println!("{:?}", entity);
+                        }
+                    }
+                    DomainCommand::ShowEntity(e) => {
+                        match self.get_entity(&e) {
+                            Ok(entity) => {
+                                println!("{:?}", entity);
+                                println!("\tAttributes {:?}", entity.attributes);
+                                println!("\tReferences {:?}", entity.references);
+                            }
+                            Err(err) => return Err(err),
                         }
                     }
                     DomainCommand::RemoveEntity(e) => {
@@ -349,7 +380,10 @@ impl GearsDsl for Domain {
                     }
                 }
             }
-            Err(err) => return Err(format!("Parsing error domain_command : {:?}", err)),
+            Err(err) => {
+                error!("Parsing error domain_command : {:?}", err);
+                return Err(format!("Parsing error domain_command : {:?}", err));
+            }
         }
         Ok(())
     }
