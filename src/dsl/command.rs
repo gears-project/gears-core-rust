@@ -91,24 +91,24 @@ pub trait GearsDsl {
         for item in items.iter() {
             match *item {
                 DslToken::BlockOpen => {
-                    res.push(format!("{{"));
+                    res.push(format!("{{\n"));
                     indent += indent_size;
                 }
                 DslToken::BlockClose => {
-                    res.push(format!("}};"));
+                    res.push(format!("}};\n"));
                     indent -= indent_size;
                 }
                 DslToken::With(ref s) => {
-                    res.push(format!(" with {label}", label = s));
+                    res.push(format!(" with {label} ", label = s));
                 }
                 DslToken::Command(ref s) => {
-                    res.push(format!(" {cmd};", cmd = s));
+                    res.push(format!(" {cmd};\n", cmd = s));
                 }
                 DslToken::Comment(_) => {}
             }
         }
 
-        res.join("\n")
+        res.join("")
     }
 }
 
