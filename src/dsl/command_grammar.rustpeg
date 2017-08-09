@@ -23,17 +23,40 @@ pub dsl_token -> DslToken
   = _ "with " label:label {
     DslToken::With(label.to_string())
   }
-  / _ "{" {
+  / _ "{" _ newline* {
     DslToken::BlockOpen
   }
-  / _ "};" {
+  / _ "};" _ newline* {
     DslToken::BlockClose
   }
-  / _ command:$([A-Za-z\ ]+) ";" {
+  / _ command:$([A-Za-z\ ]+) ";" _ newline* {
     DslToken::Command(command.to_string())
   }
-  / _ "#" command:$([A-Za-z\ ]+) newline {
+  / _ "#" command:$([A-Za-z\ ]+) _ newline* {
     DslToken::Comment(command.to_string())
+  }
+
+// For model::Model::GearsDsl implementation
+use structure::model::ModelCommand;
+
+pub model_command -> ModelCommand
+  = "add xflow" " " label:label {
+    ModelCommand::AddXFlow(label.to_string())
+  }
+  / "remove xflow" " " label:label {
+    ModelCommand::RemoveXFlow(label.to_string())
+  }
+  / "add translation" " " label:label {
+    ModelCommand::AddTranslation(label.to_string())
+  }
+  / "remove translation" " " label:label {
+    ModelCommand::RemoveTranslation(label.to_string())
+  }
+  / "add page" " " label:label {
+    ModelCommand::AddPage(label.to_string())
+  }
+  / "remove page" " " label:label {
+    ModelCommand::RemovePage(label.to_string())
   }
 
 // For domain::Domain GearsDsl implementation
@@ -46,6 +69,12 @@ pub domain_command -> DomainCommand
   }
   / "remove entity" " " label:label {
     DomainCommand::RemoveEntity(label.to_string())
+  }
+  / "list entity" {
+    DomainCommand::ListEntity
+  }
+  / "show entity" " " label:label {
+    DomainCommand::ShowEntity(label.to_string())
   }
   / "add attribute" " " attr:label ":" attr_type:label {
     DomainCommand::AddAttribute(attr.to_string(), attr_type.to_string())

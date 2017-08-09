@@ -48,6 +48,7 @@ pub trait GearsDsl {
     }
 
     fn interpret_dsl(&mut self, txt: &str) -> Result<(), String> {
+        debug!("interpret_dsl : {}", txt);
         match command_grammar::expression(&txt) {
             Ok(dsl_items) => {
                 match self.consume_dsl(&dsl_items) {
@@ -59,7 +60,7 @@ pub trait GearsDsl {
                 }
             }
             Err(err) => {
-                error!("interpret_dsl : error : {:?}", err);
+                error!("interpret_dsl : in '{:?}', error : {:?}", &txt, err);
                 Err(format!("interpret_dsl : error : {:?}", err))
             }
         }
@@ -90,24 +91,24 @@ pub trait GearsDsl {
         for item in items.iter() {
             match *item {
                 DslToken::BlockOpen => {
-                    res.push(format!("{{"));
+                    res.push(format!("{{\n"));
                     indent += indent_size;
                 }
                 DslToken::BlockClose => {
-                    res.push(format!("}};"));
+                    res.push(format!("}};\n"));
                     indent -= indent_size;
                 }
                 DslToken::With(ref s) => {
-                    res.push(format!(" with {label}", label = s));
+                    res.push(format!(" with {label} ", label = s));
                 }
                 DslToken::Command(ref s) => {
-                    res.push(format!(" {cmd};", cmd = s));
+                    res.push(format!("  {cmd};\n", cmd = s));
                 }
                 DslToken::Comment(_) => {}
             }
         }
 
-        res.join("\n")
+        res.join("")
     }
 }
 

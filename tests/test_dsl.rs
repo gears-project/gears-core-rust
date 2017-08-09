@@ -79,7 +79,7 @@ fn test_dsl_domain_generate_and_consume() {
     let e_count = domain.entities.len();
 
     domain
-        .interpret_dsl("add entity abc; remove entity abc; add entity post;")
+        .interpret_dsl("add entity abc; remove entity abc; add entity post; add entity comment; add entity log;")
         .ok();
 
     let script = domain.to_text_dsl();

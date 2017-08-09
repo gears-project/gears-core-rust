@@ -168,6 +168,69 @@ impl ModelDocument {
     }
 }
 
+use structure::xflow::XFlowDocument;
+use structure::page::PageDocument;
+
+impl Model {
+    // xflow functions
+
+    pub fn add_xflow(&mut self, name: &str) -> Result<(), String> {
+        let mut xflow = XFlowDocument::default();
+        xflow.name = name.to_string();
+        self.xflows.push(xflow);
+        Ok(())
+    }
+
+    pub fn remove_xflow(&mut self, name: &str) -> Result<(), String> {
+        self.xflows = self.xflows
+            .clone()
+            .into_iter()
+            .filter({
+                |e| e.name.ne(name)
+            })
+            .collect();
+        Ok(())
+    }
+
+    // page functions
+
+    pub fn add_page(&mut self, name: &str) -> Result<(), String> {
+        let mut doc = PageDocument::default();
+        doc.name = name.to_string();
+        self.pages.push(doc);
+        Ok(())
+    }
+
+    pub fn remove_page(&mut self, name: &str) -> Result<(), String> {
+        self.pages = self.pages
+            .clone()
+            .into_iter()
+            .filter({
+                |e| e.name.ne(name)
+            })
+            .collect();
+        Ok(())
+    }
+
+    pub fn add_translation(&mut self, name: &str) -> Result<(), String> {
+        let mut doc = TranslationDocument::default();
+        doc.name = name.to_string();
+        self.translations.push(doc);
+        Ok(())
+    }
+
+    pub fn remove_translation(&mut self, name: &str) -> Result<(), String> {
+        self.translations = self.translations
+            .clone()
+            .into_iter()
+            .filter({
+                |e| e.name.ne(name)
+            })
+            .collect();
+        Ok(())
+    }
+}
+
 impl Translatable for ModelDocument {
     fn translate_in_place(&mut self, t: &TranslationDocument) -> () {
         for ref mut page in &mut self.doc.pages {
@@ -216,7 +279,16 @@ impl Queryable for ModelConfig {}
 
 // gear-dsl
 
-use dsl::command::{GearsDsl, DslToken, DslTokens, DslTree};
+use dsl::command::{GearsDsl, DslToken, DslTokens, DslTree, command_grammar};
+
+pub enum ModelCommand {
+    AddXFlow(String),
+    RemoveXFlow(String),
+    AddTranslation(String),
+    RemoveTranslation(String),
+    AddPage(String),
+    RemovePage(String),
+}
 
 impl GearsDsl for Model {
     fn generate_dsl(&self) -> DslTokens {
@@ -230,8 +302,20 @@ impl GearsDsl for Model {
         res
     }
 
-    fn consume_command(&mut self, cmd: &str) -> Result<(), String> {
-        Err("consume_command: No commands at Model level".to_owned())
+    fn consume_command(&mut self, s: &str) -> Result<(), String> {
+        match command_grammar::model_command(&s) {
+            Ok(cmd) => {
+                match cmd {
+                    ModelCommand::AddXFlow(name) => self.add_xflow(&name),
+                    ModelCommand::RemoveXFlow(name) => self.remove_xflow(&name),
+                    ModelCommand::AddTranslation(name) => self.add_translation(&name),
+                    ModelCommand::RemoveTranslation(name) => self.remove_translation(&name),
+                    ModelCommand::AddPage(name) => self.add_page(&name),
+                    ModelCommand::RemovePage(name) => self.remove_page(&name),
+                }
+            }
+            Err(err) => Err(format!("{}", err)),
+        }
     }
 
     fn consume_dsl_tree(&mut self, items: &Vec<DslTree>) -> Result<(), String> {
