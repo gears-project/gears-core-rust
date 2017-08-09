@@ -300,7 +300,9 @@ impl GearsDsl for Domain {
                 DslTree::Command(ref s) => {
                     self.consume_command(&s);
                 }
-                DslTree::Scope(ref s, ref tree) => {}
+                DslTree::Scope(ref s, ref tree) => {
+                    unimplemented!();
+                }
                 DslTree::Comment(_) => {}
             }
         }

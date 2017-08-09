@@ -36,6 +36,29 @@ pub dsl_token -> DslToken
     DslToken::Comment(command.to_string())
   }
 
+// For model::Model::GearsDsl implementation
+use structure::model::ModelCommand;
+
+pub model_command -> ModelCommand
+  = "add xflow" " " label:label {
+    ModelCommand::AddXFlow(label.to_string())
+  }
+  / "remove xflow" " " label:label {
+    ModelCommand::RemoveXFlow(label.to_string())
+  }
+  / "add translation" " " label:label {
+    ModelCommand::AddTranslation(label.to_string())
+  }
+  / "remove translation" " " label:label {
+    ModelCommand::RemoveTranslation(label.to_string())
+  }
+  / "add page" " " label:label {
+    ModelCommand::AddPage(label.to_string())
+  }
+  / "remove page" " " label:label {
+    ModelCommand::RemovePage(label.to_string())
+  }
+
 // For domain::Domain GearsDsl implementation
 
 use structure::domain::DomainCommand;
