@@ -284,10 +284,36 @@ use dsl::command::{GearsDsl, DslToken, DslTokens, DslTree, command_grammar};
 pub enum ModelCommand {
     AddXFlow(String),
     RemoveXFlow(String),
+    ListXFlow,
+    ShowXFlow(String),
     AddTranslation(String),
     RemoveTranslation(String),
+    ListTranslation,
+    ShowTranslation(String),
     AddPage(String),
     RemovePage(String),
+    ListPage,
+    ShowPage(String),
+}
+
+impl ModelCommand {
+    fn as_dsl_token(&self) -> DslToken {
+        let s = match *self {
+            ModelCommand::AddXFlow(ref e) => format!("add xflow {}", e),
+            ModelCommand::RemoveXFlow(ref e) => format!("remove xflow {}", e),
+            ModelCommand::ListXFlow => format!("list xflow"),
+            ModelCommand::ShowXFlow(ref e) => format!("show xflow {}", e),
+            ModelCommand::AddTranslation(ref e) => format!("add translation {}", e),
+            ModelCommand::RemoveTranslation(ref e) => format!("remove translation {}", e),
+            ModelCommand::ListTranslation => format!("list translation"),
+            ModelCommand::ShowTranslation(ref e) => format!("show translation {}", e),
+            ModelCommand::AddPage(ref e) => format!("add page {}", e),
+            ModelCommand::RemovePage(ref e) => format!("remove page {}", e),
+            ModelCommand::ListPage => format!("list page"),
+            ModelCommand::ShowPage(ref e) => format!("show page {}", e),
+        };
+        DslToken::Command(s)
+    }
 }
 
 impl GearsDsl for Model {
@@ -299,6 +325,20 @@ impl GearsDsl for Model {
         res.extend(self.domain.doc.generate_dsl());
         res.push(DslToken::BlockClose);
 
+        for doc in &self.xflows {
+            res.push(ModelCommand::AddXFlow(doc.name.clone()).as_dsl_token());
+        }
+
+        for doc in &self.translations {
+            res.push(
+                ModelCommand::AddTranslation(doc.name.clone()).as_dsl_token(),
+            );
+        }
+
+        for doc in &self.pages {
+            res.push(ModelCommand::AddPage(doc.name.clone()).as_dsl_token());
+        }
+
         res
     }
 
@@ -306,13 +346,50 @@ impl GearsDsl for Model {
         match command_grammar::model_command(&s) {
             Ok(cmd) => {
                 match cmd {
-                    ModelCommand::AddXFlow(name) => self.add_xflow(&name),
-                    ModelCommand::RemoveXFlow(name) => self.remove_xflow(&name),
-                    ModelCommand::AddTranslation(name) => self.add_translation(&name),
-                    ModelCommand::RemoveTranslation(name) => self.remove_translation(&name),
-                    ModelCommand::AddPage(name) => self.add_page(&name),
-                    ModelCommand::RemovePage(name) => self.remove_page(&name),
+                    ModelCommand::AddXFlow(name) => {
+                        self.add_xflow(&name);
+                    }
+                    ModelCommand::RemoveXFlow(name) => {
+                        self.remove_xflow(&name);
+                    }
+                    ModelCommand::ListXFlow => {
+                        for doc in &self.xflows {
+                            println!("{:?}", doc);
+                        }
+                    }
+                    ModelCommand::ShowXFlow(name) => {
+                        unimplemented!();
+                    }
+                    ModelCommand::AddTranslation(name) => {
+                        self.add_translation(&name);
+                    }
+                    ModelCommand::RemoveTranslation(name) => {
+                        self.remove_translation(&name);
+                    }
+                    ModelCommand::ListTranslation => {
+                        for doc in &self.translations {
+                            println!("{:?}", doc);
+                        }
+                    }
+                    ModelCommand::ShowTranslation(name) => {
+                        unimplemented!();
+                    }
+                    ModelCommand::AddPage(name) => {
+                        self.add_page(&name);
+                    }
+                    ModelCommand::RemovePage(name) => {
+                        self.remove_page(&name);
+                    }
+                    ModelCommand::ListPage => {
+                        for doc in &self.pages {
+                            println!("{:?}", doc);
+                        }
+                    }
+                    ModelCommand::ShowPage(name) => {
+                        unimplemented!();
+                    }
                 }
+                Ok(())
             }
             Err(err) => Err(format!("{}", err)),
         }

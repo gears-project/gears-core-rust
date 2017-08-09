@@ -48,24 +48,6 @@ pub trait GearsDsl {
     }
 
     fn interpret_dsl(&mut self, txt: &str) -> Result<(), String> {
-        debug!("interpret_dsl : {}", txt);
-        match command_grammar::expression(&txt) {
-            Ok(dsl_items) => {
-                match self.consume_dsl(&dsl_items) {
-                    Ok(_) => Ok(()),
-                    Err(err) => {
-                        error!("interpret_dsl : error with commands : {:?}", err);
-                        Err(format!("interpret_dsl : error with commands : {:?}", err))
-                    }
-                }
-            }
-            Err(err) => {
-                error!("interpret_dsl : in '{:?}', error : {:?}", &txt, err);
-                Err(format!("interpret_dsl : error : {:?}", err))
-            }
-        }
-    }
-    fn interpret_dsl_via_tree(&mut self, txt: &str) -> Result<(), String> {
         match command_grammar::expression(&txt) {
             Ok(dsl_items) => {
                 match tokens_as_tree(&dsl_items) {
