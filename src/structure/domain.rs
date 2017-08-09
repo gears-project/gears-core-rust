@@ -225,7 +225,7 @@ pub enum DomainCommand {
 }
 
 impl DomainCommand {
-    fn as_dsl_item(&self) -> DslToken {
+    fn as_dsl_token(&self) -> DslToken {
         let s = match *self {
             DomainCommand::AddEntity(ref e) => format!("add entity {}", e),
             DomainCommand::RemoveEntity(ref e) => format!("remove entity {}", e),
@@ -261,7 +261,7 @@ impl GearsDsl for Domain {
         let mut res = Vec::<DslToken>::new();
 
         for entity in &self.entities {
-            res.push(DomainCommand::AddEntity(entity.name.clone()).as_dsl_item());
+            res.push(DomainCommand::AddEntity(entity.name.clone()).as_dsl_token());
 
             if entity.attributes.len() > 0 {
                 res.push(DslToken::With(entity.name.clone()));
@@ -270,7 +270,7 @@ impl GearsDsl for Domain {
                 for attribute in &entity.attributes {
                     res.push(
                         DomainCommand::AddAttribute(attribute.name.clone(), attribute.vtype.clone())
-                            .as_dsl_item(),
+                            .as_dsl_token(),
                     );
 
                     if attribute.validations.len() > 0 {
@@ -282,7 +282,7 @@ impl GearsDsl for Domain {
                                 DomainCommand::AddValidation(
                                     validation.xflow.clone(),
                                     validation.message.value.clone(),
-                                ).as_dsl_item(),
+                                ).as_dsl_token(),
                             );
                         }
                         res.push(DslToken::BlockClose);
