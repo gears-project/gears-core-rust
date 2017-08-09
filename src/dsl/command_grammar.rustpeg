@@ -23,16 +23,16 @@ pub dsl_token -> DslToken
   = _ "with " label:label {
     DslToken::With(label.to_string())
   }
-  / _ "{" {
+  / _ "{" _ newline* {
     DslToken::BlockOpen
   }
-  / _ "};" {
+  / _ "};" _ newline* {
     DslToken::BlockClose
   }
-  / _ command:$([A-Za-z\ ]+) ";" {
+  / _ command:$([A-Za-z\ ]+) ";" _ newline* {
     DslToken::Command(command.to_string())
   }
-  / _ "#" command:$([A-Za-z\ ]+) newline {
+  / _ "#" command:$([A-Za-z\ ]+) _ newline* {
     DslToken::Comment(command.to_string())
   }
 

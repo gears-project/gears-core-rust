@@ -60,7 +60,7 @@ pub trait GearsDsl {
                 }
             }
             Err(err) => {
-                error!("interpret_dsl : error : {:?}", err);
+                error!("interpret_dsl : in '{:?}', error : {:?}", &txt, err);
                 Err(format!("interpret_dsl : error : {:?}", err))
             }
         }
@@ -102,7 +102,7 @@ pub trait GearsDsl {
                     res.push(format!(" with {label} ", label = s));
                 }
                 DslToken::Command(ref s) => {
-                    res.push(format!(" {cmd};\n", cmd = s));
+                    res.push(format!("  {cmd};\n", cmd = s));
                 }
                 DslToken::Comment(_) => {}
             }
