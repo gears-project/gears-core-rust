@@ -3,6 +3,9 @@ extern crate env_logger;
 extern crate gears;
 use gears::structure::xflow::*;
 
+// partof: #TST-xflow
+// partof: #TST-serialization
+
 #[test]
 fn test_xflow_default() {
     let _ = env_logger::init();

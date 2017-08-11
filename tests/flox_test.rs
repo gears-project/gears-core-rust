@@ -192,7 +192,8 @@ fn test_combined_expressions() {
 }
 
 #[test]
-// #TST-flox-variables
+// partof #TST-flox
+// partof #TST-flox-variable
 fn test_variables() {
     let _ = env_logger::init();
     let mut state = XFState::default();

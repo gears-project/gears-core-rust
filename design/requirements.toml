@@ -104,11 +104,20 @@ text = '''
 An xflow shall be able to call another xflow.
 '''
 
+[REQ-artifact]
+text = '''
+'''
+
 [REQ-artifact-testing]
 text = '''
 As part of the artifact generation, suitable testing artifacts shall be
 generated to assert the validity of the assumptions made in the artifact
 generation. E.g. Selenium tests for browser-based artifacts.
+'''
+
+[REQ-artifact-generation]
+text = '''
+
 '''
 
 [REQ-artifact-generation-model]

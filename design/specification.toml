@@ -1,3 +1,7 @@
+[SPC-flox]
+text = '''
+'''
+
 [SPC-flox-variables]
 text = '''
 Any variables that are available in an xflow should be available for evaluation
@@ -34,6 +38,10 @@ text = '''
 Model serialization is performed using **serde_yaml**
 '''
 
+[SPC-xflow]
+text = '''
+'''
+
 [SPC-xflow-call]
 text = '''
 An xflow shall have a node of type 'call' which,
@@ -43,6 +51,16 @@ An xflow shall have a node of type 'call' which,
  - Can assign the return values to local variables
 '''
 
+
+[SPC-artifact]
+text = '''
+
+'''
+
+[SPC-artifact-generation]
+text = '''
+
+'''
 
 [SPC-artifact-generation-model]
 text = '''
