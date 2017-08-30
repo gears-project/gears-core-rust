@@ -3,3 +3,4 @@ target
 **/*.rs.racertmp
 **/*.rs.rustfmt
 Cargo.lock
+**/history.gears-shell
