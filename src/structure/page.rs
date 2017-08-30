@@ -2,7 +2,7 @@ use std::collections::{HashMap, BTreeMap};
 use serde::{Serialize, Serializer};
 use uuid::Uuid;
 
-use super::common::{Document, I18NString, Translatable, Queryable};
+use super::common::{Document, I18NString, Translatable};
 use super::translation::TranslationDocument;
 
 pub type PageDocument = Document<Page>;
@@ -28,8 +28,6 @@ impl Default for Page {
         }
     }
 }
-
-impl Queryable for Page {}
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 #[serde(tag = "component")]

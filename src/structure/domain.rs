@@ -1,4 +1,4 @@
-use super::common::{Document, I18NString, Translatable, Queryable};
+use super::common::{Document, I18NString, Translatable};
 use structure::translation::TranslationDocument;
 
 use std::fmt;
@@ -176,8 +176,6 @@ impl Default for Domain {
         }
     }
 }
-
-impl Queryable for Domain {}
 
 impl Translatable for DomainDocument {
     fn translate_in_place(&mut self, t: &TranslationDocument) -> () {

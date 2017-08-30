@@ -17,7 +17,7 @@ pub struct Document<T> {
 
 impl<T> Document<T>
 where
-    T: serde::Serialize + serde::de::DeserializeOwned + Eq + Default + Queryable,
+    T: serde::Serialize + serde::de::DeserializeOwned + Eq + Default,
 {
     pub fn new_from_header(header: &DocumentHeader) -> Self {
         Self {
@@ -236,19 +236,4 @@ impl DocumentHeader {
     pub fn from_yaml(s: &str) -> Self {
         serde_yaml::from_str(s).unwrap()
     }
-}
-
-pub enum QueryPart {
-    Item(String),
-    ListIndex(String, i32),
-    List(String),
-}
-
-pub type QueryPath = Vec<QueryPart>;
-
-// vec![Item("domain"), ListItem("
-
-pub trait Queryable {
-    // fn tree(&self) -> String;
-    // fn complete(&self) -> (String, QueryPart);
 }
