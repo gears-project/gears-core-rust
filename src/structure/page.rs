@@ -2,10 +2,12 @@ use std::collections::{HashMap, BTreeMap};
 use serde::{Serialize, Serializer};
 use uuid::Uuid;
 
-use super::common::{Document, I18NString, Translatable};
+use super::common::{Document, DocumentList, I18NString, Translatable};
 use super::translation::TranslationDocument;
 
 pub type PageDocument = Document<Page>;
+pub type PageDocumentList = DocumentList<Page>;
+
 pub type Components = Vec<Component>;
 
 impl PageDocument {

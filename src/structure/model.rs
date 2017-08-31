@@ -2,10 +2,10 @@ use std::collections::{HashMap, HashSet};
 use uuid::Uuid;
 
 use super::common::{Document, Translatable, I18NString};
-use super::domain;
-use super::xflow;
-use super::page;
-use super::translation::TranslationDocument;
+use super::domain::DomainDocument;
+use super::xflow::{XFlowDocument, XFlowDocumentList};
+use super::page::{PageDocument, PageDocumentList};
+use super::translation::{TranslationDocument, TranslationDocumentList};
 
 pub type ModelDocument = Document<Model>;
 pub type ModelConfigDocument = Document<ModelConfig>;
@@ -13,20 +13,20 @@ pub type ModelConfigDocument = Document<ModelConfig>;
 #[derive(Serialize, Deserialize, Debug, Clone, Eq, PartialEq)]
 pub struct Model {
     pub config: ModelConfigDocument,
-    pub domain: domain::DomainDocument,
-    pub xflows: Vec<xflow::XFlowDocument>,
-    pub pages: Vec<page::PageDocument>,
-    pub translations: Vec<TranslationDocument>,
+    pub domain: DomainDocument,
+    pub xflows: XFlowDocumentList,
+    pub pages: PageDocumentList,
+    pub translations: TranslationDocumentList,
 }
 
 impl Default for Model {
     fn default() -> Self {
         Model {
             config: ModelConfigDocument::default(),
-            domain: domain::DomainDocument::default(),
-            xflows: Vec::<xflow::XFlowDocument>::new(),
-            pages: Vec::<page::PageDocument>::new(),
-            translations: Vec::<TranslationDocument>::new(),
+            domain: DomainDocument::default(),
+            xflows: XFlowDocumentList::new(),
+            pages: PageDocumentList::new(),
+            translations: TranslationDocumentList::new(),
         }
     }
 }
@@ -165,9 +165,6 @@ impl ModelDocument {
         }
     }
 }
-
-use structure::xflow::XFlowDocument;
-use structure::page::PageDocument;
 
 impl Model {
     // xflow functions
