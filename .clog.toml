@@ -1,5 +1,5 @@
 [clog]
-repository = "https://github.com/michiel/xflow-rust"
+repository = "https://github.com/gears-project/gears-core-rust"
 link-style = "github"
 changelog = "CHANGELOG.md"
 output-format = "markdown"
