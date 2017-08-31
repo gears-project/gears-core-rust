@@ -116,13 +116,45 @@ fn test_dsl_model_interpret_translations() {
     let mut model = Model::default();
     assert_eq!(model.translations.len(), 0);
 
-    /*
-    // implement gears-dsl for documentlist first
     model
-        .interpret_dsl("with translations { add translation en_GB; };")
+        .interpret_dsl("with translations { add enGB; };")
         .is_ok();
     assert_eq!(model.translations.len(), 1);
-    */
+
+    model
+        .interpret_dsl("with translations { add esES; };")
+        .is_ok();
+    assert_eq!(model.translations.len(), 2);
+}
+
+#[test]
+fn test_dsl_model_interpret_xflows() {
+    let _ = env_logger::init();
+
+    let mut model = Model::default();
+    assert_eq!(model.xflows.len(), 0);
+
+    model.interpret_dsl("with xflows { add entry; };").is_ok();
+    assert_eq!(model.xflows.len(), 1);
+
+    model
+        .interpret_dsl("with xflows { add validation; };")
+        .is_ok();
+    assert_eq!(model.xflows.len(), 2);
+}
+
+#[test]
+fn test_dsl_model_interpret_pages() {
+    let _ = env_logger::init();
+
+    let mut model = Model::default();
+    assert_eq!(model.pages.len(), 0);
+
+    model.interpret_dsl("with pages { add pageone; };").is_ok();
+    assert_eq!(model.pages.len(), 1);
+
+    model.interpret_dsl("with pages { add pagetwo; };").is_ok();
+    assert_eq!(model.pages.len(), 2);
 }
 
 #[test]

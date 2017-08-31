@@ -115,6 +115,7 @@ where
     }
 }
 
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq, Eq)]
 pub enum DocumentListCommand {
     Add(String),
     Remove(String),
@@ -151,10 +152,13 @@ where
     }
 
     fn consume_command(&mut self, s: &str) -> Result<(), String> {
+        debug!("consume_command : received command string '{:?}'", s);
         match command_grammar::document_list_command(&s) {
             Ok(cmd) => {
+                debug!("consume_command : received parsed command '{:?}'", cmd);
                 match cmd {
                     DocumentListCommand::Add(name) => {
+                        debug!("DocumentListCommand::Add {:?}", name);
                         let mut doc = Document::<T>::default();
                         doc.name = name.to_string();
                         self.push(doc);
@@ -173,14 +177,19 @@ where
                 }
                 Ok(())
             }
-            Err(err) => Err(format!("{}", err)),
+            Err(err) => {
+                error!("consume_command : {:?}", err);
+                return Err(format!("{}", err));
+            }
         }
     }
 
     fn consume_dsl_tree(&mut self, items: &Vec<DslTree>) -> Result<(), String> {
+        debug!("consume_dsl_tree : items : '{:?}'", items);
         for item in items {
             match *item {
                 DslTree::Scope(ref s, ref tree) => {
+                    debug!("consume_dsl_tree : matching scope item '{:?}'", s);
                     match s {
                         _ => {
                             return Err(
@@ -191,10 +200,16 @@ where
                     }
                 }
                 DslTree::Command(ref s) => {
-                    self.consume_command(&s);
+                    debug!("consume_dsl_tree command '{:?}'", s);
+                    match self.consume_command(&s) {
+                        Err(err) => {
+                            return Err(err);
+                        }
+                        _ => {}
+                    }
                 }
                 DslTree::Comment(ref s) => {
-                    debug!("consume_dsl_tree comment {}", s);
+                    debug!("consume_dsl_tree comment '{:?}'", s);
                 }
             }
         }
