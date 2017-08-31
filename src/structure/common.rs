@@ -4,6 +4,7 @@ use serde_yaml;
 use uuid::Uuid;
 
 use structure::translation::TranslationDocument;
+use dsl::command::{GearsDsl, DslTree, DslToken, DslTokens, command_grammar};
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq, Eq)]
 pub struct Document<T> {
@@ -14,6 +15,8 @@ pub struct Document<T> {
     pub version: i64,
     pub doc: T,
 }
+
+pub type DocumentList<T> = Vec<Document<T>>;
 
 impl<T> Document<T>
 where
@@ -111,6 +114,94 @@ where
         }
     }
 }
+
+pub enum DocumentListCommand {
+    Add(String),
+    Remove(String),
+    List,
+    Show(String),
+}
+
+impl DocumentListCommand {
+    fn as_dsl_token(&self) -> DslToken {
+        let s = match *self {
+            DocumentListCommand::Add(ref e) => format!("add {}", e),
+            DocumentListCommand::Remove(ref e) => format!("remove {}", e),
+            DocumentListCommand::List => format!("list"),
+            DocumentListCommand::Show(ref e) => format!("show {}", e),
+        };
+        DslToken::Command(s)
+    }
+}
+
+use std::fmt::Debug;
+
+impl<T> GearsDsl for Vec<Document<T>>
+where
+    T: Default + Debug,
+{
+    fn generate_dsl(&self) -> DslTokens {
+        let mut res = DslTokens::new();
+
+        for doc in self {
+            res.push(DocumentListCommand::Add(doc.name.clone()).as_dsl_token());
+        }
+
+        res
+    }
+
+    fn consume_command(&mut self, s: &str) -> Result<(), String> {
+        match command_grammar::document_list_command(&s) {
+            Ok(cmd) => {
+                match cmd {
+                    DocumentListCommand::Add(name) => {
+                        let mut doc = Document::<T>::default();
+                        doc.name = name.to_string();
+                        self.push(doc);
+                    }
+                    DocumentListCommand::Remove(name) => {
+                        unimplemented!();
+                    }
+                    DocumentListCommand::List => {
+                        for doc in self.iter() {
+                            println!("{:?}", doc);
+                        }
+                    }
+                    DocumentListCommand::Show(name) => {
+                        unimplemented!();
+                    }
+                }
+                Ok(())
+            }
+            Err(err) => Err(format!("{}", err)),
+        }
+    }
+
+    fn consume_dsl_tree(&mut self, items: &Vec<DslTree>) -> Result<(), String> {
+        for item in items {
+            match *item {
+                DslTree::Scope(ref s, ref tree) => {
+                    match s {
+                        _ => {
+                            return Err(
+                                "No scopes implemented for TranslationsDocumentList yet"
+                                    .to_owned(),
+                            );
+                        }
+                    }
+                }
+                DslTree::Command(ref s) => {
+                    self.consume_command(&s);
+                }
+                DslTree::Comment(ref s) => {
+                    debug!("consume_dsl_tree comment {}", s);
+                }
+            }
+        }
+        Ok(())
+    }
+}
+
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq, Eq)]
 pub struct I18NString {
