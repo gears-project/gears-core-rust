@@ -136,7 +136,7 @@ impl DocumentListCommand {
 
 use std::fmt::Debug;
 
-impl<T> GearsDsl for Vec<Document<T>>
+impl<T> GearsDsl for DocumentList<T>
 where
     T: Default + Debug,
 {
