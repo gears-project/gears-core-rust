@@ -1,9 +1,11 @@
-use super::common::{Document, I18NString, Queryable};
+use super::common::{Document, DocumentList, I18NString};
 
 use std::collections::{HashMap, BTreeMap};
 use serde::{Serialize, Serializer};
 
 pub type TranslationDocument = Document<Translation>;
+pub type TranslationDocumentList = DocumentList<Translation>;
+
 pub type TranslationMap = HashMap<String, I18NString>;
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
@@ -35,5 +37,3 @@ impl Default for Translation {
         }
     }
 }
-
-impl Queryable for Translation {}

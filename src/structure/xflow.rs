@@ -1,8 +1,10 @@
 use std::collections::HashSet;
 
-use super::common::{Document, Queryable};
+use super::common::{Document, DocumentList};
 
 pub type XFlowDocument = Document<XFlow>;
+pub type XFlowDocumentList = DocumentList<XFlow>;
+
 pub type XFlowEdge = (i32, i32);
 
 #[derive(Serialize, Deserialize, Debug, Clone, Eq, PartialEq)]
@@ -354,5 +356,3 @@ impl Default for XFlow {
         }
     }
 }
-
-impl Queryable for XFlow {}

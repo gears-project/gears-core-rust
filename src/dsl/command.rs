@@ -48,6 +48,7 @@ pub trait GearsDsl {
     }
 
     fn interpret_dsl(&mut self, txt: &str) -> Result<(), String> {
+        debug!("interpret_dsl : '{:?}'", txt);
         match command_grammar::expression(&txt) {
             Ok(dsl_items) => {
                 match tokens_as_tree(&dsl_items) {
@@ -104,7 +105,7 @@ pub fn tokens_as_tree(tokens: &[DslToken]) -> Result<Vec<DslTree>, String> {
         debug!("tokens_as_tree entry {} : {}", offset, *offset);
 
         while *offset < tokens.len() {
-            debug!("tokens_as_tree loop {} : {}", offset, *offset);
+            // debug!("tokens_as_tree loop {} : {}", offset, *offset);
             match tokens[*offset] {
                 DslToken::BlockOpen => {
                     *offset += 1;

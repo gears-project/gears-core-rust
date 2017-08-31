@@ -38,25 +38,25 @@ pub dsl_token -> DslToken
 
 // For model::Model::GearsDsl implementation
 use structure::model::ModelCommand;
+use structure::common::DocumentListCommand;
 
 pub model_command -> ModelCommand
-  = "add xflow" " " label:label {
-    ModelCommand::AddXFlow(label.to_string())
+  = "status" {
+    ModelCommand::Summary
   }
-  / "remove xflow" " " label:label {
-    ModelCommand::RemoveXFlow(label.to_string())
+
+pub document_list_command -> DocumentListCommand
+  = "add " label:label {
+    DocumentListCommand::Add(label.to_string())
   }
-  / "add translation" " " label:label {
-    ModelCommand::AddTranslation(label.to_string())
+  / "remove " label:label {
+    DocumentListCommand::Remove(label.to_string())
   }
-  / "remove translation" " " label:label {
-    ModelCommand::RemoveTranslation(label.to_string())
+  / "list" {
+    DocumentListCommand::List
   }
-  / "add page" " " label:label {
-    ModelCommand::AddPage(label.to_string())
-  }
-  / "remove page" " " label:label {
-    ModelCommand::RemovePage(label.to_string())
+  / "show " label:label {
+    DocumentListCommand::Show(label.to_string())
   }
 
 // For domain::Domain GearsDsl implementation
