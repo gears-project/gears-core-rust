@@ -164,7 +164,9 @@ where
                         self.push(doc);
                     }
                     DocumentListCommand::Remove(name) => {
-                        unimplemented!();
+                        self.retain({
+                            |e| e.name.ne(&name)
+                        });
                     }
                     DocumentListCommand::List => {
                         for doc in self.iter() {
