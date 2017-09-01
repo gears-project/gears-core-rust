@@ -166,66 +166,6 @@ impl ModelDocument {
     }
 }
 
-impl Model {
-    // xflow functions
-
-    pub fn add_xflow(&mut self, name: &str) -> Result<(), String> {
-        let mut xflow = XFlowDocument::default();
-        xflow.name = name.to_string();
-        self.xflows.push(xflow);
-        Ok(())
-    }
-
-    pub fn remove_xflow(&mut self, name: &str) -> Result<(), String> {
-        self.xflows = self.xflows
-            .clone()
-            .into_iter()
-            .filter({
-                |e| e.name.ne(name)
-            })
-            .collect();
-        Ok(())
-    }
-
-    // page functions
-
-    pub fn add_page(&mut self, name: &str) -> Result<(), String> {
-        let mut doc = PageDocument::default();
-        doc.name = name.to_string();
-        self.pages.push(doc);
-        Ok(())
-    }
-
-    pub fn remove_page(&mut self, name: &str) -> Result<(), String> {
-        self.pages = self.pages
-            .clone()
-            .into_iter()
-            .filter({
-                |e| e.name.ne(name)
-            })
-            .collect();
-        Ok(())
-    }
-
-    pub fn add_translation(&mut self, name: &str) -> Result<(), String> {
-        let mut doc = TranslationDocument::default();
-        doc.name = name.to_string();
-        self.translations.push(doc);
-        Ok(())
-    }
-
-    pub fn remove_translation(&mut self, name: &str) -> Result<(), String> {
-        self.translations = self.translations
-            .clone()
-            .into_iter()
-            .filter({
-                |e| e.name.ne(name)
-            })
-            .collect();
-        Ok(())
-    }
-}
-
 impl Translatable for ModelDocument {
     fn translate_in_place(&mut self, t: &TranslationDocument) -> () {
         for ref mut page in &mut self.doc.pages {
