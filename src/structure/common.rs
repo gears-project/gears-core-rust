@@ -116,20 +116,20 @@ where
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq, Eq)]
-pub enum DocumentListCommand {
+pub enum ListCommand {
     Add(String),
     Remove(String),
     List,
     Show(String),
 }
 
-impl DocumentListCommand {
+impl ListCommand {
     fn as_dsl_token(&self) -> DslToken {
         let s = match *self {
-            DocumentListCommand::Add(ref e) => format!("add {}", e),
-            DocumentListCommand::Remove(ref e) => format!("remove {}", e),
-            DocumentListCommand::List => format!("list"),
-            DocumentListCommand::Show(ref e) => format!("show {}", e),
+            ListCommand::Add(ref e) => format!("add {}", e),
+            ListCommand::Remove(ref e) => format!("remove {}", e),
+            ListCommand::List => format!("list"),
+            ListCommand::Show(ref e) => format!("show {}", e),
         };
         DslToken::Command(s)
     }
@@ -145,7 +145,7 @@ where
         let mut res = DslTokens::new();
 
         for doc in self {
-            res.push(DocumentListCommand::Add(doc.name.clone()).as_dsl_token());
+            res.push(ListCommand::Add(doc.name.clone()).as_dsl_token());
         }
 
         res
@@ -157,23 +157,23 @@ where
             Ok(cmd) => {
                 debug!("consume_command : received parsed command '{:?}'", cmd);
                 match cmd {
-                    DocumentListCommand::Add(name) => {
-                        debug!("DocumentListCommand::Add {:?}", name);
+                    ListCommand::Add(name) => {
+                        debug!("ListCommand::Add {:?}", name);
                         let mut doc = Document::<T>::default();
                         doc.name = name.to_string();
                         self.push(doc);
                     }
-                    DocumentListCommand::Remove(name) => {
+                    ListCommand::Remove(name) => {
                         self.retain({
                             |e| e.name.ne(&name)
                         });
                     }
-                    DocumentListCommand::List => {
+                    ListCommand::List => {
                         for doc in self.iter() {
                             println!("{:?}", doc);
                         }
                     }
-                    DocumentListCommand::Show(name) => {
+                    ListCommand::Show(name) => {
                         unimplemented!();
                     }
                 }

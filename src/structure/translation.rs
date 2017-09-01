@@ -1,4 +1,5 @@
 use super::common::{Document, DocumentList, I18NString};
+use dsl::command::{GearsDsl, DslTree, DslToken, DslTokens, command_grammar};
 
 use std::collections::{HashMap, BTreeMap};
 use serde::{Serialize, Serializer};
@@ -35,5 +36,98 @@ impl Default for Translation {
             country: "US".to_owned(),
             items: HashMap::<String, I18NString>::new(),
         }
+    }
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq, Eq)]
+pub enum TranslationCommand {
+    Set(String, String),
+    Add(String, String),
+    Remove(String),
+}
+
+impl TranslationCommand {
+    fn as_dsl_token(&self) -> DslToken {
+        let s = match *self {
+            TranslationCommand::Set(ref k, ref v) => format!("set {} {}", k, v),
+            TranslationCommand::Add(ref k, ref v) => format!("add {} {}", k, v),
+            TranslationCommand::Remove(ref k) => format!("remove {}", k),
+        };
+        DslToken::Command(s)
+    }
+}
+
+impl GearsDsl for TranslationDocument {
+    fn generate_dsl(&self) -> DslTokens {
+        let mut res = DslTokens::new();
+
+        res.push(
+            TranslationCommand::Set("locale".to_string(), self.doc.locale.clone()).as_dsl_token(),
+        );
+
+        for (key, item) in &self.doc.items {
+            res.push(
+                TranslationCommand::Add(item.key.clone(), item.value.clone()).as_dsl_token(),
+            );
+        }
+
+        res
+    }
+
+    fn consume_command(&mut self, s: &str) -> Result<(), String> {
+        debug!("consume_command : received command string '{:?}'", s);
+        match command_grammar::translation_command(&s) {
+            Ok(cmd) => {
+                debug!("consume_command : received parsed command '{:?}'", cmd);
+                match cmd {
+                    TranslationCommand::Add(key, value) => {
+                        unimplemented!();
+                    }
+                    TranslationCommand::Remove(name) => {
+                        unimplemented!();
+                    }
+                    TranslationCommand::Set(key, value) => {
+                        unimplemented!();
+                    }
+                }
+                Ok(())
+            }
+            Err(err) => {
+                error!("consume_command : {:?}", err);
+                return Err(format!("{}", err));
+            }
+        }
+    }
+
+    fn consume_dsl_tree(&mut self, items: &Vec<DslTree>) -> Result<(), String> {
+        debug!("consume_dsl_tree : items : '{:?}'", items);
+        for item in items {
+            match *item {
+                DslTree::Scope(ref s, ref tree) => {
+                    debug!("consume_dsl_tree : matching scope item '{:?}'", s);
+                    match s {
+                        _ => {
+                            return Err(
+                                "No scopes implemented for TranslationsDocumentList yet"
+                                    .to_owned(),
+                            );
+                        }
+                    }
+                }
+                DslTree::Command(ref s) => {
+                    debug!("consume_dsl_tree command '{:?}'", s);
+                    match self.consume_command(&s) {
+                        Err(err) => {
+                            return Err(err);
+                        }
+                        _ => {}
+                    }
+                }
+                DslTree::Comment(ref s) => {
+                    debug!("consume_dsl_tree comment '{:?}'", s);
+                }
+            }
+        }
+        Ok(())
     }
 }

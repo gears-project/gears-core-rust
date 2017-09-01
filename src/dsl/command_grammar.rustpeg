@@ -38,25 +38,25 @@ pub dsl_token -> DslToken
 
 // For model::Model::GearsDsl implementation
 use structure::model::ModelCommand;
-use structure::common::DocumentListCommand;
+use structure::common::ListCommand;
 
 pub model_command -> ModelCommand
   = "status" {
     ModelCommand::Summary
   }
 
-pub document_list_command -> DocumentListCommand
+pub document_list_command -> ListCommand
   = "add " label:label {
-    DocumentListCommand::Add(label.to_string())
+    ListCommand::Add(label.to_string())
   }
   / "remove " label:label {
-    DocumentListCommand::Remove(label.to_string())
+    ListCommand::Remove(label.to_string())
   }
   / "list" {
-    DocumentListCommand::List
+    ListCommand::List
   }
   / "show " label:label {
-    DocumentListCommand::Show(label.to_string())
+    ListCommand::Show(label.to_string())
   }
 
 // For domain::Domain GearsDsl implementation
@@ -97,5 +97,18 @@ xflow_command -> XFlowCommand
 config_command -> ConfigCommand
   = "set default_locale" " " locale:label {
     ConfigCommand::SetDefaultLocale(locale.to_string())
+  }
+
+use structure::translation::TranslationCommand;
+
+pub translation_command -> TranslationCommand
+  = "set " key:label " " value:label {
+    TranslationCommand::Set(key.to_string(), value.to_string())
+  }
+  / "add " key:label " " value:label {
+    TranslationCommand::Add(key.to_string(), value.to_string())
+  }
+  / "remove " key:label {
+    TranslationCommand::Remove(key.to_string())
   }
 
