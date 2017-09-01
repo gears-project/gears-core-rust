@@ -1,6 +1,7 @@
 use std::collections::HashSet;
 
 use super::common::{Document, DocumentList};
+use dsl::command::{GearsDsl, DslTree, DslToken, DslTokens, command_grammar};
 
 pub type XFlowDocument = Document<XFlow>;
 pub type XFlowDocumentList = DocumentList<XFlow>;
@@ -354,5 +355,23 @@ impl Default for XFlow {
             edges: edges,
             branches: Vec::<XFlowBranch>::new(),
         }
+    }
+}
+
+impl GearsDsl for XFlow {
+    fn generate_dsl(&self) -> DslTokens {
+        let mut res = DslTokens::new();
+        unimplemented!();
+    }
+
+    fn consume_command(&mut self, s: &str) -> Result<(), String> {
+        debug!("consume_command : received command string '{:?}'", s);
+        unimplemented!();
+    }
+
+    fn consume_dsl_tree(&mut self, items: &Vec<DslTree>) -> Result<(), String> {
+        debug!("consume_dsl_tree : items : '{:?}'", items);
+        unimplemented!();
+        Ok(())
     }
 }

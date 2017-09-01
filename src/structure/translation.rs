@@ -57,15 +57,15 @@ impl TranslationCommand {
     }
 }
 
-impl GearsDsl for TranslationDocument {
+impl GearsDsl for Translation {
     fn generate_dsl(&self) -> DslTokens {
         let mut res = DslTokens::new();
 
         res.push(
-            TranslationCommand::Set("locale".to_string(), self.doc.locale.clone()).as_dsl_token(),
+            TranslationCommand::Set("locale".to_string(), self.locale.clone()).as_dsl_token(),
         );
 
-        for (key, item) in &self.doc.items {
+        for (key, item) in &self.items {
             res.push(
                 TranslationCommand::Add(item.key.clone(), item.value.clone()).as_dsl_token(),
             );

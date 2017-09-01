@@ -4,6 +4,7 @@ use uuid::Uuid;
 
 use super::common::{Document, DocumentList, I18NString, Translatable};
 use super::translation::TranslationDocument;
+use dsl::command::{GearsDsl, DslTree, DslToken, DslTokens, command_grammar};
 
 pub type PageDocument = Document<Page>;
 pub type PageDocumentList = DocumentList<Page>;
@@ -268,5 +269,23 @@ impl Translatable for PageDocument {
 
     fn all_i18n_strings(&self) -> Vec<&I18NString> {
         collect_i18nstrings(&self.doc.components)
+    }
+}
+
+impl GearsDsl for Page {
+    fn generate_dsl(&self) -> DslTokens {
+        let mut res = DslTokens::new();
+        unimplemented!();
+    }
+
+    fn consume_command(&mut self, s: &str) -> Result<(), String> {
+        debug!("consume_command : received command string '{:?}'", s);
+        unimplemented!();
+    }
+
+    fn consume_dsl_tree(&mut self, items: &Vec<DslTree>) -> Result<(), String> {
+        debug!("consume_dsl_tree : items : '{:?}'", items);
+        unimplemented!();
+        Ok(())
     }
 }

@@ -139,7 +139,7 @@ use std::fmt::Debug;
 
 impl<T> GearsDsl for DocumentList<T>
 where
-    T: Default + Debug,
+    T: Default + Debug + GearsDsl,
 {
     fn generate_dsl(&self) -> DslTokens {
         let mut res = DslTokens::new();
