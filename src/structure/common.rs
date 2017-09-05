@@ -282,7 +282,7 @@ pub struct I18NString {
 impl I18NString {
     pub fn new(s: String) -> I18NString {
         I18NString {
-            locale: "en_US".to_owned(),
+            locale: "".to_owned(),
             key: "".to_owned(),
             value: s,
         }
@@ -292,9 +292,9 @@ impl I18NString {
 impl Default for I18NString {
     fn default() -> I18NString {
         I18NString {
-            locale: "en_US".to_owned(),
-            key: "-no-key-".to_owned(),
-            value: "-no-value-".to_owned(),
+            locale: "".to_owned(),
+            key: "".to_owned(),
+            value: "".to_owned(),
         }
     }
 }

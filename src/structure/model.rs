@@ -37,18 +37,12 @@ fn pad_translation_doc(
 ) -> () {
     for (key, item) in strings_in_model {
         if !t.doc.items.contains_key(key) {
-            let value = format!("UNTRANSLATED {:?}", item.value);
-            let item = I18NString {
-                locale: t.doc.locale.clone(),
-                key: key.clone(),
-                value: value,
-            };
+            t.doc.add_untranslated_from(&item);
             debug!(
                 "Untranslated string, locale :'{:?}', value '{:?}'",
                 item.locale,
                 item.value
             );
-            t.doc.items.insert(key.clone(), item);
         }
     }
 }
@@ -154,12 +148,7 @@ impl ModelDocument {
             let mut t = TranslationDocument::default();
             t.doc.locale = locale.clone();
             for (_, item) in self.all_i18n_strings_map() {
-                let new_item = I18NString {
-                    key: item.key.clone(),
-                    locale: locale.clone(),
-                    value: format!("-untranslated-:{}", item.value),
-                };
-                t.doc.items.insert(new_item.key.clone(), new_item);
+                t.doc.add_untranslated_from(&item);
             }
             self.doc.translations.push(t);
         }

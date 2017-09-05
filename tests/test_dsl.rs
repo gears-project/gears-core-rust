@@ -1,8 +1,11 @@
 extern crate env_logger;
+extern crate serde;
+#[macro_use]
+extern crate serde_derive;
 
 extern crate gears;
 use gears::dsl::command::*;
-use gears::structure::model::Model;
+use gears::structure::common::{Document, DocumentList};
 
 #[test]
 fn test_dsl_tokens_to_tree() {
@@ -41,138 +44,48 @@ fn test_dsl_tokens_to_tree() {
 }
 
 #[test]
-fn test_dsl_model_interpret() {
+fn test_dsl_document_list() {
     let _ = env_logger::init();
 
-    let mut model = Model::default();
-    assert_eq!(model.domain.doc.entities.len(), 0);
+    use serde;
+    use gears::dsl::command::{GearsDsl, DslTree, DslTokens};
 
-    assert!(
-        model
-            .interpret_dsl("with domain { add entity zork; };")
-            .is_ok()
-    );
-    assert_eq!(model.domain.doc.entities.len(), 1);
+    #[derive(Debug, Serialize, Deserialize)]
+    struct Zork {
+        pub grue: bool,
+    }
 
-    assert!(
-        model
-            .interpret_dsl("with domain { remove entity zork; };")
-            .is_ok()
-    );
-    assert_eq!(model.domain.doc.entities.len(), 0);
+    impl Default for Zork {
+        fn default() -> Zork {
+            Zork { grue: false }
+        }
+    }
 
-}
+    impl GearsDsl for Zork {
+        fn generate_dsl(&self) -> DslTokens {
+            unimplemented!();
+        }
 
-#[test]
-fn test_dsl_model_interpret_translations() {
-    let _ = env_logger::init();
+        fn consume_command(&mut self, s: &str) -> Result<(), String> {
+            unimplemented!();
+        }
 
-    let mut model = Model::default();
-    assert_eq!(model.translations.len(), 0);
+        fn consume_dsl_tree(&mut self, items: &Vec<DslTree>) -> Result<(), String> {
+            unimplemented!();
+        }
+    }
 
-    assert!(
-        model
-            .interpret_dsl("with translations { add enGB; };")
-            .is_ok()
-    );
-    assert_eq!(model.translations.len(), 1);
+    type ZorkList = DocumentList<Zork>;
 
-    assert!(
-        model
-            .interpret_dsl("with translations { add esES; };")
-            .is_ok()
-    );
-    assert_eq!(model.translations.len(), 2);
+    let mut list = ZorkList::new();
 
-    assert!(
-        model
-            .interpret_dsl("with translations { add es_ES; };")
-            .is_ok()
-    );
-    assert_eq!(model.translations.len(), 3);
+    assert!(list.interpret_dsl("add itemone;").is_ok());
+    assert_eq!(list.len(), 1);
 
-    assert!(
-        model
-            .interpret_dsl(
-                "with translations { add nl_NL; with nl_NL { set locale nl_NL; add bread brood; }; };",
-            )
-            .is_ok()
-    );
+    assert!(list.interpret_dsl("add itemtwo;").is_ok());
+    assert_eq!(list.len(), 2);
 
-    assert!(
-        model
-            .interpret_dsl(
-                "with translations { with nl_NL { add breadA broodA; add breadB broodB; }; };",
-            )
-            .is_ok()
-    );
-
-    assert!(
-        model
-            .interpret_dsl(
-                r#"with translations { with nl_NL { add good_bread 'goed brood'; }; };"#,
-            )
-            .is_ok()
-    );
-
-}
-
-#[test]
-fn test_dsl_model_interpret_xflows() {
-    let _ = env_logger::init();
-
-    let mut model = Model::default();
-    assert_eq!(model.xflows.len(), 0);
-
-    assert!(model.interpret_dsl("with xflows { add entry; };").is_ok());
-    assert_eq!(model.xflows.len(), 1);
-
-    assert!(
-        model
-            .interpret_dsl("with xflows { add validation; };")
-            .is_ok()
-    );
-    assert_eq!(model.xflows.len(), 2);
-}
-
-#[test]
-fn test_dsl_model_interpret_pages() {
-    let _ = env_logger::init();
-
-    let mut model = Model::default();
-    assert_eq!(model.pages.len(), 0);
-
-    assert!(model.interpret_dsl("with pages { add pageone; };").is_ok());
-    assert_eq!(model.pages.len(), 1);
-
-    assert!(model.interpret_dsl("with pages { add pagetwo; };").is_ok());
-    assert_eq!(model.pages.len(), 2);
-}
-
-#[test]
-fn test_dsl_model_interpret_multiline() {
-    let _ = env_logger::init();
-
-    let mut model = Model::default();
-    assert_eq!(model.domain.doc.entities.len(), 0);
-
-    assert!(
-        model
-            .interpret_dsl(
-                &r#"with domain { add entity zork; add entity bork; add entity fnord; };"#,
-            )
-            .is_ok()
-    );
-
-    assert_eq!(model.domain.doc.entities.len(), 3);
-
-    assert!(
-        model
-            .interpret_dsl(
-                &r#"with domain { remove entity zork; remove entity bork; };"#,
-            )
-            .is_ok()
-    );
-    assert_eq!(model.domain.doc.entities.len(), 1);
+    assert!(list.interpret_dsl("remove itemtwo;").is_ok());
+    assert_eq!(list.len(), 1);
 
 }

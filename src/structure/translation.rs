@@ -31,11 +31,28 @@ where
 impl Default for Translation {
     fn default() -> Self {
         Translation {
-            locale: "en_US".to_owned(),
-            language: "en".to_owned(),
-            country: "US".to_owned(),
+            locale: "".to_owned(),
+            language: "".to_owned(),
+            country: "".to_owned(),
             items: HashMap::<String, I18NString>::new(),
         }
+    }
+}
+
+impl Translation {
+    pub fn add(&mut self, key: &str, value: &str) -> () {
+        self.items.insert(
+            key.to_string().clone(),
+            I18NString {
+                locale: self.locale.clone(),
+                key: key.to_string().clone(),
+                value: value.to_string().clone(),
+            },
+        );
+    }
+    pub fn add_untranslated_from(&mut self, item: &I18NString) -> () {
+        let value = format!("-untranslated-:{}", item.value);
+        self.add(&item.key, &value);
     }
 }
 
