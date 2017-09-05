@@ -86,8 +86,15 @@ fn test_dsl_model_interpret_translations() {
 
     assert!(
         model
+            .interpret_dsl("with translations { add es_ES; };")
+            .is_ok()
+    );
+    assert_eq!(model.translations.len(), 3);
+
+    assert!(
+        model
             .interpret_dsl(
-                "with translations { add nlNL; with nlNL { add bread brood; }; };",
+                "with translations { add nl_NL; with nl_NL { add bread brood; }; };",
             )
             .is_ok()
     );
@@ -95,10 +102,19 @@ fn test_dsl_model_interpret_translations() {
     assert!(
         model
             .interpret_dsl(
-                "with translations { with nlNL { add breadA broodA; add breadB broodB; }; };",
+                "with translations { with nl_NL { add breadA broodA; add breadB broodB; }; };",
             )
             .is_ok()
     );
+
+    assert!(
+        model
+            .interpret_dsl(
+                r#"with translations { with nl_NL { add good_bread 'goed brood'; }; };"#,
+            )
+            .is_ok()
+    );
+
 
 }
 

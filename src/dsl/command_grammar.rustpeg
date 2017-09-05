@@ -1,9 +1,25 @@
 use dsl::command::*;
 
+raw_command -> String
+  = rawcmd:$([A-Za-z0-9\ _']+) {
+    rawcmd.to_string()
+  }
+
+text_string -> String
+  = text:$([A-Za-z0-9\ _']+) {
+    text.to_string()
+  }
+
 label -> String
-  = label:$([A-Za-z0-9\_]+) {
+  = label:$([A-Za-z0-9_]+) {
     label.to_string()
   }
+
+quoted_string_or_label -> String
+  = "'" s:$([A-Za-z0-9\ _])+ "'" {
+    s.to_string()
+  }
+  / label
 
 _ -> ()
   = space*
@@ -29,11 +45,11 @@ pub dsl_token -> DslToken
   / _ "};" _ newline* {
     DslToken::BlockClose
   }
-  / _ command:$([A-Za-z\ ]+) ";" _ newline* {
+  / _ command:raw_command ";" _ newline* {
     DslToken::Command(command.to_string())
   }
-  / _ "#" command:$([A-Za-z\ ]+) _ newline* {
-    DslToken::Comment(command.to_string())
+  / _ "#" comment:text_string _ newline* {
+    DslToken::Comment(comment.to_string())
   }
 
 // For model::Model::GearsDsl implementation
@@ -105,7 +121,7 @@ pub translation_command -> TranslationCommand
   = "set " key:label " " value:label {
     TranslationCommand::Set(key.to_string(), value.to_string())
   }
-  / "add " key:label " " value:label {
+  / "add " key:label " " value:quoted_string_or_label {
     TranslationCommand::Add(key.to_string(), value.to_string())
   }
   / "remove " key:label {

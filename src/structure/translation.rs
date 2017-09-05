@@ -50,7 +50,7 @@ impl TranslationCommand {
     fn as_dsl_token(&self) -> DslToken {
         let s = match *self {
             TranslationCommand::Set(ref k, ref v) => format!("set {} {}", k, v),
-            TranslationCommand::Add(ref k, ref v) => format!("add {} {}", k, v),
+            TranslationCommand::Add(ref k, ref v) => format!("add {} '{}'", k, v),
             TranslationCommand::Remove(ref k) => format!("remove {}", k),
         };
         DslToken::Command(s)
@@ -96,7 +96,14 @@ impl GearsDsl for Translation {
                         });
                     }
                     TranslationCommand::Set(key, value) => {
-                        unimplemented!();
+                        match key.as_ref() {
+                            "locale" => {
+                                self.locale = value;
+                            }
+                            _ => {
+                                unimplemented!();
+                            }
+                        }
                     }
                 }
                 Ok(())
