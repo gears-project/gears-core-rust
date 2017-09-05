@@ -94,7 +94,7 @@ fn test_dsl_model_interpret_translations() {
     assert!(
         model
             .interpret_dsl(
-                "with translations { add nl_NL; with nl_NL { add bread brood; }; };",
+                "with translations { add nl_NL; with nl_NL { set locale nl_NL; add bread brood; }; };",
             )
             .is_ok()
     );
@@ -114,7 +114,6 @@ fn test_dsl_model_interpret_translations() {
             )
             .is_ok()
     );
-
 
 }
 

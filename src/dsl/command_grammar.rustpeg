@@ -52,14 +52,7 @@ pub dsl_token -> DslToken
     DslToken::Comment(comment.to_string())
   }
 
-// For model::Model::GearsDsl implementation
-use structure::model::ModelCommand;
 use structure::common::ListCommand;
-
-pub model_command -> ModelCommand
-  = "status" {
-    ModelCommand::Summary
-  }
 
 pub document_list_command -> ListCommand
   = "add " label:label {
@@ -73,6 +66,14 @@ pub document_list_command -> ListCommand
   }
   / "show " label:label {
     ListCommand::Show(label.to_string())
+  }
+
+// For model::Model::GearsDsl implementation
+use structure::model::ModelCommand;
+
+pub model_command -> ModelCommand
+  = "status" {
+    ModelCommand::Summary
   }
 
 // For domain::Domain GearsDsl implementation

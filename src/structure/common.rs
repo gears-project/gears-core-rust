@@ -189,9 +189,21 @@ where
                 match cmd {
                     ListCommand::Add(name) => {
                         debug!("ListCommand::Add {:?}", name);
-                        let mut doc = Document::<T>::default();
-                        doc.name = name.to_string();
-                        self.push(doc);
+                        if self.iter().any(|ref doc| doc.name.eq(&name)) {
+                            error!(
+                                "consume_command : A document with name '{}' already exists",
+                                name
+                            );
+                            return Err(format!(
+                                "consume_command : A document with name '{}' already exists",
+                                name
+                            ));
+                        } else {
+
+                            let mut doc = Document::<T>::default();
+                            doc.name = name.to_string();
+                            self.push(doc);
+                        }
                     }
                     ListCommand::Remove(name) => {
                         self.retain({
