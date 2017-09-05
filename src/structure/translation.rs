@@ -81,10 +81,19 @@ impl GearsDsl for Translation {
                 debug!("consume_command : received parsed command '{:?}'", cmd);
                 match cmd {
                     TranslationCommand::Add(key, value) => {
-                        unimplemented!();
+                        self.items.insert(
+                            key.clone(),
+                            I18NString {
+                                locale: self.locale.clone(),
+                                key: key,
+                                value: value,
+                            },
+                        );
                     }
-                    TranslationCommand::Remove(name) => {
-                        unimplemented!();
+                    TranslationCommand::Remove(key) => {
+                        self.items.retain({
+                            |k, _| k.ne(&key)
+                        });
                     }
                     TranslationCommand::Set(key, value) => {
                         unimplemented!();

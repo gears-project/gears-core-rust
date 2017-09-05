@@ -136,21 +136,26 @@ impl ListCommand {
 }
 
 use std::fmt::Debug;
-impl<T> GearsDsl for Document<T> {
+impl<T> GearsDsl for Document<T>
+where
+    T: GearsDsl,
+{
     fn generate_dsl(&self) -> DslTokens {
-        let mut res = DslTokens::new();
-        unimplemented!();
+        debug!("Document<T>;:generate_dsl");
+        self.doc.generate_dsl()
     }
 
     fn consume_command(&mut self, s: &str) -> Result<(), String> {
-        debug!("consume_command : received command string '{:?}'", s);
-        unimplemented!();
+        debug!(
+            "Document<T>::consume_command : received command string '{:?}'",
+            s
+        );
+        self.doc.consume_command(s)
     }
 
     fn consume_dsl_tree(&mut self, items: &Vec<DslTree>) -> Result<(), String> {
-        debug!("consume_dsl_tree : items : '{:?}'", items);
-        unimplemented!();
-        Ok(())
+        debug!("Document<T>::consume_dsl_tree : items : '{:?}'", items);
+        self.doc.consume_dsl_tree(items)
     }
 }
 
@@ -159,17 +164,25 @@ where
     T: Default + Debug + GearsDsl,
 {
     fn generate_dsl(&self) -> DslTokens {
+        debug!("DocumentList<T>;:generate_dsl");
         let mut res = DslTokens::new();
 
         for doc in self {
             res.push(ListCommand::Add(doc.name.clone()).as_dsl_token());
+            res.push(DslToken::With(doc.name.clone().to_owned()));
+            res.push(DslToken::BlockOpen);
+            res.extend(doc.generate_dsl());
+            res.push(DslToken::BlockClose);
         }
 
         res
     }
 
     fn consume_command(&mut self, s: &str) -> Result<(), String> {
-        debug!("consume_command : received command string '{:?}'", s);
+        debug!(
+            "DocumentList<T>::consume_command : received command string '{:?}'",
+            s
+        );
         match command_grammar::document_list_command(&s) {
             Ok(cmd) => {
                 debug!("consume_command : received parsed command '{:?}'", cmd);
@@ -204,17 +217,27 @@ where
     }
 
     fn consume_dsl_tree(&mut self, items: &Vec<DslTree>) -> Result<(), String> {
-        debug!("consume_dsl_tree : items : '{:?}'", items);
+        debug!("DocumentList<T>::consume_dsl_tree : items : '{:?}'", items);
         for item in items {
             match *item {
                 DslTree::Scope(ref s, ref tree) => {
+                    //
+                    // Scope refers to an idlabel object
+                    //
                     debug!("consume_dsl_tree : matching scope item '{:?}'", s);
+                    for mut obj in self {
+                        if obj.name.eq(s) {
+                            obj.consume_dsl_tree(tree);
+                        }
+                    }
+
+
+                    //
+                    // TODO: Get mutable reference from name
+                    //
                     match s {
                         _ => {
-                            return Err(
-                                "No scopes implemented for TranslationsDocumentList yet"
-                                    .to_owned(),
-                            );
+                            return Err("No scopes implemented for DocumentList yet".to_owned());
                         }
                     }
                 }

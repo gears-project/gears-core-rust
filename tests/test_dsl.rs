@@ -3,7 +3,6 @@ extern crate env_logger;
 extern crate gears;
 use gears::dsl::command::*;
 use gears::structure::model::Model;
-use gears::structure::domain::Domain;
 
 #[test]
 fn test_dsl_tokens_to_tree() {
@@ -42,69 +41,24 @@ fn test_dsl_tokens_to_tree() {
 }
 
 #[test]
-fn test_dsl_domain() {
-    let _ = env_logger::init();
-
-    let mut domain = Domain::default();
-    let e_count = domain.entities.len();
-    domain.interpret_dsl("add entity abc;").ok();
-    assert_eq!(domain.entities.len(), e_count + 1);
-
-    let dsl = domain.generate_dsl();
-    assert_eq!(dsl.len(), 1);
-}
-
-#[test]
-fn test_dsl_domain_multiple_commands() {
-    let _ = env_logger::init();
-
-    let mut domain = Domain::default();
-
-    let e_count = domain.entities.len();
-
-    domain
-        .interpret_dsl("add entity abc; remove entity abc; add entity post;")
-        .ok();
-    assert_eq!(domain.entities.len(), e_count + 1);
-
-    let dsl = domain.generate_dsl();
-    assert_eq!(dsl.len(), 1);
-
-}
-
-#[test]
-fn test_dsl_domain_generate_and_consume() {
-    let _ = env_logger::init();
-
-    let mut domain = Domain::default();
-
-    domain
-        .interpret_dsl("add entity abc; remove entity abc; add entity post; add entity comment; add entity log;")
-        .ok();
-
-    let script = domain.to_text_dsl();
-
-    let mut next_domain = Domain::default();
-    next_domain.interpret_dsl(&script).ok();
-
-    assert_eq!(domain, next_domain);
-}
-
-#[test]
 fn test_dsl_model_interpret() {
     let _ = env_logger::init();
 
     let mut model = Model::default();
     assert_eq!(model.domain.doc.entities.len(), 0);
 
-    model
-        .interpret_dsl("with domain { add entity zork; };")
-        .ok();
+    assert!(
+        model
+            .interpret_dsl("with domain { add entity zork; };")
+            .is_ok()
+    );
     assert_eq!(model.domain.doc.entities.len(), 1);
 
-    model
-        .interpret_dsl("with domain { remove entity zork; };")
-        .ok();
+    assert!(
+        model
+            .interpret_dsl("with domain { remove entity zork; };")
+            .is_ok()
+    );
     assert_eq!(model.domain.doc.entities.len(), 0);
 
 }
@@ -116,15 +70,36 @@ fn test_dsl_model_interpret_translations() {
     let mut model = Model::default();
     assert_eq!(model.translations.len(), 0);
 
-    model
-        .interpret_dsl("with translations { add enGB; };")
-        .is_ok();
+    assert!(
+        model
+            .interpret_dsl("with translations { add enGB; };")
+            .is_ok()
+    );
     assert_eq!(model.translations.len(), 1);
 
-    model
-        .interpret_dsl("with translations { add esES; };")
-        .is_ok();
+    assert!(
+        model
+            .interpret_dsl("with translations { add esES; };")
+            .is_ok()
+    );
     assert_eq!(model.translations.len(), 2);
+
+    assert!(
+        model
+            .interpret_dsl(
+                "with translations { add nlNL; with nlNL { add bread brood; }; };",
+            )
+            .is_ok()
+    );
+
+    assert!(
+        model
+            .interpret_dsl(
+                "with translations { with nlNL { add breadA broodA; add breadB broodB; }; };",
+            )
+            .is_ok()
+    );
+
 }
 
 #[test]
@@ -134,12 +109,14 @@ fn test_dsl_model_interpret_xflows() {
     let mut model = Model::default();
     assert_eq!(model.xflows.len(), 0);
 
-    model.interpret_dsl("with xflows { add entry; };").is_ok();
+    assert!(model.interpret_dsl("with xflows { add entry; };").is_ok());
     assert_eq!(model.xflows.len(), 1);
 
-    model
-        .interpret_dsl("with xflows { add validation; };")
-        .is_ok();
+    assert!(
+        model
+            .interpret_dsl("with xflows { add validation; };")
+            .is_ok()
+    );
     assert_eq!(model.xflows.len(), 2);
 }
 
@@ -150,10 +127,10 @@ fn test_dsl_model_interpret_pages() {
     let mut model = Model::default();
     assert_eq!(model.pages.len(), 0);
 
-    model.interpret_dsl("with pages { add pageone; };").is_ok();
+    assert!(model.interpret_dsl("with pages { add pageone; };").is_ok());
     assert_eq!(model.pages.len(), 1);
 
-    model.interpret_dsl("with pages { add pagetwo; };").is_ok();
+    assert!(model.interpret_dsl("with pages { add pagetwo; };").is_ok());
     assert_eq!(model.pages.len(), 2);
 }
 
@@ -164,19 +141,23 @@ fn test_dsl_model_interpret_multiline() {
     let mut model = Model::default();
     assert_eq!(model.domain.doc.entities.len(), 0);
 
-    model
-        .interpret_dsl(
-            &r#"with domain { add entity zork; add entity bork; add entity fnord; };"#,
-        )
-        .ok();
+    assert!(
+        model
+            .interpret_dsl(
+                &r#"with domain { add entity zork; add entity bork; add entity fnord; };"#,
+            )
+            .is_ok()
+    );
 
     assert_eq!(model.domain.doc.entities.len(), 3);
 
-    model
-        .interpret_dsl(
-            &r#"with domain { remove entity zork; remove entity bork; };"#,
-        )
-        .ok();
+    assert!(
+        model
+            .interpret_dsl(
+                &r#"with domain { remove entity zork; remove entity bork; };"#,
+            )
+            .is_ok()
+    );
     assert_eq!(model.domain.doc.entities.len(), 1);
 
 }
