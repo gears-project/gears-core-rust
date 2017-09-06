@@ -8,7 +8,7 @@ fn build_graph(xflow: &XFlowDocument) -> String {
     let out =
         format!(
         r#"
-graph G {{
+digraph G {{
 {nodes}
 
 {edges}
@@ -29,6 +29,13 @@ fn build_node(node: &XFlowNode) -> String {
                 label = node.label,
                 )
         }
+        XFlowNodeType::Flox => {
+            format!(
+                "  node_{id}[label={label},style=filled,color=pink];",
+                id = node.id,
+                label = node.label,
+                )
+        }
         _ => {
             format!(
                 "  node_{id}[label={label}];",
@@ -37,7 +44,6 @@ fn build_node(node: &XFlowNode) -> String {
                 )
         }
     }
-
 }
 
 fn build_nodes(xflow: &XFlowDocument) -> String {
@@ -60,7 +66,7 @@ fn build_edges(xflow: &XFlowDocument) -> String {
         .map({
             |tup| {
                 format!(
-                    "  node_{start} -- node_{end};",
+                    "  node_{start} -> node_{end};",
                     start = tup.0,
                     end = tup.1,
                 )
