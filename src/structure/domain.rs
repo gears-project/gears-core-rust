@@ -13,11 +13,11 @@ pub struct Domain {
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 pub struct Events {
-    pub change: Vec<String>,
-    pub update: Vec<String>,
-    pub read: Vec<String>,
-    pub delete: Vec<String>,
-    pub all: Vec<String>,
+    pub change: Vec<DocumentReference>,
+    pub update: Vec<DocumentReference>,
+    pub read: Vec<DocumentReference>,
+    pub delete: Vec<DocumentReference>,
+    pub all: Vec<DocumentReference>,
 }
 
 pub type Entities = Vec<Entity>;
@@ -64,11 +64,11 @@ pub struct Entity {
 impl Default for Events {
     fn default() -> Self {
         Events {
-            change: Vec::<String>::new(),
-            update: Vec::<String>::new(),
-            read: Vec::<String>::new(),
-            delete: Vec::<String>::new(),
-            all: Vec::<String>::new(),
+            change: Vec::<DocumentReference>::new(),
+            update: Vec::<DocumentReference>::new(),
+            read: Vec::<DocumentReference>::new(),
+            delete: Vec::<DocumentReference>::new(),
+            all: Vec::<DocumentReference>::new(),
         }
     }
 }

@@ -16,7 +16,7 @@ label -> String
   }
 
 quoted_string_or_label -> String
-  = "'" s:$([A-Za-z0-9\ _])+ "'" {
+  = "'" s:$([A-Za-z0-9\ _\-])+ "'" {
     s.to_string()
   }
   / label
