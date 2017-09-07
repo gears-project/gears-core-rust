@@ -75,6 +75,37 @@ fn create_dir(path: &str) -> () {
     }
 }
 
+pub fn build_dotfiles(model: &ModelDocument, path: &str) -> Result<(), ModelLoadError> {
+    // partof: #SPC-artifact-generation-model
+
+    // XXX Error handling, assumption checking
+
+    debug!(
+        "Building dotfiles id:'{}' assets, model version:'{}' in directory '{}'",
+        model.id,
+        model.version,
+        path
+    );
+
+    create_dir(&path);
+    let xflow_path = format!("{path}/xflows", path = path);
+    create_dir(&xflow_path);
+
+    for xflow in &model.doc.xflows {
+        let doc = generation::xflow_to_dot::output(&xflow);
+
+        let filename = format!("{path}/{id}.dot", path = xflow_path, id = xflow.id);
+        write_file(&filename, &doc);
+    }
+
+    let doc = generation::domain_to_dot::output(&model.doc.domain);
+
+    let filename = format!("{path}/domain.dot", path = path);
+    write_file(&filename, &doc);
+
+    Ok(())
+}
+
 pub fn build_to_react_app(model: &ModelDocument, path: &str) -> Result<(), ModelLoadError> {
     // partof: #SPC-artifact-generation-model
 
