@@ -1,4 +1,4 @@
-use super::common::{Document, I18NString, Translatable};
+use super::common::{Document, DocumentReference, I18NString, Translatable};
 use structure::translation::TranslationDocument;
 
 use std::fmt;
@@ -28,7 +28,7 @@ pub type Validations = Vec<Validation>;
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 pub struct Validation {
     pub message: I18NString,
-    pub xflow: String,
+    pub xflow: DocumentReference,
 }
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
@@ -278,7 +278,7 @@ impl GearsDsl for Domain {
                         for validation in &attribute.validations {
                             res.push(
                                 DomainCommand::AddValidation(
-                                    validation.xflow.clone(),
+                                    validation.xflow.id.to_string().clone(),
                                     validation.message.value.clone(),
                                 ).as_dsl_token(),
                             );

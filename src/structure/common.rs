@@ -18,6 +18,11 @@ pub struct Document<T> {
 
 pub type DocumentList<T> = Vec<Document<T>>;
 
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq, Eq)]
+pub struct DocumentReference {
+    pub id: Uuid,
+}
+
 impl<T> Document<T>
 where
     T: serde::Serialize + serde::de::DeserializeOwned + Eq + Default,

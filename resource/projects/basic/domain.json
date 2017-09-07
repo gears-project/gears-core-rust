@@ -29,7 +29,9 @@
                                     "key": "a_value_is_required",
                                     "value": "Value is required"
                                 },
-                                "xflow": "xflow_string_value_required"
+                                "xflow": {
+                                    "id": "e4f0518a-fd0d-403e-9c20-79041c1c14ae"
+                                }
                             }
                         ]
                     },
@@ -44,7 +46,9 @@
                                     "key": "a_value_is_required",
                                     "value": "Value is required"
                                 },
-                                "xflow": "xflow_string_value_required"
+                                "xflow": {
+                                    "id": "e4f0518a-fd0d-403e-9c20-79041c1c14ae"
+                                }
                             }
                         ]
                     },
@@ -59,7 +63,9 @@
                                     "key": "a_value_is_required",
                                     "value": "Value is required"
                                 },
-                                "xflow": "xflow_string_value_required"
+                                "xflow": {
+                                    "id": "e4f0518a-fd0d-403e-9c20-79041c1c14ae"
+                                }
                             }
                         ]
                     }
@@ -87,7 +93,9 @@
                                     "key": "a_value_is_required",
                                     "value": "Value is required"
                                 },
-                                "xflow": "xflow_string_value_required"
+                                "xflow": {
+                                    "id": "e4f0518a-fd0d-403e-9c20-79041c1c14ae"
+                                }
                             }
                         ]
                     }
