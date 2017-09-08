@@ -135,7 +135,8 @@ text = '''
 
 '''
 
-[TST-flox-variables]
+[TST-flox]
+[TST-flox-variable]
 text = '''
 Variables
 '''
@@ -145,6 +146,8 @@ text = '''
 This test demonstrates the successful extraction of variable names from a flox
 string.
 '''
+
+[TST-serialization]
 
 [TST-serialization-fs]
 text = '''
@@ -161,6 +164,7 @@ text = '''
 Model serialization tests demonstrating the serialization to and deserialization from YAML
 '''
 
+[TST-xflow]
 [TST-xflow-call]
 text = '''
 Tests that have xflows invoking other xflows and using the result.
