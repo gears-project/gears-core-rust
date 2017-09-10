@@ -4,7 +4,7 @@ extern crate gears;
 use gears::structure::xflow::*;
 
 // partof: #TST-xflow
-// partof: #TST-serialization
+// partof: TST-serialization
 
 #[test]
 fn test_xflow_default() {

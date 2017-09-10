@@ -350,7 +350,7 @@ impl DocumentHeader {
 
     /// Return a YAML representation of the DocumentHeader
     ///
-    /// partof: #SPC-serialization-yaml
+    /// partof: SPC-serialization-yaml
     pub fn to_yaml(&self) -> String {
         serde_yaml::to_string(&self).unwrap()
     }
