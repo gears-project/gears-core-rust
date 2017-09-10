@@ -70,7 +70,7 @@ fn test_dsl_document_list() {
             unimplemented!();
         }
 
-        fn consume_dsl_tree(&mut self, items: &Vec<DslTree>) -> Result<(), String> {
+        fn consume_scope(&mut self, s: &str, tree: &Vec<DslTree>) -> Result<(), String> {
             unimplemented!();
         }
     }

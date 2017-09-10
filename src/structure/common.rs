@@ -158,6 +158,11 @@ where
         self.doc.consume_command(s)
     }
 
+    fn consume_scope(&mut self, s: &str, tree: &Vec<DslTree>) -> Result<(), String> {
+        debug!("Document<T>::consume_scope : received scope '{:?}'", s);
+        unimplemented!();
+    }
+
     fn consume_dsl_tree(&mut self, items: &Vec<DslTree>) -> Result<(), String> {
         debug!("Document<T>::consume_dsl_tree : items : '{:?}'", items);
         self.doc.consume_dsl_tree(items)
@@ -233,46 +238,19 @@ where
         }
     }
 
-    fn consume_dsl_tree(&mut self, items: &Vec<DslTree>) -> Result<(), String> {
-        debug!("DocumentList<T>::consume_dsl_tree : items : '{:?}'", items);
-        for item in items {
-            match *item {
-                DslTree::Scope(ref s, ref tree) => {
-                    //
-                    // Scope refers to an idlabel object
-                    //
-                    debug!("consume_dsl_tree : matching scope item '{:?}'", s);
-                    for mut obj in self {
-                        if obj.name.eq(s) {
-                            obj.consume_dsl_tree(tree);
-                        }
-                    }
-
-
-                    //
-                    // TODO: Get mutable reference from name
-                    //
-                    match s {
-                        _ => {
-                            return Err("No scopes implemented for DocumentList yet".to_owned());
-                        }
-                    }
-                }
-                DslTree::Command(ref s) => {
-                    debug!("consume_dsl_tree command '{:?}'", s);
-                    match self.consume_command(&s) {
-                        Err(err) => {
-                            return Err(err);
-                        }
-                        _ => {}
-                    }
-                }
-                DslTree::Comment(ref s) => {
-                    debug!("consume_dsl_tree comment '{:?}'", s);
-                }
+    fn consume_scope(&mut self, s: &str, tree: &Vec<DslTree>) -> Result<(), String> {
+        let mut found: bool = false;
+        for mut obj in self {
+            if obj.name.eq(s) {
+                found = true;
+                obj.consume_dsl_tree(tree);
             }
         }
-        Ok(())
+        if found {
+            Ok(())
+        } else {
+            Err(format!("consume_scope : scope '{}' not found", s))
+        }
     }
 }
 

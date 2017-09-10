@@ -132,35 +132,7 @@ impl GearsDsl for Translation {
         }
     }
 
-    fn consume_dsl_tree(&mut self, items: &Vec<DslTree>) -> Result<(), String> {
-        debug!("consume_dsl_tree : items : '{:?}'", items);
-        for item in items {
-            match *item {
-                DslTree::Scope(ref s, ref tree) => {
-                    debug!("consume_dsl_tree : matching scope item '{:?}'", s);
-                    match s {
-                        _ => {
-                            return Err(
-                                "No scopes implemented for TranslationsDocumentList yet"
-                                    .to_owned(),
-                            );
-                        }
-                    }
-                }
-                DslTree::Command(ref s) => {
-                    debug!("consume_dsl_tree command '{:?}'", s);
-                    match self.consume_command(&s) {
-                        Err(err) => {
-                            return Err(err);
-                        }
-                        _ => {}
-                    }
-                }
-                DslTree::Comment(ref s) => {
-                    debug!("consume_dsl_tree comment '{:?}'", s);
-                }
-            }
-        }
-        Ok(())
+    fn consume_scope(&mut self, name: &str, tree: &Vec<DslTree>) -> Result<(), String> {
+        unimplemented!();
     }
 }

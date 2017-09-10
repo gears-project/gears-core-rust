@@ -364,14 +364,13 @@ impl GearsDsl for XFlow {
         unimplemented!();
     }
 
-    fn consume_command(&mut self, s: &str) -> Result<(), String> {
-        debug!("consume_command : received command string '{:?}'", s);
+    fn consume_scope(&mut self, s: &str, items: &Vec<DslTree>) -> Result<(), String> {
+        debug!("consume_scope : received command string '{:?}'", s);
         unimplemented!();
     }
 
-    fn consume_dsl_tree(&mut self, items: &Vec<DslTree>) -> Result<(), String> {
-        debug!("consume_dsl_tree : items : '{:?}'", items);
+    fn consume_command(&mut self, s: &str) -> Result<(), String> {
+        debug!("consume_command : received command string '{:?}'", s);
         unimplemented!();
-        Ok(())
     }
 }

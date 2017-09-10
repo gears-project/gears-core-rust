@@ -283,9 +283,7 @@ impl GearsDsl for Page {
         unimplemented!();
     }
 
-    fn consume_dsl_tree(&mut self, items: &Vec<DslTree>) -> Result<(), String> {
-        debug!("consume_dsl_tree : items : '{:?}'", items);
+    fn consume_scope(&mut self, s: &str, tree: &Vec<DslTree>) -> Result<(), String> {
         unimplemented!();
-        Ok(())
     }
 }

@@ -292,21 +292,6 @@ impl GearsDsl for Domain {
         res
     }
 
-    fn consume_dsl_tree(&mut self, items: &Vec<DslTree>) -> Result<(), String> {
-        for item in items {
-            match *item {
-                DslTree::Command(ref s) => {
-                    self.consume_command(&s);
-                }
-                DslTree::Scope(ref s, ref tree) => {
-                    unimplemented!();
-                }
-                DslTree::Comment(_) => {}
-            }
-        }
-        Ok(())
-    }
-
     fn consume_command(&mut self, s: &str) -> Result<(), String> {
         debug!("consume_command : input {:?}", s);
         let mut state = DomainDslState::default();
@@ -386,5 +371,9 @@ impl GearsDsl for Domain {
             }
         }
         Ok(())
+    }
+
+    fn consume_scope(&mut self, s: &str, tree: &Vec<DslTree>) -> Result<(), String> {
+        unimplemented!();
     }
 }
