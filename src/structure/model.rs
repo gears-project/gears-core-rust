@@ -37,18 +37,12 @@ fn pad_translation_doc(
 ) -> () {
     for (key, item) in strings_in_model {
         if !t.doc.items.contains_key(key) {
-            let value = format!("UNTRANSLATED {:?}", item.value);
-            let item = I18NString {
-                locale: t.doc.locale.clone(),
-                key: key.clone(),
-                value: value,
-            };
+            t.doc.add_untranslated_from(&item);
             debug!(
                 "Untranslated string, locale :'{:?}', value '{:?}'",
                 item.locale,
                 item.value
             );
-            t.doc.items.insert(key.clone(), item);
         }
     }
 }
@@ -154,12 +148,7 @@ impl ModelDocument {
             let mut t = TranslationDocument::default();
             t.doc.locale = locale.clone();
             for (_, item) in self.all_i18n_strings_map() {
-                let new_item = I18NString {
-                    key: item.key.clone(),
-                    locale: locale.clone(),
-                    value: format!("-untranslated-:{}", item.value),
-                };
-                t.doc.items.insert(new_item.key.clone(), new_item);
+                t.doc.add_untranslated_from(&item);
             }
             self.doc.translations.push(t);
         }
@@ -268,36 +257,25 @@ impl GearsDsl for Model {
         }
     }
 
-    fn consume_dsl_tree(&mut self, items: &Vec<DslTree>) -> Result<(), String> {
-        for item in items {
-            match *item {
-                DslTree::Scope(ref s, ref tree) => {
-                    match s.as_ref() {
-                        "domain" => {
-                            self.domain.doc.consume_dsl_tree(&tree);
-                        }
-                        "xflows" => {
-                            self.xflows.consume_dsl_tree(&tree);
-                        }
-                        "pages" => {
-                            self.pages.consume_dsl_tree(&tree);
-                        }
-                        "translations" => {
-                            self.translations.consume_dsl_tree(&tree);
-                        }
-                        _ => {
-                            return Err("No other scope implemented for Model".to_owned());
-                        }
-                    }
-                }
-                DslTree::Command(ref s) => {
-                    self.consume_command(&s);
-                }
-                DslTree::Comment(ref s) => {
-                    debug!("consume_dsl_tree comment {}", s);
-                }
+    fn consume_scope(&mut self, s: &str, tree: &Vec<DslTree>) -> Result<(), String> {
+        match s.as_ref() {
+            "domain" => {
+                self.domain.doc.consume_dsl_tree(&tree);
+                Ok(())
             }
+            "xflows" => {
+                self.xflows.consume_dsl_tree(&tree);
+                Ok(())
+            }
+            "pages" => {
+                self.pages.consume_dsl_tree(&tree);
+                Ok(())
+            }
+            "translations" => {
+                self.translations.consume_dsl_tree(&tree);
+                Ok(())
+            }
+            _ => Err("No other scope implemented for Model".to_owned()),
         }
-        Ok(())
     }
 }

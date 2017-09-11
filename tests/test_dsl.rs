@@ -1,9 +1,11 @@
 extern crate env_logger;
+extern crate serde;
+#[macro_use]
+extern crate serde_derive;
 
 extern crate gears;
 use gears::dsl::command::*;
-use gears::structure::model::Model;
-use gears::structure::domain::Domain;
+use gears::structure::common::{Document, DocumentList};
 
 #[test]
 fn test_dsl_tokens_to_tree() {
@@ -42,141 +44,48 @@ fn test_dsl_tokens_to_tree() {
 }
 
 #[test]
-fn test_dsl_domain() {
+fn test_dsl_document_list() {
     let _ = env_logger::init();
 
-    let mut domain = Domain::default();
-    let e_count = domain.entities.len();
-    domain.interpret_dsl("add entity abc;").ok();
-    assert_eq!(domain.entities.len(), e_count + 1);
+    use serde;
+    use gears::dsl::command::{GearsDsl, DslTree, DslTokens};
 
-    let dsl = domain.generate_dsl();
-    assert_eq!(dsl.len(), 1);
-}
+    #[derive(Debug, Serialize, Deserialize)]
+    struct Zork {
+        pub grue: bool,
+    }
 
-#[test]
-fn test_dsl_domain_multiple_commands() {
-    let _ = env_logger::init();
+    impl Default for Zork {
+        fn default() -> Zork {
+            Zork { grue: false }
+        }
+    }
 
-    let mut domain = Domain::default();
+    impl GearsDsl for Zork {
+        fn generate_dsl(&self) -> DslTokens {
+            unimplemented!();
+        }
 
-    let e_count = domain.entities.len();
+        fn consume_command(&mut self, s: &str) -> Result<(), String> {
+            unimplemented!();
+        }
 
-    domain
-        .interpret_dsl("add entity abc; remove entity abc; add entity post;")
-        .ok();
-    assert_eq!(domain.entities.len(), e_count + 1);
+        fn consume_scope(&mut self, s: &str, tree: &Vec<DslTree>) -> Result<(), String> {
+            unimplemented!();
+        }
+    }
 
-    let dsl = domain.generate_dsl();
-    assert_eq!(dsl.len(), 1);
+    type ZorkList = DocumentList<Zork>;
 
-}
+    let mut list = ZorkList::new();
 
-#[test]
-fn test_dsl_domain_generate_and_consume() {
-    let _ = env_logger::init();
+    assert!(list.interpret_dsl("add itemone;").is_ok());
+    assert_eq!(list.len(), 1);
 
-    let mut domain = Domain::default();
+    assert!(list.interpret_dsl("add itemtwo;").is_ok());
+    assert_eq!(list.len(), 2);
 
-    domain
-        .interpret_dsl("add entity abc; remove entity abc; add entity post; add entity comment; add entity log;")
-        .ok();
-
-    let script = domain.to_text_dsl();
-
-    let mut next_domain = Domain::default();
-    next_domain.interpret_dsl(&script).ok();
-
-    assert_eq!(domain, next_domain);
-}
-
-#[test]
-fn test_dsl_model_interpret() {
-    let _ = env_logger::init();
-
-    let mut model = Model::default();
-    assert_eq!(model.domain.doc.entities.len(), 0);
-
-    model
-        .interpret_dsl("with domain { add entity zork; };")
-        .ok();
-    assert_eq!(model.domain.doc.entities.len(), 1);
-
-    model
-        .interpret_dsl("with domain { remove entity zork; };")
-        .ok();
-    assert_eq!(model.domain.doc.entities.len(), 0);
-
-}
-
-#[test]
-fn test_dsl_model_interpret_translations() {
-    let _ = env_logger::init();
-
-    let mut model = Model::default();
-    assert_eq!(model.translations.len(), 0);
-
-    model
-        .interpret_dsl("with translations { add enGB; };")
-        .is_ok();
-    assert_eq!(model.translations.len(), 1);
-
-    model
-        .interpret_dsl("with translations { add esES; };")
-        .is_ok();
-    assert_eq!(model.translations.len(), 2);
-}
-
-#[test]
-fn test_dsl_model_interpret_xflows() {
-    let _ = env_logger::init();
-
-    let mut model = Model::default();
-    assert_eq!(model.xflows.len(), 0);
-
-    model.interpret_dsl("with xflows { add entry; };").is_ok();
-    assert_eq!(model.xflows.len(), 1);
-
-    model
-        .interpret_dsl("with xflows { add validation; };")
-        .is_ok();
-    assert_eq!(model.xflows.len(), 2);
-}
-
-#[test]
-fn test_dsl_model_interpret_pages() {
-    let _ = env_logger::init();
-
-    let mut model = Model::default();
-    assert_eq!(model.pages.len(), 0);
-
-    model.interpret_dsl("with pages { add pageone; };").is_ok();
-    assert_eq!(model.pages.len(), 1);
-
-    model.interpret_dsl("with pages { add pagetwo; };").is_ok();
-    assert_eq!(model.pages.len(), 2);
-}
-
-#[test]
-fn test_dsl_model_interpret_multiline() {
-    let _ = env_logger::init();
-
-    let mut model = Model::default();
-    assert_eq!(model.domain.doc.entities.len(), 0);
-
-    model
-        .interpret_dsl(
-            &r#"with domain { add entity zork; add entity bork; add entity fnord; };"#,
-        )
-        .ok();
-
-    assert_eq!(model.domain.doc.entities.len(), 3);
-
-    model
-        .interpret_dsl(
-            &r#"with domain { remove entity zork; remove entity bork; };"#,
-        )
-        .ok();
-    assert_eq!(model.domain.doc.entities.len(), 1);
+    assert!(list.interpret_dsl("remove itemtwo;").is_ok());
+    assert_eq!(list.len(), 1);
 
 }

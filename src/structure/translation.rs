@@ -31,11 +31,28 @@ where
 impl Default for Translation {
     fn default() -> Self {
         Translation {
-            locale: "en_US".to_owned(),
-            language: "en".to_owned(),
-            country: "US".to_owned(),
+            locale: "".to_owned(),
+            language: "".to_owned(),
+            country: "".to_owned(),
             items: HashMap::<String, I18NString>::new(),
         }
+    }
+}
+
+impl Translation {
+    pub fn add(&mut self, key: &str, value: &str) -> () {
+        self.items.insert(
+            key.to_string().clone(),
+            I18NString {
+                locale: self.locale.clone(),
+                key: key.to_string().clone(),
+                value: value.to_string().clone(),
+            },
+        );
+    }
+    pub fn add_untranslated_from(&mut self, item: &I18NString) -> () {
+        let value = format!("-untranslated-:{}", item.value);
+        self.add(&item.key, &value);
     }
 }
 
@@ -50,7 +67,7 @@ impl TranslationCommand {
     fn as_dsl_token(&self) -> DslToken {
         let s = match *self {
             TranslationCommand::Set(ref k, ref v) => format!("set {} {}", k, v),
-            TranslationCommand::Add(ref k, ref v) => format!("add {} {}", k, v),
+            TranslationCommand::Add(ref k, ref v) => format!("add {} '{}'", k, v),
             TranslationCommand::Remove(ref k) => format!("remove {}", k),
         };
         DslToken::Command(s)
@@ -81,13 +98,29 @@ impl GearsDsl for Translation {
                 debug!("consume_command : received parsed command '{:?}'", cmd);
                 match cmd {
                     TranslationCommand::Add(key, value) => {
-                        unimplemented!();
+                        self.items.insert(
+                            key.clone(),
+                            I18NString {
+                                locale: self.locale.clone(),
+                                key: key,
+                                value: value,
+                            },
+                        );
                     }
-                    TranslationCommand::Remove(name) => {
-                        unimplemented!();
+                    TranslationCommand::Remove(key) => {
+                        self.items.retain({
+                            |k, _| k.ne(&key)
+                        });
                     }
                     TranslationCommand::Set(key, value) => {
-                        unimplemented!();
+                        match key.as_ref() {
+                            "locale" => {
+                                self.locale = value;
+                            }
+                            _ => {
+                                unimplemented!();
+                            }
+                        }
                     }
                 }
                 Ok(())
@@ -99,35 +132,7 @@ impl GearsDsl for Translation {
         }
     }
 
-    fn consume_dsl_tree(&mut self, items: &Vec<DslTree>) -> Result<(), String> {
-        debug!("consume_dsl_tree : items : '{:?}'", items);
-        for item in items {
-            match *item {
-                DslTree::Scope(ref s, ref tree) => {
-                    debug!("consume_dsl_tree : matching scope item '{:?}'", s);
-                    match s {
-                        _ => {
-                            return Err(
-                                "No scopes implemented for TranslationsDocumentList yet"
-                                    .to_owned(),
-                            );
-                        }
-                    }
-                }
-                DslTree::Command(ref s) => {
-                    debug!("consume_dsl_tree command '{:?}'", s);
-                    match self.consume_command(&s) {
-                        Err(err) => {
-                            return Err(err);
-                        }
-                        _ => {}
-                    }
-                }
-                DslTree::Comment(ref s) => {
-                    debug!("consume_dsl_tree comment '{:?}'", s);
-                }
-            }
-        }
-        Ok(())
+    fn consume_scope(&mut self, name: &str, tree: &Vec<DslTree>) -> Result<(), String> {
+        unimplemented!();
     }
 }

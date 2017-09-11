@@ -1,4 +1,4 @@
-use super::common::{Document, I18NString, Translatable};
+use super::common::{Document, DocumentReference, I18NString, Translatable};
 use structure::translation::TranslationDocument;
 
 use std::fmt;
@@ -13,11 +13,11 @@ pub struct Domain {
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 pub struct Events {
-    pub change: Vec<String>,
-    pub update: Vec<String>,
-    pub read: Vec<String>,
-    pub delete: Vec<String>,
-    pub all: Vec<String>,
+    pub change: Vec<DocumentReference>,
+    pub update: Vec<DocumentReference>,
+    pub read: Vec<DocumentReference>,
+    pub delete: Vec<DocumentReference>,
+    pub all: Vec<DocumentReference>,
 }
 
 pub type Entities = Vec<Entity>;
@@ -28,7 +28,7 @@ pub type Validations = Vec<Validation>;
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 pub struct Validation {
     pub message: I18NString,
-    pub xflow: String,
+    pub xflow: DocumentReference,
 }
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
@@ -64,11 +64,11 @@ pub struct Entity {
 impl Default for Events {
     fn default() -> Self {
         Events {
-            change: Vec::<String>::new(),
-            update: Vec::<String>::new(),
-            read: Vec::<String>::new(),
-            delete: Vec::<String>::new(),
-            all: Vec::<String>::new(),
+            change: Vec::<DocumentReference>::new(),
+            update: Vec::<DocumentReference>::new(),
+            read: Vec::<DocumentReference>::new(),
+            delete: Vec::<DocumentReference>::new(),
+            all: Vec::<DocumentReference>::new(),
         }
     }
 }
@@ -278,7 +278,7 @@ impl GearsDsl for Domain {
                         for validation in &attribute.validations {
                             res.push(
                                 DomainCommand::AddValidation(
-                                    validation.xflow.clone(),
+                                    validation.xflow.id.to_string().clone(),
                                     validation.message.value.clone(),
                                 ).as_dsl_token(),
                             );
@@ -290,21 +290,6 @@ impl GearsDsl for Domain {
             }
         }
         res
-    }
-
-    fn consume_dsl_tree(&mut self, items: &Vec<DslTree>) -> Result<(), String> {
-        for item in items {
-            match *item {
-                DslTree::Command(ref s) => {
-                    self.consume_command(&s);
-                }
-                DslTree::Scope(ref s, ref tree) => {
-                    unimplemented!();
-                }
-                DslTree::Comment(_) => {}
-            }
-        }
-        Ok(())
     }
 
     fn consume_command(&mut self, s: &str) -> Result<(), String> {
@@ -386,5 +371,9 @@ impl GearsDsl for Domain {
             }
         }
         Ok(())
+    }
+
+    fn consume_scope(&mut self, s: &str, tree: &Vec<DslTree>) -> Result<(), String> {
+        unimplemented!();
     }
 }

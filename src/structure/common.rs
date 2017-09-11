@@ -18,6 +18,11 @@ pub struct Document<T> {
 
 pub type DocumentList<T> = Vec<Document<T>>;
 
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq, Eq)]
+pub struct DocumentReference {
+    pub id: Uuid,
+}
+
 impl<T> Document<T>
 where
     T: serde::Serialize + serde::de::DeserializeOwned + Eq + Default,
@@ -136,21 +141,31 @@ impl ListCommand {
 }
 
 use std::fmt::Debug;
-impl<T> GearsDsl for Document<T> {
+impl<T> GearsDsl for Document<T>
+where
+    T: GearsDsl,
+{
     fn generate_dsl(&self) -> DslTokens {
-        let mut res = DslTokens::new();
-        unimplemented!();
+        debug!("Document<T>;:generate_dsl");
+        self.doc.generate_dsl()
     }
 
     fn consume_command(&mut self, s: &str) -> Result<(), String> {
-        debug!("consume_command : received command string '{:?}'", s);
+        debug!(
+            "Document<T>::consume_command : received command string '{:?}'",
+            s
+        );
+        self.doc.consume_command(s)
+    }
+
+    fn consume_scope(&mut self, s: &str, tree: &Vec<DslTree>) -> Result<(), String> {
+        debug!("Document<T>::consume_scope : received scope '{:?}'", s);
         unimplemented!();
     }
 
     fn consume_dsl_tree(&mut self, items: &Vec<DslTree>) -> Result<(), String> {
-        debug!("consume_dsl_tree : items : '{:?}'", items);
-        unimplemented!();
-        Ok(())
+        debug!("Document<T>::consume_dsl_tree : items : '{:?}'", items);
+        self.doc.consume_dsl_tree(items)
     }
 }
 
@@ -159,26 +174,46 @@ where
     T: Default + Debug + GearsDsl,
 {
     fn generate_dsl(&self) -> DslTokens {
+        debug!("DocumentList<T>;:generate_dsl");
         let mut res = DslTokens::new();
 
         for doc in self {
             res.push(ListCommand::Add(doc.name.clone()).as_dsl_token());
+            res.push(DslToken::With(doc.name.clone().to_owned()));
+            res.push(DslToken::BlockOpen);
+            res.extend(doc.generate_dsl());
+            res.push(DslToken::BlockClose);
         }
 
         res
     }
 
     fn consume_command(&mut self, s: &str) -> Result<(), String> {
-        debug!("consume_command : received command string '{:?}'", s);
+        debug!(
+            "DocumentList<T>::consume_command : received command string '{:?}'",
+            s
+        );
         match command_grammar::document_list_command(&s) {
             Ok(cmd) => {
                 debug!("consume_command : received parsed command '{:?}'", cmd);
                 match cmd {
                     ListCommand::Add(name) => {
                         debug!("ListCommand::Add {:?}", name);
-                        let mut doc = Document::<T>::default();
-                        doc.name = name.to_string();
-                        self.push(doc);
+                        if self.iter().any(|ref doc| doc.name.eq(&name)) {
+                            error!(
+                                "consume_command : A document with name '{}' already exists",
+                                name
+                            );
+                            return Err(format!(
+                                "consume_command : A document with name '{}' already exists",
+                                name
+                            ));
+                        } else {
+
+                            let mut doc = Document::<T>::default();
+                            doc.name = name.to_string();
+                            self.push(doc);
+                        }
                     }
                     ListCommand::Remove(name) => {
                         self.retain({
@@ -203,36 +238,19 @@ where
         }
     }
 
-    fn consume_dsl_tree(&mut self, items: &Vec<DslTree>) -> Result<(), String> {
-        debug!("consume_dsl_tree : items : '{:?}'", items);
-        for item in items {
-            match *item {
-                DslTree::Scope(ref s, ref tree) => {
-                    debug!("consume_dsl_tree : matching scope item '{:?}'", s);
-                    match s {
-                        _ => {
-                            return Err(
-                                "No scopes implemented for TranslationsDocumentList yet"
-                                    .to_owned(),
-                            );
-                        }
-                    }
-                }
-                DslTree::Command(ref s) => {
-                    debug!("consume_dsl_tree command '{:?}'", s);
-                    match self.consume_command(&s) {
-                        Err(err) => {
-                            return Err(err);
-                        }
-                        _ => {}
-                    }
-                }
-                DslTree::Comment(ref s) => {
-                    debug!("consume_dsl_tree comment '{:?}'", s);
-                }
+    fn consume_scope(&mut self, s: &str, tree: &Vec<DslTree>) -> Result<(), String> {
+        let mut found: bool = false;
+        for mut obj in self {
+            if obj.name.eq(s) {
+                found = true;
+                obj.consume_dsl_tree(tree);
             }
         }
-        Ok(())
+        if found {
+            Ok(())
+        } else {
+            Err(format!("consume_scope : scope '{}' not found", s))
+        }
     }
 }
 
@@ -247,7 +265,7 @@ pub struct I18NString {
 impl I18NString {
     pub fn new(s: String) -> I18NString {
         I18NString {
-            locale: "en_US".to_owned(),
+            locale: "".to_owned(),
             key: "".to_owned(),
             value: s,
         }
@@ -257,9 +275,9 @@ impl I18NString {
 impl Default for I18NString {
     fn default() -> I18NString {
         I18NString {
-            locale: "en_US".to_owned(),
-            key: "-no-key-".to_owned(),
-            value: "-no-value-".to_owned(),
+            locale: "".to_owned(),
+            key: "".to_owned(),
+            value: "".to_owned(),
         }
     }
 }
