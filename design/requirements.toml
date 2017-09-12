@@ -1,6 +1,79 @@
+[REQ-artifact]
+
+[REQ-artifact-generation]
+text = '''
+
+'''
+
+[REQ-artifact-generation-model]
+text = '''
+
+'''
+
+[REQ-artifact-generation-page]
+text = '''
+
+'''
+
+[REQ-artifact-generation-xflow]
+text = '''
+
+'''
+
+[REQ-artifact-testing]
+text = '''
+As part of the artifact generation, suitable testing artifacts shall be
+generated to assert the validity of the assumptions made in the artifact
+generation. E.g. Selenium tests for browser-based artifacts.
+'''
+
+[REQ-domain]
+text = '''
+A platform independent format for describing a data model shall be available.
+
+'''
+
+[REQ-dsl]
+text = '''
+Each data structure in the project shall be open to manipulation and inspection
+via a consistent, declarative, domain-specific, textual language.
+'''
+
+[REQ-flox]
+text = '''
+An evaluation environment shall be available with an expression-based language
+capable of,
+
+ - Performing numeric arithmetic
+ - Performing boolean arithmetic
+ - Binding to contextual variables at run-time
+'''
+
+[REQ-i18n]
+text = '''
+
+All user-facing text will be translatable into an arbitrary number of
+languages, identified by ISO 639-2 code, optionally extended with a regional
+code identified with a two-letter country code from ISO-3166-2.
+
+'''
+
+[REQ-pages]
+text = '''
+A platform independent format for describing application pages shall be available.
+'''
+
+[REQ-portability]
+text = '''
+
+ - The project shall be available for a wide variety of operating systems and platforms.
+ - The project shall be suitable for embedding in other environments.
+
+'''
+
 [REQ-purpose]
 text = '''
-The purpose of this project is to provide datastructures and tooling for the
+The purpose of this project is to provide data structures and tooling for the
 manipulation and execution of a portable representation (model) of an
 application containing,
 
@@ -20,58 +93,6 @@ All aspects of the model manipulation and artifact generation shall be suitable
 for integration in existing build-pipelines and development processes.
 
 Examples can be found in {repo}/resources/
-
-'''
-
-[REQ-dsl]
-text = '''
-Each data structure in the project shall be open to manipulation and inspection
-via a consistent, declarative, domain-specific, textual language.
-'''
-
-[REQ-portability]
-text = '''
-
- - The project shall be available for a wide variety of operating systems and platforms.
- - The project shall be suitable for embedding in other environments.
-
-'''
-
-[REQ-flox]
-text = '''
-An evaluation environment shall be available with an expression-based language
-capable of,
-
- - Performing numeric arithmetic
- - Performing boolean arithmetic
- - Binding to contextual variables at run-time
-'''
-
-[REQ-xflow]
-text = '''
-A graph-based, platform independent format for describing logic shall be available.
-
-The format shall be suitable for, amongst others,
-
- - Graph analysis
- - Graph rendering
-'''
-
-[REQ-pages]
-text = '''
-A platform independent format for describing application pages shall be available.
-'''
-
-[REQ-domain]
-text = '''
-A platform independent format for describing a data model shall be available.
-
-'''
-
-[REQ-i18n]
-text = '''
-
-All user-facing text will be translatable into an arbitrary number of languages, identified by ISO 639-2 code, optionally extended with a regional code identified with a two-letter country code from ISO-3166-2.
 
 '''
 
@@ -105,73 +126,17 @@ text = '''
 All models can be serialized to or deserialized from YAML.
 '''
 
+[REQ-xflow]
+text = '''
+A graph-based, platform independent format for describing logic shall be available.
+
+The format shall be suitable for, amongst others,
+
+ - Graph analysis
+ - Graph rendering
+'''
+
 [REQ-xflow-call]
 text = '''
 An xflow shall be able to call another xflow.
-'''
-
-[REQ-artifact]
-text = '''
-'''
-
-[REQ-artifact-testing]
-text = '''
-As part of the artifact generation, suitable testing artifacts shall be
-generated to assert the validity of the assumptions made in the artifact
-generation. E.g. Selenium tests for browser-based artifacts.
-'''
-
-[REQ-artifact-generation]
-text = '''
-
-'''
-
-[REQ-artifact-generation-model]
-text = '''
-
-'''
-
-[REQ-artifact-generation-xflow]
-text = '''
-
-'''
-
-[REQ-artifact-generation-page]
-text = '''
-
-'''
-
-[TST-flox]
-[TST-flox-variable]
-text = '''
-Variables
-'''
-
-[TST-flox-variable-extraction]
-text = '''
-This test demonstrates the successful extraction of variable names from a flox
-string.
-'''
-
-[TST-serialization]
-
-[TST-serialization-fs]
-text = '''
-Model serialization tests demonstrating the serialization to and deserialization from a filesystem
-'''
-
-[TST-serialization-json]
-text = '''
-Model serialization tests demonstrating the serialization to and deserialization from JSON
-'''
-
-[TST-serialization-yaml]
-text = '''
-Model serialization tests demonstrating the serialization to and deserialization from YAML
-'''
-
-[TST-xflow]
-[TST-xflow-call]
-text = '''
-Tests that have xflows invoking other xflows and using the result.
 '''

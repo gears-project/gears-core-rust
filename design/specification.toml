@@ -1,3 +1,27 @@
+[SPC-artifact]
+text = '''
+
+'''
+
+[SPC-artifact-generation]
+text = '''
+
+'''
+
+[SPC-artifact-generation-model]
+text = '''
+
+'''
+
+[SPC-artifact-generation-page]
+text = '''
+Page models can be transformed to React JavaScript/JSX components
+'''
+
+[SPC-artifact-generation-xflow]
+text = '''
+XFlow models can be transformed to JavaScript code
+'''
 
 [SPC-dsl]
 text = '''
@@ -17,10 +41,17 @@ All interaction with the DSL will take place through a trait.
 
 '''
 
+[SPC-dsl-extensibility]
+text = '''
+
+
+'''
 
 [SPC-flox]
-text = '''
-'''
+
+[SPC-flox-variable]
+
+[SPC-flox-variable-extraction]
 
 [SPC-flox-variables]
 text = '''
@@ -59,8 +90,6 @@ Model serialization is performed using **serde_yaml**
 '''
 
 [SPC-xflow]
-text = '''
-'''
 
 [SPC-xflow-call]
 text = '''
@@ -70,30 +99,3 @@ An xflow shall have a node of type 'call' which,
  - Can pass local variables
  - Can assign the return values to local variables
 '''
-
-
-[SPC-artifact]
-text = '''
-
-'''
-
-[SPC-artifact-generation]
-text = '''
-
-'''
-
-[SPC-artifact-generation-model]
-text = '''
-
-'''
-
-[SPC-artifact-generation-xflow]
-text = '''
-XFlow models can be transformed to JavaScript code
-'''
-
-[SPC-artifact-generation-page]
-text = '''
-Page models can be transformed to React JavaScript/JSX components
-'''
-
