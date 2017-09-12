@@ -23,6 +23,12 @@ Examples can be found in {repo}/resources/
 
 '''
 
+[REQ-dsl]
+text = '''
+Each data structure in the project shall be open to manipulation and inspection
+via a consistent, declarative, domain-specific, textual language.
+'''
+
 [REQ-portability]
 text = '''
 

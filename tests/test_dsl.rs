@@ -7,6 +7,8 @@ extern crate gears;
 use gears::dsl::command::*;
 use gears::structure::common::{Document, DocumentList};
 
+// partof: #TST-dsl-consistency
+
 #[test]
 fn test_dsl_tokens_to_tree() {
     let _ = env_logger::init();

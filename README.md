@@ -1,5 +1,7 @@
 # gears-core-rust
 
+_Cross platform, embeddable library for structured document transformation_
+
 [![Build Status](https://travis-ci.org/gears-project/gears-core-rust.svg?branch=master)](https://travis-ci.org/gears-project/gears-core-rust)
 [![codecov](https://codecov.io/gh/gears-project/gears-core-rust/branch/master/graph/badge.svg)](https://codecov.io/gh/gears-project/gears-core-rust)
 [![Crates.io Status](http://meritbadge.herokuapp.com/gearsg)](https://crates.io/crates/gears)
@@ -32,4 +34,24 @@ Use artifact-app
 
     cargo build --release
     cargo build --features embedded
+
+
+## DSL
+
+    with domain {
+        add entity post;
+        with entity post {
+            add attribute name:string;
+            with attribute name {
+                set default 'none';
+            };
+        };
+    };
+
+    with xflows {
+        add main_flow;
+        with main_flow {
+            add node branch_2;
+        };
+    };
 

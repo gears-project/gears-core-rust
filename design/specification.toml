@@ -1,3 +1,23 @@
+
+[SPC-dsl]
+text = '''
+ - Textual content for the DSL will only be accessed through a parser
+ - The language will be consist of two distint forms of content,
+   * Global level (Command, Scope, Comment)
+   * Component level
+
+Component level commands will be passed to the relevant components, which are
+each responsible for parsing these commands and executing them.
+
+'''
+
+[SPC-dsl-consistency]
+text = '''
+All interaction with the DSL will take place through a trait.
+
+'''
+
+
 [SPC-flox]
 text = '''
 '''
