@@ -14,12 +14,16 @@
 
 [TST-dsl-consistency]
 
+[TST-dsl-consistency-common_document_list]
+
 [TST-flox]
 
 [TST-flox-variable]
 text = '''
 Variables
 '''
+
+[TST-flox-variable-error_reporting]
 
 [TST-flox-variable-extraction]
 text = '''

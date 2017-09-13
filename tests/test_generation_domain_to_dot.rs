@@ -8,7 +8,7 @@ use gears::generation::domain_to_dot;
 mod common;
 use common::load_doc;
 
-// partof: #TST-artifact-generation-domain
+// partof: TST-artifact-generation-domain
 //
 #[test]
 fn test_load_basic_document() {

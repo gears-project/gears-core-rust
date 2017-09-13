@@ -41,6 +41,12 @@ All interaction with the DSL will take place through a trait.
 
 '''
 
+[SPC-dsl-consistency-common_document]
+text = 'All Documents shall implement the dsl trait'
+
+[SPC-dsl-consistency-common_document_list]
+text = 'All Document lists shall be queryable through a common interface and use identical semantics.'
+
 [SPC-dsl-extensibility]
 text = '''
 

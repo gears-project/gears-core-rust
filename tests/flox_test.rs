@@ -355,7 +355,7 @@ fn test_variable_extraction() {
 }
 
 #[test]
-// #TST-flox-variable-error-reporting
+// #TST-flox-variable-error_reporting
 fn test_variable_error_reporting() {
     let _ = env_logger::init();
 
