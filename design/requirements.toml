@@ -58,6 +58,9 @@ code identified with a two-letter country code from ISO-3166-2.
 
 '''
 
+[REQ-i18n-external_translation]
+text = 'All translatable content must be exportable into an external format for translation, the result of that translation has to be importable again.'
+
 [REQ-pages]
 text = '''
 A platform independent format for describing application pages shall be available.

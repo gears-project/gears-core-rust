@@ -9,6 +9,7 @@ struct FloxParameters {
     returns: XFlowVariableDefinition,
 }
 
+#[derive(Debug)]
 pub struct Flox;
 
 impl Flox {
