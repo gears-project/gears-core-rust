@@ -26,32 +26,37 @@ See https://doc.rust-lang.org/log/env_logger/ for more logging options
 
 Use artifact-app
 
-    art check
-    art ls -p
-    art export -o target/art html
+```
+ art check
+ art ls -p
+ art export -o target/art html
+```
 
 ## Build
 
-    cargo build --release
-    cargo build --features embedded
-
+```
+cargo build --release
+cargo build --features embedded
+```
 
 ## DSL
 
-    with domain {
-        add entity post;
-        with entity post {
-            add attribute name:string;
-            with attribute name {
-                set default 'none';
-            };
+```sql
+with domain {
+    add entity post;
+    with entity post {
+        add attribute name:string;
+        with attribute name {
+            set default 'none';
         };
     };
+};
 
-    with xflows {
-        add main_flow;
-        with main_flow {
-            add node branch_2;
-        };
+with xflows {
+    add main_flow;
+    with main_flow {
+        add node branch_2;
     };
+};
+```
 
