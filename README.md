@@ -41,7 +41,7 @@ cargo build --features embedded
 
 ## DSL
 
-```ruby
+```
 with domain {
     add entity post;
     with entity post {
