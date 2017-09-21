@@ -33,4 +33,11 @@ after_success: |
   rm -rf kcov-master &&
   for file in `ls target/debug/x* | grep -v \.d$`; do mkdir -p "target/cov/$(basename $file)"; kcov --exclude-pattern=/.cargo,/usr/lib --verify "target/cov/$(basename $file)" "$file"; done &&
   bash <(curl -s https://codecov.io/bash) &&
-  echo "Uploaded code coverage"
+  echo "Uploaded code coverage" &&
+  [ $TRAVIS_BRANCH = master ] &&
+  [ $TRAVIS_PULL_REQUEST = false ] &&
+  cargo install artifact-app &&
+  art export -o target/doc/ html
+  sudo pip install ghp-import &&
+  ghp-import -n target/doc &&
+  git push -fq https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git gh-pages

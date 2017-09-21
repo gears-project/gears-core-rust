@@ -1,0 +1,56 @@
+[TST-artifact]
+
+[TST-artifact-generation]
+
+[TST-artifact-generation-domain]
+
+[TST-artifact-generation-page]
+
+[TST-artifact-generation-translation]
+
+[TST-artifact-generation-xflow]
+
+[TST-dsl]
+
+[TST-dsl-consistency]
+
+[TST-dsl-consistency-common_document_list]
+
+[TST-flox]
+
+[TST-flox-variable]
+text = '''
+Variables
+'''
+
+[TST-flox-variable-error_reporting]
+
+[TST-flox-variable-extraction]
+text = '''
+This test demonstrates the successful extraction of variable names from a flox
+string.
+'''
+
+[TST-serialization]
+
+[TST-serialization-fs]
+text = '''
+Model serialization tests demonstrating the serialization to and deserialization from a filesystem
+'''
+
+[TST-serialization-json]
+text = '''
+Model serialization tests demonstrating the serialization to and deserialization from JSON
+'''
+
+[TST-serialization-yaml]
+text = '''
+Model serialization tests demonstrating the serialization to and deserialization from YAML
+'''
+
+[TST-xflow]
+
+[TST-xflow-call]
+text = '''
+Tests that have xflows invoking other xflows and using the result.
+'''

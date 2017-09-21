@@ -1,3 +1,13 @@
+#![deny(trivial_casts,
+        trivial_numeric_casts,
+        unsafe_code,
+        unstable_features,
+        unused_import_braces,
+        unused_qualifications
+       )]
+
+#![doc(html_root_url = "https://docs.rs/gears/")]
+
 extern crate serde;
 #[macro_use]
 extern crate serde_derive;

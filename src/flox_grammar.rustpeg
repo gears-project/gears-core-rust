@@ -1,5 +1,5 @@
-use structure::xflow::{XFlowValue};
-use xfstate::{XFState};
+use structure::xflow::XFlowValue;
+use xfstate::XFState;
 
 #![arguments(context: &XFState)]
 

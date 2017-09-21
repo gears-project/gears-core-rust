@@ -169,6 +169,7 @@ where
     }
 }
 
+// partof: SPC-dsl-consistency-common_document_list
 impl<T> GearsDsl for DocumentList<T>
 where
     T: Default + Debug + GearsDsl,

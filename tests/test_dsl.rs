@@ -7,6 +7,8 @@ extern crate gears;
 use gears::dsl::command::*;
 use gears::structure::common::{Document, DocumentList};
 
+// partof: #TST-dsl-consistency
+
 #[test]
 fn test_dsl_tokens_to_tree() {
     let _ = env_logger::init();
@@ -43,39 +45,41 @@ fn test_dsl_tokens_to_tree() {
     }
 }
 
+use gears::dsl::command::{GearsDsl, DslTree, DslTokens};
+
+#[derive(Debug, Serialize, Deserialize)]
+struct Zork {
+    pub grue: bool,
+}
+
+impl Default for Zork {
+    fn default() -> Zork {
+        Zork { grue: false }
+    }
+}
+
+impl GearsDsl for Zork {
+    fn generate_dsl(&self) -> DslTokens {
+        DslTokens::new()
+    }
+
+    fn consume_command(&mut self, s: &str) -> Result<(), String> {
+        unimplemented!();
+    }
+
+    fn consume_scope(&mut self, s: &str, tree: &Vec<DslTree>) -> Result<(), String> {
+        unimplemented!();
+    }
+}
+
+type ZorkList = DocumentList<Zork>;
+
+// partof: #TST-dsl-consistency-common_document_list
+//
 #[test]
 fn test_dsl_document_list() {
     let _ = env_logger::init();
 
-    use serde;
-    use gears::dsl::command::{GearsDsl, DslTree, DslTokens};
-
-    #[derive(Debug, Serialize, Deserialize)]
-    struct Zork {
-        pub grue: bool,
-    }
-
-    impl Default for Zork {
-        fn default() -> Zork {
-            Zork { grue: false }
-        }
-    }
-
-    impl GearsDsl for Zork {
-        fn generate_dsl(&self) -> DslTokens {
-            unimplemented!();
-        }
-
-        fn consume_command(&mut self, s: &str) -> Result<(), String> {
-            unimplemented!();
-        }
-
-        fn consume_scope(&mut self, s: &str, tree: &Vec<DslTree>) -> Result<(), String> {
-            unimplemented!();
-        }
-    }
-
-    type ZorkList = DocumentList<Zork>;
 
     let mut list = ZorkList::new();
 
@@ -87,5 +91,63 @@ fn test_dsl_document_list() {
 
     assert!(list.interpret_dsl("remove itemtwo;").is_ok());
     assert_eq!(list.len(), 1);
+
+}
+
+#[test]
+fn test_dsl_document_list_multiline() {
+    let _ = env_logger::init();
+
+
+    let mut list = ZorkList::new();
+
+    assert!(
+        list.interpret_dsl(
+            r#"
+    add itemone;
+    add itemtwo;
+    add itemthree;
+    "#,
+        ).is_ok()
+    );
+    assert_eq!(list.len(), 3);
+
+    assert!(
+        list.interpret_dsl(
+            r#"
+    remove itemone;
+    remove itemtwo;
+    remove itemthree;
+    add newitemone;
+    "#,
+        ).is_ok()
+    );
+    assert_eq!(list.len(), 1);
+
+}
+
+#[test]
+fn test_dsl_document_list_multiline_regenerate() {
+    let _ = env_logger::init();
+
+
+    let mut list = ZorkList::new();
+
+    assert!(
+        list.interpret_dsl(
+            r#"
+    add itemone;
+    add itemtwo;
+    add itemthree;
+    remove itemthree;
+    "#,
+        ).is_ok()
+    );
+    assert_eq!(list.len(), 2);
+
+    let mut list_b = ZorkList::new();
+    list_b.consume_dsl(&list.generate_dsl());
+
+    assert_eq!(list.generate_dsl(), list_b.generate_dsl());
 
 }

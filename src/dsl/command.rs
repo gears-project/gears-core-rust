@@ -31,6 +31,7 @@ pub enum ConfigCommand {
     SetDefaultLocale(String),
 }
 
+// partof: #SPC-dsl-consistency
 pub trait GearsDsl {
     fn generate_dsl(&self) -> DslTokens;
     fn consume_command(&mut self, cmd: &str) -> Result<(), String>;

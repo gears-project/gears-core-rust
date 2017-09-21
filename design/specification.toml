@@ -1,6 +1,63 @@
-[SPC-flox]
+[SPC-artifact]
 text = '''
+
 '''
+
+[SPC-artifact-generation]
+text = '''
+
+'''
+
+[SPC-artifact-generation-model]
+text = '''
+
+'''
+
+[SPC-artifact-generation-page]
+text = '''
+Page models can be transformed to React JavaScript/JSX components
+'''
+
+[SPC-artifact-generation-xflow]
+text = '''
+XFlow models can be transformed to JavaScript code
+'''
+
+[SPC-dsl]
+text = '''
+ - Textual content for the DSL will only be accessed through a parser
+ - The language will be consist of two distint forms of content,
+   * Global level (Command, Scope, Comment)
+   * Component level
+
+Component level commands will be passed to the relevant components, which are
+each responsible for parsing these commands and executing them.
+
+'''
+
+[SPC-dsl-consistency]
+text = '''
+All interaction with the DSL will take place through a trait.
+
+'''
+
+[SPC-dsl-consistency-common_document]
+text = 'All Documents shall implement the dsl trait'
+
+[SPC-dsl-consistency-common_document_list]
+text = 'All Document lists shall be queryable through a common interface and use identical semantics.'
+
+[SPC-dsl-extensibility]
+text = '''
+
+
+'''
+
+[SPC-flox]
+
+[SPC-flox-variable]
+
+[SPC-flox-variable-extraction]
 
 [SPC-flox-variables]
 text = '''
@@ -39,8 +96,6 @@ Model serialization is performed using **serde_yaml**
 '''
 
 [SPC-xflow]
-text = '''
-'''
 
 [SPC-xflow-call]
 text = '''
@@ -50,30 +105,3 @@ An xflow shall have a node of type 'call' which,
  - Can pass local variables
  - Can assign the return values to local variables
 '''
-
-
-[SPC-artifact]
-text = '''
-
-'''
-
-[SPC-artifact-generation]
-text = '''
-
-'''
-
-[SPC-artifact-generation-model]
-text = '''
-
-'''
-
-[SPC-artifact-generation-xflow]
-text = '''
-XFlow models can be transformed to JavaScript code
-'''
-
-[SPC-artifact-generation-page]
-text = '''
-Page models can be transformed to React JavaScript/JSX components
-'''
-
