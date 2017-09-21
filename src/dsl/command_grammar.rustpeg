@@ -32,23 +32,27 @@ newline -> ()
   / "\r"
   / "\r\n"
 
+empty -> ()
+  = newline
+  / space
+
 pub expression -> Vec<DslToken>
   = dsl_token*
 
 pub dsl_token -> DslToken
-  = _ "with " label:label {
+  = empty* "with " label:label {
     DslToken::With(label.to_string())
   }
-  / _ "{" _ newline* {
+  / empty* "{" empty* {
     DslToken::BlockOpen
   }
-  / _ "};" _ newline* {
+  / empty* "};" _ empty* {
     DslToken::BlockClose
   }
-  / _ command:raw_command ";" _ newline* {
+  / empty* command:raw_command ";" empty* {
     DslToken::Command(command.to_string())
   }
-  / _ "#" comment:text_string _ newline* {
+  / empty* "#" comment:text_string empty* {
     DslToken::Comment(comment.to_string())
   }
 
