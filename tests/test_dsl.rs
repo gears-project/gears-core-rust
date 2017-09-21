@@ -60,7 +60,7 @@ impl Default for Zork {
 
 impl GearsDsl for Zork {
     fn generate_dsl(&self) -> DslTokens {
-        unimplemented!();
+        DslTokens::new()
     }
 
     fn consume_command(&mut self, s: &str) -> Result<(), String> {
@@ -123,5 +123,31 @@ fn test_dsl_document_list_multiline() {
         ).is_ok()
     );
     assert_eq!(list.len(), 1);
+
+}
+
+#[test]
+fn test_dsl_document_list_multiline_regenerate() {
+    let _ = env_logger::init();
+
+
+    let mut list = ZorkList::new();
+
+    assert!(
+        list.interpret_dsl(
+            r#"
+    add itemone;
+    add itemtwo;
+    add itemthree;
+    remove itemthree;
+    "#,
+        ).is_ok()
+    );
+    assert_eq!(list.len(), 2);
+
+    let mut list_b = ZorkList::new();
+    list_b.consume_dsl(&list.generate_dsl());
+
+    assert_eq!(list.generate_dsl(), list_b.generate_dsl());
 
 }
