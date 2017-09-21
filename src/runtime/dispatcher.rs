@@ -6,7 +6,6 @@ use xfstate::XFState;
 
 type Receivers<'a> = HashMap<XFlowNodeType, Box<Dispatchable + 'a>>;
 
-#[derive(Debug)]
 pub struct Dispatcher<'a> {
     receivers: Receivers<'a>,
 }
