@@ -39,7 +39,7 @@ after_success:
     [ $TRAVIS_BRANCH = master ] &&
     [ $TRAVIS_PULL_REQUEST = false ] &&
     cargo install artifact-app &&
-    art export -o target/doc/ html
+    art export  --path-url "https://github.com/gears-project/gears-core-rust/blob/$(git rev-parse --verify HEAD)/{path}#L{line}") -o target/doc/ html
     sudo pip install ghp-import &&
     ghp-import -n target/doc &&
     git push -fq https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git gh-pages
