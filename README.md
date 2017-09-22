@@ -24,9 +24,9 @@ See https://doc.rust-lang.org/log/env_logger/ for more logging options
 
 ## Specifications
 
-https://gears-core-rust.github.io/
+https://gears-project.github.io/gears-core-rust/
 
-Use artifact-app
+To generate the specifications, use artifact-app
 
 ```
  art check
