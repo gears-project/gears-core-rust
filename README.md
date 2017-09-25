@@ -13,7 +13,10 @@ _Cross platform, embeddable library for structured document transformation_
 
 The requirements and specifications are documented using [artifact-app](https://github.com/vitiral/artifact) . 
 
-The generated artifact documents are automatically published from `master` at  [https://gears-project.github.io/gears-core-rust/](https://gears-project.github.io/gears-core-rust/)
+The generated artifact documents are automatically published from `master` at 
+[https://gears-project.github.io/gears-core-rust/](https://gears-project.github.io/gears-core-rust/)
+
+To generate the documents locally run,
 
 ```
  cargo install artifact-app
