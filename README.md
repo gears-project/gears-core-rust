@@ -8,30 +8,18 @@ _Cross platform, embeddable library for structured document transformation_
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/gears-project/gears-core-rust/master/LICENSE)
 [![Documentation](https://docs.rs/gears/badge.svg)](https://docs.rs/gears)
 
-## Testing
-
-    cargo test -- --nocapture
-
-    RUST_BACKTRACE=1 cargo test -- --nocapture
-
-    RUST_BACKTRACE=1 cargo watch -x "test -- --nocapture"
-
-    RUST_BACKTRACE=1 RUST_LOG=gearsg=debug cargo watch -x "test -- --nocapture"
-
-    RUST_BACKTRACE=1 RUST_LOG=gearsg=debug cargo watch -x "test --features peg/trace -- --nocapture"
-
-See https://doc.rust-lang.org/log/env_logger/ for more logging options
 
 ## Specifications
 
-https://gears-project.github.io/gears-core-rust/
+The requirements and specifications are documented using [artifact-app](https://github.com/vitiral/artifact) . 
 
-To generate the specifications, use artifact-app
+The generated artifact documents are automatically published from `master` at  [https://gears-project.github.io/gears-core-rust/](https://gears-project.github.io/gears-core-rust/)
 
 ```
+ cargo install artifact-app
  art check
  art ls -p
- art export -o target/art html
+ art export -o target/spec html
 ```
 
 ## Build
@@ -62,3 +50,16 @@ with xflows {
 };
 ```
 
+## Testing
+
+    cargo test -- --nocapture
+
+    RUST_BACKTRACE=1 cargo test -- --nocapture
+
+    RUST_BACKTRACE=1 cargo watch -x "test -- --nocapture"
+
+    RUST_BACKTRACE=1 RUST_LOG=gearsg=debug cargo watch -x "test -- --nocapture"
+
+    RUST_BACKTRACE=1 RUST_LOG=gearsg=debug cargo watch -x "test --features peg/trace -- --nocapture"
+
+See https://doc.rust-lang.org/log/env_logger/ for more logging options
