@@ -322,7 +322,7 @@ impl Validation {
         }
 
         errors
-    c
+    }
 
 
     //     X  all_edges_have_nodes(flow),
