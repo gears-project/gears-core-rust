@@ -10,29 +10,26 @@ pub struct Validation {
 }
 
 impl Validation {
-    pub fn validate(xflow: &XFlowDocument) -> Vec<ValidationError> {
+    pub fn validate(doc: &XFlowDocument) -> Vec<ValidationError> {
         let mut errors = Vec::<ValidationError>::new();
 
-        errors.extend(Validation::all_edges_have_nodes(xflow));
-        errors.extend(Validation::has_one_entry_node(xflow));
-        errors.extend(Validation::has_terminal_nodes(xflow));
-        errors.extend(Validation::all_nodes_have_at_least_one_edge(xflow));
-        errors.extend(Validation::all_node_actions_have_matching_requirements(
-            xflow,
-        ));
-        errors.extend(Validation::variables_are_defined_only_once(xflow));
-        errors.extend(Validation::all_return_values_exist(xflow));
-        errors.extend(Validation::no_variable_redefinition(xflow));
-        errors.extend(Validation::all_flox_variables_exist(xflow));
+        errors.extend(Validation::all_edges_have_nodes(doc));
+        errors.extend(Validation::has_one_entry_node(doc));
+        errors.extend(Validation::has_terminal_nodes(doc));
+        errors.extend(Validation::all_nodes_have_at_least_one_edge(doc));
+        errors.extend(Validation::all_node_actions_have_matching_requirements(doc));
+        errors.extend(Validation::variables_are_defined_only_once(doc));
+        errors.extend(Validation::all_return_values_exist(doc));
+        errors.extend(Validation::no_variable_redefinition(doc));
+        errors.extend(Validation::all_flox_variables_exist(doc));
 
         errors
     }
 
-    pub fn all_edges_have_nodes(xflow: &XFlowDocument) -> Vec<ValidationError> {
+    pub fn all_edges_have_nodes(doc: &XFlowDocument) -> Vec<ValidationError> {
         let mut errors = Vec::<ValidationError>::new();
 
-        let mut node_ids = xflow
-            .doc
+        let mut node_ids = doc.body
             .nodes
             .iter()
             .map({
@@ -43,7 +40,7 @@ impl Validation {
         node_ids.sort();
         node_ids.dedup();
 
-        for edge in &xflow.doc.edges {
+        for edge in &doc.body.edges {
 
             if !node_ids.contains(&edge.0) {
                 errors.push(ValidationError {
@@ -65,10 +62,10 @@ impl Validation {
         errors
     }
 
-    pub fn has_one_entry_node(xflow: &XFlowDocument) -> Vec<ValidationError> {
+    pub fn has_one_entry_node(doc: &XFlowDocument) -> Vec<ValidationError> {
         let mut errors = Vec::<ValidationError>::new();
 
-        let res = xflow.doc.get_nodes_by(&XFlowNodeType::Flow, "start");
+        let res = doc.body.get_nodes_by(&XFlowNodeType::Flow, "start");
         match res.len() {
             0 => {
                 errors.push(ValidationError {
@@ -92,10 +89,10 @@ impl Validation {
         errors
     }
 
-    pub fn has_terminal_nodes(xflow: &XFlowDocument) -> Vec<ValidationError> {
+    pub fn has_terminal_nodes(doc: &XFlowDocument) -> Vec<ValidationError> {
         let mut errors = Vec::<ValidationError>::new();
 
-        let res = xflow.doc.get_nodes_by(&XFlowNodeType::Flow, "end");
+        let res = doc.body.get_nodes_by(&XFlowNodeType::Flow, "end");
 
         if let 0 = res.len() {
             errors.push(ValidationError {
@@ -106,15 +103,13 @@ impl Validation {
         }
 
         errors
-
     }
 
-    pub fn all_nodes_have_at_least_one_edge(xflow: &XFlowDocument) -> Vec<ValidationError> {
+    pub fn all_nodes_have_at_least_one_edge(doc: &XFlowDocument) -> Vec<ValidationError> {
         let mut errors = Vec::<ValidationError>::new();
 
-        for node in &xflow.doc.nodes {
-            let res = xflow
-                .doc
+        for node in &doc.body.nodes {
+            let res = doc.body
                 .edges
                 .iter()
                 .filter({
@@ -135,12 +130,11 @@ impl Validation {
     }
 
     pub fn all_node_actions_have_matching_requirements(
-        xflow: &XFlowDocument,
+        doc: &XFlowDocument,
     ) -> Vec<ValidationError> {
         let mut errors = Vec::<ValidationError>::new();
 
-        let reqs = xflow
-            .doc
+        let reqs = doc.body
             .requirements
             .iter()
             .map({
@@ -148,7 +142,7 @@ impl Validation {
             })
             .collect::<Vec<XFlowNodeType>>();
 
-        for node in &xflow.doc.nodes {
+        for node in &doc.body.nodes {
 
             if !reqs.contains(&node.nodetype) {
                 errors.push(ValidationError {
@@ -167,11 +161,11 @@ impl Validation {
         errors
     }
 
-    pub fn variables_are_defined_only_once(xflow: &XFlowDocument) -> Vec<ValidationError> {
+    pub fn variables_are_defined_only_once(doc: &XFlowDocument) -> Vec<ValidationError> {
         let mut errors = Vec::<ValidationError>::new();
 
         let mut input_vars = HashSet::<String>::new();
-        for xvar in &xflow.doc.variables.input {
+        for xvar in &doc.body.variables.input {
             if input_vars.contains(&xvar.name) {
                 errors.push(ValidationError {
                     code: 1,
@@ -187,7 +181,7 @@ impl Validation {
         }
 
         let mut local_vars = HashSet::<String>::new();
-        for xvar in &xflow.doc.variables.local {
+        for xvar in &doc.body.variables.local {
             if local_vars.contains(&xvar.name) {
                 errors.push(ValidationError {
                     code: 1,
@@ -203,7 +197,7 @@ impl Validation {
         }
 
         let mut output_vars = HashSet::<String>::new();
-        for xvar in &xflow.doc.variables.output {
+        for xvar in &doc.body.variables.output {
             if output_vars.contains(&xvar.name) {
                 errors.push(ValidationError {
                     code: 1,
@@ -221,21 +215,21 @@ impl Validation {
         errors
     }
 
-    pub fn all_return_values_exist(xflow: &XFlowDocument) -> Vec<ValidationError> {
+    pub fn all_return_values_exist(doc: &XFlowDocument) -> Vec<ValidationError> {
         let mut errors = Vec::<ValidationError>::new();
 
         let mut inputs = HashMap::<&String, &XFlowVariableDefinition>::new();
         let mut locals = HashMap::<&String, &XFlowVariable>::new();
 
-        for xvar in &xflow.doc.variables.input {
+        for xvar in &doc.body.variables.input {
             inputs.insert(&xvar.name, xvar);
         }
 
-        for xvar in &xflow.doc.variables.local {
+        for xvar in &doc.body.variables.local {
             locals.insert(&xvar.name, xvar);
         }
 
-        for xvar in &xflow.doc.variables.output {
+        for xvar in &doc.body.variables.output {
             if !locals.contains_key(&xvar.name) && !inputs.contains_key(&xvar.name) {
                 errors.push(ValidationError {
                     code: 1,
@@ -278,16 +272,16 @@ impl Validation {
         errors
     }
 
-    pub fn no_variable_redefinition(xflow: &XFlowDocument) -> Vec<ValidationError> {
+    pub fn no_variable_redefinition(doc: &XFlowDocument) -> Vec<ValidationError> {
         let mut errors = Vec::<ValidationError>::new();
 
         let mut locals = HashMap::<&String, &XFlowVariable>::new();
 
-        for xvar in &xflow.doc.variables.local {
+        for xvar in &doc.body.variables.local {
             locals.insert(&xvar.name, xvar);
         }
 
-        for xvar in &xflow.doc.variables.input {
+        for xvar in &doc.body.variables.input {
             if locals.contains_key(&xvar.name) {
                 errors.push(ValidationError {
                     code: 1,
@@ -303,11 +297,11 @@ impl Validation {
         errors
     }
 
-    pub fn all_flox_variables_exist(xflow: &XFlowDocument) -> Vec<ValidationError> {
+    pub fn all_flox_variables_exist(doc: &XFlowDocument) -> Vec<ValidationError> {
         let mut errors = Vec::<ValidationError>::new();
 
-        let nodes = xflow.doc.get_nodes_of_type(&XFlowNodeType::Flow);
-        let names_in_xflow = xflow.doc.get_all_variable_names();
+        let nodes = doc.body.get_nodes_of_type(&XFlowNodeType::Flow);
+        let names_in_xflow = doc.body.get_all_variable_names();
 
         for node in nodes {
             if let XFlowNodeParameters::Flox(ref flox_params) = node.parameters {
@@ -328,7 +322,7 @@ impl Validation {
         }
 
         errors
-    }
+    c
 
 
     //     X  all_edges_have_nodes(flow),

@@ -1,10 +1,10 @@
 use structure::xflow::*;
 
-pub fn output(xflow: &XFlowDocument) -> String {
-    build_graph(&xflow)
+pub fn output(doc: &XFlowDocument) -> String {
+    build_graph(&doc)
 }
 
-fn build_graph(xflow: &XFlowDocument) -> String {
+fn build_graph(doc: &XFlowDocument) -> String {
     let out =
         format!(
         r#"
@@ -14,8 +14,8 @@ digraph G {{
 {edges}
 }}
 "#,
-        nodes = build_nodes(&xflow),
-        edges = build_edges(&xflow),
+        nodes = build_nodes(&doc),
+        edges = build_edges(&doc),
     );
     out
 }
@@ -46,9 +46,8 @@ fn build_node(node: &XFlowNode) -> String {
     }
 }
 
-fn build_nodes(xflow: &XFlowDocument) -> String {
-    let vars: Vec<String> = xflow
-        .doc
+fn build_nodes(doc: &XFlowDocument) -> String {
+    let vars: Vec<String> = doc.body
         .nodes
         .iter()
         .map({
@@ -58,9 +57,8 @@ fn build_nodes(xflow: &XFlowDocument) -> String {
     vars.join("\n")
 }
 
-fn build_edges(xflow: &XFlowDocument) -> String {
-    let vars: Vec<String> = xflow
-        .doc
+fn build_edges(doc: &XFlowDocument) -> String {
+    let vars: Vec<String> = doc.body
         .edges
         .iter()
         .map({

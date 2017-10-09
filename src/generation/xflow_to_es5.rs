@@ -5,13 +5,13 @@ use ratel::{transformer, parser, codegen};
 
 // partof: #SPC-artifact-generation-xflow
 
-pub fn output(xflow: &XFlowDocument) -> String {
-    let res = build_class(&xflow);
+pub fn output(doc: &XFlowDocument) -> String {
+    let res = build_class(&doc);
     output_js(&res)
 }
 
-pub fn output_es5(xflow: &XFlowDocument) -> String {
-    let res = build_class(&xflow);
+pub fn output_es5(doc: &XFlowDocument) -> String {
+    let res = build_class(&doc);
     output_js_es5(&res)
 }
 
@@ -27,7 +27,7 @@ fn output_js_es5(input_program: &str) -> String {
     codegen::generate_code(&ast, false)
 }
 
-fn build_class(xflow: &XFlowDocument) -> String {
+fn build_class(doc: &XFlowDocument) -> String {
 
     let out = format!(
         r#"
@@ -64,10 +64,10 @@ class XFlow_{id} {{
     {nodes}
 }}
 "#,
-        id = uuid_to_label(&xflow.id),
-        name = &xflow.name,
-        local_variables = local_variables(&xflow),
-        nodes = build_nodes(&xflow)
+        id = uuid_to_label(&doc.id),
+        name = &doc.name,
+        local_variables = local_variables(&doc),
+        nodes = build_nodes(&doc)
     );
     out
 }
@@ -76,9 +76,8 @@ fn method_name_for_node_id(id: &i32) -> String {
     format!("node_{id}", id = id)
 }
 
-fn local_variables(xflow: &XFlowDocument) -> String {
-    let vars: Vec<String> = xflow
-        .doc
+fn local_variables(doc: &XFlowDocument) -> String {
+    let vars: Vec<String> = doc.body
         .variables
         .local
         .iter()
@@ -96,9 +95,8 @@ fn local_variables(xflow: &XFlowDocument) -> String {
 
 }
 
-fn build_nodes(xflow: &XFlowDocument) -> String {
-    let vars: Vec<String> = xflow
-        .doc
+fn build_nodes(doc: &XFlowDocument) -> String {
+    let vars: Vec<String> = doc.body
         .nodes
         .iter()
         .map({
@@ -106,7 +104,7 @@ fn build_nodes(xflow: &XFlowDocument) -> String {
                 format!(
                     r#" {fn_id}() {{ {body} }}  "#,
                     fn_id = method_name_for_node_id(&node.id),
-                    body = build_function_body(&node, &xflow)
+                    body = build_function_body(&node, &doc)
                 )
             }
         })
@@ -115,10 +113,10 @@ fn build_nodes(xflow: &XFlowDocument) -> String {
 
 }
 
-fn build_function_body(node: &XFlowNode, xflow: &XFlowDocument) -> String {
+fn build_function_body(node: &XFlowNode, doc: &XFlowDocument) -> String {
     let body = match node.nodetype {
-        XFlowNodeType::Flow => build_xflow_body(&node, &xflow),
-        XFlowNodeType::Flox => build_flox_body(&node, &xflow),
+        XFlowNodeType::Flow => build_xflow_body(&node, &doc),
+        XFlowNodeType::Flox => build_flox_body(&node, &doc),
         XFlowNodeType::Call => "call_xflow();".to_owned(),
     };
 
@@ -129,29 +127,29 @@ fn build_function_body(node: &XFlowNode, xflow: &XFlowDocument) -> String {
     )
 }
 
-fn build_xflow_body(node: &XFlowNode, xflow: &XFlowDocument) -> String {
+fn build_xflow_body(node: &XFlowNode, doc: &XFlowDocument) -> String {
 
     match node.action.as_ref() {
-        "start" => build_node_body_call_next_node(node, xflow),
+        "start" => build_node_body_call_next_node(node, doc),
         "end" => format!("this.finalize(); this.callback(this.output_vars);"),
-        "branch" => build_node_body_branch(node, xflow),
+        "branch" => build_node_body_branch(node, doc),
         _ => format!("unimplemented();"),
 
     }
 }
 
-fn build_flox_body(node: &XFlowNode, xflow: &XFlowDocument) -> String {
+fn build_flox_body(node: &XFlowNode, doc: &XFlowDocument) -> String {
     format!(
         r#"
     console.log('flox node');
     {call_next_node}
     "#,
-        call_next_node = build_node_body_call_next_node(node, xflow)
+        call_next_node = build_node_body_call_next_node(node, doc)
     )
 }
 
-fn build_node_body_call_next_node(node: &XFlowNode, xflow: &XFlowDocument) -> String {
-    let edges = xflow.doc.get_out_edges(node);
+fn build_node_body_call_next_node(node: &XFlowNode, doc: &XFlowDocument) -> String {
+    let edges = doc.body.get_out_edges(node);
     match edges.len() {
         0 => {
             error!("build_node_body_call_next_node: Unable to find a connecting node");
@@ -172,8 +170,8 @@ fn build_node_body_call_next_node(node: &XFlowNode, xflow: &XFlowDocument) -> St
     }
 }
 
-fn build_node_body_branch(node: &XFlowNode, xflow: &XFlowDocument) -> String {
-    let edges = xflow.doc.get_out_edges(node);
+fn build_node_body_branch(node: &XFlowNode, doc: &XFlowDocument) -> String {
+    let edges = doc.body.get_out_edges(node);
     match edges.len() {
         0 => {
             error!("build_node_body_branch: Unable to find a connecting node");
@@ -187,8 +185,7 @@ fn build_node_body_branch(node: &XFlowNode, xflow: &XFlowDocument) -> String {
             )
         }
         _ => {
-            let mut res: Vec<String> = xflow
-                .doc
+            let mut res: Vec<String> = doc.body
                 .get_out_branches(node.id)
                 .iter()
                 .map({

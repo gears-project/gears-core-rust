@@ -36,7 +36,7 @@ fn pad_translation_doc(
     strings_in_model: &HashMap<String, &I18NString>,
 ) -> () {
     for (key, item) in strings_in_model {
-        if !t.doc.items.contains_key(key) {
+        if !t.body.items.contains_key(key) {
             t.body.add_untranslated_from(&item);
             debug!(
                 "Untranslated string, locale :'{:?}', value '{:?}'",
@@ -108,7 +108,7 @@ impl ModelDocument {
     pub fn has_locale(&self, locale: &str) -> bool {
         let res: Vec<&String> = self.body
             .config
-            .doc
+            .body
             .locales
             .iter()
             .filter({
@@ -125,7 +125,7 @@ impl ModelDocument {
 
     pub fn add_locale(&mut self, locale: &str) -> Result<(), String> {
         if !self.has_locale(&locale) {
-            self.body.config.doc.locales.push(locale.to_owned());
+            self.body.config.body.locales.push(locale.to_owned());
             Ok(())
         } else {
             let msg = format!("add_locale : The locale '{:?}' already exists", locale);
@@ -137,7 +137,7 @@ impl ModelDocument {
 
         let missing: Vec<&String> = self.body
             .config
-            .doc
+            .body
             .locales
             .iter()
             .filter(|l| !self.has_translation(l))
@@ -222,7 +222,7 @@ impl GearsDsl for Model {
 
         res.push(DslToken::With("domain".to_owned()));
         res.push(DslToken::BlockOpen);
-        res.extend(self.domain.doc.generate_dsl());
+        res.extend(self.domain.body.generate_dsl());
         res.push(DslToken::BlockClose);
 
         res.push(DslToken::With("xflows".to_owned()));
@@ -260,7 +260,7 @@ impl GearsDsl for Model {
     fn consume_scope(&mut self, s: &str, tree: &Vec<DslTree>) -> Result<(), String> {
         match s.as_ref() {
             "domain" => {
-                self.domain.doc.consume_dsl_tree(&tree);
+                self.domain.body.consume_dsl_tree(&tree);
                 Ok(())
             }
             "xflows" => {

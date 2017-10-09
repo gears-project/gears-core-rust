@@ -1,11 +1,11 @@
 use structure::domain::*;
 
-pub fn output(domain: &DomainDocument) -> String {
-    build_graph(&domain)
+pub fn output(doc: &DomainDocument) -> String {
+    build_graph(&doc)
 }
 
-fn build_graph(domain: &DomainDocument) -> String {
-    let (nodes, edges) = build_nodes_and_edges(&domain);
+fn build_graph(doc: &DomainDocument) -> String {
+    let (nodes, edges) = build_nodes_and_edges(&doc);
     let out =
         format!(
         r#"
@@ -21,11 +21,11 @@ digraph G {{
     out
 }
 
-fn build_nodes_and_edges(domain: &DomainDocument) -> (Vec<String>, Vec<String>) {
+fn build_nodes_and_edges(doc: &DomainDocument) -> (Vec<String>, Vec<String>) {
     let mut nodes = Vec::<String>::new();
     let mut edges = Vec::<String>::new();
 
-    for entity in &domain.doc.entities {
+    for entity in &doc.body.entities {
         nodes.push(build_entity_node(&entity));
         for attr in &entity.attributes {
             nodes.push(build_attribute_node(&attr));

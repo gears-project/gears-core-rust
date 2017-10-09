@@ -287,9 +287,9 @@ impl Default for I18NString {
 impl I18NString {
     pub fn translate(&self, t: &TranslationDocument) -> Self {
         I18NString {
-            locale: t.doc.locale.clone(),
+            locale: t.body.locale.clone(),
             key: self.key.clone(),
-            value: t.doc
+            value: t.body
                 .items
                 .get(&self.key)
                 .unwrap_or(&I18NString::new("".to_owned()))
@@ -299,7 +299,7 @@ impl I18NString {
     }
 
     pub fn translate_self(&mut self, t: &TranslationDocument) -> () {
-        match t.doc.items.get(&self.key) {
+        match t.body.items.get(&self.key) {
             Some(item) => {
                 self.locale = item.locale.clone();
                 self.value = item.value.clone();
@@ -308,9 +308,9 @@ impl I18NString {
                 warn!(
                     "No translation found for '{:?}' in locale '{:?}'",
                     self.key,
-                    t.doc.locale
+                    t.body.locale
                 );
-                self.locale = t.doc.locale.clone();
+                self.locale = t.body.locale.clone();
                 self.value = "-no-value-".to_owned();
             }
         };
