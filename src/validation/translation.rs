@@ -16,11 +16,11 @@ impl Validation {
     pub fn all_items_have_correct_key(t: &TranslationDocument) -> Vec<ValidationError> {
         let mut errors = Vec::<ValidationError>::new();
 
-        for (key, item) in &t.doc.items {
+        for (key, item) in &t.body.items {
             if !key.eq(&item.key) {
                 let message = format!(
                     "Translation document {locale} has an item with key '{itemkey}' stored using a different key '{key}'",
-                    locale = t.doc.locale,
+                    locale = t.body.locale,
                     itemkey = item.key,
                     key = key
                 );
@@ -30,15 +30,15 @@ impl Validation {
                     paths: vec![
                         format!(
                             "/domain/translations/{locale}/items",
-                            locale = t.doc.locale
+                            locale = t.body.locale
                         ),
                     ],
                 });
             }
-            if !t.doc.locale.eq(&item.locale) {
+            if !t.body.locale.eq(&item.locale) {
                 let message = format!(
                     "Translation document {locale} has an item with key '{key}' set to a different locale '{itemlocale}'",
-                    locale = t.doc.locale,
+                    locale = t.body.locale,
                     itemlocale = item.locale,
                     key = key
                 );
@@ -48,7 +48,7 @@ impl Validation {
                     paths: vec![
                         format!(
                             "/domain/translations/{locale}/items",
-                            locale = t.doc.locale
+                            locale = t.body.locale
                         ),
                     ],
                 });

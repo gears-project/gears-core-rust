@@ -7,28 +7,24 @@ use structure::domain::DomainDocument;
 pub struct Validation {}
 
 impl Validation {
-    pub fn validate(domain: &DomainDocument) -> Vec<ValidationError> {
+    pub fn validate(doc: &DomainDocument) -> Vec<ValidationError> {
         let mut errors = Vec::<ValidationError>::new();
 
-        errors.extend(Validation::all_references_point_to_existing_entities(
-            &domain,
-        ));
+        errors.extend(Validation::all_references_point_to_existing_entities(&doc));
 
         errors
     }
 
-    pub fn all_references_point_to_existing_entities(
-        domain: &DomainDocument,
-    ) -> Vec<ValidationError> {
+    pub fn all_references_point_to_existing_entities(doc: &DomainDocument) -> Vec<ValidationError> {
         let mut errors = Vec::<ValidationError>::new();
 
         let mut entities = HashSet::<&String>::new();
 
-        for entity in &domain.doc.entities {
+        for entity in &doc.body.entities {
             entities.insert(&entity.name);
         }
 
-        for entity in &domain.doc.entities {
+        for entity in &doc.body.entities {
             for reference in &entity.references {
                 if !entities.contains(&reference.name) {
                     errors.push(ValidationError {

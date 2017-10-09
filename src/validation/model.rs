@@ -28,7 +28,7 @@ impl Validation {
         debug!("all_locales_have_translation_docs");
         let mut errors = Vec::<ValidationError>::new();
 
-        for locale in &model.doc.config.doc.locales {
+        for locale in &model.body.config.body.locales {
             if !model.has_translation(&locale) {
                 errors.push(ValidationError {
                     code: 1,
@@ -45,12 +45,12 @@ impl Validation {
         debug!("all_translation_docs_have_locales");
         let mut errors = Vec::<ValidationError>::new();
 
-        for t in &model.doc.translations {
-            if !model.has_locale(&t.doc.locale) {
+        for t in &model.body.translations {
+            if !model.has_locale(&t.body.locale) {
                 errors.push(ValidationError {
                                 code: 1,
                                 message: format!("Model: translation doc exists with locale '{:?}' but it is not listed as a supported locale",
-                                                 &t.doc.locale),
+                                                 &t.body.locale),
                                 paths: vec!["/config/translations".to_owned()],
                             });
             }
@@ -66,7 +66,7 @@ impl Validation {
         let mut errors = Vec::<ValidationError>::new();
         let xflow_ids = model.all_xflow_ids();
 
-        for page in &model.doc.pages {
+        for page in &model.body.pages {
             for xflow_reference in &page.all_xflow_references() {
                 if !xflow_ids.contains(xflow_reference) {
                     let message = format!(
@@ -93,7 +93,7 @@ impl Validation {
 
         let mut xflow_ids = HashSet::<&Uuid>::new();
 
-        for doc in &model.doc.xflows {
+        for doc in &model.body.xflows {
             if xflow_ids.contains(&doc.id) {
                 let message = format!("xflow: Duplicate ID found in XFlow document '{}'", doc.id);
                 errors.push(ValidationError {
@@ -108,7 +108,7 @@ impl Validation {
 
         let mut page_ids = HashSet::<&Uuid>::new();
 
-        for doc in &model.doc.pages {
+        for doc in &model.body.pages {
             if page_ids.contains(&doc.id) {
                 let message = format!("page: Duplicate ID found in page document '{}'", doc.id);
                 errors.push(ValidationError {
@@ -123,7 +123,7 @@ impl Validation {
 
         let mut translation_ids = HashSet::<&Uuid>::new();
 
-        for doc in &model.doc.translations {
+        for doc in &model.body.translations {
             if translation_ids.contains(&doc.id) {
                 let message = format!(
                     "translation: Duplicate ID found in translation document '{}'",

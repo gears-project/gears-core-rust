@@ -179,7 +179,7 @@ impl Default for Domain {
 
 impl Translatable for DomainDocument {
     fn translate_in_place(&mut self, t: &TranslationDocument) -> () {
-        for entity in &mut self.doc.entities {
+        for entity in &mut self.body.entities {
             for attribute in &mut entity.attributes {
                 for validation in &mut attribute.validations {
                     validation.message.translate_self(&t);
@@ -196,7 +196,7 @@ impl Translatable for DomainDocument {
     fn all_i18n_strings(&self) -> Vec<&I18NString> {
         let mut ts = Vec::<&I18NString>::new();
 
-        for entity in &self.doc.entities {
+        for entity in &self.body.entities {
             for attribute in &entity.attributes {
                 for validation in &attribute.validations {
                     ts.push(&validation.message);

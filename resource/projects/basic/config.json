@@ -4,7 +4,7 @@
     "id": "e3f0518a-fd0d-403e-9c20-79041c1c14ae",
     "name" : "Basic Model",
     "version" : 1,
-    "doc" : {
+    "body" : {
         "default_locale": "en_US",
         "active_locale": "en_US",
         "locales": ["en_US", "nl_NL"]

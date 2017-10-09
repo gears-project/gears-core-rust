@@ -10,7 +10,7 @@ use common::load_doc;
 #[test]
 fn test_init_validation() {
     let xfs = load_doc::<XFlowDocument>("resource/docs/xflow/flows/10_steps.json");
-    assert_eq!(xfs.doc.nodes.len(), 10);
+    assert_eq!(xfs.body.nodes.len(), 10);
 }
 
 #[test]

@@ -42,13 +42,13 @@ fn test_translation_ordered_hash_deserialization() {
     // Insert order differs between t_a and t_b
     //
 
-    t_a.doc.items.insert(item_1.key.clone(), item_1.clone());
-    t_a.doc.items.insert(item_2.key.clone(), item_2.clone());
-    t_a.doc.items.insert(item_3.key.clone(), item_3.clone());
+    t_a.body.items.insert(item_1.key.clone(), item_1.clone());
+    t_a.body.items.insert(item_2.key.clone(), item_2.clone());
+    t_a.body.items.insert(item_3.key.clone(), item_3.clone());
 
-    t_b.doc.items.insert(item_3.key.clone(), item_3.clone());
-    t_b.doc.items.insert(item_2.key.clone(), item_2.clone());
-    t_b.doc.items.insert(item_1.key.clone(), item_1.clone());
+    t_b.body.items.insert(item_3.key.clone(), item_3.clone());
+    t_b.body.items.insert(item_2.key.clone(), item_2.clone());
+    t_b.body.items.insert(item_1.key.clone(), item_1.clone());
 
     //
     // Deserialization should be the same

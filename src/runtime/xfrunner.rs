@@ -31,7 +31,7 @@ impl<'a> XFlowRunner<'a> {
 
         let mut state = XFState::default();
 
-        for xvardef in &xflow.doc.variables.input {
+        for xvardef in &xflow.body.variables.input {
             match input.get(&xvardef.name) {
                 Some(xvar) => state.add(xvar),
                 None => {
@@ -45,11 +45,11 @@ impl<'a> XFlowRunner<'a> {
             }
         }
 
-        for xvar in &xflow.doc.variables.local {
+        for xvar in &xflow.body.variables.local {
             state.add(xvar);
         }
 
-        match xflow.doc.get_entry_node() {
+        match xflow.body.get_entry_node() {
             Ok(node) => {
                 Ok(XFlowRunner {
                     status: XFlowStatus::Initialized,
@@ -123,7 +123,7 @@ impl<'a> XFlowRunner<'a> {
 
     fn next_node(&mut self) -> () {
         if let Some(current_node) = self.current_node {
-            let edges = self.xflow.doc.get_out_edges(current_node);
+            let edges = self.xflow.body.get_out_edges(current_node);
             match edges.len() {
                 0 => {
                     self.status = XFlowStatus::InvalidState;
@@ -131,7 +131,7 @@ impl<'a> XFlowRunner<'a> {
                 }
                 1 => {
                     if let Some(edge) = edges.first() {
-                        self.current_node = self.xflow.doc.get_node_id(edge.1);
+                        self.current_node = self.xflow.body.get_node_id(edge.1);
                     } else {
                         self.status = XFlowStatus::InvalidState;
                         self.current_node = None;
@@ -144,7 +144,7 @@ impl<'a> XFlowRunner<'a> {
                     //
 
                     let branches: Vec<&XFlowBranch> = self.xflow
-                        .doc
+                        .body
                         .get_out_branches(current_node.id)
                         .iter()
                         .filter({
@@ -162,7 +162,7 @@ impl<'a> XFlowRunner<'a> {
                     match branches.len() {
                         1 => {
                             if let Some(branch) = branches.first() {
-                                self.current_node = self.xflow.doc.get_node_id(branch.edge.1);
+                                self.current_node = self.xflow.body.get_node_id(branch.edge.1);
                             } else {
                                 self.status = XFlowStatus::InvalidState;
                                 self.current_node = None;
@@ -184,7 +184,7 @@ impl<'a> XFlowRunner<'a> {
     pub fn get_output(self) -> Result<XFState, String> {
         if self.status == XFlowStatus::Finished {
             let mut state = XFState::default();
-            for xvar_out in &self.xflow.doc.variables.output {
+            for xvar_out in &self.xflow.body.variables.output {
                 if let Some(xvar_local) = self.state.get(&xvar_out.name) {
                     if xvar_local.vtype == xvar_out.vtype {
                         state.add(xvar_local);

@@ -13,7 +13,7 @@ pub struct Document<T> {
     pub doctype: String,
     pub doctype_version: i64,
     pub version: i64,
-    pub doc: T,
+    pub body: T,
 }
 
 pub type DocumentList<T> = Vec<Document<T>>;
@@ -34,7 +34,7 @@ where
             doctype: header.doctype.clone(),
             doctype_version: header.doctype_version.clone(),
             version: header.version.clone(),
-            doc: <T>::default(),
+            body: <T>::default(),
         }
     }
 
@@ -115,7 +115,7 @@ where
             doctype: "".to_owned(),
             doctype_version: 1,
             version: 1,
-            doc: <T>::default(),
+            body: <T>::default(),
         }
     }
 }
@@ -147,7 +147,7 @@ where
 {
     fn generate_dsl(&self) -> DslTokens {
         debug!("Document<T>;:generate_dsl");
-        self.doc.generate_dsl()
+        self.body.generate_dsl()
     }
 
     fn consume_command(&mut self, s: &str) -> Result<(), String> {
@@ -155,7 +155,7 @@ where
             "Document<T>::consume_command : received command string '{:?}'",
             s
         );
-        self.doc.consume_command(s)
+        self.body.consume_command(s)
     }
 
     fn consume_scope(&mut self, s: &str, tree: &Vec<DslTree>) -> Result<(), String> {
@@ -165,7 +165,7 @@ where
 
     fn consume_dsl_tree(&mut self, items: &Vec<DslTree>) -> Result<(), String> {
         debug!("Document<T>::consume_dsl_tree : items : '{:?}'", items);
-        self.doc.consume_dsl_tree(items)
+        self.body.consume_dsl_tree(items)
     }
 }
 
@@ -287,9 +287,9 @@ impl Default for I18NString {
 impl I18NString {
     pub fn translate(&self, t: &TranslationDocument) -> Self {
         I18NString {
-            locale: t.doc.locale.clone(),
+            locale: t.body.locale.clone(),
             key: self.key.clone(),
-            value: t.doc
+            value: t.body
                 .items
                 .get(&self.key)
                 .unwrap_or(&I18NString::new("".to_owned()))
@@ -299,7 +299,7 @@ impl I18NString {
     }
 
     pub fn translate_self(&mut self, t: &TranslationDocument) -> () {
-        match t.doc.items.get(&self.key) {
+        match t.body.items.get(&self.key) {
             Some(item) => {
                 self.locale = item.locale.clone();
                 self.value = item.value.clone();
@@ -308,9 +308,9 @@ impl I18NString {
                 warn!(
                     "No translation found for '{:?}' in locale '{:?}'",
                     self.key,
-                    t.doc.locale
+                    t.body.locale
                 );
-                self.locale = t.doc.locale.clone();
+                self.locale = t.body.locale.clone();
                 self.value = "-no-value-".to_owned();
             }
         };

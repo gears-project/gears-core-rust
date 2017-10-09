@@ -91,14 +91,14 @@ pub fn build_dotfiles(model: &ModelDocument, path: &str) -> Result<(), ModelLoad
     let xflow_path = format!("{path}/xflows", path = path);
     create_dir(&xflow_path);
 
-    for xflow in &model.doc.xflows {
+    for xflow in &model.body.xflows {
         let doc = generation::xflow_to_dot::output(&xflow);
 
         let filename = format!("{path}/{id}.dot", path = xflow_path, id = xflow.id);
         write_file(&filename, &doc);
     }
 
-    let doc = generation::domain_to_dot::output(&model.doc.domain);
+    let doc = generation::domain_to_dot::output(&model.body.domain);
 
     let filename = format!("{path}/domain.dot", path = path);
     write_file(&filename, &doc);
@@ -124,7 +124,7 @@ pub fn build_to_react_app(model: &ModelDocument, path: &str) -> Result<(), Model
     let component_path = format!("{path}/components", path = path);
     create_dir(&component_path);
 
-    for page in &model.doc.pages {
+    for page in &model.body.pages {
         let doc = generation::page_to_react_component::output_html(&page);
 
         let filename = format!("{path}/{id}.js", path = component_path, id = page.id);
@@ -132,7 +132,7 @@ pub fn build_to_react_app(model: &ModelDocument, path: &str) -> Result<(), Model
 
     }
 
-    for xflow in &model.doc.xflows {
+    for xflow in &model.body.xflows {
         let doc = generation::xflow_to_es5::output(&xflow);
 
         let filename = format!("{path}/{id}.js", path = xflow_path, id = xflow.id);
@@ -158,15 +158,15 @@ pub fn model_to_fs(model: &ModelDocument, path: &str) -> Result<(), ModelLoadErr
     write_file(&model_header_doc_filename, &model.get_header().to_json());
 
     let model_config_doc_filename = format!("{}/config.json", path);
-    write_file(&model_config_doc_filename, &model.doc.config.to_json());
+    write_file(&model_config_doc_filename, &model.body.config.to_json());
 
     let doc_filename = format!("{}/domain.json", path);
-    write_file(&doc_filename, &model.doc.domain.to_json());
+    write_file(&doc_filename, &model.body.domain.to_json());
 
     let xflows_path_name = format!("{}/xflows", path);
     create_dir(&xflows_path_name);
 
-    for doc in &model.doc.xflows {
+    for doc in &model.body.xflows {
         let doc_filename = format!("{}/{}.json", xflows_path_name, doc.id);
         write_file(&doc_filename, &doc.to_json());
     }
@@ -174,7 +174,7 @@ pub fn model_to_fs(model: &ModelDocument, path: &str) -> Result<(), ModelLoadErr
     let pages_path_name = format!("{}/pages", path);
     create_dir(&pages_path_name);
 
-    for doc in &model.doc.pages {
+    for doc in &model.body.pages {
         let doc_filename = format!("{}/{}.json", pages_path_name, doc.id);
         write_file(&doc_filename, &doc.to_json());
     }
@@ -182,8 +182,8 @@ pub fn model_to_fs(model: &ModelDocument, path: &str) -> Result<(), ModelLoadErr
     let translations_path_name = format!("{}/translations", path);
     create_dir(&translations_path_name);
 
-    for doc in &model.doc.translations {
-        let doc_filename = format!("{}/{}.json", translations_path_name, doc.doc.locale);
+    for doc in &model.body.translations {
+        let doc_filename = format!("{}/{}.json", translations_path_name, doc.body.locale);
         write_file(&doc_filename, &doc.to_json());
     }
 
@@ -208,14 +208,14 @@ pub fn model_from_fs(path: &str) -> Result<ModelDocument, ModelLoadError> {
     let model_config_json = read_json_file(model_config_path);
     let model_config: ModelConfigDocument = ModelConfigDocument::from_json(&model_config_json);
 
-    modeldoc.doc.config = model_config;
+    modeldoc.body.config = model_config;
 
     let domain_filename = format!("{}/domain.json", path);
     let domain_path = Path::new(&domain_filename);
     let json = read_json_file(domain_path);
     let domain: DomainDocument = DomainDocument::from_json(&json);
 
-    modeldoc.doc.domain = domain;
+    modeldoc.body.domain = domain;
 
 
     let glob_options = MatchOptions {
@@ -229,7 +229,7 @@ pub fn model_from_fs(path: &str) -> Result<ModelDocument, ModelLoadError> {
         if let Ok(path) = item {
             let json = read_json_file(&path);
             let xflow_doc: XFlowDocument = XFlowDocument::from_json(&json);
-            modeldoc.doc.xflows.push(xflow_doc);
+            modeldoc.body.xflows.push(xflow_doc);
         } else {
             warn!("Unable to load doc from '{:?}'", item);
         }
@@ -240,7 +240,7 @@ pub fn model_from_fs(path: &str) -> Result<ModelDocument, ModelLoadError> {
         if let Ok(path) = item {
             let json = read_json_file(&path);
             let page_doc: PageDocument = PageDocument::from_json(&json);
-            modeldoc.doc.pages.push(page_doc);
+            modeldoc.body.pages.push(page_doc);
         } else {
             warn!("Unable to load doc from '{:?}'", item);
         }
@@ -251,7 +251,7 @@ pub fn model_from_fs(path: &str) -> Result<ModelDocument, ModelLoadError> {
         if let Ok(path) = item {
             let json = read_json_file(&path);
             let translation_doc: TranslationDocument = TranslationDocument::from_json(&json);
-            modeldoc.doc.translations.push(translation_doc);
+            modeldoc.body.translations.push(translation_doc);
         } else {
             warn!("Unable to load doc from '{:?}'", item);
         }
@@ -263,7 +263,7 @@ pub fn model_from_fs(path: &str) -> Result<ModelDocument, ModelLoadError> {
 pub fn init_new_model_dir(path: &str) -> Result<(), ModelLoadError> {
     create_dir(path);
     let mut model = ModelDocument::default();
-    let default_locale = model.doc.config.doc.default_locale.clone();
+    let default_locale = model.body.config.body.default_locale.clone();
     model.add_locale(&default_locale);
     model.pad_all_translations();
     model_to_fs(&model, &path)

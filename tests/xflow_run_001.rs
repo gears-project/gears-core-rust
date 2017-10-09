@@ -51,7 +51,7 @@ fn test_run_10_steps() {
     let _ = env_logger::init();
 
     let xfs = load_doc::<XFlowDocument>("resource/docs/xflow/flows/10_steps.json");
-    assert_eq!(xfs.doc.nodes.len(), 10);
+    assert_eq!(xfs.body.nodes.len(), 10);
 
     let dispatcher = build_dispatcher();
     let mut state = XFState::default();
@@ -75,7 +75,7 @@ fn test_run_10_steps() {
                 }
                 i += 1;
             }
-            assert_eq!(i, xfs.doc.nodes.len());
+            assert_eq!(i, xfs.body.nodes.len());
             match xfrunner
                 .get_output()
                 .unwrap()
@@ -96,9 +96,9 @@ fn test_run_simple_branch() {
     let _ = env_logger::init();
 
     let xfs = load_doc::<XFlowDocument>("resource/docs/xflow/flows/branch_boolean.json");
-    assert_eq!(xfs.doc.nodes.len(), 4);
-    assert_eq!(xfs.doc.edges.len(), 3);
-    assert_eq!(xfs.doc.branches.len(), 2);
+    assert_eq!(xfs.body.nodes.len(), 4);
+    assert_eq!(xfs.body.edges.len(), 3);
+    assert_eq!(xfs.body.branches.len(), 2);
 
     let dispatcher = build_dispatcher();
     let mut state = XFState::default();

@@ -4,7 +4,7 @@
     "id": "e4f0518a-fd0d-403e-9c20-29041c1c14ae",
     "name" : "List Posts",
     "version" : 1,
-    "doc" : {
+    "body" : {
         "title": {
             "locale": "en_US",
             "key": "list_posts",

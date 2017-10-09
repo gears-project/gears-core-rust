@@ -61,7 +61,7 @@ fn test_translate_model_add_translations() {
     // partof: TST-i18n
 
     let mut model = model_from_fs(&"resource/projects/basic").unwrap();
-    model.doc.config.doc.locales.push("es_ES".to_owned());
+    model.body.config.body.locales.push("es_ES".to_owned());
     model.pad_all_translations();
 
     let model_es = model.as_locale("es_ES").unwrap();

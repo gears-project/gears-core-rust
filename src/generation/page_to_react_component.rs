@@ -2,8 +2,8 @@ use structure::page::*;
 
 // partof: #SPC-artifact-generation-page
 
-pub fn output_html(page: &PageDocument) -> String {
-    output_components(&page.doc.components)
+pub fn output_html(doc: &PageDocument) -> String {
+    output_components(&doc.body.components)
 }
 
 fn output_components(components: &[Component]) -> String {

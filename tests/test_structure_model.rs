@@ -19,14 +19,14 @@ fn test_load_model() {
     let model_c = ModelDocument::from_yaml(&yaml_a);
 
     assert_eq!(model_a.id, model_c.id);
-    assert_eq!(model_a.doc, model_c.doc);
-    assert_eq!(model_a.doc.xflows.len(), model_c.doc.xflows.len());
+    assert_eq!(model_a.body, model_c.body);
+    assert_eq!(model_a.body.xflows.len(), model_c.body.xflows.len());
     assert_eq!(
-        model_a.doc.pages[0].to_json(),
-        model_c.doc.pages[0].to_json()
+        model_a.body.pages[0].to_json(),
+        model_c.body.pages[0].to_json()
     );
     assert_eq!(
-        model_a.doc.xflows[0].to_json(),
-        model_c.doc.xflows[0].to_json()
+        model_a.body.xflows[0].to_json(),
+        model_c.body.xflows[0].to_json()
     );
 }
