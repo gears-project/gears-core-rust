@@ -4,7 +4,7 @@
     "id": "e4f0518a-fd2d-403e-9c20-79041c1c14ae",
     "name" : "Forum Model",
     "version" : 1,
-    "doc" : {
+    "body" : {
         "events": {
             "change":[],
             "update":[],

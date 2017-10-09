@@ -38,5 +38,5 @@ fn test_model_to_and_from_fs() {
     let model_b = model_from_fs(&root_b_path).unwrap();
 
     assert_eq!(model_a.id, model_b.id);
-    assert_eq!(model_a.doc.xflows.len(), model_b.doc.xflows.len());
+    assert_eq!(model_a.body.xflows.len(), model_b.body.xflows.len());
 }

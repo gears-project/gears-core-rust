@@ -10,21 +10,21 @@ fn test_dsl_model_interpret() {
     let _ = env_logger::init();
 
     let mut model = Model::default();
-    assert_eq!(model.domain.doc.entities.len(), 0);
+    assert_eq!(model.domain.body.entities.len(), 0);
 
     assert!(
         model
             .interpret_dsl("with domain { add entity zork; };")
             .is_ok()
     );
-    assert_eq!(model.domain.doc.entities.len(), 1);
+    assert_eq!(model.domain.body.entities.len(), 1);
 
     assert!(
         model
             .interpret_dsl("with domain { remove entity zork; };")
             .is_ok()
     );
-    assert_eq!(model.domain.doc.entities.len(), 0);
+    assert_eq!(model.domain.body.entities.len(), 0);
 
 }
 
@@ -119,7 +119,7 @@ fn test_dsl_model_interpret_multiline() {
     let _ = env_logger::init();
 
     let mut model = Model::default();
-    assert_eq!(model.domain.doc.entities.len(), 0);
+    assert_eq!(model.domain.body.entities.len(), 0);
 
     assert!(
         model
@@ -129,7 +129,7 @@ fn test_dsl_model_interpret_multiline() {
             .is_ok()
     );
 
-    assert_eq!(model.domain.doc.entities.len(), 3);
+    assert_eq!(model.domain.body.entities.len(), 3);
 
     assert!(
         model
@@ -138,6 +138,6 @@ fn test_dsl_model_interpret_multiline() {
             )
             .is_ok()
     );
-    assert_eq!(model.domain.doc.entities.len(), 1);
+    assert_eq!(model.domain.body.entities.len(), 1);
 
 }

@@ -67,7 +67,7 @@ fn create_xflow_struct() -> XFlowDocument {
         version: 1,
         doctype: "Some doctype".to_string(),
         doctype_version: 1,
-        doc: XFlow {
+        body: XFlow {
             requirements: Vec::<XFlowRequirement>::new(),
             variables: XFlowVariables {
                 input: Vec::<XFlowVariableDefinition>::new(),
@@ -87,9 +87,9 @@ fn test_xfs() {
 
     let xfs = create_xflow_struct();
 
-    assert_eq!(xfs.doc.nodes.len(), 5);
-    assert_eq!(xfs.doc.edges.len(), 5);
-    assert_eq!(xfs.doc.branches.len(), 5);
+    assert_eq!(xfs.body.nodes.len(), 5);
+    assert_eq!(xfs.body.edges.len(), 5);
+    assert_eq!(xfs.body.branches.len(), 5);
 }
 
 #[test]
@@ -107,14 +107,17 @@ fn test_xfs_fields() {
 fn test_xfs_entry() {
     let _ = env_logger::init();
     let xfs = load_doc::<XFlowDocument>("resource/docs/xflow/flows/10_steps.json");
-    assert_eq!(xfs.doc.get_nodes_by(&XFlowNodeType::Flow, "start").len(), 1);
+    assert_eq!(
+        xfs.body.get_nodes_by(&XFlowNodeType::Flow, "start").len(),
+        1
+    );
 }
 
 #[test]
-fn test_xfs_doc_get_nodes_of_type() {
+fn test_xfs_body_get_nodes_of_type() {
     let _ = env_logger::init();
     let xfs = load_doc::<XFlowDocument>("resource/docs/xflow/flows/10_steps.json");
-    assert_eq!(xfs.doc.get_nodes_of_type(&XFlowNodeType::Flow).len(), 2);
+    assert_eq!(xfs.body.get_nodes_of_type(&XFlowNodeType::Flow).len(), 2);
 }
 
 #[test]
@@ -123,39 +126,39 @@ fn test_xfs_from_json() {
     let _ = env_logger::init();
     let xfs = load_doc::<XFlowDocument>("resource/docs/xflow/flows/10_steps.json");
     assert_eq!(xfs.name, "steps".to_string());
-    assert_eq!(xfs.doc.nodes.len(), 10);
-    assert_eq!(xfs.doc.edges.len(), 9);
-    assert_eq!(xfs.doc.branches.len(), 0);
+    assert_eq!(xfs.body.nodes.len(), 10);
+    assert_eq!(xfs.body.edges.len(), 9);
+    assert_eq!(xfs.body.branches.len(), 0);
 
-    assert_eq!(xfs.doc.requirements.len(), 2);
+    assert_eq!(xfs.body.requirements.len(), 2);
 
-    assert_eq!(xfs.doc.variables.input.len(), 1);
-    assert_eq!(xfs.doc.variables.local.len(), 0);
-    assert_eq!(xfs.doc.variables.output.len(), 1);
+    assert_eq!(xfs.body.variables.input.len(), 1);
+    assert_eq!(xfs.body.variables.local.len(), 0);
+    assert_eq!(xfs.body.variables.output.len(), 1);
 
-    assert!(xfs.doc.get_entry_node().is_ok());
-    assert!(xfs.doc.get_terminal_nodes().is_ok());
+    assert!(xfs.body.get_entry_node().is_ok());
+    assert!(xfs.body.get_terminal_nodes().is_ok());
 
-    match xfs.doc.get_entry_node() {
+    match xfs.body.get_entry_node() {
         Ok(res) => assert_eq!(res.id, 1),
         Err(err) => println!("Error: {:?}", err),
     }
 
-    match xfs.doc.get_terminal_nodes() {
+    match xfs.body.get_terminal_nodes() {
         Ok(res) => assert_eq!(res.len(), 1),
         Err(err) => println!("Error: {:?}", err),
     }
 
-    match xfs.doc.get_entry_node() {
+    match xfs.body.get_entry_node() {
         Ok(res) => {
 
-            let in_edges = xfs.doc.get_in_edges(res);
-            let out_edges = xfs.doc.get_out_edges(res);
+            let in_edges = xfs.body.get_in_edges(res);
+            let out_edges = xfs.body.get_out_edges(res);
 
             assert_eq!(in_edges.len(), 0);
             assert_eq!(out_edges.len(), 1);
 
-            assert_eq!(xfs.doc.get_branches_for(out_edges[0]).len(), 0);
+            assert_eq!(xfs.body.get_branches_for(out_edges[0]).len(), 0);
 
         }
         Err(err) => println!("Error: {:?}", err),
@@ -168,9 +171,9 @@ fn test_xfs_from_json_string() {
     let xfs = load_doc::<XFlowDocument>("resource/docs/xflow/bad_flows/empty.json");
 
     assert_eq!(xfs.name, "empty".to_string());
-    assert_eq!(xfs.doc.nodes.len(), 0);
-    assert_eq!(xfs.doc.edges.len(), 0);
-    assert_eq!(xfs.doc.branches.len(), 0);
+    assert_eq!(xfs.body.nodes.len(), 0);
+    assert_eq!(xfs.body.edges.len(), 0);
+    assert_eq!(xfs.body.branches.len(), 0);
 }
 
 #[test]

@@ -4,7 +4,7 @@
     "version" : 1,
     "doctype": "xflow",
     "doctype_version": 1,
-    "doc" : {
+    "body" : {
         "requirements": [
             {
                 "xtype": "flow",
