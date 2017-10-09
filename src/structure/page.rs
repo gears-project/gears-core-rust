@@ -13,7 +13,7 @@ pub type Components = Vec<Component>;
 
 impl PageDocument {
     pub fn all_xflow_references(&self) -> Vec<&Uuid> {
-        collect_xflow_references(&self.doc.components)
+        collect_xflow_references(&self.body.components)
     }
 }
 
@@ -257,8 +257,8 @@ fn translate_components(components: &mut Components, t: &TranslationDocument) ->
 
 impl Translatable for PageDocument {
     fn translate_in_place(&mut self, t: &TranslationDocument) -> () {
-        self.doc.title.translate_self(&t);
-        translate_components(&mut self.doc.components, &t);
+        self.body.title.translate_self(&t);
+        translate_components(&mut self.body.components, &t);
     }
 
     fn translate(&self, t: &TranslationDocument) -> PageDocument {
@@ -268,7 +268,7 @@ impl Translatable for PageDocument {
     }
 
     fn all_i18n_strings(&self) -> Vec<&I18NString> {
-        collect_i18nstrings(&self.doc.components)
+        collect_i18nstrings(&self.body.components)
     }
 }
 

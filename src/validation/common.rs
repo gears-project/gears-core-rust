@@ -36,13 +36,13 @@ pub fn validate_model(model: &ModelDocument) -> ValidationErrors {
     let mut errors = ValidationErrors::new();
 
     errors.extend(model::Validation::validate(model));
-    errors.extend(domain::Validation::validate(&model.doc.domain));
+    errors.extend(domain::Validation::validate(&model.body.domain));
 
-    for xflow in &model.doc.xflows {
+    for xflow in &model.body.xflows {
         errors.extend(xflow::Validation::validate(&xflow));
     }
 
-    for t in &model.doc.translations {
+    for t in &model.body.translations {
         errors.extend(translation::Validation::validate(&t));
     }
 

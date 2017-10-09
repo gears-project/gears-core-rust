@@ -37,7 +37,7 @@ fn pad_translation_doc(
 ) -> () {
     for (key, item) in strings_in_model {
         if !t.doc.items.contains_key(key) {
-            t.doc.add_untranslated_from(&item);
+            t.body.add_untranslated_from(&item);
             debug!(
                 "Untranslated string, locale :'{:?}', value '{:?}'",
                 item.locale,
@@ -64,7 +64,7 @@ impl ModelDocument {
     pub fn all_xflow_ids(&self) -> HashSet<&Uuid> {
         let mut xflow_ids = HashSet::<&Uuid>::new();
 
-        for xflow in &self.doc.xflows {
+        for xflow in &self.body.xflows {
             xflow_ids.insert(&xflow.id);
         }
 
@@ -80,11 +80,11 @@ impl ModelDocument {
     }
 
     pub fn get_translation(&self, locale: &str) -> Result<&TranslationDocument, String> {
-        let res: Vec<&TranslationDocument> = self.doc
+        let res: Vec<&TranslationDocument> = self.body
             .translations
             .iter()
             .filter({
-                |t| t.doc.locale == locale
+                |t| t.body.locale == locale
             })
             .collect();
 
@@ -106,7 +106,7 @@ impl ModelDocument {
     }
 
     pub fn has_locale(&self, locale: &str) -> bool {
-        let res: Vec<&String> = self.doc
+        let res: Vec<&String> = self.body
             .config
             .doc
             .locales
@@ -125,7 +125,7 @@ impl ModelDocument {
 
     pub fn add_locale(&mut self, locale: &str) -> Result<(), String> {
         if !self.has_locale(&locale) {
-            self.doc.config.doc.locales.push(locale.to_owned());
+            self.body.config.doc.locales.push(locale.to_owned());
             Ok(())
         } else {
             let msg = format!("add_locale : The locale '{:?}' already exists", locale);
@@ -135,7 +135,7 @@ impl ModelDocument {
 
     pub fn pad_all_translations(&mut self) -> () {
 
-        let missing: Vec<&String> = self.doc
+        let missing: Vec<&String> = self.body
             .config
             .doc
             .locales
@@ -146,21 +146,21 @@ impl ModelDocument {
         for locale in missing {
             info!("Adding new translation for locale '{:?}'", locale);
             let mut t = TranslationDocument::default();
-            t.doc.locale = locale.clone();
+            t.body.locale = locale.clone();
             for (_, item) in self.all_i18n_strings_map() {
-                t.doc.add_untranslated_from(&item);
+                t.body.add_untranslated_from(&item);
             }
-            self.doc.translations.push(t);
+            self.body.translations.push(t);
         }
     }
 }
 
 impl Translatable for ModelDocument {
     fn translate_in_place(&mut self, t: &TranslationDocument) -> () {
-        for ref mut page in &mut self.doc.pages {
+        for ref mut page in &mut self.body.pages {
             page.translate_in_place(&t);
         }
-        self.doc.domain.translate_in_place(&t);
+        self.body.domain.translate_in_place(&t);
     }
 
     fn translate(&self, t: &TranslationDocument) -> ModelDocument {
@@ -172,11 +172,11 @@ impl Translatable for ModelDocument {
     fn all_i18n_strings(&self) -> Vec<&I18NString> {
         let mut ts = Vec::<&I18NString>::new();
 
-        for ref page in &self.doc.pages {
+        for ref page in &self.body.pages {
             ts.append(&mut page.all_i18n_strings());
         }
 
-        ts.append(&mut self.doc.domain.all_i18n_strings());
+        ts.append(&mut self.body.domain.all_i18n_strings());
 
         ts
     }
