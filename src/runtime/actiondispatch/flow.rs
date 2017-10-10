@@ -1,6 +1,6 @@
 use runtime::actiondispatch::dispatchable::*;
 use structure::xflow::*;
-use xfstate::XFState;
+use runtime::xfstate::XFState;
 
 #[derive(Debug)]
 pub struct Flow;

@@ -1,3 +1,4 @@
 # Various TODO notes
 
- - [ ] Rename the `doc.doc`/`Document.doc` field to body
+ - [X] Rename the `doc.doc`/`Document.doc` field to body
+ - [ ] 

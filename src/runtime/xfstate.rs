@@ -48,7 +48,7 @@ impl Default for XFState {
     ///
     /// # Example
     /// ```
-    /// use gears::xfstate::{XFState};
+    /// use gears::runtime::xfstate::XFState;
     /// let xfstate = XFState::default();
     /// println!("State has {} keys", xfstate.len());
     /// ```

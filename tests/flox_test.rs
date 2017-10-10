@@ -3,7 +3,8 @@ extern crate gears;
 
 use gears::structure::xflow::*;
 use gears::*;
-use xfstate::*;
+use gears::runtime::xfstate::*;
+use gears::parser::flox;
 
 fn expect_context_integer(input: &str, context: &XFState, expected: i64) -> () {
     let _ = env_logger::init();

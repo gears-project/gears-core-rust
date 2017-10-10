@@ -1,5 +1,5 @@
 use structure::xflow::*;
-use xfstate::*;
+use super::xfstate::*;
 use runtime::dispatcher::*;
 
 #[derive(Debug, PartialEq)]
