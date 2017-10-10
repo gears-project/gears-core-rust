@@ -20,7 +20,6 @@ extern crate uuid;
 
 extern crate ratel;
 
-pub mod xfstate;
 pub mod flox;
 
 pub mod structure;

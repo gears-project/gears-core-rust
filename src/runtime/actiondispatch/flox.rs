@@ -1,6 +1,6 @@
 use runtime::actiondispatch::dispatchable::*;
 use structure::xflow::*;
-use xfstate::XFState;
+use runtime::xfstate::XFState;
 use flox;
 
 #[derive(Serialize, Deserialize, Debug)]

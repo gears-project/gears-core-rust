@@ -3,7 +3,7 @@ extern crate env_logger;
 extern crate gears;
 
 use gears::structure::xflow::*;
-use gears::xfstate::*;
+use gears::runtime::xfstate::*;
 use gears::runtime::xfrunner::*;
 use gears::runtime::dispatcher::*;
 use gears::runtime::actiondispatch;

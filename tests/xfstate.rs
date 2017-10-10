@@ -1,6 +1,6 @@
 extern crate gears;
 use gears::structure::xflow::*;
-use gears::xfstate::*;
+use gears::runtime::xfstate::*;
 
 #[cfg(test)]
 #[test]
