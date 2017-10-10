@@ -1,7 +1,7 @@
 use runtime::actiondispatch::dispatchable::*;
 use structure::xflow::*;
 use runtime::xfstate::XFState;
-use flox;
+use parser::flox;
 
 #[derive(Serialize, Deserialize, Debug)]
 struct FloxParameters {

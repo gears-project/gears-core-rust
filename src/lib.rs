@@ -20,11 +20,10 @@ extern crate uuid;
 
 extern crate ratel;
 
-pub mod flox;
-
 pub mod structure;
 pub mod dsl;
 pub mod runtime;
 pub mod generation;
 pub mod validation;
+pub mod parser;
 pub mod util;

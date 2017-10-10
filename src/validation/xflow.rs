@@ -1,5 +1,5 @@
 use structure::xflow::*;
-use flox;
+use parser::flox;
 use std::collections::{HashSet, HashMap};
 
 use validation::common::ValidationError;
