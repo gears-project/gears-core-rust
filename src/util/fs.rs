@@ -107,7 +107,7 @@ pub fn build_dotfiles(model: &ModelDocument, path: &str) -> Result<(), ModelLoad
 }
 
 pub fn build_to_react_app(model: &ModelDocument, path: &str) -> Result<(), ModelLoadError> {
-    // partof: #SPC-artifact-generation-model
+    // partof: SPC-artifact-generation-model
 
     // XXX Error handling, assumption checking
 
