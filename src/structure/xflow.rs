@@ -360,11 +360,11 @@ impl Default for XFlow {
 
 impl GearsDsl for XFlow {
     fn generate_dsl(&self) -> DslTokens {
-        let mut res = DslTokens::new();
+        let mut _res = DslTokens::new();
         unimplemented!();
     }
 
-    fn consume_scope(&mut self, s: &str, items: &Vec<DslTree>) -> Result<(), String> {
+    fn consume_scope(&mut self, s: &str, _items: &Vec<DslTree>) -> Result<(), String> {
         debug!("consume_scope : received command string '{:?}'", s);
         unimplemented!();
     }

@@ -82,7 +82,7 @@ impl GearsDsl for Translation {
             TranslationCommand::Set("locale".to_string(), self.locale.clone()).as_dsl_token(),
         );
 
-        for (key, item) in &self.items {
+        for (_key, item) in &self.items {
             res.push(
                 TranslationCommand::Add(item.key.clone(), item.value.clone()).as_dsl_token(),
             );
@@ -132,7 +132,7 @@ impl GearsDsl for Translation {
         }
     }
 
-    fn consume_scope(&mut self, name: &str, tree: &Vec<DslTree>) -> Result<(), String> {
+    fn consume_scope(&mut self, _name: &str, _tree: &Vec<DslTree>) -> Result<(), String> {
         unimplemented!();
     }
 }

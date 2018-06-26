@@ -274,7 +274,7 @@ impl Translatable for PageDocument {
 
 impl GearsDsl for Page {
     fn generate_dsl(&self) -> DslTokens {
-        let mut res = DslTokens::new();
+        let mut _res = DslTokens::new();
         unimplemented!();
     }
 
@@ -283,7 +283,7 @@ impl GearsDsl for Page {
         unimplemented!();
     }
 
-    fn consume_scope(&mut self, s: &str, tree: &Vec<DslTree>) -> Result<(), String> {
+    fn consume_scope(&mut self, _s: &str, _tree: &Vec<DslTree>) -> Result<(), String> {
         unimplemented!();
     }
 }

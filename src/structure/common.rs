@@ -158,7 +158,7 @@ where
         self.body.consume_command(s)
     }
 
-    fn consume_scope(&mut self, s: &str, tree: &Vec<DslTree>) -> Result<(), String> {
+    fn consume_scope(&mut self, s: &str, _tree: &Vec<DslTree>) -> Result<(), String> {
         debug!("Document<T>::consume_scope : received scope '{:?}'", s);
         unimplemented!();
     }
@@ -226,7 +226,7 @@ where
                             println!("{:?}", doc);
                         }
                     }
-                    ListCommand::Show(name) => {
+                    ListCommand::Show(_name) => {
                         unimplemented!();
                     }
                 }

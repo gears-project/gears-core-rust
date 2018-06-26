@@ -337,7 +337,7 @@ impl GearsDsl for Domain {
                             self.remove_entity(&e);
                         }
                     }
-                    DomainCommand::AddAttribute(attr, attr_type) => {
+                    DomainCommand::AddAttribute(_attr, _attr_type) => {
                         if state.indent != 1 {
                             return Err("Bad indent for Attribute".to_owned());
                         } else {
@@ -354,13 +354,13 @@ impl GearsDsl for Domain {
                                */
                         }
                     }
-                    DomainCommand::RemoveAttribute(attr) => {
+                    DomainCommand::RemoveAttribute(_attr) => {
                         info!("Domain DSL");
                     }
-                    DomainCommand::AddValidation(val, val_msg) => {
+                    DomainCommand::AddValidation(_val, _val_msg) => {
                         info!("Domain DSL");
                     }
-                    DomainCommand::RemoveValidation(val) => {
+                    DomainCommand::RemoveValidation(_val) => {
                         info!("Domain DSL");
                     }
                 }
@@ -373,7 +373,7 @@ impl GearsDsl for Domain {
         Ok(())
     }
 
-    fn consume_scope(&mut self, s: &str, tree: &Vec<DslTree>) -> Result<(), String> {
+    fn consume_scope(&mut self, _s: &str, _tree: &Vec<DslTree>) -> Result<(), String> {
         unimplemented!();
     }
 }
