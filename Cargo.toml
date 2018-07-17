@@ -24,7 +24,7 @@ serde_derive = "1.0"
 log = "0.3"
 glob = "0.2.11"
 ratel = "0.7.0"
-uuid = { version = "0.5", features = ["serde", "v4"] }
+uuid = { version = "0.6", features = ["serde", "v4"] }
 
 [dev-dependencies]
 env_logger = "0.4"
