@@ -7,7 +7,7 @@ use gears::structure::domain::Domain;
 
 #[test]
 fn test_dsl_domain() {
-    let _ = env_logger::init();
+    let _ = env_logger::try_init();
 
     let mut domain = Domain::default();
     let e_count = domain.entities.len();
@@ -20,7 +20,7 @@ fn test_dsl_domain() {
 
 #[test]
 fn test_dsl_domain_multiple_commands() {
-    let _ = env_logger::init();
+    let _ = env_logger::try_init();
 
     let mut domain = Domain::default();
 
@@ -38,7 +38,7 @@ fn test_dsl_domain_multiple_commands() {
 
 #[test]
 fn test_dsl_domain_generate_and_consume() {
-    let _ = env_logger::init();
+    let _ = env_logger::try_init();
 
     let mut domain = Domain::default();
 

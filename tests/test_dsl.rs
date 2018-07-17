@@ -11,7 +11,7 @@ use gears::structure::common::{Document, DocumentList};
 
 #[test]
 fn test_dsl_tokens_to_tree() {
-    let _ = env_logger::init();
+    let _ = env_logger::try_init();
 
     let tokens = vec![
         DslToken::With("domain".to_owned()),
@@ -78,7 +78,7 @@ type ZorkList = DocumentList<Zork>;
 //
 #[test]
 fn test_dsl_document_list() {
-    let _ = env_logger::init();
+    let _ = env_logger::try_init();
 
 
     let mut list = ZorkList::new();
@@ -96,7 +96,7 @@ fn test_dsl_document_list() {
 
 #[test]
 fn test_dsl_document_list_multiline() {
-    let _ = env_logger::init();
+    let _ = env_logger::try_init();
 
 
     let mut list = ZorkList::new();
@@ -128,7 +128,7 @@ fn test_dsl_document_list_multiline() {
 
 #[test]
 fn test_dsl_document_list_multiline_regenerate() {
-    let _ = env_logger::init();
+    let _ = env_logger::try_init();
 
 
     let mut list = ZorkList::new();

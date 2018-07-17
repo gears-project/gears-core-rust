@@ -14,7 +14,7 @@ use common::load_doc;
 //
 #[test]
 fn test_load_basic_page_document() {
-    let _ = env_logger::init();
+    let _ = env_logger::try_init();
 
     let xflow =
         load_doc::<XFlowDocument>("resource/docs/xflow/flows/branch_boolean_condition.json");

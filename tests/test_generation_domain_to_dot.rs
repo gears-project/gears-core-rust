@@ -12,7 +12,7 @@ use common::load_doc;
 //
 #[test]
 fn test_load_basic_document() {
-    let _ = env_logger::init();
+    let _ = env_logger::try_init();
 
     let domain = load_doc::<DomainDocument>("resource/docs/domain/good/basic.json");
     let res = domain_to_dot::output(&domain);

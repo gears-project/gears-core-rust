@@ -12,21 +12,21 @@ use common::load_doc;
 
 #[test]
 fn test_load_basic_page_document() {
-    let _ = env_logger::init();
+    let _ = env_logger::try_init();
     let doc = load_doc::<PageDocument>("resource/docs/page/good/basic.json");
     let _ = format!("{:?}", doc);
 }
 
 #[test]
 fn test_load_nested_page_document() {
-    let _ = env_logger::init();
+    let _ = env_logger::try_init();
     let doc = load_doc::<PageDocument>("resource/docs/page/good/nested.json");
     let _ = format!("{:?}", doc);
 }
 
 #[test]
 fn test_page_component_datatable_config_ordered_hash_deserialization() {
-    let _ = env_logger::init();
+    let _ = env_logger::try_init();
 
     let mut dtc_a = DatatableConfig {
         entity: "Post".to_owned(),

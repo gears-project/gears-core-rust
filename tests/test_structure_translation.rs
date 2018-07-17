@@ -9,14 +9,14 @@ use common::load_doc;
 
 #[test]
 fn test_load_basic_translation_document() {
-    let _ = env_logger::init();
+    let _ = env_logger::try_init();
     let doc = load_doc::<TranslationDocument>("resource/docs/translation/good/nl_NL.json");
     let _ = format!("{:?}", doc);
 }
 
 #[test]
 fn test_translation_ordered_hash_deserialization() {
-    let _ = env_logger::init();
+    let _ = env_logger::try_init();
     let mut t_a = load_doc::<TranslationDocument>("resource/docs/translation/good/nl_NL.json");
     let mut t_b = load_doc::<TranslationDocument>("resource/docs/translation/good/nl_NL.json");
 

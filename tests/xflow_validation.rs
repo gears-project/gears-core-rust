@@ -111,7 +111,7 @@ fn test_all_node_actions_have_matching_requirements() {
 
 #[test]
 fn test_all_good_flows_validate() {
-    let _ = env_logger::init();
+    let _ = env_logger::try_init();
     let flows = vec![
         "10_steps.json",
         "arithmetic_addition.json",
