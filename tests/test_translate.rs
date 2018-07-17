@@ -13,7 +13,7 @@ use common::load_doc;
 
 #[test]
 fn test_translate_model() {
-    let _ = env_logger::init();
+    let _ = env_logger::try_init();
     // partof: TST-i18n
 
     let model_en = model_from_fs(&"resource/projects/basic").unwrap();
@@ -28,7 +28,7 @@ fn test_translate_model() {
 
 #[test]
 fn test_translate_basic_page() {
-    let _ = env_logger::init();
+    let _ = env_logger::try_init();
     // partof: TST-i18n
 
     let page = load_doc::<PageDocument>("resource/docs/page/good/basic.json");
@@ -41,7 +41,7 @@ fn test_translate_basic_page() {
 
 #[test]
 fn test_translate_basic_domain() {
-    let _ = env_logger::init();
+    let _ = env_logger::try_init();
     // partof: TST-i18n
 
     let domain = load_doc::<DomainDocument>("resource/docs/domain/good/basic.json");
@@ -57,7 +57,7 @@ fn test_translate_basic_domain() {
 
 #[test]
 fn test_translate_model_add_translations() {
-    let _ = env_logger::init();
+    let _ = env_logger::try_init();
     // partof: TST-i18n
 
     let mut model = model_from_fs(&"resource/projects/basic").unwrap();

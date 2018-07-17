@@ -7,7 +7,7 @@ use gears::structure::model::Model;
 
 #[test]
 fn test_dsl_model_interpret() {
-    let _ = env_logger::init();
+    let _ = env_logger::try_init();
 
     let mut model = Model::default();
     assert_eq!(model.domain.body.entities.len(), 0);
@@ -30,7 +30,7 @@ fn test_dsl_model_interpret() {
 
 #[test]
 fn test_dsl_model_interpret_translations() {
-    let _ = env_logger::init();
+    let _ = env_logger::try_init();
 
     let mut model = Model::default();
     assert_eq!(model.translations.len(), 0);
@@ -84,7 +84,7 @@ fn test_dsl_model_interpret_translations() {
 
 #[test]
 fn test_dsl_model_interpret_xflows() {
-    let _ = env_logger::init();
+    let _ = env_logger::try_init();
 
     let mut model = Model::default();
     assert_eq!(model.xflows.len(), 0);
@@ -102,7 +102,7 @@ fn test_dsl_model_interpret_xflows() {
 
 #[test]
 fn test_dsl_model_interpret_pages() {
-    let _ = env_logger::init();
+    let _ = env_logger::try_init();
 
     let mut model = Model::default();
     assert_eq!(model.pages.len(), 0);
@@ -116,7 +116,7 @@ fn test_dsl_model_interpret_pages() {
 
 #[test]
 fn test_dsl_model_interpret_multiline() {
-    let _ = env_logger::init();
+    let _ = env_logger::try_init();
 
     let mut model = Model::default();
     assert_eq!(model.domain.body.entities.len(), 0);

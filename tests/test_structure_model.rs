@@ -6,7 +6,7 @@ use gears::structure::model::*;
 
 #[test]
 fn test_load_model() {
-    let _ = env_logger::init();
+    let _ = env_logger::try_init();
     // TST-serialization
     // #TST-serialization-yaml
     // partof: TST-serialization-fs

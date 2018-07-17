@@ -7,7 +7,7 @@ use gears::runtime::xfstate::*;
 use gears::parser::flox;
 
 fn expect_context_integer(input: &str, context: &XFState, expected: i64) -> () {
-    let _ = env_logger::init();
+    let _ = env_logger::try_init();
     match flox::parse_context(input, context) {
         Err(err) => {
             println!("Error parsing result for ('{:?}') is {:?}", input, err);
@@ -23,7 +23,7 @@ fn expect_context_integer(input: &str, context: &XFState, expected: i64) -> () {
 }
 
 fn expect_integer(input: &str, expected: i64) -> () {
-    let _ = env_logger::init();
+    let _ = env_logger::try_init();
     match flox::parse(input) {
         Err(err) => {
             println!("Error parsing result for ('{:?}') is {:?}", input, err);
@@ -39,7 +39,7 @@ fn expect_integer(input: &str, expected: i64) -> () {
 }
 
 fn expect_context_boolean(input: &str, context: &XFState, expected: bool) -> () {
-    let _ = env_logger::init();
+    let _ = env_logger::try_init();
     match flox::parse_context(input, context) {
         Err(err) => {
             println!("Error parsing result for ('{:?}') is {:?}", input, err);
@@ -55,7 +55,7 @@ fn expect_context_boolean(input: &str, context: &XFState, expected: bool) -> () 
 }
 
 fn expect_boolean(input: &str, expected: bool) -> () {
-    let _ = env_logger::init();
+    let _ = env_logger::try_init();
     match flox::parse_boolean(input) {
         Err(err) => {
             println!("Error parsing result for ('{:?}') is {:?}", input, err);
@@ -72,7 +72,7 @@ fn expect_boolean(input: &str, expected: bool) -> () {
 
 #[test]
 fn test_flox_arithmetic() {
-    let _ = env_logger::init();
+    let _ = env_logger::try_init();
     expect_integer("1+2", 3);
     expect_integer("1+2", 3);
     expect_integer("1*2", 2);
@@ -93,7 +93,7 @@ fn test_flox_arithmetic() {
 
 #[test]
 fn test_flox_boolean() {
-    let _ = env_logger::init();
+    let _ = env_logger::try_init();
     expect_boolean("1==1", true);
     expect_boolean("1 == 1", true);
     expect_boolean("1==2", false);
@@ -141,7 +141,7 @@ fn test_flox_boolean() {
 
 #[test]
 fn test_flox_arithmetic_precedence() {
-    let _ = env_logger::init();
+    let _ = env_logger::try_init();
 
     expect_integer("1+1+1", 3);
     expect_integer("1+2/3", 1);
@@ -149,7 +149,7 @@ fn test_flox_arithmetic_precedence() {
 
 #[test]
 fn test_flox_boolean_precedence() {
-    let _ = env_logger::init();
+    let _ = env_logger::try_init();
 
     expect_boolean("false&&false&&false", false);
     expect_boolean("false&&false||true", false);
@@ -157,7 +157,7 @@ fn test_flox_boolean_precedence() {
 
 #[test]
 fn test_flox_atom() {
-    let _ = env_logger::init();
+    let _ = env_logger::try_init();
     match flox::parse("1") {
         Err(err) => {
             println!("Error parsing result for ('{:?}') is {:?}", "1", err);
@@ -174,7 +174,7 @@ fn test_flox_atom() {
 
 #[test]
 fn test_combined_expressions() {
-    let _ = env_logger::init();
+    let _ = env_logger::try_init();
     expect_integer("(2)", 2);
     expect_integer("(2+2)", 4);
     expect_boolean("(2 == 2)", true);
@@ -196,7 +196,7 @@ fn test_combined_expressions() {
 // partof #TST-flox
 // partof #TST-flox-variable
 fn test_variables() {
-    let _ = env_logger::init();
+    let _ = env_logger::try_init();
     let mut state = XFState::default();
     state.add(&XFlowVariable {
         name: "CounterValue".to_owned(),
@@ -311,7 +311,7 @@ fn test_variables() {
 #[test]
 // #TST-flox-variable-extraction
 fn test_variable_extraction() {
-    let _ = env_logger::init();
+    let _ = env_logger::try_init();
 
     match flox::extract_variable_names("$CounterValue+6") {
         Ok(res) => assert_eq!(res, vec!["CounterValue"]),
@@ -358,7 +358,7 @@ fn test_variable_extraction() {
 #[test]
 // #TST-flox-variable-error_reporting
 fn test_variable_error_reporting() {
-    let _ = env_logger::init();
+    let _ = env_logger::try_init();
 
     match flox::parse_arithmetic("snork") {
         Ok(_) => assert!(false),

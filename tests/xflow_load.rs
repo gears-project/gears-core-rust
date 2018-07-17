@@ -83,7 +83,7 @@ fn create_xflow_struct() -> XFlowDocument {
 
 #[test]
 fn test_xfs() {
-    let _ = env_logger::init();
+    let _ = env_logger::try_init();
 
     let xfs = create_xflow_struct();
 
@@ -94,7 +94,7 @@ fn test_xfs() {
 
 #[test]
 fn test_xfs_fields() {
-    let _ = env_logger::init();
+    let _ = env_logger::try_init();
 
     let xfs = create_xflow_struct();
 
@@ -105,7 +105,7 @@ fn test_xfs_fields() {
 #[test]
 // #[should_panic]
 fn test_xfs_entry() {
-    let _ = env_logger::init();
+    let _ = env_logger::try_init();
     let xfs = load_doc::<XFlowDocument>("resource/docs/xflow/flows/10_steps.json");
     assert_eq!(
         xfs.body.get_nodes_by(&XFlowNodeType::Flow, "start").len(),
@@ -115,7 +115,7 @@ fn test_xfs_entry() {
 
 #[test]
 fn test_xfs_body_get_nodes_of_type() {
-    let _ = env_logger::init();
+    let _ = env_logger::try_init();
     let xfs = load_doc::<XFlowDocument>("resource/docs/xflow/flows/10_steps.json");
     assert_eq!(xfs.body.get_nodes_of_type(&XFlowNodeType::Flow).len(), 2);
 }
@@ -123,7 +123,7 @@ fn test_xfs_body_get_nodes_of_type() {
 #[test]
 // #TST-serialization-json
 fn test_xfs_from_json() {
-    let _ = env_logger::init();
+    let _ = env_logger::try_init();
     let xfs = load_doc::<XFlowDocument>("resource/docs/xflow/flows/10_steps.json");
     assert_eq!(xfs.name, "steps".to_string());
     assert_eq!(xfs.body.nodes.len(), 10);
@@ -167,7 +167,7 @@ fn test_xfs_from_json() {
 
 #[test]
 fn test_xfs_from_json_string() {
-    let _ = env_logger::init();
+    let _ = env_logger::try_init();
     let xfs = load_doc::<XFlowDocument>("resource/docs/xflow/bad_flows/empty.json");
 
     assert_eq!(xfs.name, "empty".to_string());
@@ -178,7 +178,7 @@ fn test_xfs_from_json_string() {
 
 #[test]
 fn test_mem_profile() {
-    let _ = env_logger::init();
+    let _ = env_logger::try_init();
     let xfs = load_doc::<XFlowDocument>("resource/docs/xflow/flows/10_steps.json");
 
     assert_eq!(std::mem::size_of_val(&xfs), 248);

@@ -9,7 +9,7 @@ use common::load_doc;
 
 #[test]
 fn test_load_basic_page_document() {
-    let _ = env_logger::init();
+    let _ = env_logger::try_init();
 
     let form = load_doc::<PageDocument>("resource/docs/page/good/nested.json");
     let s = page_to_react_component::output_html(&form);
@@ -20,7 +20,7 @@ fn test_load_basic_page_document() {
 
 #[test]
 fn test_load_basic_form_document() {
-    let _ = env_logger::init();
+    let _ = env_logger::try_init();
 
     let form = load_doc::<PageDocument>("resource/docs/page/good/form.json");
     let s = page_to_react_component::output_html(&form);

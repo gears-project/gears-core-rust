@@ -7,7 +7,7 @@ use gears::structure::translation::Translation;
 
 #[test]
 fn test_dsl_translation_interpret() {
-    let _ = env_logger::init();
+    let _ = env_logger::try_init();
 
     let mut t = Translation::default();
     assert_eq!(t.items.len(), 0);
@@ -33,7 +33,7 @@ fn test_dsl_translation_interpret() {
 
 #[test]
 fn test_dsl_translation_regenerate() {
-    let _ = env_logger::init();
+    let _ = env_logger::try_init();
 
     let mut t1 = Translation::default();
     assert!(t1.interpret_dsl("set locale en_GB;").is_ok());

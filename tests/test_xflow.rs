@@ -8,7 +8,7 @@ use gears::structure::xflow::*;
 
 #[test]
 fn test_xflow_default() {
-    let _ = env_logger::init();
+    let _ = env_logger::try_init();
 
     let xfs = XFlowDocument::default();
 
@@ -18,7 +18,7 @@ fn test_xflow_default() {
 
 #[test]
 fn test_xflow_to_json() {
-    let _ = env_logger::init();
+    let _ = env_logger::try_init();
 
     let xfs_a = XFlowDocument::default();
     let xfs_b = XFlowDocument::from_json(&xfs_a.to_json());
