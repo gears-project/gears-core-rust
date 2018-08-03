@@ -21,7 +21,6 @@ extern crate uuid;
 extern crate ratel;
 
 pub mod structure;
-pub mod dsl;
 pub mod runtime;
 pub mod generation;
 pub mod validation;

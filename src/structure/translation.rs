@@ -1,5 +1,4 @@
 use super::common::{Document, DocumentList, I18NString};
-use dsl::command::{GearsDsl, DslTree, DslToken, DslTokens, command_grammar};
 
 use std::collections::{HashMap, BTreeMap};
 use serde::{Serialize, Serializer};
@@ -56,83 +55,3 @@ impl Translation {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone, PartialEq, Eq)]
-pub enum TranslationCommand {
-    Set(String, String),
-    Add(String, String),
-    Remove(String),
-}
-
-impl TranslationCommand {
-    fn as_dsl_token(&self) -> DslToken {
-        let s = match *self {
-            TranslationCommand::Set(ref k, ref v) => format!("set {} {}", k, v),
-            TranslationCommand::Add(ref k, ref v) => format!("add {} '{}'", k, v),
-            TranslationCommand::Remove(ref k) => format!("remove {}", k),
-        };
-        DslToken::Command(s)
-    }
-}
-
-impl GearsDsl for Translation {
-    fn generate_dsl(&self) -> DslTokens {
-        let mut res = DslTokens::new();
-
-        res.push(
-            TranslationCommand::Set("locale".to_string(), self.locale.clone()).as_dsl_token(),
-        );
-
-        for (_key, item) in &self.items {
-            res.push(
-                TranslationCommand::Add(item.key.clone(), item.value.clone()).as_dsl_token(),
-            );
-        }
-
-        res
-    }
-
-    fn consume_command(&mut self, s: &str) -> Result<(), String> {
-        debug!("consume_command : received command string '{:?}'", s);
-        match command_grammar::translation_command(&s) {
-            Ok(cmd) => {
-                debug!("consume_command : received parsed command '{:?}'", cmd);
-                match cmd {
-                    TranslationCommand::Add(key, value) => {
-                        self.items.insert(
-                            key.clone(),
-                            I18NString {
-                                locale: self.locale.clone(),
-                                key: key,
-                                value: value,
-                            },
-                        );
-                    }
-                    TranslationCommand::Remove(key) => {
-                        self.items.retain({
-                            |k, _| k.ne(&key)
-                        });
-                    }
-                    TranslationCommand::Set(key, value) => {
-                        match key.as_ref() {
-                            "locale" => {
-                                self.locale = value;
-                            }
-                            _ => {
-                                unimplemented!();
-                            }
-                        }
-                    }
-                }
-                Ok(())
-            }
-            Err(err) => {
-                error!("consume_command : {:?}", err);
-                return Err(format!("{}", err));
-            }
-        }
-    }
-
-    fn consume_scope(&mut self, _name: &str, _tree: &Vec<DslTree>) -> Result<(), String> {
-        unimplemented!();
-    }
-}
