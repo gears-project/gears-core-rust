@@ -22,6 +22,12 @@ pub struct DocumentReference {
     pub id: Uuid,
 }
 
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub enum ModelLoadError {
+    UnParseable(String),
+    BadStructure(String),
+}
+
 impl<T> Document<T>
 where
     T: serde::Serialize + serde::de::DeserializeOwned + Eq + Default,
@@ -84,8 +90,23 @@ where
     /// Initialize a Document from a JSON string
     ///
     /// partof: SPC-serialization-json
-    pub fn from_json(s: &str) -> Self {
-        serde_json::from_str(s).unwrap()
+    pub fn from_json(s: &str) -> Result<Self, ModelLoadError> {
+        match serde_json::from_str(s) {
+            Ok(res) => Ok(res),
+            Err(err) => {
+                let msg = format!("{}", err);
+                Err(ModelLoadError::BadStructure(msg))
+            }
+        }
+    }
+
+    /// Update a Document from a JSON string
+    ///
+    /// partof: SPC-serialization-json
+    pub fn update_from_json(&mut self, s: &str) -> Result<&Self, String> {
+        let value = serde_json::from_str(s).unwrap();
+        *self = serde_json::from_value(value).unwrap();
+        Ok(self)
     }
 
     /// Return a YAML representation of the Document
@@ -98,9 +119,25 @@ where
     /// Initialize a Document from a JSON string
     ///
     /// partof: SPC-serialization-yaml
-    pub fn from_yaml(s: &str) -> Self {
-        serde_yaml::from_str(s).unwrap()
+    pub fn from_yaml(s: &str) -> Result<Self, ModelLoadError> {
+        match serde_yaml::from_str(s) {
+            Ok(res) => Ok(res),
+            Err(err) => {
+                let msg = format!("{}", err);
+                Err(ModelLoadError::BadStructure(msg))
+            }
+        }
     }
+
+    /// Update a Document from a YAML string
+    ///
+    /// partof: SPC-serialization-yaml
+    pub fn update_from_yaml(&mut self, s: &str) -> Result<&Self, String> {
+        let value = serde_yaml::from_str(s).unwrap();
+        *self = serde_yaml::from_value(value).unwrap();
+        Ok(self)
+    }
+
 }
 
 impl<T> Default for Document<T>
@@ -226,8 +263,14 @@ impl DocumentHeader {
     /// Initialize a DocumentHeader from a JSON string
     ///
     /// partof: SPC-serialization-json
-    pub fn from_json(s: &str) -> Self {
-        serde_json::from_str(s).unwrap()
+    pub fn from_json(s: &str) -> Result<Self, ModelLoadError> {
+        match serde_json::from_str(s) {
+            Ok(res) => Ok(res),
+            Err(err) => {
+                let msg = format!("{}", err);
+                Err(ModelLoadError::BadStructure(msg))
+            }
+        }
     }
 
     /// Return a YAML representation of the DocumentHeader
@@ -240,7 +283,13 @@ impl DocumentHeader {
     /// Initialize a DocumentHeader from a JSON string
     ///
     /// partof: SPC-serialization-yaml
-    pub fn from_yaml(s: &str) -> Self {
-        serde_yaml::from_str(s).unwrap()
+    pub fn from_yaml(s: &str) -> Result<Self, ModelLoadError> {
+        match serde_yaml::from_str(s) {
+            Ok(res) => Ok(res),
+            Err(err) => {
+                let msg = format!("{}", err);
+                Err(ModelLoadError::BadStructure(msg))
+            }
+        }
     }
 }

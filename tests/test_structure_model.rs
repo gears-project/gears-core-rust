@@ -2,6 +2,7 @@ extern crate env_logger;
 
 extern crate gears;
 use gears::util::fs::*;
+use gears::util::naming::{label_to_uuid};
 use gears::structure::model::*;
 
 #[test]
@@ -14,9 +15,21 @@ fn test_load_model() {
 
     let model_a = model_from_fs(&"resource/projects/basic").unwrap();
     let json_a = model_a.to_json();
-    let model_b = ModelDocument::from_json(&json_a);
+    let model_b = match ModelDocument::from_json(&json_a) {
+        Ok(res) => res,
+        Err(_) => {
+            assert!(false);
+            return ()
+        }
+    };
     let yaml_a = model_b.to_yaml();
-    let model_c = ModelDocument::from_yaml(&yaml_a);
+    let model_c = match ModelDocument::from_yaml(&yaml_a) {
+        Ok(res) => res,
+        Err(_) => {
+            assert!(false);
+            return ()
+        }
+    };
 
     assert_eq!(model_a.id, model_c.id);
     assert_eq!(model_a.body, model_c.body);
@@ -30,3 +43,15 @@ fn test_load_model() {
         model_c.body.xflows[0].to_json()
     );
 }
+
+#[test]
+fn test_model_collection_helpers() {
+    let _ = env_logger::try_init();
+
+    let model = model_from_fs(&"resource/projects/basic").unwrap();
+
+    assert!(model.has_xflow(&label_to_uuid("e4f0518a-fd0d-403e-9c20-79041c1c14ae").unwrap()));
+    assert!(!model.has_page(&label_to_uuid("e4f0518a-fd0d-403e-9c20-79041c1c14ae").unwrap()));
+}
+
+
