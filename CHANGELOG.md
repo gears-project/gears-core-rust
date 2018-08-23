@@ -1,5 +1,13 @@
 <a name=""></a>
-##  (2017-07-14)
+##  0.1.6 (2018-08-23)
+
+#### Features
+
+*   Extend serialization/deserialization support ([e4fb7b5a](https://github.com/gears-project/gears-core-rust/commit/e4fb7b5aed6d0c0ec4b7123f6beda5b675ebcfad))
+*   Remove DSL implementation ([11698268](https://github.com/gears-project/gears-core-rust/commit/116982689c394ac72f9eeccb45d85fb7853bcacd))
+
+<a name=""></a>
+##  0.1.5 (2017-07-14)
 
 
 #### Features
