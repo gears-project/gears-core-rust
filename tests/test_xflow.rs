@@ -21,6 +21,9 @@ fn test_xflow_to_json() {
     let _ = env_logger::try_init();
 
     let xfs_a = XFlowDocument::default();
-    let xfs_b = XFlowDocument::from_json(&xfs_a.to_json());
-    assert_eq!(xfs_a.id, xfs_b.id);
+    if let Ok(xfs_b) = XFlowDocument::from_json(&xfs_a.to_json()) {
+        assert_eq!(xfs_a.id, xfs_b.id);
+    } else {
+        assert!(false);
+    }
 }

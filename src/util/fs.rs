@@ -1,4 +1,4 @@
-use structure::common::DocumentHeader;
+use structure::common::{DocumentHeader, ModelLoadError};
 use structure::model::{ModelDocument, ModelConfigDocument};
 use structure::xflow::XFlowDocument;
 use structure::page::PageDocument;
@@ -30,12 +30,6 @@ fn read_json_file(path: &Path) -> String {
     };
 
     s
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub enum ModelLoadError {
-    NoPath,
-    Unhandled,
 }
 
 fn write_file(filename: &str, data: &str) -> () {
@@ -199,21 +193,33 @@ pub fn model_from_fs(path: &str) -> Result<ModelDocument, ModelLoadError> {
     let model_header_filename = format!("{}/model.json", path);
     let model_header_path = Path::new(&model_header_filename);
     let model_header_json = read_json_file(model_header_path);
-    let model_header: DocumentHeader = DocumentHeader::from_json(&model_header_json);
+    debug!("model_from_fs : Deserializing model header JSON from {}", model_header_filename);
+    let model_header: DocumentHeader = match DocumentHeader::from_json(&model_header_json) {
+        Ok(res) => res,
+        Err(err) => return Err(err)
+    };
 
     let mut modeldoc = ModelDocument::new_from_header(&model_header);
 
     let model_config_filename = format!("{}/config.json", path);
     let model_config_path = Path::new(&model_config_filename);
     let model_config_json = read_json_file(model_config_path);
-    let model_config: ModelConfigDocument = ModelConfigDocument::from_json(&model_config_json);
+    debug!("model_from_fs : Deserializing model JSON from {}", model_config_filename);
+    let model_config: ModelConfigDocument = match ModelConfigDocument::from_json(&model_config_json) {
+        Ok(res) => res,
+        Err(err) => return Err(err)
+    };
 
     modeldoc.body.config = model_config;
 
     let domain_filename = format!("{}/domain.json", path);
     let domain_path = Path::new(&domain_filename);
     let json = read_json_file(domain_path);
-    let domain: DomainDocument = DomainDocument::from_json(&json);
+    debug!("model_from_fs : Deserializing domain JSON from {}", domain_filename);
+    let domain: DomainDocument = match DomainDocument::from_json(&json) {
+        Ok(res) => res,
+        Err(err) => return Err(err)
+    };
 
     modeldoc.body.domain = domain;
 
@@ -225,36 +231,61 @@ pub fn model_from_fs(path: &str) -> Result<ModelDocument, ModelLoadError> {
     };
 
     let xflow_files_path = format!("{}/xflows/*", path);
-    for item in glob_with(&xflow_files_path, &glob_options).unwrap() {
-        if let Ok(path) = item {
-            let json = read_json_file(&path);
-            let xflow_doc: XFlowDocument = XFlowDocument::from_json(&json);
-            modeldoc.body.xflows.push(xflow_doc);
-        } else {
-            warn!("Unable to load doc from '{:?}'", item);
+    if let Ok(coll) = glob_with(&xflow_files_path, &glob_options) {
+        for item in coll {
+            if let Ok(path) = item {
+                let json = read_json_file(&path);
+                debug!("model_from_fs : Deserializing xflow JSON from {:?}", path);
+                let xflow_doc: XFlowDocument = match XFlowDocument::from_json(&json) {
+                    Ok(res) => res,
+                    Err(err) => return Err(err)
+                };
+                modeldoc.body.xflows.push(xflow_doc);
+            } else {
+                warn!("Unable to load doc from '{:?}'", item);
+            }
         }
+    } else {
+        error!("model_from_fs : unable to read from path : {}", xflow_files_path);
+        panic!(format!("model_from_fs : unable to read from path : {}", xflow_files_path));
     }
 
     let page_files_path = format!("{}/pages/*", path);
-    for item in glob_with(&page_files_path, &glob_options).unwrap() {
-        if let Ok(path) = item {
-            let json = read_json_file(&path);
-            let page_doc: PageDocument = PageDocument::from_json(&json);
-            modeldoc.body.pages.push(page_doc);
-        } else {
-            warn!("Unable to load doc from '{:?}'", item);
+    if let Ok(coll) = glob_with(&page_files_path, &glob_options) {
+        for item in coll {
+            if let Ok(path) = item {
+                let json = read_json_file(&path);
+                debug!("model_from_fs : Deserializing page JSON from {:?}", path);
+                let page_doc: PageDocument = match PageDocument::from_json(&json) {
+                    Ok(res) => res,
+                    Err(err) => return Err(err)
+                };
+                modeldoc.body.pages.push(page_doc);
+            } else {
+                warn!("Unable to load doc from '{:?}'", item);
+            }
         }
+    } else {
+        error!("model_from_fs : unable to read from path : {}", page_files_path);
     }
 
     let translation_files_path = format!("{}/translations/*", path);
-    for item in glob_with(&translation_files_path, &glob_options).unwrap() {
-        if let Ok(path) = item {
-            let json = read_json_file(&path);
-            let translation_doc: TranslationDocument = TranslationDocument::from_json(&json);
-            modeldoc.body.translations.push(translation_doc);
-        } else {
-            warn!("Unable to load doc from '{:?}'", item);
+    if let Ok(coll) =  glob_with(&translation_files_path, &glob_options) {
+        for item in coll {
+            if let Ok(path) = item {
+                let json = read_json_file(&path);
+                debug!("model_from_fs : Deserializing translation JSON from {:?}", path);
+                let translation_doc: TranslationDocument = match TranslationDocument::from_json(&json) {
+                    Ok(res) => res,
+                    Err(err) => return Err(err)
+                };
+                modeldoc.body.translations.push(translation_doc);
+            } else {
+                warn!("Unable to load doc from '{:?}'", item);
+            }
         }
+    } else {
+        error!("model_from_fs : unable to read from path : {}", translation_files_path);
     }
 
     Ok(modeldoc)

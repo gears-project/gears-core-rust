@@ -153,6 +153,51 @@ impl ModelDocument {
             self.body.translations.push(t);
         }
     }
+
+    pub fn get_page(&self, id: &Uuid) -> Option<&PageDocument> {
+        let res: Vec<&PageDocument> = self.body
+            .pages
+            .iter()
+            .filter({
+                |obj| obj.id == *id
+            })
+            .collect();
+
+        match res.len() {
+            0 => None,
+            _ => Some(&res[0]),
+        }
+    }
+
+    pub fn has_page(&self, id: &Uuid) -> bool {
+        match self.get_page(id) {
+            None => false,
+            Some(_) => true,
+        }
+    }
+
+    pub fn get_xflow(&self, id: &Uuid) -> Option<&XFlowDocument> {
+        let res: Vec<&XFlowDocument> = self.body
+            .xflows
+            .iter()
+            .filter({
+                |obj| obj.id == *id
+            })
+            .collect();
+
+        match res.len() {
+            0 => None,
+            _ => Some(&res[0]),
+        }
+    }
+
+    pub fn has_xflow(&self, id: &Uuid) -> bool {
+        match self.get_xflow(id) {
+            None => false,
+            Some(_) => true,
+        }
+    }
+
 }
 
 impl Translatable for ModelDocument {
