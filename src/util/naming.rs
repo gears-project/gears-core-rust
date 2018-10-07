@@ -1,7 +1,7 @@
 use uuid::Uuid;
 
 pub fn uuid_to_label(id: &Uuid) -> String {
-    id.simple().to_string()
+    id.to_simple().to_string()
 }
 
 pub fn label_to_uuid(id: &str) -> Result<Uuid, String> {
