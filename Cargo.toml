@@ -27,7 +27,7 @@ ratel = "0.7.0"
 uuid = { version = "0.7", features = ["serde", "v4"] }
 
 [dev-dependencies]
-env_logger = "0.5"
+env_logger = "0.6"
 tempdir =  "0.3"
 
 [build-dependencies]
