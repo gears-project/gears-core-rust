@@ -1,5 +1,5 @@
-use structure::xflow::XFlowValue;
-use runtime::xfstate::XFState;
+use crate::structure::xflow::XFlowValue;
+use crate::runtime::xfstate::XFState;
 
 #[allow(dead_code)]
 mod flox_grammar {

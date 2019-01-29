@@ -3,7 +3,7 @@ use super::xflow;
 use super::domain;
 use super::translation;
 
-use structure::model::ModelDocument;
+use crate::structure::model::ModelDocument;
 
 #[derive(Debug)]
 pub struct ValidationError {

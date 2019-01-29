@@ -1,11 +1,11 @@
-use structure::common::{DocumentHeader, ModelLoadError};
-use structure::model::{ModelDocument, ModelConfigDocument};
-use structure::xflow::XFlowDocument;
-use structure::page::PageDocument;
-use structure::domain::DomainDocument;
-use structure::translation::TranslationDocument;
+use crate::structure::common::{DocumentHeader, ModelLoadError};
+use crate::structure::model::{ModelDocument, ModelConfigDocument};
+use crate::structure::xflow::XFlowDocument;
+use crate::structure::page::PageDocument;
+use crate::structure::domain::DomainDocument;
+use crate::structure::translation::TranslationDocument;
 
-use generation;
+use crate::generation;
 
 use glob::glob_with;
 use glob::MatchOptions;

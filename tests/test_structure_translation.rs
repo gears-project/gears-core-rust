@@ -5,7 +5,7 @@ use gears::structure::translation::*;
 use gears::structure::common::I18NString;
 
 mod common;
-use common::load_doc;
+use crate::common::load_doc;
 
 #[test]
 fn test_load_basic_translation_document() {

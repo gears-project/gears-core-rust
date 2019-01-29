@@ -9,7 +9,7 @@ use gears::structure::page::*;
 use gears::structure::translation::*;
 
 mod common;
-use common::load_doc;
+use crate::common::load_doc;
 
 #[test]
 fn test_translate_model() {

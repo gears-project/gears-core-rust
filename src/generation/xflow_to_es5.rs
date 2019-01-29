@@ -1,5 +1,5 @@
-use structure::xflow::*;
-use util::naming::uuid_to_label;
+use crate::structure::xflow::*;
+use crate::util::naming::uuid_to_label;
 
 use ratel::{transformer, parser, codegen};
 

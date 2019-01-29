@@ -1,4 +1,4 @@
-use structure::xflow::*;
+use crate::structure::xflow::*;
 
 pub fn output(doc: &XFlowDocument) -> String {
     build_graph(&doc)

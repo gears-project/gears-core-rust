@@ -6,7 +6,7 @@ use gears::structure::domain::*;
 use gears::generation::domain_to_dot;
 
 mod common;
-use common::load_doc;
+use crate::common::load_doc;
 
 // partof: TST-artifact-generation-domain
 //

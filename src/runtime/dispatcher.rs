@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 
-use runtime::actiondispatch::dispatchable::Dispatchable;
-use structure::xflow::{XFlowNode, XFlowNodeType};
+use crate::runtime::actiondispatch::dispatchable::Dispatchable;
+use crate::structure::xflow::{XFlowNode, XFlowNodeType};
 use super::xfstate::XFState;
 
 type Receivers<'a> = HashMap<XFlowNodeType, Box<Dispatchable + 'a>>;

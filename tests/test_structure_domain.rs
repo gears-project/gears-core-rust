@@ -4,7 +4,7 @@ extern crate gears;
 use gears::structure::domain::*;
 
 mod common;
-use common::load_doc;
+use crate::common::load_doc;
 
 #[test]
 fn test_load_domain() {

@@ -1,4 +1,4 @@
-use structure::domain::*;
+use crate::structure::domain::*;
 
 pub fn output(doc: &DomainDocument) -> String {
     build_graph(&doc)

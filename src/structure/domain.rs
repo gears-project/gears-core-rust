@@ -1,5 +1,5 @@
 use super::common::{Document, DocumentReference, I18NString, Translatable};
-use structure::translation::TranslationDocument;
+use crate::structure::translation::TranslationDocument;
 
 use std::fmt;
 

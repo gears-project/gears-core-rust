@@ -8,7 +8,7 @@ use gears::structure::xflow::*;
 use gears::generation::xflow_to_es5;
 
 mod common;
-use common::load_doc;
+use crate::common::load_doc;
 
 // partof: TST-artifact-generation-xflow
 //

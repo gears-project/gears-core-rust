@@ -5,7 +5,7 @@ use gears::structure::xflow::*;
 use gears::validation::xflow::*;
 
 mod common;
-use common::load_doc;
+use crate::common::load_doc;
 
 #[test]
 fn test_init_validation() {

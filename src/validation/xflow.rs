@@ -1,8 +1,8 @@
-use structure::xflow::*;
-use parser::flox;
+use crate::structure::xflow::*;
+use crate::parser::flox;
 use std::collections::{HashSet, HashMap};
 
-use validation::common::ValidationError;
+use crate::validation::common::ValidationError;
 
 #[derive(Debug)]
 pub struct Validation {
