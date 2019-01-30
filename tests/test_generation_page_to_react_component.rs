@@ -5,7 +5,7 @@ use gears::structure::page::*;
 use gears::generation::page_to_react_component;
 
 mod common;
-use common::load_doc;
+use crate::common::load_doc;
 
 #[test]
 fn test_load_basic_page_document() {

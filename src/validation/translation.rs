@@ -1,5 +1,5 @@
-use validation::common::ValidationError;
-use structure::translation::TranslationDocument;
+use crate::validation::common::ValidationError;
+use crate::structure::translation::TranslationDocument;
 
 #[derive(Debug)]
 pub struct Validation {}

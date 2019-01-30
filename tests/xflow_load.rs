@@ -5,7 +5,7 @@ extern crate gears;
 use gears::structure::xflow::*;
 
 mod common;
-use common::load_doc;
+use crate::common::load_doc;
 
 fn create_node(id: i32) -> XFlowNode {
     XFlowNode {

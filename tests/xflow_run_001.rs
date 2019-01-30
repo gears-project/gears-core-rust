@@ -9,7 +9,7 @@ use gears::runtime::dispatcher::*;
 use gears::runtime::actiondispatch;
 
 mod common;
-use common::load_doc;
+use crate::common::load_doc;
 
 fn build_dispatcher<'a>() -> Dispatcher<'a> {
     let mut dispatcher = Dispatcher::default();

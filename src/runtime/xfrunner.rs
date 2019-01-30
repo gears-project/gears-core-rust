@@ -1,6 +1,6 @@
-use structure::xflow::*;
+use crate::structure::xflow::*;
 use super::xfstate::*;
-use runtime::dispatcher::*;
+use crate::runtime::dispatcher::*;
 
 #[derive(Debug, PartialEq)]
 pub enum XFlowStatus {

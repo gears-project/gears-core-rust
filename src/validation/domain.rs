@@ -1,7 +1,7 @@
 use std::collections::HashSet;
 
-use validation::common::ValidationError;
-use structure::domain::DomainDocument;
+use crate::validation::common::ValidationError;
+use crate::structure::domain::DomainDocument;
 
 #[derive(Debug)]
 pub struct Validation {}

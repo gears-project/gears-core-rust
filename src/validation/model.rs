@@ -1,5 +1,5 @@
-use validation::common::{ValidationError, ValidationErrors};
-use structure::model::ModelDocument;
+use crate::validation::common::{ValidationError, ValidationErrors};
+use crate::structure::model::ModelDocument;
 
 use uuid::Uuid;
 

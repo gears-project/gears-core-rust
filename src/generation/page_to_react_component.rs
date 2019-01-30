@@ -1,4 +1,4 @@
-use structure::page::*;
+use crate::structure::page::*;
 
 // partof: #SPC-artifact-generation-page
 

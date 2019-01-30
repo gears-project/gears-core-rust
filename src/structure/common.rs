@@ -3,7 +3,7 @@ use serde_json;
 use serde_yaml;
 use uuid::Uuid;
 
-use structure::translation::TranslationDocument;
+use crate::structure::translation::TranslationDocument;
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq, Eq)]
 pub struct Document<T> {

@@ -1,5 +1,5 @@
-use structure::xflow::*;
-use runtime::xfstate::XFState;
+use crate::structure::xflow::*;
+use crate::runtime::xfstate::XFState;
 
 pub trait Dispatchable {
     fn init(&mut self) -> Result<(), ()>;
