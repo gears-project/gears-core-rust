@@ -25,6 +25,7 @@ log = "0.4"
 glob = "0.2.11"
 ratel = "0.7.0"
 uuid = { version = "0.7", features = ["serde", "v4"] }
+jsonapi = "*"
 
 [dev-dependencies]
 env_logger = "0.6"
