@@ -2,16 +2,18 @@ use std::collections::{HashMap, HashSet};
 use uuid::Uuid;
 use jsonapi::model::*;
 
+use glob::glob_with;
+use glob::MatchOptions;
 
-use super::common::{Document, Translatable, I18NString};
+use super::common::{Document, DocumentNature, Translatable, I18NString, DocumentFileSystemLoadable, ModelLoadError};
+
+use super::modelconfig::ModelConfigDocument;
 use super::domain::DomainDocument;
 use super::xflow::{XFlowDocument, XFlowDocumentList};
 use super::page::{PageDocument, PageDocumentList};
 use super::translation::{TranslationDocument, TranslationDocumentList};
 
 pub type ModelDocument = Document<Model>;
-pub type ModelConfigDocument = Document<ModelConfig>;
-
 jsonapi_model!(ModelDocument; "modeldocument");
 
 #[derive(Serialize, Deserialize, Debug, Clone, Eq, PartialEq)]
@@ -231,20 +233,105 @@ impl Translatable for ModelDocument {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, Eq, PartialEq)]
-pub struct ModelConfig {
-    pub default_locale: String,
-    pub active_locale: String,
-    pub locales: Vec<String>,
-}
+impl DocumentFileSystemLoadable for ModelDocument {
+    type Doc = ModelDocument;
 
-impl Default for ModelConfig {
-    fn default() -> Self {
-        ModelConfig {
-            default_locale: "en_US".to_owned(),
-            active_locale: "en_US".to_owned(),
-            locales: Vec::<String>::new(),
-        }
+    fn load_from_filesystem(path: &str) -> Result<ModelDocument, ModelLoadError> {
+        // partof: SPC-serialization-fs
+
+        // XXX Error handling, assumption checking
+
+        debug!("Reading model from directory '{}'", path);
+
+        let model_header = ::util::fs::load_docheader_from_filename(&format!("{}/model.json", path))?;
+
+        let mut modeldoc = ModelDocument::new_from_header(&model_header);
+
+        let model_config = ::util::fs::load_doc_from_filename::<ModelConfigDocument>(
+            &format!("{}/config.json", path)
+            )?;
+
+        modeldoc.body.config = model_config;
+
+        let domain = ::util::fs::load_doc_from_filename::<DomainDocument>(
+            &format!("{}/domain.json", path)
+            )?;
+
+        modeldoc.body.domain = domain;
+
+        let glob_options = MatchOptions {
+            case_sensitive: true,
+            require_literal_separator: false,
+            require_literal_leading_dot: false,
+        };
+
+        let mut docs = ::util::fs::load_docs_from_path::<XFlowDocument>(
+            &format!("{}/xflows/*", path),
+            &glob_options)?;
+
+        modeldoc.body.xflows.append(&mut docs);
+
+        let mut docs = ::util::fs::load_docs_from_path::<PageDocument>(
+            &format!("{}/pages/*", path),
+            &glob_options)?;
+        modeldoc.body.pages.append(&mut docs);
+
+        let mut docs = ::util::fs::load_docs_from_path::<TranslationDocument>(
+            &format!("{}/translations/*", path),
+            &glob_options)?;
+        modeldoc.body.translations.append(&mut docs);
+
+        Ok(modeldoc)
+
     }
-}
 
+    fn write_to_filesystem(&self, path: &str) -> Result<(), ModelLoadError> {
+        // partof: #SPC-serialization-fs
+
+        // XXX Error handling, assumption checking
+
+        debug!(
+            "Writing self id:'{}', version:'{}' to directory '{}'",
+            self.id,
+            self.version,
+            path
+        );
+
+        let self_header_doc_filename = format!("{}/model.json", path);
+        ::util::fs::write_file(&self_header_doc_filename, &self.get_header().to_json());
+
+        let self_config_doc_filename = format!("{}/config.json", path);
+        ::util::fs::write_file(&self_config_doc_filename, &self.body.config.to_json());
+
+        let doc_filename = format!("{}/domain.json", path);
+        ::util::fs::write_file(&doc_filename, &self.body.domain.to_json());
+
+        let xflows_path_name = format!("{}/xflows", path);
+        ::util::fs::create_dir(&xflows_path_name);
+
+        for doc in &self.body.xflows {
+            let doc_filename = format!("{}/{}.json", xflows_path_name, doc.id);
+            ::util::fs::write_file(&doc_filename, &doc.to_json());
+        }
+
+        let pages_path_name = format!("{}/pages", path);
+        ::util::fs::create_dir(&pages_path_name);
+
+        for doc in &self.body.pages {
+            let doc_filename = format!("{}/{}.json", pages_path_name, doc.id);
+            ::util::fs::write_file(&doc_filename, &doc.to_json());
+        }
+
+        let translations_path_name = format!("{}/translations", path);
+        ::util::fs::create_dir(&translations_path_name);
+
+        for doc in &self.body.translations {
+            let doc_filename = format!("{}/{}.json", translations_path_name, doc.body.locale);
+            ::util::fs::write_file(&doc_filename, &doc.to_json());
+        }
+
+        Ok(())
+
+    }
+
+}
