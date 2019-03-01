@@ -1,9 +1,9 @@
 use super::common::{Document, DocumentReference, I18NString, Translatable};
 use crate::structure::translation::TranslationDocument;
-
-use std::fmt;
+use jsonapi::model::*;
 
 pub type DomainDocument = Document<Domain>;
+jsonapi_model!(DomainDocument; "domain");
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 pub struct Domain {

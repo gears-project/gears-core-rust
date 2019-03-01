@@ -1,8 +1,10 @@
 use std::collections::HashSet;
+use jsonapi::model::*;
 
 use super::common::{Document, DocumentList};
 
 pub type XFlowDocument = Document<XFlow>;
+jsonapi_model!(XFlowDocument; "xflow");
 pub type XFlowDocumentList = DocumentList<XFlow>;
 
 pub type XFlowEdge = (i32, i32);

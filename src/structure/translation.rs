@@ -2,8 +2,10 @@ use super::common::{Document, DocumentList, I18NString};
 
 use std::collections::{HashMap, BTreeMap};
 use serde::{Serialize, Serializer};
+use jsonapi::model::*;
 
 pub type TranslationDocument = Document<Translation>;
+jsonapi_model!(TranslationDocument; "translation");
 pub type TranslationDocumentList = DocumentList<Translation>;
 
 pub type TranslationMap = HashMap<String, I18NString>;
