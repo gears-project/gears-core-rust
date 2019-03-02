@@ -15,6 +15,8 @@ use super::page::{PageDocument, PageDocumentList};
 use super::translation::{TranslationDocument, TranslationDocumentList};
 
 #[derive(Serialize, Deserialize, Debug, Clone, Eq, PartialEq)]
+// #[cfg_attr(feature = "gluon", derive(Getable, Pushable, VmType))]
+// #[cfg_attr(feature = "gluon", gluon(vm_type = "gears.gxmodel"))]
 pub struct GxModel {
     pub id: Uuid,
     pub name: String,

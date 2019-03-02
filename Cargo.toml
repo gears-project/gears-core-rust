@@ -26,7 +26,9 @@ glob = "0.2.11"
 ratel = "0.7.0"
 uuid = { version = "0.7", features = ["serde", "v4"] }
 jsonapi = "0.6"
-gluon = { version = "0.11.0", optional = true }
+gluon = "0.11.0"
+gluon_vm = "0.11.0"
+gluon_codegen = "0.11.0"
 
 [dev-dependencies]
 env_logger = "0.6"

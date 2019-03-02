@@ -10,6 +10,8 @@ pub type XFlowDocumentList = DocumentList<XFlow>;
 pub type XFlowEdge = (i32, i32);
 
 #[derive(Serialize, Deserialize, Debug, Clone, Eq, PartialEq)]
+#[derive(Getable, Pushable, VmType)]
+#[gluon(vm_type = "gears.xflow.xflow")]
 // partof: SPC-serialization-json
 pub struct XFlow {
     pub requirements: Vec<XFlowRequirement>,
@@ -29,6 +31,8 @@ pub enum XFlowError {
 }
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
+#[derive(Getable, Pushable, VmType)]
+#[gluon(vm_type = "gears.xflow.xflowvaluetype")]
 // partof: #SPC-serialization-json
 pub enum XFlowValueType {
     #[serde(rename = "string")]
@@ -40,6 +44,8 @@ pub enum XFlowValueType {
 }
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
+#[derive(Getable, Pushable, VmType)]
+#[gluon(vm_type = "gears.xflow.xflowvalue")]
 #[serde(untagged)]
 pub enum XFlowValue {
     String(String),
@@ -63,18 +69,24 @@ impl XFlowValue {
     }
 }
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
+#[derive(Getable, Pushable, VmType)]
+#[gluon(vm_type = "gears.xflow.xflowrequirement")]
 pub struct XFlowRequirement {
     pub xtype: XFlowNodeType,
     pub version: i32,
 }
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
+#[derive(Getable, Pushable, VmType)]
+#[gluon(vm_type = "gears.xflow.xflowvariabledefinition")]
 pub struct XFlowVariableDefinition {
     pub name: String,
     pub vtype: XFlowValueType,
 }
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
+#[derive(Getable, Pushable, VmType)]
+#[gluon(vm_type = "gears.xflow.xflowvariable")]
 pub struct XFlowVariable {
     pub name: String,
     pub vtype: XFlowValueType,
@@ -82,6 +94,8 @@ pub struct XFlowVariable {
 }
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
+#[derive(Getable, Pushable, VmType)]
+#[gluon(vm_type = "gears.xflow.xflowvariables")]
 pub struct XFlowVariables {
     pub input: Vec<XFlowVariableDefinition>,
     pub local: Vec<XFlowVariable>,
@@ -89,6 +103,8 @@ pub struct XFlowVariables {
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Clone)]
+#[derive(Getable, Pushable, VmType)]
+#[gluon(vm_type = "gears.xflow.xflownode")]
 pub struct XFlowNode {
     pub id: i32,
     pub nodetype: XFlowNodeType,
@@ -98,6 +114,8 @@ pub struct XFlowNode {
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Clone, Hash, Eq)]
+#[derive(Getable, Pushable, VmType)]
+#[gluon(vm_type = "gears.xflow.xflownodetype")]
 pub enum XFlowNodeType {
     #[serde(rename = "flow")]
     Flow,
@@ -108,6 +126,8 @@ pub enum XFlowNodeType {
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Clone)]
+#[derive(Getable, Pushable, VmType)]
+#[gluon(vm_type = "gears.xflow.xflownodeparameters")]
 pub enum XFlowNodeParameters {
     #[serde(rename = "flow")]
     Flow(FlowParameters),
@@ -118,6 +138,8 @@ pub enum XFlowNodeParameters {
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Clone)]
+#[derive(Getable, Pushable, VmType)]
+#[gluon(vm_type = "gears.xflow.flowparameters")]
 pub struct FlowParameters {}
 
 impl Default for FlowParameters {
@@ -127,15 +149,21 @@ impl Default for FlowParameters {
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Clone)]
+#[derive(Getable, Pushable, VmType)]
+#[gluon(vm_type = "gears.xflow.floxparameters")]
 pub struct FloxParameters {
     pub expression: String,
     pub returns: XFlowVariableDefinition,
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Clone)]
+#[derive(Getable, Pushable, VmType)]
+#[gluon(vm_type = "gears.xflow.callparameters")]
 pub struct CallParameters {}
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
+#[derive(Getable, Pushable, VmType)]
+#[gluon(vm_type = "gears.xflow.xflowbranch")]
 pub struct XFlowBranch {
     pub edge: XFlowEdge,
     pub xvar: XFlowVariable,

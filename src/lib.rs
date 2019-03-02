@@ -16,10 +16,7 @@ extern crate serde_yaml;
 #[macro_use]
 extern crate jsonapi;
 
-#[cfg(feature = "gluon")]
 extern crate gluon;
-
-#[cfg(feature = "gluon")]
 #[macro_use]
 extern crate gluon_codegen;
 

@@ -218,6 +218,8 @@ where
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq, Eq)]
+#[derive(Getable, Pushable, VmType)]
+#[gluon(vm_type = "gears.i18nstring")]
 pub struct I18NString {
     pub locale: String,
     pub key: String,
