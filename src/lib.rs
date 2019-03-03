@@ -19,6 +19,8 @@ extern crate jsonapi;
 extern crate gluon;
 #[macro_use]
 extern crate gluon_codegen;
+#[macro_use]
+extern crate gluon_vm;
 
 #[macro_use]
 extern crate log;
