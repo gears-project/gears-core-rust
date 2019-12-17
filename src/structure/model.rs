@@ -1,7 +1,5 @@
 use std::collections::{HashMap, HashSet};
 use uuid::Uuid;
-use jsonapi::model::*;
-
 
 use super::common::{Document, Translatable, I18NString};
 use super::domain::DomainDocument;
@@ -11,8 +9,6 @@ use super::translation::{TranslationDocument, TranslationDocumentList};
 
 pub type ModelDocument = Document<Model>;
 pub type ModelConfigDocument = Document<ModelConfig>;
-
-jsonapi_model!(ModelDocument; "modeldocument");
 
 #[derive(Serialize, Deserialize, Debug, Clone, Eq, PartialEq)]
 pub struct Model {
