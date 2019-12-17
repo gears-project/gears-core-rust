@@ -7,8 +7,6 @@ use gears::structure::common::Translatable;
 use gears::structure::domain::*;
 use gears::structure::page::*;
 use gears::structure::translation::*;
-use gears::structure::common::DocumentFileSystemLoadable;
-use gears::structure::model::ModelDocument;
 
 mod common;
 use crate::common::load_doc;
@@ -18,7 +16,7 @@ fn test_translate_model() {
     let _ = env_logger::try_init();
     // partof: TST-i18n
 
-    let model_en = ModelDocument::load_from_filesystem(&"resource/projects/basic").unwrap();
+    let model_en = model_from_fs(&"resource/projects/basic").unwrap();
 
     let model_en_nl = model_en.as_locale(&"nl_NL").unwrap();
     let model_en_nl_en = model_en_nl.as_locale(&"en_US").unwrap();
@@ -62,7 +60,7 @@ fn test_translate_model_add_translations() {
     let _ = env_logger::try_init();
     // partof: TST-i18n
 
-    let mut model = ModelDocument::load_from_filesystem(&"resource/projects/basic").unwrap();
+    let mut model = model_from_fs(&"resource/projects/basic").unwrap();
     model.body.config.body.locales.push("es_ES".to_owned());
     model.pad_all_translations();
 

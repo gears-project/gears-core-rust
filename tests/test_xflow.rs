@@ -2,7 +2,6 @@ extern crate env_logger;
 
 extern crate gears;
 use gears::structure::xflow::*;
-use gears::structure::common::*;
 
 // partof: #TST-xflow
 // partof: TST-serialization

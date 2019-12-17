@@ -1,13 +1,11 @@
 use std::collections::{HashMap, BTreeMap};
 use serde::{Serialize, Serializer};
 use uuid::Uuid;
-use jsonapi::model::*;
 
 use super::common::{Document, DocumentList, I18NString, Translatable};
 use super::translation::TranslationDocument;
 
 pub type PageDocument = Document<Page>;
-jsonapi_model!(PageDocument; "page");
 pub type PageDocumentList = DocumentList<Page>;
 
 pub type Components = Vec<Component>;

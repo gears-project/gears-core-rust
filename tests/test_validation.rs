@@ -1,8 +1,6 @@
 extern crate env_logger;
 
 extern crate gears;
-use gears::structure::common::DocumentFileSystemLoadable;
-use gears::structure::model::ModelDocument;
 use gears::structure::xflow::*;
 use gears::validation::common::*;
 use gears::validation;
@@ -31,7 +29,7 @@ fn test_validation_error_instantiate() {
 fn test_basic_model_validation() {
     let _ = env_logger::try_init();
 
-    let model = ModelDocument::load_from_filesystem(&"resource/projects/basic").unwrap();
+    let model = model_from_fs(&"resource/projects/basic").unwrap();
     let validation_errors = validation::model::Validation::validate(&model);
 
     assert_eq!(validation_errors.len(), 0);

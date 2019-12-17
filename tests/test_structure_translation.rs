@@ -2,7 +2,7 @@ extern crate env_logger;
 
 extern crate gears;
 use gears::structure::translation::*;
-use gears::structure::common::*;
+use gears::structure::common::I18NString;
 
 mod common;
 use crate::common::load_doc;

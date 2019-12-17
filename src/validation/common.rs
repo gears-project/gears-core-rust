@@ -1,11 +1,9 @@
 use super::model;
-use super::gxmodel;
 use super::xflow;
 use super::domain;
 use super::translation;
 
 use crate::structure::model::ModelDocument;
-use crate::structure::gxmodel::GxModel;
 
 #[derive(Debug)]
 pub struct ValidationError {
@@ -45,23 +43,6 @@ pub fn validate_model(model: &ModelDocument) -> ValidationErrors {
     }
 
     for t in &model.body.translations {
-        errors.extend(translation::Validation::validate(&t));
-    }
-
-    errors
-}
-
-pub fn validate_gxmodel(model: &GxModel) -> ValidationErrors {
-    let mut errors = ValidationErrors::new();
-
-    errors.extend(gxmodel::Validation::validate(model));
-    errors.extend(domain::Validation::validate(&model.domain));
-
-    for xflow in &model.xflows {
-        errors.extend(xflow::Validation::validate(&xflow));
-    }
-
-    for t in &model.translations {
         errors.extend(translation::Validation::validate(&t));
     }
 

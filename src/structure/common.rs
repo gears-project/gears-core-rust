@@ -26,74 +26,13 @@ pub struct DocumentReference {
 pub enum ModelLoadError {
     UnParseable(String),
     BadStructure(String),
-    InputError(String),
 }
 
-pub trait DocumentNature {
-    type Doc;
-
-    fn new_from_header(header: &DocumentHeader) -> Self::Doc;
-    fn get_header(&self) -> DocumentHeader;
-    fn set_header(&mut self, header: &DocumentHeader) -> ();
-
-    /// Return a string representation of the Document
-    ///
-    fn to_string(&self) -> String;
-
-    /// Return a summary of the Document
-    ///
-    fn summary(&self) -> String;
-
-    /// Return an indented JSON representation of the Document
-    ///
-    /// partof: SPC-serialization-json
-    fn to_json(&self) -> String;
-
-    /// Return a compact JSON representation of the Document
-    ///
-    /// partof: SPC-serialization-json
-    fn to_json_compact(&self) -> String;
-
-    /// Initialize a Document from a JSON string
-    ///
-    /// partof: SPC-serialization-json
-    fn from_json(s: &str) -> Result<Self::Doc, ModelLoadError>;
-
-    /// Update a Document from a JSON string
-    ///
-    /// partof: SPC-serialization-json
-    fn update_from_json(&mut self, s: &str) -> Result<&Self::Doc, String>;
-
-    /// Return a YAML representation of the Document
-    ///
-    /// partof: #SPC-serialization-yaml
-    fn to_yaml(&self) -> String;
-
-    /// Initialize a Document from a JSON string
-    ///
-    /// partof: SPC-serialization-yaml
-    fn from_yaml(s: &str) -> Result<Self::Doc, ModelLoadError>;
-
-    /// Update a Document from a YAML string
-    ///
-    /// partof: SPC-serialization-yaml
-    fn update_from_yaml(&mut self, s: &str) -> Result<&Self::Doc, String>;
-}
-
-pub trait DocumentFileSystemLoadable {
-    type Doc;
-
-    fn load_from_filesystem(path: &str) -> Result<Self::Doc, ModelLoadError>;
-    fn write_to_filesystem(&self, path: &str) -> Result<(), ModelLoadError>;
-}
-
-impl<T> DocumentNature for Document<T>
+impl<T> Document<T>
 where
     T: serde::Serialize + serde::de::DeserializeOwned + Eq + Default,
 {
-    type Doc = Document<T>;
-
-    fn new_from_header(header: &DocumentHeader) -> Self {
+    pub fn new_from_header(header: &DocumentHeader) -> Self {
         Self {
             id: header.id.clone(),
             name: header.name.clone(),
@@ -104,7 +43,7 @@ where
         }
     }
 
-    fn get_header(&self) -> DocumentHeader {
+    pub fn get_header(&self) -> DocumentHeader {
         DocumentHeader {
             id: self.id.clone(),
             name: self.name.clone(),
@@ -114,7 +53,7 @@ where
         }
     }
 
-    fn set_header(&mut self, header: &DocumentHeader) -> () {
+    pub fn set_header(&mut self, header: &DocumentHeader) -> () {
         self.id = header.id.clone();
         self.name = header.name.clone();
         self.doctype = header.doctype.clone();
@@ -124,34 +63,34 @@ where
 
     /// Return a string representation of the Document
     ///
-    fn to_string(&self) -> String {
-        self.summary()
+    pub fn to_string(&self) -> String {
+        format!("document {}", self.id)
     }
 
     /// Return a summary of the Document
     ///
-    fn summary(&self) -> String {
+    pub fn summary(&self) -> String {
         format!("Doc {:?} - {:?} - {:?}", self.doctype, self.id, self.name)
     }
 
     /// Return an indented JSON representation of the Document
     ///
     /// partof: SPC-serialization-json
-    fn to_json(&self) -> String {
+    pub fn to_json(&self) -> String {
         serde_json::to_string_pretty(&self).unwrap()
     }
 
     /// Return a compact JSON representation of the Document
     ///
     /// partof: SPC-serialization-json
-    fn to_json_compact(&self) -> String {
+    pub fn to_json_compact(&self) -> String {
         serde_json::to_string(&self).unwrap()
     }
 
     /// Initialize a Document from a JSON string
     ///
     /// partof: SPC-serialization-json
-    fn from_json(s: &str) -> Result<Self::Doc, ModelLoadError> {
+    pub fn from_json(s: &str) -> Result<Self, ModelLoadError> {
         match serde_json::from_str(s) {
             Ok(res) => Ok(res),
             Err(err) => {
@@ -164,7 +103,7 @@ where
     /// Update a Document from a JSON string
     ///
     /// partof: SPC-serialization-json
-    fn update_from_json(&mut self, s: &str) -> Result<&Self, String> {
+    pub fn update_from_json(&mut self, s: &str) -> Result<&Self, String> {
         let value = serde_json::from_str(s).unwrap();
         *self = serde_json::from_value(value).unwrap();
         Ok(self)
@@ -173,14 +112,14 @@ where
     /// Return a YAML representation of the Document
     ///
     /// partof: #SPC-serialization-yaml
-    fn to_yaml(&self) -> String {
+    pub fn to_yaml(&self) -> String {
         serde_yaml::to_string(&self).unwrap()
     }
 
     /// Initialize a Document from a JSON string
     ///
     /// partof: SPC-serialization-yaml
-    fn from_yaml(s: &str) -> Result<Self, ModelLoadError> {
+    pub fn from_yaml(s: &str) -> Result<Self, ModelLoadError> {
         match serde_yaml::from_str(s) {
             Ok(res) => Ok(res),
             Err(err) => {
@@ -193,7 +132,7 @@ where
     /// Update a Document from a YAML string
     ///
     /// partof: SPC-serialization-yaml
-    fn update_from_yaml(&mut self, s: &str) -> Result<&Self, String> {
+    pub fn update_from_yaml(&mut self, s: &str) -> Result<&Self, String> {
         let value = serde_yaml::from_str(s).unwrap();
         *self = serde_yaml::from_value(value).unwrap();
         Ok(self)
