@@ -27,7 +27,7 @@ ratel = "0.7.0"
 uuid = { version = "0.8", features = ["serde", "v4"] }
 jsonapi = "0.6"
 gluon = { version = "0.13.0", optional = true }
-uuid = { version = "0.7", features = ["serde", "v4"] }
+jsonapi = "0.6"
 
 [dev-dependencies]
 env_logger = "0.7"
