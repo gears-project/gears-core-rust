@@ -4,7 +4,7 @@ use crate::runtime::actiondispatch::dispatchable::Dispatchable;
 use crate::structure::xflow::{XFlowNode, XFlowNodeType};
 use super::xfstate::XFState;
 
-type Receivers<'a> = HashMap<XFlowNodeType, Box<Dispatchable + 'a>>;
+type Receivers<'a> = HashMap<XFlowNodeType, Box<dyn Dispatchable + 'a>>;
 
 pub struct Dispatcher<'a> {
     receivers: Receivers<'a>,

@@ -1,7 +1,7 @@
 use super::common::{Document, DocumentReference, I18NString, Translatable};
 use crate::structure::translation::TranslationDocument;
 
-use std::fmt;
+
 
 pub type DomainDocument = Document<Domain>;
 

@@ -19,6 +19,7 @@ extern crate glob;
 extern crate uuid;
 
 extern crate ratel;
+extern crate juniper;
 
 pub mod structure;
 pub mod runtime;
@@ -26,3 +27,4 @@ pub mod generation;
 pub mod validation;
 pub mod parser;
 pub mod util;
+
