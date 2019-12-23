@@ -3,6 +3,7 @@ use std::collections::HashSet;
 use crate::validation::common::ValidationError;
 use crate::structure::domain::DomainDocument;
 
+#[derive(juniper::GraphQLObject)]
 #[derive(Debug)]
 pub struct Validation {}
 

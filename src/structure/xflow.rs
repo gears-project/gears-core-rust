@@ -41,7 +41,7 @@ pub enum XFlowValueType {
 #[serde(untagged)]
 pub enum XFlowValue {
     String(String),
-    Integer(i64),
+    Integer(i32),
     Boolean(bool),
 }
 

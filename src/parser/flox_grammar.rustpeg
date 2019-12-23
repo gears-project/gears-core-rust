@@ -15,7 +15,7 @@ pub expression -> XFlowValue
 pub arithmetic_expression -> XFlowValue
   = e:arithmetic_test { XFlowValue::Integer(e) }
 
-arithmetic_test -> i64
+arithmetic_test -> i32
   = #infix<integer> {
       #L x plus y { x + y }
          x minus y { x - y }
@@ -107,7 +107,7 @@ boolean -> bool
   / parenthesized<boolean_test>
   / parenthesized<boolean>
 
-integer -> i64
+integer -> i32
   = n:$([0-9]+) { n.parse().unwrap() }
   / integer_variable
   / parenthesized<integer>
@@ -130,7 +130,7 @@ boolean_variable -> bool
     }
 }
 
-integer_variable -> i64
+integer_variable -> i32
  = "$" s:$([A-Za-z]+) {?
     match context.get(s) {
         Some(val) => {

@@ -10,13 +10,14 @@ pub struct Document<T> {
     pub id: Uuid,
     pub name: String,
     pub doctype: String,
-    pub doctype_version: i64,
-    pub version: i64,
+    pub doctype_version: i32,
+    pub version: i32,
     pub body: T,
 }
 
 pub type DocumentList<T> = Vec<Document<T>>;
 
+#[derive(juniper::GraphQLObject)]
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq, Eq)]
 pub struct DocumentReference {
     pub id: Uuid,
@@ -156,6 +157,7 @@ where
     }
 }
 
+#[derive(juniper::GraphQLObject)]
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq, Eq)]
 pub struct I18NString {
     pub locale: String,
@@ -230,13 +232,14 @@ pub trait Translatable {
 // model.json
 //
 
+#[derive(juniper::GraphQLObject)]
 #[derive(Serialize, Deserialize, Debug, Clone, Eq, PartialEq)]
 pub struct DocumentHeader {
     pub id: Uuid,
     pub name: String,
     pub doctype: String,
-    pub doctype_version: i64,
-    pub version: i64,
+    pub doctype_version: i32,
+    pub version: i32,
 }
 
 impl DocumentHeader {

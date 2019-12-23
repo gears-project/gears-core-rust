@@ -5,12 +5,14 @@ use crate::structure::translation::TranslationDocument;
 
 pub type DomainDocument = Document<Domain>;
 
+#[derive(juniper::GraphQLObject)]
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 pub struct Domain {
     pub events: Events,
     pub entities: Entities,
 }
 
+#[derive(juniper::GraphQLObject)]
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 pub struct Events {
     pub change: Vec<DocumentReference>,
@@ -25,12 +27,14 @@ pub type Attributes = Vec<Attribute>;
 pub type References = Vec<Reference>;
 pub type Validations = Vec<Validation>;
 
+#[derive(juniper::GraphQLObject)]
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 pub struct Validation {
     pub message: I18NString,
     pub xflow: DocumentReference,
 }
 
+#[derive(juniper::GraphQLObject)]
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 pub struct Attribute {
     pub name: String,
@@ -39,14 +43,18 @@ pub struct Attribute {
     pub validations: Vec<Validation>,
 }
 
+#[derive(juniper::GraphQLEnum)]
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 pub enum ReferenceType {
+    #[graphql(name="has_many")]
     #[serde(rename = "has_many")]
     HasMany,
+    #[graphql(name="belongs_to")]
     #[serde(rename = "belongs_to")]
     BelongsTo,
 }
 
+#[derive(juniper::GraphQLObject)]
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 pub struct Reference {
     pub name: String,
@@ -54,6 +62,7 @@ pub struct Reference {
     pub other: String,
 }
 
+#[derive(juniper::GraphQLObject)]
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 pub struct Entity {
     pub name: String,

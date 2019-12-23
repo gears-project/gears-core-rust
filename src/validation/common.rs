@@ -5,6 +5,7 @@ use super::translation;
 
 use crate::structure::model::ModelDocument;
 
+#[derive(juniper::GraphQLObject)]
 #[derive(Debug)]
 pub struct ValidationError {
     pub code: i32,
